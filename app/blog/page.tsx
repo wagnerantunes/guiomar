@@ -2,6 +2,8 @@ import prisma from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BlogPage() {
     const site = await prisma.site.findFirst({
         where: { domain: 'renovamente-guiomarmelo.com.br' }
