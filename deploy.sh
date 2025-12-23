@@ -15,7 +15,8 @@ echo "🗄️ Executando migrações do banco de dados..."
 npm run db:push
 
 # Build application
-echo "🔨 Compilando aplicação..."
+echo "🔨 Limpando cache e compilando aplicação..."
+rm -rf .next
 npm run build
 
 # Restart PM2
