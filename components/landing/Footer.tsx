@@ -55,7 +55,7 @@ export function Footer() {
                             <li>
                                 <Link
                                     className="hover:text-primary transition-colors"
-                                    href="#quem-somos"
+                                    href="/#quem-somos"
                                 >
                                     Sobre Nós
                                 </Link>
@@ -63,7 +63,7 @@ export function Footer() {
                             <li>
                                 <Link
                                     className="hover:text-primary transition-colors"
-                                    href="#servicos"
+                                    href="/#servicos"
                                 >
                                     Nossos Serviços
                                 </Link>
@@ -71,7 +71,7 @@ export function Footer() {
                             <li>
                                 <Link
                                     className="hover:text-primary transition-colors"
-                                    href="#metodologia"
+                                    href="/#metodologia"
                                 >
                                     Metodologia
                                 </Link>
@@ -87,7 +87,7 @@ export function Footer() {
                             <li>
                                 <Link
                                     className="hover:text-primary transition-colors"
-                                    href="#contato"
+                                    href="/#contato"
                                 >
                                     Contato
                                 </Link>

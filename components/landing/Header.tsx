@@ -64,19 +64,19 @@ export function Header() {
                 <div className="max-w-[1280px] mx-auto flex justify-center gap-8 py-3">
                     <Link
                         className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="#quem-somos"
+                        href="/#quem-somos"
                     >
                         Quem Somos
                     </Link>
                     <Link
                         className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="#servicos"
+                        href="/#servicos"
                     >
                         Serviços
                     </Link>
                     <Link
                         className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="#metodologia"
+                        href="/#metodologia"
                     >
                         Metodologia
                     </Link>
@@ -94,21 +94,21 @@ export function Header() {
                     <div className="flex flex-col p-4 gap-4">
                         <Link
                             className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="#quem-somos"
+                            href="/#quem-somos"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             Quem Somos
                         </Link>
                         <Link
                             className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="#servicos"
+                            href="/#servicos"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             Serviços
                         </Link>
                         <Link
                             className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="#metodologia"
+                            href="/#metodologia"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             Metodologia
