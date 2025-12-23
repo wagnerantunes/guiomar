@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { signOut } from 'next-auth/react'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
     LayoutDashboard,
     FileText,
@@ -11,25 +11,25 @@ import {
     Settings,
     LogOut,
     Menu,
-    X
-} from 'lucide-react'
-import { useState } from 'react'
+    X,
+} from "lucide-react";
+import { useState } from "react";
 
 const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Posts', href: '/admin/posts', icon: FileText },
-    { name: 'Categorias', href: '/admin/categories', icon: FolderOpen },
-    { name: 'Mídia', href: '/admin/media', icon: Image },
-    { name: 'Configurações', href: '/admin/settings', icon: Settings },
-]
+    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Posts", href: "/admin/posts", icon: FileText },
+    { name: "Categorias", href: "/admin/categories", icon: FolderOpen },
+    { name: "Mídia", href: "/admin/media", icon: Image },
+    { name: "Configurações", href: "/admin/settings", icon: Settings },
+];
 
 export default function Sidebar() {
-    const pathname = usePathname()
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const pathname = usePathname();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const handleSignOut = () => {
-        signOut({ callbackUrl: '/login' })
-    }
+        signOut({ callbackUrl: "/login" });
+    };
 
     return (
         <>
@@ -44,23 +44,30 @@ export default function Sidebar() {
             {/* Sidebar */}
             <aside
                 className={`
-          fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-indigo-600 to-purple-700 text-white
-          transform transition-transform duration-300 ease-in-out z-40
-          ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          fixed top-0 left-0 h-full w-64 bg-[#102216] text-white overflow-y-auto
+          transform transition-transform duration-300 ease-in-out z-40 border-r border-[#1f422b]
+          ${mobileMenuOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0"
+                    }
         `}
             >
                 <div className="flex flex-col h-full">
                     {/* Logo */}
-                    <div className="p-6 border-b border-white/10">
-                        <h1 className="text-2xl font-bold">RenovaMente</h1>
-                        <p className="text-sm text-indigo-200 mt-1">Painel Administrativo</p>
+                    <div className="p-6 border-b border-[#1f422b]">
+                        <h1 className="text-2xl font-bold flex items-center gap-2">
+                            <span className="text-[#13ec5b]">Renova</span>Mente
+                        </h1>
+                        <p className="text-xs text-[#4c9a66] mt-1 font-medium tracking-wider uppercase">
+                            Painel Administrativo
+                        </p>
                     </div>
 
                     {/* Navigation */}
                     <nav className="flex-1 p-4 space-y-2">
                         {navigation.map((item) => {
-                            const isActive = pathname === item.href
-                            const Icon = item.icon
+                            const isActive = pathname === item.href;
+                            const Icon = item.icon;
 
                             return (
                                 <Link
@@ -70,23 +77,23 @@ export default function Sidebar() {
                                     className={`
                     flex items-center gap-3 px-4 py-3 rounded-lg transition-all
                     ${isActive
-                                            ? 'bg-white text-indigo-600 shadow-lg'
-                                            : 'text-white hover:bg-white/10'
+                                            ? "bg-[#13ec5b] text-[#0d1b12] font-bold shadow-lg shadow-[#13ec5b]/20"
+                                            : "text-gray-300 hover:bg-[#1f422b] hover:text-white"
                                         }
                   `}
                                 >
                                     <Icon size={20} />
                                     <span className="font-medium">{item.name}</span>
                                 </Link>
-                            )
+                            );
                         })}
                     </nav>
 
                     {/* Logout */}
-                    <div className="p-4 border-t border-white/10">
+                    <div className="p-4 border-t border-[#1f422b]">
                         <button
                             onClick={handleSignOut}
-                            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-white hover:bg-white/10 transition-all"
+                            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-gray-300 hover:bg-[#1f422b] hover:text-white transition-all"
                         >
                             <LogOut size={20} />
                             <span className="font-medium">Sair</span>
@@ -103,5 +110,5 @@ export default function Sidebar() {
                 />
             )}
         </>
-    )
+    );
 }
