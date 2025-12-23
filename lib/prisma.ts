@@ -1,12 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 
-return new PrismaClient({
-    datasources: {
-        db: {
-            url: process.env.DATABASE_URL,
+const prismaClientSingleton = () => {
+    return new PrismaClient({
+        datasources: {
+            db: {
+                url: process.env.DATABASE_URL,
+            },
         },
-    },
-} as any)
+    } as any)
 }
 
 declare global {
