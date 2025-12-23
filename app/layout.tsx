@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const manrope = Manrope({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RenovaMente - Transformando Mentes, Renovando Vidas",
-  description: "Serviços de psicologia e terapia para transformar sua vida",
+  title: "RenovaMente - Consultoria em Bem-Estar Corporativo",
+  description: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.",
 };
 
 export default function RootLayout({
@@ -16,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={manrope.className}>{children}</body>
     </html>
   );
 }
