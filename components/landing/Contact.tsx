@@ -1,4 +1,40 @@
+"use client";
+
+import { useState } from "react";
+
 export function Contact() {
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus("loading");
+        try {
+            const response = await fetch("/api/leads", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...formData,
+                    source: "Landing Page Contact Form",
+                }),
+            });
+            if (response.ok) {
+                setStatus("success");
+                setFormData({ name: "", email: "", phone: "", message: "" });
+            } else {
+                setStatus("error");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            setStatus("error");
+        }
+    };
+
     return (
         <section
             className="py-20 lg:py-28 bg-background-dark relative overflow-hidden"
@@ -57,57 +93,87 @@ export function Contact() {
                         <h3 className="text-2xl font-bold text-text-main mb-6">
                             Solicite uma avaliação inicial
                         </h3>
-                        <form className="space-y-5">
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">
-                                    Nome Completo
-                                </span>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
-                                    placeholder="Seu nome"
-                                    type="text"
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">
-                                    E-mail Corporativo
-                                </span>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
-                                    placeholder="seu@email.com"
-                                    type="email"
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">
-                                    Telefone / WhatsApp
-                                </span>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
-                                    placeholder="(11) 9999-9999"
-                                    type="tel"
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">
-                                    Como podemos ajudar?
-                                </span>
-                                <textarea
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main resize-none"
-                                    placeholder="conte um pouco da sua empresa ou suas dúvidas..."
-                                    rows={4}
-                                ></textarea>
-                            </label>
-                            <button
-                                className="w-full bg-primary hover:bg-primary-dark text-text-main font-bold py-4 rounded-lg transition-colors shadow-lg mt-2"
-                                type="button"
-                            >
-                                Enviar Mensagem
-                            </button>
-                        </form>
+                        {status === "success" ? (
+                            <div className="bg-green-50 text-green-700 p-8 rounded-xl text-center">
+                                <span className="material-symbols-outlined text-5xl mb-4">check_circle</span>
+                                <h4 className="font-bold text-xl mb-2">Mensagem enviada!</h4>
+                                <p>Obrigado pelo contato. Retornaremos em breve.</p>
+                                <button
+                                    onClick={() => setStatus("idle")}
+                                    className="mt-6 text-green-700 underline font-bold"
+                                >
+                                    Enviar outra mensagem
+                                </button>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="space-y-5">
+                                <label className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-1 block">
+                                        Nome Completo
+                                    </span>
+                                    <input
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
+                                        placeholder="Seu nome"
+                                        type="text"
+                                        required
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    />
+                                </label>
+                                <label className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-1 block">
+                                        E-mail Corporativo
+                                    </span>
+                                    <input
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
+                                        placeholder="seu@email.com"
+                                        type="email"
+                                        required
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </label>
+                                <label className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-1 block">
+                                        Telefone / WhatsApp
+                                    </span>
+                                    <input
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main"
+                                        placeholder="(11) 9999-9999"
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    />
+                                </label>
+                                <label className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-1 block">
+                                        Como podemos ajudar?
+                                    </span>
+                                    <textarea
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-text-main resize-none"
+                                        placeholder="conte um pouco da sua empresa ou suas dúvidas..."
+                                        rows={4}
+                                        required
+                                        value={formData.message}
+                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                    ></textarea>
+                                </label>
+                                {status === "error" && (
+                                    <p className="text-red-500 text-sm font-bold">Ocorreu um erro ao enviar. Tente novamente.</p>
+                                )}
+                                <button
+                                    className="w-full bg-primary hover:bg-primary-dark text-text-main font-bold py-4 rounded-lg transition-colors shadow-lg mt-2 disabled:opacity-50"
+                                    type="submit"
+                                    disabled={status === "loading"}
+                                >
+                                    {status === "loading" ? "Enviando..." : "Enviar Mensagem"}
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </div>
             </div>
         </section>
     );
 }
+
