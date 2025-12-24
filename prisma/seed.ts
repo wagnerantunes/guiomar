@@ -105,8 +105,15 @@ async function main() {
     })
 
     if (psicologiaCategory) {
-        await prisma.post.create({
-            data: {
+        await prisma.post.upsert({
+            where: {
+                siteId_slug: {
+                    siteId: renovamenteSite.id,
+                    slug: 'bem-vindo-ao-renovamente',
+                },
+            },
+            update: {},
+            create: {
                 title: 'Bem-vindo ao RenovaMente',
                 slug: 'bem-vindo-ao-renovamente',
                 content: `
