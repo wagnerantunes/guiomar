@@ -105,6 +105,7 @@ model Site {
   leads        Lead[]
   newsletterSubscribers NewsletterSubscriber[]
   newsletterCampaigns   NewsletterCampaign[]
+  analytics             Analytics[]
 
   @@map("sites")
 }
@@ -158,9 +159,10 @@ model Post {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  site     Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
-  author   User      @relation(fields: [authorId], references: [id])
-  tags     PostTag[]
+  site      Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id])
+  category  Category? @relation(fields: [categoryId], references: [id])
+  tags      PostTag[]
   analytics Analytics[]
 
   @@unique([siteId, slug])

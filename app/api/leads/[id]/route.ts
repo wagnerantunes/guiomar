@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth();
@@ -14,7 +14,7 @@ export async function PATCH(
 
         const body = await req.json();
         const { status, notes } = body;
-        const { id } = params;
+        const { id } = await params;
 
         const lead = await prisma.lead.update({
             where: { id },
