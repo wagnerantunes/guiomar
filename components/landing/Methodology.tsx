@@ -1,126 +1,87 @@
-export function Methodology() {
+"use client";
+
+import React from "react";
+
+interface MethodologyProps {
+    getSetting: (key: string, defaultValue: any) => any;
+}
+
+export function Methodology({ getSetting }: MethodologyProps) {
+    const defaultSteps = [
+        {
+            t: "Diagnóstico Integrado",
+            d: "Análise 360 do seu cenário atual.",
+        },
+        {
+            t: "Inventário de Riscos",
+            d: "Identificação técnica de pontos críticos.",
+        },
+        {
+            t: "Plano de Ação",
+            d: "Definição estratégica de soluções.",
+        },
+        {
+            t: "Implementação",
+            d: "Execução acompanhada por especialistas.",
+        },
+        {
+            t: "Monitoramento",
+            d: "Avaliação contínua de resultados.",
+        },
+        {
+            t: "Sustentação",
+            d: "Consolidação de uma cultura saudável.",
+        },
+    ];
+
+    const content = getSetting("section_methodology_content", {
+        title: "Metodologia RenovaMente",
+        steps: defaultSteps
+    });
+
     return (
-        <section className="py-20 lg:py-28 bg-gray-50 relative" id="metodologia">
-            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-text-main mb-4">
-                        Metodologia RenovaMente
-                    </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Uma abordagem integrada, técnica e humana para transformar ambientes
-                        corporativos.
-                    </p>
+        <section
+            id="metodologia"
+            className="py-24 px-6 bg-white overflow-hidden"
+        >
+            <div className="max-w-7xl mx-auto">
+                <h2 className="text-4xl font-black text-[#0d1b12] text-center mb-20">
+                    {content.title}
+                </h2>
+                <div className="relative space-y-12">
+                    <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2"></div>
+                    {(content.steps || defaultSteps).map((m: any, i: number) => (
+                        <div
+                            key={i}
+                            className={`flex flex-col lg:flex-row items-center gap-8 ${i % 2 !== 0 ? "lg:flex-row-reverse" : ""
+                                }`}
+                        >
+                            <div className="flex-1 w-full lg:text-right">
+                                {i % 2 === 0 && (
+                                    <div className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
+                                        <h4 className="text-xl font-black text-primary mb-2">
+                                            0{i + 1}. {m.t}
+                                        </h4>
+                                        <p className="text-sm text-gray-500">{m.d}</p>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="size-12 rounded-full bg-primary flex items-center justify-center text-text-dark font-black z-20 border-4 border-white shadow-lg shrink-0">
+                                {i + 1}
+                            </div>
+                            <div className="flex-1 w-full lg:text-left">
+                                {i % 2 !== 0 && (
+                                    <div className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
+                                        <h4 className="text-xl font-black text-primary mb-2">
+                                            0{i + 1}. {m.t}
+                                        </h4>
+                                        <p className="text-sm text-gray-500">{m.d}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                <div className="relative max-w-4xl mx-auto">
-                    {/* Vertical Line */}
-                    <div className="absolute left-4 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 lg:-translate-x-1/2"></div>
-                    <div className="space-y-12">
-                        {/* Step 1 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:text-right order-2 lg:order-1 lg:pr-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    1. Diagnóstico Inicial
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Entendimento profundo do cenário atual, cultura e necessidades
-                                    da empresa.
-                                </p>
-                            </div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-primary border-4 border-white shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="w-2 h-2 bg-text-main rounded-full"></span>
-                            </div>
-                            <div className="flex-1 lg:pl-12 order-3 hidden lg:block"></div>
-                        </div>
-                        {/* Step 2 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:pr-12 order-3 hidden lg:block"></div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-white border-4 border-primary shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="w-2 h-2 bg-primary rounded-full"></span>
-                            </div>
-                            <div className="flex-1 lg:text-left order-2 lg:order-3 lg:pl-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    2. Análise Técnica
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Aplicação de ferramentas ergonômicas e de avaliação de riscos
-                                    com rigor técnico.
-                                </p>
-                            </div>
-                        </div>
-                        {/* Step 3 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:text-right order-2 lg:order-1 lg:pr-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    3. Planejamento Estratégico
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Desenvolvimento de plano de ação personalizado, com cronograma
-                                    e metas claras.
-                                </p>
-                            </div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-white border-4 border-primary shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="w-2 h-2 bg-primary rounded-full"></span>
-                            </div>
-                            <div className="flex-1 lg:pl-12 order-3 hidden lg:block"></div>
-                        </div>
-                        {/* Step 4 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:pr-12 order-3 hidden lg:block"></div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-white border-4 border-primary shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="w-2 h-2 bg-primary rounded-full"></span>
-                            </div>
-                            <div className="flex-1 lg:text-left order-2 lg:order-3 lg:pl-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    4. Implementação Humanizada
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Execução das ações com foco na comunicação, engajamento e
-                                    sensibilização das pessoas.
-                                </p>
-                            </div>
-                        </div>
-                        {/* Step 5 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:text-right order-2 lg:order-1 lg:pr-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    5. Monitoramento e Ajustes
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Acompanhamento contínuo dos indicadores e feedbacks para
-                                    melhoria constante.
-                                </p>
-                            </div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-white border-4 border-primary shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="w-2 h-2 bg-primary rounded-full"></span>
-                            </div>
-                            <div className="flex-1 lg:pl-12 order-3 hidden lg:block"></div>
-                        </div>
-                        {/* Step 6 */}
-                        <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 group">
-                            <div className="flex-1 lg:pr-12 order-3 hidden lg:block"></div>
-                            <div className="absolute lg:static left-0 top-0 w-8 h-8 rounded-full bg-primary border-4 border-white shadow-lg flex items-center justify-center z-10 shrink-0 order-1 lg:order-2">
-                                <span className="material-symbols-outlined text-text-main text-sm">
-                                    check
-                                </span>
-                            </div>
-                            <div className="flex-1 lg:text-left order-2 lg:order-3 lg:pl-12">
-                                <h3 className="text-xl font-bold text-text-main">
-                                    6. Resultados Sustentáveis
-                                </h3>
-                                <p className="text-gray-600 mt-2">
-                                    Consolidação de um ambiente mais saudável, produtivo e
-                                    conforme legalmente.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Divider Arrow */}
-            <div className="flex justify-center mt-16 opacity-30">
-                <span className="material-symbols-outlined text-3xl">
-                    keyboard_arrow_down
-                </span>
             </div>
         </section>
     );

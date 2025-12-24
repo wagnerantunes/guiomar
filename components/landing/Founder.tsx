@@ -1,50 +1,51 @@
-export function Founder() {
+"use client";
+
+import React from "react";
+
+interface FounderProps {
+    getSetting: (key: string, defaultValue: any) => any;
+}
+
+export function Founder({ getSetting }: FounderProps) {
+    const content = getSetting("section_founder_content", {
+        title: "Sobre Guiomar Melo",
+        description: "Fundadora da RenovaMente, Guiomar combina técnica e sensibilidade para apoiar empresas na construção de ambientes conscientes.",
+        quote: "Transformar ambientes de trabalho começa pelo cuidado genuíno com as pessoas.",
+        image: "/images/founder.jpg" // Fallback placeholder
+    });
+
     return (
-        <section className="py-20 lg:py-28 bg-white">
-            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-                    {/* Image */}
-                    <div className="lg:col-span-5 relative">
-                        <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-gray-100">
-                            {/* Placeholder for Guiomar Melo */}
-                            <img
-                                className="w-full h-full object-cover"
-                                alt="Portrait of Guiomar Melo, founder of RenovaMente, smiling professionally"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr44Rwg47CLG4ksVHtF9Q1XO9K0sfCUdmQQ0QOaS385U8SXLv-3A22CbnWbng_42XdlSXIBM-Ne3CulqDLZ0zwkrDZ9TarT9brogbkGi_pdgeCBrPXYzbl9M81sr_gOjbdqp8Z0nAigRpuuVAXzFyGDQSC8nCC_sAbqTvzooHdq6c0yTF1cUmwVg7Syf1Z988ShL_xdQUZZEEjzoaazFnsf3g9J3usMvVUdjGFcK-oBB0Lym035v-9UO8S5_5VnHDdLWzqcLrbs3Cb"
-                            />
-                        </div>
-                        {/* Decorative Frame */}
-                        <div className="absolute -top-4 -left-4 w-full h-full border-2 border-primary rounded-2xl -z-10"></div>
-                    </div>
-                    {/* Content */}
-                    <div className="lg:col-span-7 space-y-8">
-                        <h2 className="text-3xl lg:text-4xl font-bold text-text-main">
-                            Sobre Guiomar Melo
-                        </h2>
-                        <p className="text-lg text-gray-600 leading-relaxed">
-                            Guiomar Melo é Especialista em Bem-Estar Corporativo e fundadora
-                            da RenovaMente. Sua atuação combina experiência em ambientes
-                            corporativos, conhecimento técnico e uma abordagem humana,
-                            apoiando empresas na construção de ambientes mais saudáveis,
-                            conscientes e produtivos.
+        <section
+            id="guiomar"
+            className="py-24 px-6 bg-white overflow-hidden relative"
+        >
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="order-2 lg:order-1 space-y-8">
+                    <h2 className="text-4xl font-black text-[#0d1b12]">
+                        {content.title}
+                    </h2>
+                    <p className="text-gray-600 text-lg leading-relaxed">
+                        {content.description}
+                    </p>
+                    <div className="bg-primary/5 p-10 rounded-[2.5rem] border-l-8 border-primary relative">
+                        <span className="material-symbols-outlined absolute -top-4 right-8 text-primary opacity-20 text-7xl select-none">
+                            format_quote
+                        </span>
+                        <p className="text-xl font-black text-[#0d1b12] italic leading-snug">
+                            "{content.quote}"
                         </p>
-                        <div className="bg-primary/10 p-8 rounded-xl border-l-4 border-primary relative">
-                            <span className="material-symbols-outlined absolute top-4 left-4 text-primary/30 text-6xl -z-10">
-                                format_quote
-                            </span>
-                            <p className="text-xl font-medium text-text-main italic z-10 relative">
-                                "Transformar ambientes de trabalho começa pelo cuidado genuíno
-                                com as pessoas.”
-                            </p>
-                        </div>
                     </div>
                 </div>
-            </div>
-            {/* Divider Arrow */}
-            <div className="flex justify-center mt-12 opacity-30">
-                <span className="material-symbols-outlined text-3xl">
-                    keyboard_arrow_down
-                </span>
+                <div className="order-1 lg:order-2 flex justify-center">
+                    <div className="relative w-full max-w-sm">
+                        <div className="absolute inset-0 bg-primary rounded-[3rem] rotate-6 scale-95 opacity-50"></div>
+                        <img
+                            src={content.image}
+                            className="rounded-[3rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"
+                            alt="Guiomar Melo"
+                        />
+                    </div>
+                </div>
             </div>
         </section>
     );

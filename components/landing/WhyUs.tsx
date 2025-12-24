@@ -1,83 +1,54 @@
-export function WhyUs() {
+"use client";
+
+import React from "react";
+
+interface WhyUsProps {
+    getSetting: (key: string, defaultValue: any) => any;
+}
+
+export function WhyUs({ getSetting }: WhyUsProps) {
+    const defaultItems = [
+        {
+            t: "Evolução Constante",
+            d: "Entregamos transformação real, não apenas papéis.",
+        },
+        {
+            t: "Integração Total",
+            d: "Razão e Emoção. Técnica e Humanização.",
+        },
+        {
+            t: "Segurança Jurídica",
+            d: "Compliance total com as normas NR-17 e NR-1.",
+        },
+    ];
+
+    const content = getSetting("section_whyus_content", {
+        title: "Por que a RenovaMente?",
+        items: defaultItems
+    });
+
     return (
-        <section className="py-20 lg:py-28 bg-background-dark text-white">
-            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-                <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                    Por que a RenovaMente?
+        <section id="porque" className="py-24 bg-primary/5 px-6">
+            <div className="max-w-7xl mx-auto">
+                <h2 className="text-4xl font-black text-[#0d1b12] text-center mb-16">
+                    {content.title}
                 </h2>
-                <p className="text-lg text-gray-300">
-                    Nossa essência traduzida em valor para sua empresa
-                </p>
-            </div>
-            <div className="flex overflow-x-auto gap-6 px-4 sm:px-6 lg:px-8 pb-8 no-scrollbar snap-x snap-mandatory">
-                {/* Card 1 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        verified
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Conformidade Legal</h3>
-                    <p className="text-gray-400 text-sm">
-                        Garantia de atendimento às normas regulamentadoras (NRs) com rigor
-                        técnico.
-                    </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {(content.items || defaultItems).map((v: any, i: number) => (
+                        <div
+                            key={i}
+                            className="bg-white p-10 rounded-[2.5rem] border border-gray-100 text-center space-y-4"
+                        >
+                            <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto">
+                                <span className="material-symbols-outlined font-bold">
+                                    verified_user
+                                </span>
+                            </div>
+                            <h3 className="text-xl font-black text-[#0d1b12]">{v.t}</h3>
+                            <p className="text-sm text-gray-500 leading-relaxed">{v.d}</p>
+                        </div>
+                    ))}
                 </div>
-                {/* Card 2 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        favorite
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Abordagem Humana</h3>
-                    <p className="text-gray-400 text-sm">
-                        Foco nas pessoas como centro da transformação organizacional.
-                    </p>
-                </div>
-                {/* Card 3 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        integration_instructions
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Visão Integrada</h3>
-                    <p className="text-gray-400 text-sm">
-                        Conexão entre saúde, segurança, RH e gestão estratégica.
-                    </p>
-                </div>
-                {/* Card 4 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        stars
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Experiência Comprovada</h3>
-                    <p className="text-gray-400 text-sm">
-                        Mais de 30 anos de expertise em ambientes corporativos.
-                    </p>
-                </div>
-                {/* Card 5 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        query_stats
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Resultados Mensuráveis</h3>
-                    <p className="text-gray-400 text-sm">
-                        Foco em indicadores de desempenho e retorno sobre o investimento
-                        (ROI).
-                    </p>
-                </div>
-                {/* Card 6 */}
-                <div className="min-w-[280px] sm:min-w-[320px] snap-center bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-primary text-4xl mb-4">
-                        handshake
-                    </span>
-                    <h3 className="text-xl font-bold mb-3">Parceria Estratégica</h3>
-                    <p className="text-gray-400 text-sm">
-                        Atuação próxima e consultiva, entendendo o negócio do cliente.
-                    </p>
-                </div>
-            </div>
-            {/* Divider Arrow */}
-            <div className="flex justify-center mt-8 opacity-30 text-white">
-                <span className="material-symbols-outlined text-3xl">
-                    keyboard_arrow_down
-                </span>
             </div>
         </section>
     );

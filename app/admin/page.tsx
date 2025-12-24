@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
     }
 
     // Get statistics
-    const [postsCount, categoriesCount, totalViews, recentPosts] = await Promise.all([
+    const [postsCount, categoriesCount, totalViews, recentPosts, recentLeads, weeklyAnalytics] = await Promise.all([
         prisma.post.count({ where: { siteId: siteUser.siteId } }),
         prisma.category.count({ where: { siteId: siteUser.siteId } }),
         prisma.post.aggregate({
@@ -33,8 +33,35 @@ export default async function AdminDashboard() {
             orderBy: { createdAt: 'desc' },
             take: 5,
             include: { category: true, author: true }
+        }),
+        prisma.lead.findMany({
+            where: { siteId: siteUser.siteId },
+            orderBy: { createdAt: 'desc' },
+            take: 5
+        }),
+        prisma.analytics.groupBy({
+            by: ['date'],
+            where: {
+                siteId: siteUser.siteId,
+                date: {
+                    gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                }
+            },
+            _count: { _all: true }
         })
     ]);
+
+    // Process weekly analytics for chart
+    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    const chartData = Array.from({ length: 7 }).map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        const dateStr = d.toISOString().split('T')[0];
+        const count = weeklyAnalytics.find(a => a.date.toISOString().split('T')[0] === dateStr)?._count._all || 0;
+        return { day: days[d.getDay()], count };
+    });
+
+    const maxViews = Math.max(...chartData.map(d => d.count), 1);
 
     const stats = [
         { label: 'Total de Posts', value: postsCount.toString(), change: '+2', icon: 'article', color: 'primary' },
@@ -82,18 +109,18 @@ export default async function AdminDashboard() {
                         </select>
                     </div>
                     <div className="flex-1 min-h-[300px] flex items-end justify-between gap-2 px-4">
-                        {[40, 70, 55, 90, 65, 80, 100].map((h, i) => (
+                        {chartData.map((d, i) => (
                             <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
                                 <div
                                     className="w-full bg-[#13ec5b]/20 rounded-t-xl group-hover:bg-[#13ec5b] transition-all duration-500 cursor-pointer relative"
-                                    style={{ height: `${h}%` }}
+                                    style={{ height: `${(d.count / maxViews) * 100}%` }}
                                 >
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0d1b12] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {h * 125}
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0d1b12] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                        {d.count} views
                                     </div>
                                 </div>
                                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                    {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'][i]}
+                                    {d.day}
                                 </span>
                             </div>
                         ))}
@@ -125,6 +152,34 @@ export default async function AdminDashboard() {
                     </div>
                     <button className="w-full mt-8 py-3 text-xs font-black text-gray-400 hover:text-[#13ec5b] transition-colors uppercase tracking-widest border-t border-gray-100 dark:border-white/5 pt-6">
                         Gerenciar Todos
+                    </button>
+                </div>
+
+                {/* RECENT LEADS */}
+                <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm p-8">
+                    <h3 className="text-lg font-black text-[#0d1b12] dark:text-white mb-6">Últimos Leads</h3>
+                    <div className="space-y-6">
+                        {recentLeads.length === 0 ? (
+                            <p className="text-sm text-gray-400 text-center py-10">Nenhum lead recebido.</p>
+                        ) : recentLeads.map((lead: any) => (
+                            <div key={lead.id} className="flex gap-4 group cursor-pointer">
+                                <div className={`size-10 rounded-xl bg-[#13ec5b]/10 flex items-center justify-center shrink-0 text-[#13ec5b]`}>
+                                    <span className="material-symbols-outlined text-xl">contact_mail</span>
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h4 className="text-sm font-black text-[#0d1b12] dark:text-white group-hover:text-[#13ec5b] transition-colors line-clamp-1">{lead.name}</h4>
+                                        <span className="text-[10px] font-bold text-gray-400 shrink-0 ml-2">
+                                            {new Date(lead.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-gray-500 line-clamp-1 italic">"{lead.message}"</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="w-full mt-8 py-3 text-xs font-black text-gray-400 hover:text-[#13ec5b] transition-colors uppercase tracking-widest border-t border-gray-100 dark:border-white/5 pt-6">
+                        Ver Inbox
                     </button>
                 </div>
             </div>

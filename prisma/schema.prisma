@@ -103,9 +103,12 @@ model Site {
   media      Media[]
   siteSettings SiteSettings[]
   leads        Lead[]
+  newsletterSubscribers NewsletterSubscriber[]
+  newsletterCampaigns   NewsletterCampaign[]
 
   @@map("sites")
 }
+
 
 model SiteUser {
   id        String   @id @default(cuid())
@@ -157,8 +160,8 @@ model Post {
 
   site     Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
   author   User      @relation(fields: [authorId], references: [id])
-  category Category? @relation(fields: [categoryId], references: [id])
   tags     PostTag[]
+  analytics Analytics[]
 
   @@unique([siteId, slug])
   @@index([siteId, status])
@@ -253,6 +256,7 @@ model Lead {
   phone     String?
   company   String?
   message   String   @db.Text
+  notes     String?  @db.Text
   source    String?
   status    String   @default("New")
   siteId    String
@@ -263,4 +267,52 @@ model Lead {
 
   @@map("leads")
 }
+
+model Analytics {
+  id        String   @id @default(cuid())
+  siteId    String
+  postId    String?
+  type      String   @default("view") // view, click, session
+  path      String   @default("/")
+  referrer  String?
+  date      DateTime @default(now()) // To be aggregated by day
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  post Post? @relation(fields: [postId], references: [id], onDelete: SetNull)
+
+  @@index([siteId, date])
+  @@index([postId, date])
+  @@map("analytics")
+}
+
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String
+  status    String   @default("Active")
+  siteId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, email])
+  @@map("newsletter_subscribers")
+}
+
+model NewsletterCampaign {
+  id        String   @id @default(cuid())
+  subject   String
+  content   String   @db.Text
+  status    String   @default("Draft") // Draft, Scheduled, Sent
+  sentAt    DateTime?
+  siteId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@map("newsletter_campaigns")
+}
+
 

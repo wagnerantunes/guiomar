@@ -1,128 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import Link from "next/link";
 
-export function Header() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+interface HeaderProps {
+    getSetting: (key: string, defaultValue: any) => any;
+    scrollTo: (id: string) => void;
+    setSelectedPost: (post: any) => void;
+}
 
+export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
     return (
-        <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 transition-all duration-300">
-            {/* Top Bar */}
-            <div className="layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-                {/* Logo Area */}
-                <div className="flex items-center gap-3">
-                    <div className="size-8 bg-primary rounded flex items-center justify-center text-text-main">
-                        <span className="material-symbols-outlined">spa</span>
-                    </div>
-                    <h1 className="text-text-main text-xl font-bold tracking-tight">
+        <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <div
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => {
+                        setSelectedPost(null);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                >
+                    <span className="material-symbols-outlined text-3xl text-primary transition-transform group-hover:rotate-12">
+                        spa
+                    </span>
+                    <span className="text-xl font-black tracking-tight text-[#0d1b12]">
                         RenovaMente
-                    </h1>
+                    </span>
                 </div>
-                {/* Socials & CTA Area */}
-                <div className="flex items-center gap-4">
-                    <div className="hidden md:flex gap-2">
-                        <a
-                            className="p-2 text-text-main hover:text-primary transition-colors"
-                            href="#"
+
+                <div className="hidden lg:flex items-center gap-8">
+                    {getSetting("navigation_header", [
+                        { label: "SOBRE", url: "#sobre" },
+                        { label: "SERVIÇOS", url: "#servicos" },
+                        { label: "METODOLOGIA", url: "#metodologia" },
+                        { label: "BLOG", url: "#blog" },
+                        { label: "CONTATO", url: "#contato" },
+                    ]).map((link: any, i: number) => (
+                        <button
+                            key={i}
+                            onClick={() => scrollTo(link.url.replace("#", ""))}
+                            className="text-xs font-black text-gray-500 hover:text-primary transition-colors tracking-widest"
                         >
-                            <span className="material-symbols-outlined">photo_camera</span>
-                        </a>{" "}
-                        {/* Instagram placeholder */}
-                        <a
-                            className="p-2 text-text-main hover:text-primary transition-colors"
-                            href="#"
-                        >
-                            <span className="material-symbols-outlined">public</span>
-                        </a>{" "}
-                        {/* Facebook placeholder */}
-                        <a
-                            className="p-2 text-text-main hover:text-primary transition-colors"
-                            href="#"
-                        >
-                            <span className="material-symbols-outlined">work</span>
-                        </a>{" "}
-                        {/* LinkedIn placeholder */}
-                    </div>
+                            {link.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Link
+                        href="/admin"
+                        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-[10px] font-black text-gray-400 hover:text-primary hover:border-primary/30 uppercase transition-all"
+                    >
+                        <span className="material-symbols-outlined text-sm">settings</span>{" "}
+                        ADMIN
+                    </Link>
                     <a
-                        className="hidden sm:flex bg-primary hover:bg-primary-dark text-text-main text-sm font-bold px-5 py-2.5 rounded-full transition-colors items-center gap-2"
-                        href="https://wa.me/5511994416024"
+                        href={`https://wa.me/${getSetting("navigation_footer", { phone: "5511994416024" }).phone.replace(/\D/g, "")}`}
+                        className="bg-[#13ec5b] text-[#0d1b12] px-5 py-2.5 rounded-xl text-xs font-black hover:bg-[#0fdc53] shadow-lg shadow-primary/20 transition-all active:scale-95"
                     >
-                        <span className="material-symbols-outlined text-[20px]">chat</span>
-                        Fale Conosco
+                        FALE CONOSCO
                     </a>
-                    <button
-                        className="sm:hidden p-2 text-text-main"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
-                        <span className="material-symbols-outlined">menu</span>
-                    </button>
                 </div>
             </div>
-            {/* Navigation Line */}
-            <div className="hidden sm:block border-t border-gray-100 bg-white">
-                <div className="max-w-[1280px] mx-auto flex justify-center gap-8 py-3">
-                    <Link
-                        className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="/#quem-somos"
-                    >
-                        Quem Somos
-                    </Link>
-                    <Link
-                        className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="/#servicos"
-                    >
-                        Serviços
-                    </Link>
-                    <Link
-                        className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="/#metodologia"
-                    >
-                        Metodologia
-                    </Link>
-                    <Link
-                        className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                        href="/blog"
-                    >
-                        Blog
-                    </Link>
-                </div>
-            </div>
-            {/* Mobile Menu */}
-            {isMobileMenuOpen && (
-                <div className="sm:hidden border-t border-gray-100 bg-white absolute w-full left-0 top-[100%] shadow-lg">
-                    <div className="flex flex-col p-4 gap-4">
-                        <Link
-                            className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="/#quem-somos"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Quem Somos
-                        </Link>
-                        <Link
-                            className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="/#servicos"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Serviços
-                        </Link>
-                        <Link
-                            className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="/#metodologia"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Metodologia
-                        </Link>
-                        <Link
-                            className="text-sm font-semibold text-gray-600 hover:text-primary uppercase tracking-wide transition-colors"
-                            href="/blog"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Blog
-                        </Link>
-                    </div>
-                </div>
-            )}
-        </header>
+        </nav>
     );
 }
+

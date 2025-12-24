@@ -10,6 +10,7 @@ import {
     CategoriesWidget,
     TagsWidget,
 } from "@/components/blog";
+import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,7 @@ export default async function BlogPage() {
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+            <AnalyticsTracker siteId={site.id} />
             <Header />
 
             {/* Main Content */}

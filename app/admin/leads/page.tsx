@@ -9,6 +9,7 @@ interface Lead {
     phone: string | null;
     company: string | null;
     message: string;
+    notes: string | null;
     source: string | null;
     status: string;
     createdAt: string;
@@ -18,6 +19,8 @@ export default function LeadsPage() {
     const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
+    const [noteText, setNoteText] = useState("");
+    const [isSavingNote, setIsSavingNote] = useState(false);
 
     useEffect(() => {
         async function fetchLeads() {
@@ -39,6 +42,12 @@ export default function LeadsPage() {
 
     const selectedLead = leads.find((l) => l.id === selectedLeadId);
 
+    useEffect(() => {
+        if (selectedLead) {
+            setNoteText(selectedLead.notes || "");
+        }
+    }, [selectedLeadId, leads]);
+
     const handleStatusUpdate = async (id: string, newStatus: string) => {
         try {
             const response = await fetch(`/api/leads/${id}`, {
@@ -51,6 +60,26 @@ export default function LeadsPage() {
             }
         } catch (error) {
             console.error("Error updating lead status:", error);
+        }
+    };
+
+    const handleSaveNote = async () => {
+        if (!selectedLeadId) return;
+        setIsSavingNote(true);
+        try {
+            const response = await fetch(`/api/leads/${selectedLeadId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ notes: noteText }),
+            });
+            if (response.ok) {
+                setLeads(leads.map(l => l.id === selectedLeadId ? { ...l, notes: noteText } : l));
+                alert("Nota salva com sucesso!");
+            }
+        } catch (error) {
+            console.error("Error saving note:", error);
+        } finally {
+            setIsSavingNote(false);
         }
     };
 
@@ -209,12 +238,18 @@ export default function LeadsPage() {
                                 <div className="pt-10 border-t border-gray-100 dark:border-white/5 space-y-6">
                                     <h4 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-widest ml-1">Notas Internas</h4>
                                     <textarea
+                                        value={noteText}
+                                        onChange={(e) => setNoteText(e.target.value)}
                                         className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[2rem] p-8 text-sm focus:ring-2 focus:ring-[#13ec5b]/30 h-40 resize-none outline-none shadow-inner"
                                         placeholder="Adicione anotações sobre este lead aqui... (apenas você vê)"
                                     />
                                     <div className="flex justify-end">
-                                        <button className="px-10 py-4 bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
-                                            Salvar Nota
+                                        <button
+                                            onClick={handleSaveNote}
+                                            disabled={isSavingNote}
+                                            className="px-10 py-4 bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl disabled:opacity-50"
+                                        >
+                                            {isSavingNote ? "Salvando..." : "Salvar Nota"}
                                         </button>
                                     </div>
                                 </div>

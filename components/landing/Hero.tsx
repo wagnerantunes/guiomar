@@ -1,99 +1,104 @@
-export function Hero() {
+import React, { useState } from "react";
+
+interface HeroProps {
+    getSetting: (key: string, defaultValue: any) => any;
+    scrollTo: (id: string) => void;
+}
+
+export function Hero({ getSetting, scrollTo }: HeroProps) {
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setStatus("loading");
+
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            source: "Hero Section Lead Form",
+            domain: window.location.hostname
+        };
+
+        try {
+            const res = await fetch("/api/leads", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            if (res.ok) {
+                setStatus("success");
+                (e.target as HTMLFormElement).reset();
+                setTimeout(() => setStatus("idle"), 3000);
+            } else {
+                setStatus("error");
+            }
+        } catch (err) {
+            setStatus("error");
+        }
+    };
+
     return (
-        <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-background-dark">
-            {/* Background Image with Overlay */}
+        <section
+            id="hero"
+            className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden"
+        >
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-background-dark/95 via-background-dark/80 to-primary/10 z-10"></div>
                 <img
-                    className="w-full h-full object-cover opacity-60"
-                    alt="Modern corporate office environment with plants and natural light"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwsXDZ8mgtPr7RbZrfQ49hf7S1uNnFDHJk_CC6eWM0ObPSIQS0imuXls229umv5pemYV3BJ6cwUu6DlKblbSFXjWuFnkmHil3B4SJiTfU8zcaWvMF-fu2WPGv7NneZM-abjuIVoSRVgwJWWHrtJuwSYbHd7BoFjQaRxbEsqyMD4QYs8B9GShUParaDUMN_9Ggcb-_BiwX-xePV6IRTPK9J2cN-W7xzwu91s-rM17av1TunvYpzGRQZWzYBXsW3nihXAz88_MNTXass"
+                    src={getSetting("section_hero_content", {}).image || "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop"}
+                    className="w-full h-full object-cover"
+                    alt="Hero"
                 />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#102216]/95 via-[#102216]/80 to-transparent"></div>
             </div>
-            <div className="layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-                {/* Text Content */}
-                <div className="flex-1 text-white space-y-8">
-                    <div className="space-y-4">
-                        <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight">
-                            Consciência que transforma{" "}
-                            <span className="text-primary">ambientes de trabalho</span>
-                        </h1>
-                        <h2 className="text-xl text-gray-200 font-medium max-w-2xl leading-relaxed">
-                            Consultoria em bem-estar corporativo que une técnica, cuidado e
-                            gestão humana.
-                        </h2>
-                    </div>
-                    <p className="text-gray-300 leading-relaxed text-lg max-w-xl">
-                        A RenovaMente é uma consultoria em bem-estar corporativo que atua
-                        com ergonomia legal conforme NR-1 e NR-17, riscos psicossociais e
-                        cultura organizacional, unindo técnica, conformidade e cuidado
-                        humano para gerar resultados sustentáveis.
+            <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="text-white space-y-8 animate-fadeInLeft">
+                    <h1 className="text-4xl md:text-6xl font-black leading-[1.1]">
+                        {getSetting("section_hero_content", { title: "Consciência que transforma ambientes de trabalho" }).title}
+                    </h1>
+                    <p className="text-lg md:text-xl font-bold text-primary italic">
+                        {getSetting("section_hero_content", { description: "Técnica, cuidado e gestão humana para sua empresa." }).description}
                     </p>
-                    <div className="pt-2">
-                        <a
-                            className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-primary hover:bg-primary-dark text-text-main font-bold text-base transition-colors shadow-lg shadow-primary/25"
-                            href="#servicos"
+                    <button
+                        onClick={() => scrollTo("servicos")}
+                        className="bg-primary text-text-dark px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-xl shadow-primary/20"
+                    >
+                        NOSSOS SERVIÇOS
+                    </button>
+                </div>
+                <div className="bg-white p-8 rounded-[2.5rem] shadow-2xl animate-fadeInRight max-w-md ml-auto">
+                    <h3 className="text-2xl font-black mb-6 text-[#0d1b12]">
+                        Fale com um especialista
+                    </h3>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="name"
+                            required
+                            placeholder="Nome"
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30"
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="E-mail Corporativo"
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30"
+                        />
+                        <button
+                            type="submit"
+                            disabled={status === "loading"}
+                            className="w-full bg-[#0d1b12] text-white py-4 rounded-xl font-black text-sm hover:bg-black transition-all active:scale-95 disabled:opacity-50"
                         >
-                            NOSSOS SERVIÇOS
-                        </a>
-                    </div>
+                            {status === "loading" ? "Enviando..." :
+                                status === "success" ? "Solicitação Enviada!" :
+                                    status === "error" ? "Erro ao Enviar" : "Solicitar Contato"}
+                        </button>
+                    </form>
                 </div>
-                {/* Form Card */}
-                <div className="w-full max-w-md lg:w-[420px] bg-white rounded-xl shadow-2xl overflow-hidden border-t-4 border-primary">
-                    <div className="p-8">
-                        <div className="mb-6">
-                            <h3 className="text-xl font-bold text-text-main mb-2">
-                                Transforme seu ambiente de trabalho
-                            </h3>
-                            <p className="text-sm text-gray-500">
-                                Preencha os dados abaixo para iniciar.
-                            </p>
-                        </div>
-                        <form className="space-y-4">
-                            <div>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder-gray-400 text-text-main"
-                                    placeholder="Seu nome"
-                                    type="text"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder-gray-400 text-text-main"
-                                    placeholder="Seu e-mail corporativo"
-                                    type="email"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder-gray-400 text-text-main"
-                                    placeholder="Nome da empresa"
-                                    type="text"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder-gray-400 text-text-main"
-                                    placeholder="WhatsApp - Telefone"
-                                    type="tel"
-                                />
-                            </div>
-                            <button
-                                className="w-full bg-primary hover:bg-primary-dark text-text-main font-bold py-3.5 rounded-lg transition-colors shadow-md mt-2"
-                                type="button"
-                            >
-                                Solicitar contato
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/50">
-                <span className="material-symbols-outlined text-4xl">
-                    keyboard_arrow_down
-                </span>
             </div>
         </section>
     );
 }
+

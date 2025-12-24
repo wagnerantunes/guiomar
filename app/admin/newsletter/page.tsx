@@ -1,26 +1,80 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+interface Subscriber {
+    id: string;
+    email: string;
+    status: string;
+    createdAt: string;
+}
+
+interface Campaign {
+    id: string;
+    subject: string;
+    content: string;
+    status: string;
+    sentAt: string | null;
+    createdAt: string;
+}
 
 export default function NewsletterPage() {
+    const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [newCampaign, setNewCampaign] = useState({ subject: "", content: "" });
+    const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [subRes, campRes] = await Promise.all([
+                    fetch("/api/newsletter/subscribers"),
+                    fetch("/api/newsletter/campaigns"),
+                ]);
+                const subData = await subRes.json();
+                const campData = await campRes.json();
+                setSubscribers(subData);
+                setCampaigns(campData);
+            } catch (error) {
+                console.error("Error fetching newsletter data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleSendCampaign = async (status: "Draft" | "Sent") => {
+        if (!newCampaign.subject || !newCampaign.content) return;
+        setSubmitting(true);
+        try {
+            const res = await fetch("/api/newsletter/campaigns", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...newCampaign, status }),
+            });
+            if (res.ok) {
+                const campaign = await res.json();
+                setCampaigns([campaign, ...campaigns]);
+                setNewCampaign({ subject: "", content: "" });
+            }
+        } catch (error) {
+            console.error("Error sending campaign:", error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     const stats = [
-        { label: "Total Subscribers", value: "4,258", change: "+12% this month", icon: "group", color: "blue" },
-        { label: "Avg. Open Rate", value: "48.2%", change: "Target: 45%", icon: "drafts", color: "purple" },
-        { label: "Campaigns Sent", value: "24", change: "2 Scheduled", icon: "send", color: "orange" },
+        { label: "Total Subscribers", value: subscribers.length.toString(), change: "+0% this month", icon: "group", color: "blue" },
+        { label: "Avg. Open Rate", value: "0%", change: "Target: 45%", icon: "drafts", color: "purple" },
+        { label: "Campaigns Sent", value: campaigns.filter(c => c.status === "Sent").length.toString(), change: "0 Scheduled", icon: "send", color: "orange" },
     ];
 
-    const campaigns = [
-        { id: "1", name: "Monthly Wellness Digest", status: "Sent", sentDate: "Oct 24, 2023", stats: "52% Open Rate" },
-        { id: "2", name: "Product Launch: Calm Series", status: "Scheduled", sentDate: "Nov 01, 2023", stats: "-" },
-        { id: "3", name: "Draft: Winter Tips", status: "Draft", sentDate: "-", stats: "-" },
-    ];
-
-    const recentSubscribers = [
-        { id: "1", email: "sarah.m@example.com", addedAt: "Added Today" },
-        { id: "2", email: "jason.k@work.com", addedAt: "Added Yesterday" },
-        { id: "3", email: "contact@studio.io", addedAt: "Added Oct 28" },
-        { id: "4", email: "mike_dev@gmail.com", addedAt: "Added Oct 25" },
-    ];
+    if (loading) {
+        return <div className="p-10 text-center font-black animate-pulse">Carregando dados da newsletter...</div>;
+    }
 
     return (
         <div className="flex flex-col min-h-full bg-[#f6f8f6] dark:bg-[#102216]">
@@ -78,12 +132,18 @@ export default function NewsletterPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Subject Line</label>
-                                        <input className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-[#0d1b12] dark:text-white" placeholder="e.g. Tips for a clearer mind..." type="text" />
+                                        <input
+                                            className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-[#0d1b12] dark:text-white"
+                                            placeholder="e.g. Tips for a clearer mind..."
+                                            type="text"
+                                            value={newCampaign.subject}
+                                            onChange={(e) => setNewCampaign({ ...newCampaign, subject: e.target.value })}
+                                        />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Target Segment</label>
                                         <select className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-[#0d1b12] dark:text-white appearance-none cursor-pointer">
-                                            <option>All Subscribers (4,258)</option>
+                                            <option>All Subscribers ({subscribers.length})</option>
                                             <option>New Users (Last 30 days)</option>
                                             <option>VIP Clients</option>
                                         </select>
@@ -99,18 +159,29 @@ export default function NewsletterPage() {
                                                 </button>
                                             ))}
                                         </div>
-                                        <div className="p-8 min-h-[350px] outline-none text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium" contentEditable placeholder="Start typing...">
-                                            <p>Olá time RenovaMente,</p>
-                                            <p><br /></p>
-                                            <p>Estamos entusiasmados em compartilhar as últimas atualizações com vocês...</p>
-                                        </div>
+                                        <textarea
+                                            className="w-full p-8 min-h-[350px] outline-none text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium bg-transparent border-none resize-none"
+                                            placeholder="Start typing..."
+                                            value={newCampaign.content}
+                                            onChange={(e) => setNewCampaign({ ...newCampaign, content: e.target.value })}
+                                        />
                                     </div>
                                 </div>
                                 <div className="pt-4 flex justify-end gap-4">
-                                    <button className="px-8 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-[#0d1b12] transition-colors">Save Draft</button>
-                                    <button className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-3">
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => handleSendCampaign("Draft")}
+                                        className="px-8 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-[#0d1b12] transition-colors"
+                                    >
+                                        Save Draft
+                                    </button>
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => handleSendCampaign("Sent")}
+                                        className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-3 disabled:opacity-50"
+                                    >
                                         <span className="material-symbols-outlined text-[18px]">send</span>
-                                        Send Campaign
+                                        {submitting ? "Sending..." : "Send Campaign"}
                                     </button>
                                 </div>
                             </div>
@@ -128,14 +199,13 @@ export default function NewsletterPage() {
                                             <th className="px-10 py-5">Campaign Name</th>
                                             <th className="px-8 py-5">Status</th>
                                             <th className="px-8 py-5">Sent Date</th>
-                                            <th className="px-8 py-5">Stats</th>
                                             <th className="px-10 py-5 text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50 dark:divide-white/5">
                                         {campaigns.map((c) => (
                                             <tr key={c.id} className="group hover:bg-[#f6f8f6] dark:hover:bg-white/5 transition-colors">
-                                                <td className="px-10 py-6 text-sm font-black text-[#0d1b12] dark:text-white">{c.name}</td>
+                                                <td className="px-10 py-6 text-sm font-black text-[#0d1b12] dark:text-white">{c.subject}</td>
                                                 <td className="px-8 py-6">
                                                     <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${c.status === "Sent" ? "bg-green-50 text-green-600 border-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20" :
                                                         c.status === "Scheduled" ? "bg-yellow-50 text-yellow-600 border-yellow-100 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20" :
@@ -144,8 +214,7 @@ export default function NewsletterPage() {
                                                         {c.status}
                                                     </span>
                                                 </td>
-                                                <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.sentDate}</td>
-                                                <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.stats}</td>
+                                                <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.sentAt ? new Date(c.sentAt).toLocaleDateString() : "-"}</td>
                                                 <td className="px-10 py-6 text-right">
                                                     <button className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline">
                                                         {c.status === "Sent" ? "View Report" : c.status === "Scheduled" ? "Edit" : "Resume"}
@@ -196,11 +265,11 @@ export default function NewsletterPage() {
                                 <button className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline">Export CSV</button>
                             </div>
                             <ul className="divide-y divide-gray-50 dark:divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
-                                {recentSubscribers.map((s) => (
+                                {subscribers.slice(0, 10).map((s) => (
                                     <li key={s.id} className="px-10 py-6 flex items-center justify-between hover:bg-[#f6f8f6] dark:hover:bg-white/5 transition-colors group">
                                         <div className="flex flex-col">
                                             <span className="text-xs font-black text-[#0d1b12] dark:text-white">{s.email}</span>
-                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">{s.addedAt}</span>
+                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">{new Date(s.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </li>
                                 ))}

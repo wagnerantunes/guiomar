@@ -5,32 +5,51 @@ import prisma from '@/lib/prisma'
 export async function GET(request: NextRequest) {
     try {
         const session = await auth()
-        if (!session) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        let siteId: string | null = null
+
+        if (session) {
+            const siteUser = await prisma.siteUser.findFirst({
+                where: { userId: session.user.id }
+            })
+            siteId = siteUser?.siteId || null
+        } else {
+            // Public access - find site by domain
+            const url = new URL(request.url)
+            const domain = url.searchParams.get('domain') || "renovamente-guiomarmelo.com.br"
+            const site = await prisma.site.findUnique({
+                where: { domain }
+            })
+            siteId = site?.id || null
         }
 
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user.id }
-        })
-
-        if (!siteUser) {
+        if (!siteId) {
             return NextResponse.json({ error: 'Site not found' }, { status: 404 })
         }
 
         const posts = await prisma.post.findMany({
-            where: { siteId: siteUser.siteId },
+            where: {
+                siteId,
+                ...(session ? {} : { status: 'PUBLISHED' }) // Only published for public
+            },
             include: {
                 category: true,
-                author: true
+                author: {
+                    select: {
+                        name: true,
+                        image: true
+                    }
+                }
             },
             orderBy: { createdAt: 'desc' }
         })
 
         return NextResponse.json(posts)
     } catch (error) {
+        console.error("Error fetching posts:", error)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }
+
 
 export async function POST(request: NextRequest) {
     try {

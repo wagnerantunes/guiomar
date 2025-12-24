@@ -26,14 +26,26 @@ export default function PageSections() {
     ]);
 
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        async function fetchSections() {
+        async function fetchSettings() {
             try {
-                const response = await fetch("/api/sections");
+                const response = await fetch("/api/settings");
                 const data = await response.json();
                 if (data && data.length > 0) {
-                    // Merge content if exists
+                    setSections(prev => prev.map(sec => {
+                        const setting = data.find((s: any) => s.key === `section_${sec.id}_content`);
+                        if (setting) {
+                            try {
+                                const content = JSON.parse(setting.value);
+                                return { ...sec, content };
+                            } catch (e) {
+                                return sec;
+                            }
+                        }
+                        return sec;
+                    }));
                 }
             } catch (error) {
                 console.error("Error fetching sections:", error);
@@ -41,8 +53,36 @@ export default function PageSections() {
                 setLoading(false);
             }
         }
-        fetchSections();
+        fetchSettings();
     }, []);
+
+    const handleContentChange = (id: string, field: string, value: string) => {
+        setSections(prev => prev.map(sec =>
+            sec.id === id ? { ...sec, content: { ...sec.content, [field]: value } } : sec
+        ));
+    };
+
+    const saveSection = async (sec: Section) => {
+        setSaving(true);
+        try {
+            const res = await fetch("/api/settings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    key: `section_${sec.id}_content`,
+                    value: JSON.stringify(sec.content || {})
+                }),
+            });
+            if (res.ok) {
+                alert("Sessão salva com sucesso!");
+            }
+        } catch (error) {
+            console.error("Error saving section:", error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
 
     return (
         <div className="flex flex-col h-full bg-[#f6f8f6] dark:bg-[#102216]">
@@ -76,8 +116,8 @@ export default function PageSections() {
                         <div
                             key={sec.id}
                             className={`group bg-white dark:bg-[#183221] rounded-[2.5rem] border transition-all duration-500 overflow-hidden ${expandedId === sec.id
-                                    ? "border-[#13ec5b] ring-8 ring-[#13ec5b]/5 shadow-2xl"
-                                    : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/30 shadow-sm"
+                                ? "border-[#13ec5b] ring-8 ring-[#13ec5b]/5 shadow-2xl"
+                                : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/30 shadow-sm"
                                 }`}
                         >
                             <div
@@ -89,8 +129,8 @@ export default function PageSections() {
                                         <span className="material-symbols-outlined text-xl">drag_indicator</span>
                                     </div>
                                     <div className={`size-16 rounded-3xl flex items-center justify-center transition-all duration-300 ${expandedId === sec.id
-                                            ? "bg-[#13ec5b] text-[#0d1b12] rotate-6 shadow-lg shadow-[#13ec5b]/20"
-                                            : "bg-gray-50 dark:bg-white/5 text-gray-400 group-hover:bg-[#13ec5b]/10 group-hover:text-[#13ec5b]"
+                                        ? "bg-[#13ec5b] text-[#0d1b12] rotate-6 shadow-lg shadow-[#13ec5b]/20"
+                                        : "bg-gray-50 dark:bg-white/5 text-gray-400 group-hover:bg-[#13ec5b]/10 group-hover:text-[#13ec5b]"
                                         }`}>
                                         <span className="material-symbols-outlined text-2xl">{sec.icon}</span>
                                     </div>
@@ -128,15 +168,68 @@ export default function PageSections() {
                                                         <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Título Principal</label>
                                                         <input
                                                             className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
-                                                            defaultValue="Texto de exemplo da sessão..."
+                                                            value={sec.content?.title || ""}
+                                                            onChange={(e) => handleContentChange(sec.id, "title", e.target.value)}
+                                                            placeholder="Texto de exemplo da sessão..."
                                                         />
                                                     </div>
+
+                                                    {sec.id === "desafio" && (
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Valor Estatístico</label>
+                                                                <input
+                                                                    className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
+                                                                    value={sec.content?.statValue || ""}
+                                                                    onChange={(e) => handleContentChange(sec.id, "statValue", e.target.value)}
+                                                                    placeholder="+30%"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Rótulo Estatístico</label>
+                                                                <input
+                                                                    className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
+                                                                    value={sec.content?.statLabel || ""}
+                                                                    onChange={(e) => handleContentChange(sec.id, "statLabel", e.target.value)}
+                                                                    placeholder="produtividade..."
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {sec.id === "sobre" && (
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Anos de Experiência</label>
+                                                            <input
+                                                                className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
+                                                                value={sec.content?.experience || ""}
+                                                                onChange={(e) => handleContentChange(sec.id, "experience", e.target.value)}
+                                                                placeholder="30"
+                                                            />
+                                                        </div>
+                                                    )}
+
+                                                    {sec.id === "guiomar" && (
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Citação / Quote</label>
+                                                            <textarea
+                                                                rows={3}
+                                                                className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300"
+                                                                value={sec.content?.quote || ""}
+                                                                onChange={(e) => handleContentChange(sec.id, "quote", e.target.value)}
+                                                                placeholder="A frase de destaque da Guiomar..."
+                                                            />
+                                                        </div>
+                                                    )}
+
                                                     <div className="space-y-2">
                                                         <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Texto de Apoio / Descrição</label>
                                                         <textarea
                                                             rows={5}
                                                             className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[2rem] px-6 py-5 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
-                                                            defaultValue="Descrição longa que aparece abaixo do título principal para dar mais contexto ao usuário..."
+                                                            value={sec.content?.description || ""}
+                                                            onChange={(e) => handleContentChange(sec.id, "description", e.target.value)}
+                                                            placeholder="Descrição longa que aparece abaixo do título principal para dar mais contexto ao usuário..."
                                                         />
                                                     </div>
                                                 </div>
@@ -150,29 +243,34 @@ export default function PageSections() {
                                                 </div>
                                                 <div className="space-y-6">
                                                     <div className="space-y-3">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Cor de Fundo</label>
-                                                        <div className="flex items-center gap-4 bg-gray-50 dark:bg-white/5 p-4 rounded-2xl w-fit">
-                                                            <div className="size-8 rounded-full bg-white border border-gray-200 cursor-pointer ring-4 ring-[#13ec5b]/30"></div>
-                                                            <div className="size-8 rounded-full bg-gray-100 border border-gray-200 cursor-pointer"></div>
-                                                            <div className="size-8 rounded-full bg-[#0d1b12] border border-gray-200 cursor-pointer"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Imagem / Background</label>
-                                                        <div className="aspect-[4/3] bg-gray-50 dark:bg-white/5 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-3 group cursor-pointer hover:border-[#13ec5b]/50 hover:bg-[#13ec5b]/5 transition-all">
-                                                            <span className="material-symbols-outlined text-3xl text-gray-300 group-hover:text-[#13ec5b] group-hover:scale-110 transition-all">image</span>
-                                                            <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest group-hover:text-[#13ec5b]">Upload Background</span>
-                                                        </div>
+                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Imagem / URL de Mídia</label>
+                                                        <input
+                                                            className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
+                                                            value={sec.content?.image || ""}
+                                                            onChange={(e) => handleContentChange(sec.id, "image", e.target.value)}
+                                                            placeholder="https://images.unsplash.com/..."
+                                                        />
+                                                        {sec.content?.image && (
+                                                            <div className="mt-4 aspect-video rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
+                                                                <img src={sec.content.image} alt="Preview" className="w-full h-full object-cover" />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div className="mt-12 pt-8 border-t border-gray-100 dark:border-white/5 flex justify-end gap-4">
                                         <button className="px-8 py-3 text-[10px] font-black text-gray-400 hover:text-red-500 transition-colors uppercase tracking-widest">Pausar Sessão</button>
-                                        <button className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95">
-                                            Aplicar Alterações
+                                        <button
+                                            onClick={() => saveSection(sec)}
+                                            disabled={saving}
+                                            className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                                        >
+                                            {saving ? "Salvando..." : "Aplicar Alterações"}
                                         </button>
+
                                     </div>
                                 </div>
                             )}
