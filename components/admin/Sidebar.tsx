@@ -1,114 +1,82 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import {
-    LayoutDashboard,
-    FileText,
-    FolderOpen,
-    Image,
-    Settings,
-    LogOut,
-    Menu,
-    X,
-} from "lucide-react";
-import { useState } from "react";
 
-const navigation = [
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { name: "Posts", href: "/admin/posts", icon: FileText },
-    { name: "Categorias", href: "/admin/categories", icon: FolderOpen },
-    { name: "Mídia", href: "/admin/media", icon: Image },
-    { name: "Configurações", href: "/admin/settings", icon: Settings },
+const menuItems = [
+    { id: "dashboard", label: "Dashboard", icon: "dashboard", href: "/admin" },
+    { id: "leads", label: "Leads & Inbox", icon: "inbox", href: "/admin/leads", badge: 5 },
+    { id: "sections", label: "Page Sections", icon: "view_quilt", href: "/admin/sections" },
+    { id: "navigation", label: "Menu & Footer", icon: "menu_open", href: "/admin/navigation" },
+    { id: "newsletter", label: "Newsletter", icon: "campaign", href: "/admin/newsletter" },
+    { id: "blog", label: "Blog Posts", icon: "article", href: "/admin/posts" },
+    { id: "forms", label: "Forms Editor", icon: "check_box", href: "/admin/forms" },
+    { id: "media", label: "Media Library", icon: "image", href: "/admin/media" },
 ];
 
 export default function Sidebar() {
     const pathname = usePathname();
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const handleSignOut = () => {
         signOut({ callbackUrl: "/login" });
     };
 
     return (
-        <>
-            {/* Mobile menu button */}
-            <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
-            >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-
-            {/* Sidebar */}
-            <aside
-                className={`
-          fixed top-0 left-0 h-full w-64 bg-[#102216] text-white overflow-y-auto
-          transform transition-transform duration-300 ease-in-out z-40 border-r border-[#1f422b]
-          ${mobileMenuOpen
-                        ? "translate-x-0"
-                        : "-translate-x-full lg:translate-x-0"
-                    }
-        `}
-            >
-                <div className="flex flex-col h-full">
-                    {/* Logo */}
-                    <div className="p-6 border-b border-[#1f422b]">
-                        <h1 className="text-2xl font-bold flex items-center gap-2">
-                            <span className="text-[#13ec5b]">Renova</span>Mente
-                        </h1>
-                        <p className="text-xs text-[#4c9a66] mt-1 font-medium tracking-wider uppercase">
-                            Painel Administrativo
-                        </p>
-                    </div>
-
-                    {/* Navigation */}
-                    <nav className="flex-1 p-4 space-y-2">
-                        {navigation.map((item) => {
-                            const isActive = pathname === item.href;
-                            const Icon = item.icon;
-
-                            return (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className={`
-                    flex items-center gap-3 px-4 py-3 rounded-lg transition-all
-                    ${isActive
-                                            ? "bg-[#13ec5b] text-[#0d1b12] font-bold shadow-lg shadow-[#13ec5b]/20"
-                                            : "text-gray-300 hover:bg-[#1f422b] hover:text-white"
-                                        }
-                  `}
-                                >
-                                    <Icon size={20} />
-                                    <span className="font-medium">{item.name}</span>
-                                </Link>
-                            );
-                        })}
-                    </nav>
-
-                    {/* Logout */}
-                    <div className="p-4 border-t border-[#1f422b]">
-                        <button
-                            onClick={handleSignOut}
-                            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-gray-300 hover:bg-[#1f422b] hover:text-white transition-all"
+        <aside className="w-64 bg-white dark:bg-[#183221] border-r border-[#e7f3eb] dark:border-white/10 hidden lg:flex flex-col flex-shrink-0">
+            <div className="p-6 flex flex-col gap-1 overflow-y-auto custom-scrollbar flex-1">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-3">
+                    Main Menu
+                </span>
+                {menuItems.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+                    return (
+                        <Link
+                            key={item.id}
+                            href={item.href}
+                            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-left ${isActive
+                                    ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
+                                }`}
                         >
-                            <LogOut size={20} />
-                            <span className="font-medium">Sair</span>
-                        </button>
-                    </div>
-                </div>
-            </aside>
+                            <span
+                                className={`material-symbols-outlined text-[20px] ${isActive ? "fill-1" : ""
+                                    }`}
+                            >
+                                {item.icon}
+                            </span>
+                            <span className="text-sm">{item.label}</span>
+                            {item.badge && (
+                                <span className="ml-auto bg-[#13ec5b] text-[#0d1b12] text-[10px] font-black px-1.5 py-0.5 rounded-full">
+                                    {item.badge}
+                                </span>
+                            )}
+                        </Link>
+                    );
+                })}
+            </div>
 
-            {/* Overlay for mobile */}
-            {mobileMenuOpen && (
-                <div
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="lg:hidden fixed inset-0 bg-black/50 z-30"
-                />
-            )}
-        </>
+            <div className="mt-auto p-6 border-t border-gray-100 dark:border-white/10">
+                <Link
+                    href="/admin/settings"
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-left ${pathname === "/admin/settings"
+                            ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
+                        }`}
+                >
+                    <span className="material-symbols-outlined text-[20px]">settings</span>
+                    <span className="text-sm">Settings</span>
+                </Link>
+                <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors dark:text-gray-300 dark:hover:bg-white/5 mt-1"
+                >
+                    <span className="material-symbols-outlined text-[20px]">logout</span>
+                    <span className="text-sm font-medium">Logout</span>
+                </button>
+            </div>
+        </aside>
     );
 }
+
