@@ -55,6 +55,25 @@ export default function PostsPage() {
         fetchData();
     }, []);
 
+    const handleDelete = async (id: string) => {
+        if (!confirm("Tem certeza que deseja excluir este post?")) return;
+
+        try {
+            const res = await fetch(`/api/posts/${id}`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                setPosts(posts.filter((p) => p.id !== id));
+            } else {
+                alert("Erro ao excluir post");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Erro ao excluir post");
+        }
+    };
+
     const filteredPosts = posts.filter((post) => {
         const matchesSearch =
             post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -230,6 +249,7 @@ export default function PostsPage() {
                                     <span className="material-symbols-outlined">edit</span>
                                 </Link>
                                 <button
+                                    onClick={() => handleDelete(post.id)}
                                     className="size-12 rounded-2xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all active:scale-90"
                                     title="Excluir post"
                                 >
