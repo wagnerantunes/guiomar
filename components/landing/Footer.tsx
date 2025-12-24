@@ -3,23 +3,23 @@
 import React from "react";
 
 interface FooterProps {
-    getSetting: (key: string, defaultValue: any) => any;
-    scrollTo: (id: string) => void;
-    handleNewsletterSubmit: (e: React.FormEvent) => void;
-    newsletterEmail: string;
-    setNewsletterEmail: (email: string) => void;
-    newsletterStatus: string;
+    getSetting?: (key: string, defaultValue: any) => any;
+    scrollTo?: (id: string) => void;
+    handleNewsletterSubmit?: (e: React.FormEvent) => void;
+    newsletterEmail?: string;
+    setNewsletterEmail?: (email: string) => void;
+    newsletterStatus?: string;
 }
 
 export function Footer({
     getSetting,
     scrollTo,
     handleNewsletterSubmit,
-    newsletterEmail,
+    newsletterEmail = "",
     setNewsletterEmail,
-    newsletterStatus
+    newsletterStatus = "idle"
 }: FooterProps) {
-    const footerSettings = getSetting("navigation_footer", {
+    const footerSettings = getSetting ? getSetting("navigation_footer", {
         bio: "Transformando ambientes de trabalho com técnica e humanização.",
         quickLinks: [
             { label: "Sobre", url: "#sobre" },
@@ -31,7 +31,19 @@ export function Footer({
             linkedin: "#",
         },
         phone: "5511994416024"
-    });
+    }) : {
+        bio: "Transformando ambientes de trabalho com técnica e humanização.",
+        quickLinks: [
+            { label: "Sobre", url: "#sobre" },
+            { label: "Serviços", url: "#servicos" },
+            { label: "Blog", url: "#blog" },
+        ],
+        socials: {
+            instagram: "#",
+            linkedin: "#",
+        },
+        phone: "5511994416024"
+    };
 
     return (
         <footer className="bg-gray-100 py-20 px-6 border-t border-gray-200">
@@ -57,7 +69,13 @@ export function Footer({
                         {(footerSettings.quickLinks || []).map((link: any, i: number) => (
                             <li key={i}>
                                 <button
-                                    onClick={() => scrollTo(link.url.replace("#", ""))}
+                                    onClick={() => {
+                                        if (scrollTo) {
+                                            scrollTo(link.url.replace("#", ""));
+                                        } else {
+                                            window.location.href = "/" + link.url;
+                                        }
+                                    }}
                                     className="hover:text-primary transition-colors text-left"
                                 >
                                     {link.label}
@@ -85,18 +103,18 @@ export function Footer({
                 </div>
                 <div className="bg-white p-6 rounded-2xl shadow-sm">
                     <h4 className="text-xs font-black mb-4">Newsletter</h4>
-                    <form className="flex flex-col gap-2" onSubmit={handleNewsletterSubmit}>
+                    <form className="flex flex-col gap-2" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
                         <input
                             className="bg-gray-50 border-none rounded-xl text-xs py-2 px-4 outline-none focus:ring-2 focus:ring-primary/30 text-[#0d1b12]"
                             placeholder="Seu e-mail"
                             type="email"
                             required
                             value={newsletterEmail}
-                            onChange={(e) => setNewsletterEmail(e.target.value)}
+                            onChange={(e) => setNewsletterEmail && setNewsletterEmail(e.target.value)}
                         />
                         <button
                             type="submit"
-                            disabled={newsletterStatus === "loading"}
+                            disabled={newsletterStatus === "loading" || !handleNewsletterSubmit}
                             className="bg-primary text-text-dark font-black py-2 rounded-xl text-[10px] uppercase hover:scale-105 transition-all active:scale-95 disabled:opacity-50"
                         >
                             {newsletterStatus === "loading" ? "..." :

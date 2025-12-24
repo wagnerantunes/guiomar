@@ -4,9 +4,9 @@ import React from "react";
 import Link from "next/link";
 
 interface HeaderProps {
-    getSetting: (key: string, defaultValue: any) => any;
-    scrollTo: (id: string) => void;
-    setSelectedPost: (post: any) => void;
+    getSetting?: (key: string, defaultValue: any) => any;
+    scrollTo?: (id: string) => void;
+    setSelectedPost?: (post: any) => void;
 }
 
 export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
@@ -16,8 +16,10 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                 <div
                     className="flex items-center gap-2 cursor-pointer group"
                     onClick={() => {
-                        setSelectedPost(null);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        if (setSelectedPost) setSelectedPost(null);
+                        if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
                     }}
                 >
                     <span className="material-symbols-outlined text-3xl text-primary transition-transform group-hover:rotate-12">
@@ -29,7 +31,13 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                 </div>
 
                 <div className="hidden lg:flex items-center gap-8">
-                    {getSetting("navigation_header", [
+                    {(getSetting ? getSetting("navigation_header", [
+                        { label: "SOBRE", url: "#sobre" },
+                        { label: "SERVIÇOS", url: "#servicos" },
+                        { label: "METODOLOGIA", url: "#metodologia" },
+                        { label: "BLOG", url: "#blog" },
+                        { label: "CONTATO", url: "#contato" },
+                    ]) : [
                         { label: "SOBRE", url: "#sobre" },
                         { label: "SERVIÇOS", url: "#servicos" },
                         { label: "METODOLOGIA", url: "#metodologia" },
@@ -38,7 +46,13 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                     ]).map((link: any, i: number) => (
                         <button
                             key={i}
-                            onClick={() => scrollTo(link.url.replace("#", ""))}
+                            onClick={() => {
+                                if (scrollTo) {
+                                    scrollTo(link.url.replace("#", ""));
+                                } else {
+                                    window.location.href = "/" + link.url;
+                                }
+                            }}
                             className="text-xs font-black text-gray-500 hover:text-primary transition-colors tracking-widest"
                         >
                             {link.label}
@@ -55,7 +69,7 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                         ADMIN
                     </Link>
                     <a
-                        href={`https://wa.me/${getSetting("navigation_footer", { phone: "5511994416024" }).phone.replace(/\D/g, "")}`}
+                        href={`https://wa.me/${(getSetting ? getSetting("navigation_footer", { phone: "5511994416024" }) : { phone: "5511994416024" }).phone.replace(/\D/g, "")}`}
                         className="bg-[#13ec5b] text-[#0d1b12] px-5 py-2.5 rounded-xl text-xs font-black hover:bg-[#0fdc53] shadow-lg shadow-primary/20 transition-all active:scale-95"
                     >
                         FALE CONOSCO
