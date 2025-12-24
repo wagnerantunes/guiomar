@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Header } from "@/components/landing/Header";
 import { Hero } from "@/components/landing/Hero";
 import { AboutUs } from "@/components/landing/AboutUs";
@@ -30,6 +31,16 @@ export default function HomePage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  // Animation variants
+  const sectionVariants: any = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
 
   const scrollTo = (id: string) => {
     if (selectedPost) {
@@ -62,7 +73,6 @@ export default function HomePage() {
         const res = await fetch("/api/posts");
         if (res.ok) {
           const data = await res.json();
-          // Transform API data to BlogPost format if needed
           const transformed = data.map((p: any) => ({
             id: p.id,
             title: p.title,
@@ -148,23 +158,95 @@ export default function HomePage() {
           </div>
         </article>
       ) : (
-        <>
+        <div className="overflow-x-hidden">
           <Hero getSetting={getSetting} scrollTo={scrollTo} />
-          <AboutUs getSetting={getSetting} />
-          <Challenge getSetting={getSetting} />
-          <Services getSetting={getSetting} />
-          <Methodology getSetting={getSetting} />
-          <BlogPreview
-            getSetting={getSetting}
-            blogPosts={blogPosts}
-            setSelectedPost={setSelectedPost}
-            scrollTo={scrollTo}
-          />
-          <WhyUs getSetting={getSetting} />
-          <Founder getSetting={getSetting} />
-          <FAQ getSetting={getSetting} />
-          <Contact getSetting={getSetting} />
-        </>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <AboutUs getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Challenge getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Services getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Methodology getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <BlogPreview
+              getSetting={getSetting}
+              blogPosts={blogPosts}
+              setSelectedPost={setSelectedPost}
+              scrollTo={scrollTo}
+            />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <WhyUs getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Founder getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <FAQ getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Contact getSetting={getSetting} />
+          </motion.section>
+        </div>
       )}
 
       <Footer

@@ -7,7 +7,7 @@ interface FounderProps {
 }
 
 export function Founder({ getSetting }: FounderProps) {
-    const content = getSetting("section_founder_content", {
+    const content = getSetting("section_guiomar_content", {
         title: "Sobre Guiomar Melo",
         description: "Fundadora da RenovaMente, Guiomar combina técnica e sensibilidade para apoiar empresas na construção de ambientes conscientes.",
         quote: "Transformar ambientes de trabalho começa pelo cuidado genuíno com as pessoas.",

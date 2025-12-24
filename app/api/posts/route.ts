@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
         const session = await auth()
         let siteId: string | null = null
 
-        if (session) {
+        if (session?.user?.id) {
             const siteUser = await prisma.siteUser.findFirst({
                 where: { userId: session.user.id }
             })

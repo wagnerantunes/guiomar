@@ -7,7 +7,7 @@ interface AboutUsProps {
 }
 
 export function AboutUs({ getSetting }: AboutUsProps) {
-    const content = getSetting("section_about_content", {
+    const content = getSetting("section_sobre_content", {
         title: "Muito mais que uma consultoria comum",
         description: "A RenovaMente une ergonomia técnica e humanização para transformar empresas, considerando pessoas, processos e exigências legais.",
         experience: "30",

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useToast } from "@/components/admin/Toast";
 
 interface Subscriber {
     id: string;
@@ -24,6 +25,7 @@ export default function NewsletterPage() {
     const [loading, setLoading] = useState(true);
     const [newCampaign, setNewCampaign] = useState({ subject: "", content: "" });
     const [submitting, setSubmitting] = useState(false);
+    const { toast } = useToast();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,10 +59,18 @@ export default function NewsletterPage() {
             if (res.ok) {
                 const campaign = await res.json();
                 setCampaigns([campaign, ...campaigns]);
+                toast({
+                    title: status === "Sent" ? "Campanha Enviada" : "Rascunho Salvo",
+                    description: status === "Sent" ? "Sua mensagem foi entregue aos inscritos." : "Sua campanha foi armazenada para edição posterior.",
+                    type: "success"
+                });
                 setNewCampaign({ subject: "", content: "" });
+            } else {
+                toast({ title: "Erro na Campanha", description: "Ocorreu um problema ao processar a campanha.", type: "error" });
             }
         } catch (error) {
             console.error("Error sending campaign:", error);
+            toast({ title: "Erro de Conexão", description: "Não foi possível conectar ao servidor.", type: "error" });
         } finally {
             setSubmitting(false);
         }

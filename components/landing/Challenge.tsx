@@ -7,7 +7,7 @@ interface ChallengeProps {
 }
 
 export function Challenge({ getSetting }: ChallengeProps) {
-    const content = getSetting("section_challenge_content", {
+    const content = getSetting("section_desafio_content", {
         title: "O desafio das empresas hoje",
         description: "Exigências como NR-1 e NR-17, somadas ao aumento de riscos psicossociais, tornam essencial uma atuação estruturada e preventiva.",
         statValue: "+30%",

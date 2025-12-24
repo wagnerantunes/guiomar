@@ -34,7 +34,7 @@ export function Methodology({ getSetting }: MethodologyProps) {
         },
     ];
 
-    const content = getSetting("section_methodology_content", {
+    const content = getSetting("section_metodologia_content", {
         title: "Metodologia RenovaMente",
         steps: defaultSteps
     });

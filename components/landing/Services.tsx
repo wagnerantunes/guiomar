@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 
 interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -34,7 +35,7 @@ export function Services({ getSetting }: ServicesProps) {
         },
     ];
 
-    const services = getSetting("section_services_content", {
+    const services = getSetting("section_servicos_content", {
         title: "Nossos Serviços",
         subtitle: "Soluções completas para sua empresa",
         items: defaultServices
@@ -51,11 +52,30 @@ export function Services({ getSetting }: ServicesProps) {
                         {services.subtitle}
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: {
+                                staggerChildren: 0.1
+                            }
+                        }
+                    }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
+                >
                     {(services.items || defaultServices).map((s: any, i: number) => (
-                        <div
+                        <motion.div
                             key={i}
-                            className="bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-primary/40 hover:shadow-2xl transition-all group"
+                            variants={{
+                                hidden: { opacity: 0, y: 20 },
+                                visible: { opacity: 1, y: 0 }
+                            }}
+                            whileHover={{ y: -5, scale: 1.02 }}
+                            className="bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-primary/40 hover:shadow-2xl transition-all group cursor-default"
                         >
                             <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                                 <span className="material-symbols-outlined text-2xl">
@@ -66,9 +86,9 @@ export function Services({ getSetting }: ServicesProps) {
                                 {s.t}
                             </h3>
                             <p className="text-sm text-gray-500 leading-relaxed">{s.d}</p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

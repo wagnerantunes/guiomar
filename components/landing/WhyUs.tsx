@@ -22,7 +22,7 @@ export function WhyUs({ getSetting }: WhyUsProps) {
         },
     ];
 
-    const content = getSetting("section_whyus_content", {
+    const content = getSetting("section_porque_content", {
         title: "Por que a RenovaMente?",
         items: defaultItems
     });

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/admin/Toast";
 
 interface MediaItem {
     id: string;
@@ -17,6 +18,7 @@ export default function MediaLibraryPage() {
     const [filter, setFilter] = useState<string>("all");
     const [mediaFiles, setMediaFiles] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const { toast } = useToast();
 
     useEffect(() => {
         async function fetchMedia() {
@@ -65,9 +67,9 @@ export default function MediaLibraryPage() {
                 </div>
             </div>
 
-            <div className="flex flex-1 overflow-hidden">
+            <div className="flex flex-1 overflow-hidden relative">
                 {/* MAIN CONTENT */}
-                <div className="flex-1 flex flex-col p-6 md:p-8 overflow-y-auto custom-scrollbar">
+                <div className={`${selectedItem && 'hidden lg:flex'} flex-1 flex flex-col p-6 md:p-8 overflow-y-auto custom-scrollbar`}>
 
                     {/* TOOLBAR */}
                     <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -77,8 +79,8 @@ export default function MediaLibraryPage() {
                                     key={f}
                                     onClick={() => setFilter(f)}
                                     className={`px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${filter === f
-                                            ? "bg-[#13ec5b] text-[#0d1b12] shadow-sm"
-                                            : "text-gray-400 hover:text-[#13ec5b]"
+                                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-sm"
+                                        : "text-gray-400 hover:text-[#13ec5b]"
                                         }`}
                                 >
                                     {f === "all" ? "Tudo" : f === "image" ? "Imagens" : f === "video" ? "Vídeos" : "Docs"}
@@ -118,8 +120,8 @@ export default function MediaLibraryPage() {
                                     key={file.id}
                                     onClick={() => setSelectedItem(file)}
                                     className={`group relative bg-white dark:bg-[#183221] rounded-[2rem] border transition-all cursor-pointer overflow-hidden ${selectedItem?.id === file.id
-                                            ? "ring-4 ring-[#13ec5b]/30 border-[#13ec5b]"
-                                            : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/50 hover:shadow-2xl"
+                                        ? "ring-4 ring-[#13ec5b]/30 border-[#13ec5b]"
+                                        : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/50 hover:shadow-2xl"
                                         }`}
                                 >
                                     <div className="aspect-square bg-gray-50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden">
@@ -162,12 +164,20 @@ export default function MediaLibraryPage() {
 
                 {/* DETAILS SIDEBAR */}
                 {selectedItem && (
-                    <div className="w-96 border-l border-gray-200 dark:border-white/10 bg-white dark:bg-[#183221] flex flex-col shrink-0 animate-in slide-in-from-right duration-300 overflow-y-auto custom-scrollbar shadow-2xl">
-                        <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-white/5">
-                            <h3 className="font-black text-xs text-[#0d1b12] dark:text-white uppercase tracking-widest">File Details</h3>
+                    <div className={`${!selectedItem && 'hidden lg:flex'} w-full lg:w-96 border-l border-gray-200 dark:border-white/10 bg-white dark:bg-[#183221] flex flex-col shrink-0 animate-in slide-in-from-right duration-300 overflow-y-auto custom-scrollbar shadow-2xl`}>
+                        <div className="p-6 md:p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-white/5">
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => setSelectedItem(null)}
+                                    className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-primary transition-colors"
+                                >
+                                    <span className="material-symbols-outlined">arrow_back</span>
+                                </button>
+                                <h3 className="font-black text-xs text-[#0d1b12] dark:text-white uppercase tracking-widest">Detalhes do Arquivo</h3>
+                            </div>
                             <button
                                 onClick={() => setSelectedItem(null)}
-                                className="size-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                                className="hidden lg:flex size-8 items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
                             >
                                 <span className="material-symbols-outlined text-lg">close</span>
                             </button>

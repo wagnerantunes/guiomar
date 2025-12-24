@@ -1,32 +1,69 @@
-import { auth } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import React from "react";
+import { Skeleton } from "@/components/admin/Skeleton";
 
-export default async function PostsPage() {
-    const session = await auth();
+interface Post {
+    id: string;
+    title: string;
+    slug: string;
+    status: string;
+    image: string | null;
+    createdAt: string;
+    views: number;
+    category: {
+        id: string;
+        name: string;
+    } | null;
+    author: {
+        name: string | null;
+    };
+}
 
-    const siteUser = await prisma.siteUser.findFirst({
-        where: { userId: session?.user?.id },
-        include: { site: true },
-    });
+interface Category {
+    id: string;
+    name: string;
+}
 
-    if (!siteUser) {
-        return (
-            <div className="p-10 text-center">
-                <h2 className="text-xl font-bold text-gray-900">Site não encontrado</h2>
-                <p className="text-gray-600 mt-2">Certifique-se de que sua conta está vinculada a um site.</p>
-            </div>
-        );
-    }
+export default function PostsPage() {
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
 
-    const posts = await prisma.post.findMany({
-        where: { siteId: siteUser.siteId },
-        include: {
-            category: true,
-            author: true,
-        },
-        orderBy: { createdAt: "desc" },
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const [postsRes, catsRes] = await Promise.all([
+                    fetch("/api/posts"),
+                    fetch("/api/categories")
+                ]);
+                const postsData = await postsRes.json();
+                const catsData = await catsRes.json();
+
+                setPosts(Array.isArray(postsData) ? postsData : []);
+                setCategories(Array.isArray(catsData) ? catsData : []);
+            } catch (error) {
+                console.error("Error fetching posts data:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const filteredPosts = posts.filter((post) => {
+        const matchesSearch =
+            post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            post.slug.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesStatus = statusFilter === "" || post.status === statusFilter;
+        const matchesCategory = categoryFilter === "" || post.category?.id === categoryFilter;
+
+        return matchesSearch && matchesStatus && matchesCategory;
     });
 
     return (
@@ -34,19 +71,19 @@ export default async function PostsPage() {
             {/* HEADER */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white tracking-tight">
+                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white tracking-tight uppercase tracking-widest">
                         Blog Posts
                     </h1>
-                    <p className="text-gray-500 font-medium">
+                    <p className="text-gray-500 font-medium mt-1">
                         Gerencie e publique conteúdos para sua audiência.
                     </p>
                 </div>
                 <Link
                     href="/admin/posts/new"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#13ec5b] text-[#0d1b12] rounded-xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-[#13ec5b]/20 active:scale-95 uppercase tracking-widest"
                 >
                     <span className="material-symbols-outlined text-[20px] font-bold">add</span>
-                    NOVO POST
+                    Novo Post
                 </Link>
             </div>
 
@@ -59,104 +96,141 @@ export default async function PostsPage() {
                     <input
                         type="text"
                         placeholder="Buscar por título ou slug..."
-                        className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-sm focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm"
+                        className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-xs font-bold focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm transition-all"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <select className="px-4 py-3 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-sm focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm font-bold text-gray-600 dark:text-gray-300">
-                    <option value="">Status: Todos</option>
+                <select
+                    className="px-4 py-3.5 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-xs focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm font-black text-gray-500 dark:text-gray-300 appearance-none cursor-pointer uppercase tracking-widest"
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                    <option value="">Todos os Status</option>
                     <option value="PUBLISHED">Publicado</option>
                     <option value="DRAFT">Rascunho</option>
                 </select>
-                <select className="px-4 py-3 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-sm focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm font-bold text-gray-600 dark:text-gray-300">
+                <select
+                    className="px-4 py-3.5 bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl text-xs focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm font-black text-gray-500 dark:text-gray-300 appearance-none cursor-pointer uppercase tracking-widest"
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                >
                     <option value="">Todas as Categorias</option>
-                    {/* Categorias dinâmicas aqui se necessário */}
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
                 </select>
             </div>
 
             {/* POST LIST */}
-            <div className="grid grid-cols-1 gap-4">
-                {posts.length === 0 ? (
-                    <div className="bg-white dark:bg-[#183221] p-20 rounded-[2.5rem] border border-gray-100 dark:border-white/5 text-center space-y-4">
+            <div className="grid grid-cols-1 gap-6">
+                {loading ? (
+                    <div className="grid grid-cols-1 gap-6">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="bg-white dark:bg-[#183221] p-6 rounded-[2.5rem] border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center gap-8">
+                                <Skeleton className="w-full md:w-48 aspect-[4/3] rounded-[1.5rem]" />
+                                <div className="flex-1 space-y-4">
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-4 w-20" variant="text" />
+                                        <Skeleton className="h-4 w-24" variant="text" />
+                                    </div>
+                                    <Skeleton className="h-8 w-3/4" variant="text" />
+                                    <div className="flex gap-6">
+                                        <Skeleton className="h-4 w-24" variant="text" />
+                                        <Skeleton className="h-4 w-24" variant="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : filteredPosts.length === 0 ? (
+                    <div className="bg-white dark:bg-[#183221] p-20 rounded-[3rem] border border-gray-100 dark:border-white/5 text-center space-y-6 shadow-sm">
                         <span className="material-symbols-outlined text-6xl text-gray-200">
                             article
                         </span>
-                        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">
-                            Nenhum post encontrado
-                        </p>
-                        <Link
-                            href="/admin/posts/new"
-                            className="text-[#13ec5b] font-black text-xs hover:underline uppercase"
-                        >
-                            Criar meu primeiro post
-                        </Link>
+                        <div>
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">
+                                Nenhum post encontrado
+                            </p>
+                            <Link
+                                href="/admin/posts/new"
+                                className="text-[#13ec5b] font-black text-xs hover:underline uppercase tracking-widest mt-4 inline-block"
+                            >
+                                Criar meu primeiro post
+                            </Link>
+                        </div>
                     </div>
                 ) : (
-                    posts.map((post: any) => (
+                    filteredPosts.map((post) => (
                         <div
                             key={post.id}
-                            className="bg-white dark:bg-[#183221] p-6 rounded-[2rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-center gap-6 group"
+                            className="bg-white dark:bg-[#183221] p-6 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-xl hover:border-[#13ec5b]/30 transition-all flex flex-col md:flex-row items-center gap-8 group relative overflow-hidden"
                         >
-                            <div className="w-full md:w-40 aspect-video rounded-2xl bg-gray-50 dark:bg-zinc-800 overflow-hidden shrink-0">
+                            <div className="w-full md:w-48 aspect-[4/3] rounded-[1.5rem] bg-gray-50 dark:bg-zinc-800 overflow-hidden shrink-0 border border-gray-100 dark:border-white/5">
                                 {post.image ? (
                                     <img
                                         src={post.image}
                                         alt={post.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                        <span className="material-symbols-outlined text-3xl">image</span>
+                                    <div className="w-full h-full flex items-center justify-center text-gray-200">
+                                        <span className="material-symbols-outlined text-5xl">image</span>
                                     </div>
                                 )}
                             </div>
 
-                            <div className="flex-1 space-y-2 text-center md:text-left">
-                                <div className="flex items-center justify-center md:justify-start gap-3">
+                            <div className="flex-1 space-y-4 text-center md:text-left">
+                                <div className="flex items-center justify-center md:justify-start gap-4">
                                     <span
-                                        className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${post.status === "PUBLISHED"
-                                            ? "bg-green-100 text-green-700"
-                                            : "bg-yellow-100 text-yellow-700"
+                                        className={`text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest border ${post.status === "PUBLISHED"
+                                            ? "bg-green-50 text-green-600 border-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20"
+                                            : "bg-yellow-50 text-yellow-600 border-yellow-100 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20"
                                             }`}
                                     >
                                         {post.status === "PUBLISHED" ? "Publicado" : "Rascunho"}
                                     </span>
-                                    <span className="text-[10px] font-bold text-gray-400">
-                                        {new Date(post.createdAt).toLocaleDateString("pt-BR")}
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        {new Date(post.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short', year: 'numeric' })}
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-black text-[#0d1b12] dark:text-white group-hover:text-[#13ec5b] transition-colors leading-tight">
+                                <h3 className="text-2xl font-black text-[#0d1b12] dark:text-white group-hover:text-[#13ec5b] transition-colors leading-tight tracking-tight">
                                     {post.title}
                                 </h3>
-                                <div className="flex items-center justify-center md:justify-start gap-4 text-xs font-bold text-gray-500">
-                                    <span className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-sm">folder</span>
+                                <div className="flex items-center justify-center md:justify-start gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-gray-400 flex-wrap">
+                                    <span className="flex items-center gap-2 shrink-0">
+                                        <span className="material-symbols-outlined text-lg text-primary">folder</span>
                                         {post.category?.name || "Sem categoria"}
                                     </span>
-                                    <span className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-sm">visibility</span>
-                                        {post.views || 0}
+                                    <span className="flex items-center gap-2 shrink-0">
+                                        <span className="material-symbols-outlined text-lg text-primary">visibility</span>
+                                        {post.views || 0} views
+                                    </span>
+                                    <span className="flex items-center gap-2 shrink-0">
+                                        <span className="material-symbols-outlined text-lg text-primary">person</span>
+                                        {post.author.name || "Admin"}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3">
                                 <Link
                                     href={`/blog/${post.slug}`}
                                     target="_blank"
-                                    className="size-11 rounded-xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 transition-all"
+                                    className="size-12 rounded-2xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 transition-all active:scale-90"
                                     title="Visualizar no site"
                                 >
                                     <span className="material-symbols-outlined">visibility</span>
                                 </Link>
                                 <Link
                                     href={`/admin/posts/${post.id}/edit`}
-                                    className="size-11 rounded-xl bg-gray-50 dark:bg-zinc-800 flex items-center justify-center text-[#0d1b12] dark:text-white hover:bg-[#13ec5b] hover:text-[#0d1b12] transition-all shadow-sm"
+                                    className="size-12 rounded-2xl bg-[#0d1b12] dark:bg-white text-white dark:text-[#0d1b12] flex items-center justify-center hover:scale-110 transition-all shadow-lg active:scale-90"
                                     title="Editar post"
                                 >
                                     <span className="material-symbols-outlined">edit</span>
                                 </Link>
                                 <button
-                                    className="size-11 rounded-xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                                    className="size-12 rounded-2xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all active:scale-90"
                                     title="Excluir post"
                                 >
                                     <span className="material-symbols-outlined">delete</span>
@@ -169,4 +243,3 @@ export default async function PostsPage() {
         </div>
     );
 }
-

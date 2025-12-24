@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useToast } from "@/components/admin/Toast";
+import { Skeleton } from "@/components/admin/Skeleton";
 
 interface Lead {
     id: string;
@@ -18,9 +20,12 @@ interface Lead {
 export default function LeadsPage() {
     const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
     const [leads, setLeads] = useState<Lead[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
     const [loading, setLoading] = useState(true);
     const [noteText, setNoteText] = useState("");
     const [isSavingNote, setIsSavingNote] = useState(false);
+    const { toast } = useToast();
 
     useEffect(() => {
         async function fetchLeads() {
@@ -40,7 +45,18 @@ export default function LeadsPage() {
         fetchLeads();
     }, []);
 
-    const selectedLead = leads.find((l) => l.id === selectedLeadId);
+    const filteredLeads = leads.filter((lead) => {
+        const matchesSearch =
+            lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (lead.company?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+            lead.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesStatus = statusFilter === "All" || lead.status === statusFilter;
+
+        return matchesSearch && matchesStatus;
+    });
+
+    const selectedLead = filteredLeads.find((l) => l.id === selectedLeadId) || filteredLeads[0];
 
     useEffect(() => {
         if (selectedLead) {
@@ -57,9 +73,17 @@ export default function LeadsPage() {
             });
             if (response.ok) {
                 setLeads(leads.map(l => l.id === id ? { ...l, status: newStatus } : l));
+                toast({
+                    title: "Status Atualizado",
+                    description: `O lead foi marcado como ${newStatus === 'Contacted' ? 'Respondido' : 'Arquivado'}.`,
+                    type: "success"
+                });
+            } else {
+                toast({ title: "Erro na Atualização", description: "Não foi possível mudar o status.", type: "error" });
             }
         } catch (error) {
             console.error("Error updating lead status:", error);
+            toast({ title: "Erro de Conexão", description: "Verifique sua internet.", type: "error" });
         }
     };
 
@@ -74,19 +98,26 @@ export default function LeadsPage() {
             });
             if (response.ok) {
                 setLeads(leads.map(l => l.id === selectedLeadId ? { ...l, notes: noteText } : l));
-                alert("Nota salva com sucesso!");
+                toast({
+                    title: "Nota Salva",
+                    description: "Seu comentário interno foi registrado.",
+                    type: "success"
+                });
+            } else {
+                toast({ title: "Erro ao Salvar", description: "Tente novamente mais tarde.", type: "error" });
             }
         } catch (error) {
             console.error("Error saving note:", error);
+            toast({ title: "Erro de Conexão", type: "error" });
         } finally {
             setIsSavingNote(false);
         }
     };
 
     return (
-        <div className="flex h-full bg-white dark:bg-background-dark overflow-hidden">
+        <div className="flex h-full bg-white dark:bg-background-dark overflow-hidden relative">
             {/* LISTA DE LEADS */}
-            <div className="w-96 border-r border-gray-100 dark:border-white/5 flex flex-col shrink-0 bg-gray-50/30">
+            <div className={`${selectedLeadId && 'hidden lg:flex'} w-full lg:w-96 border-r border-gray-100 dark:border-white/5 flex flex-col shrink-0 bg-gray-50/30`}>
                 <div className="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
                     <h2 className="text-xl font-black text-[#0d1b12] dark:text-white tracking-tight uppercase tracking-widest">Inbox Leads</h2>
                     <span className="bg-primary text-text-dark text-[10px] font-black px-2 py-0.5 rounded-full">
@@ -94,26 +125,52 @@ export default function LeadsPage() {
                     </span>
                 </div>
 
-                <div className="p-4">
+                <div className="p-4 space-y-4">
+                    <div className="flex items-center gap-2 p-1 bg-white dark:bg-zinc-800 rounded-2xl border border-gray-100 dark:border-zinc-700 shadow-sm">
+                        {["All", "New", "Contacted", "Archived"].map((status) => (
+                            <button
+                                key={status}
+                                onClick={() => setStatusFilter(status)}
+                                className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${statusFilter === status
+                                    ? "bg-primary text-text-dark shadow-sm"
+                                    : "text-gray-400 hover:text-primary"
+                                    }`}
+                            >
+                                {status === "All" ? "Tudo" : status === "New" ? "Novos" : status === "Contacted" ? "Lidos" : "Arq."}
+                            </button>
+                        ))}
+                    </div>
+
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-lg">search</span>
                         <input
                             className="w-full bg-white dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700 rounded-xl pl-10 py-2.5 text-xs focus:ring-primary/30 outline-none"
                             placeholder="Pesquisar contatos..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {loading ? (
-                        <div className="p-10 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-                            Carregando leads...
+                        <div className="p-5 space-y-4">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <div key={i} className="space-y-3 p-2">
+                                    <div className="flex justify-between">
+                                        <Skeleton className="h-4 w-32" variant="text" />
+                                        <Skeleton className="h-3 w-10" variant="text" />
+                                    </div>
+                                    <Skeleton className="h-3 w-20" variant="text" />
+                                    <Skeleton className="h-3 w-full" variant="text" />
+                                </div>
+                            ))}
                         </div>
-                    ) : leads.length === 0 ? (
+                    ) : filteredLeads.length === 0 ? (
                         <div className="p-10 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-                            Nenhum lead recebido ainda.
+                            Nenhum lead encontrado.
                         </div>
-                    ) : leads.map((lead) => (
+                    ) : filteredLeads.map((lead) => (
                         <div
                             key={lead.id}
                             onClick={() => setSelectedLeadId(lead.id)}
@@ -139,33 +196,41 @@ export default function LeadsPage() {
             </div>
 
             {/* DETALHE DO LEAD */}
-            <div className="flex-1 flex flex-col min-w-0">
+            <div className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-white dark:bg-zinc-950`}>
                 {selectedLead ? (
                     <>
-                        <div className="h-20 px-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-card-dark/80 backdrop-blur-sm shrink-0">
-                            <div className="flex items-center gap-4">
-                                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase shadow-inner">
+                        <div className="h-20 px-4 md:px-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-card-dark/80 backdrop-blur-sm shrink-0">
+                            <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
+                                <button
+                                    onClick={() => setSelectedLeadId(null)}
+                                    className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-primary transition-colors"
+                                >
+                                    <span className="material-symbols-outlined">arrow_back</span>
+                                </button>
+                                <div className="size-8 md:size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase shadow-inner shrink-0">
                                     {selectedLead.name.charAt(0)}
                                 </div>
-                                <div>
-                                    <h3 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-tight">{selectedLead.name}</h3>
-                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{selectedLead.source || "Canal Externo"}</span>
+                                <div className="truncate">
+                                    <h3 className="text-xs md:text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-tight truncate">{selectedLead.name}</h3>
+                                    <span className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate block">{selectedLead.source || "Canal Externo"}</span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 md:gap-3">
                                 <button
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Archived")}
-                                    className="flex items-center gap-2 px-4 py-2 text-xs font-black border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all uppercase tracking-widest"
+                                    className="flex items-center gap-2 p-2 md:px-4 md:py-2 text-[10px] font-black border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all uppercase tracking-widest"
+                                    title="Arquivar"
                                 >
                                     <span className="material-symbols-outlined text-sm">archive</span>
-                                    Arquivar
+                                    <span className="hidden md:inline">Arquivar</span>
                                 </button>
                                 <button
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Contacted")}
-                                    className="flex items-center gap-2 px-6 py-2 text-xs font-black bg-primary text-text-dark rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
+                                    className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-2 text-[10px] md:text-xs font-black bg-primary text-text-dark rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
                                 >
                                     <span className="material-symbols-outlined text-sm">check_circle</span>
-                                    {selectedLead.status === "Contacted" ? "Respondido" : "Marcar respondido"}
+                                    <span className="hidden md:inline">{selectedLead.status === "Contacted" ? "Respondido" : "Marcar respondido"}</span>
+                                    <span className="md:hidden">OK</span>
                                 </button>
                             </div>
                         </div>

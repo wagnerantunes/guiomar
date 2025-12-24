@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-const menuItems = [
+export const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "dashboard", href: "/admin" },
     { id: "leads", label: "Leads & Inbox", icon: "inbox", href: "/admin/leads", badge: 5 },
     { id: "sections", label: "Page Sections", icon: "view_quilt", href: "/admin/sections" },
@@ -36,8 +36,8 @@ export default function Sidebar() {
                             key={item.id}
                             href={item.href}
                             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-left ${isActive
-                                    ? "bg-[#13ec5b]/10 text-[#13ec5b]"
-                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
+                                ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
                                 }`}
                         >
                             <span
@@ -61,8 +61,8 @@ export default function Sidebar() {
                 <Link
                     href="/admin/settings"
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-left ${pathname === "/admin/settings"
-                            ? "bg-[#13ec5b]/10 text-[#13ec5b]"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
+                        ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-300 dark:hover:bg-white/5"
                         }`}
                 >
                     <span className="material-symbols-outlined text-[20px]">settings</span>
