@@ -57,8 +57,8 @@ export default function NewsletterPage() {
                                 </p>
                             </div>
                             <div className={`h-16 w-16 rounded-[1.5rem] flex items-center justify-center shadow-inner ${stat.color === "blue" ? "bg-blue-50 text-blue-500 shadow-blue-100/50" :
-                                    stat.color === "purple" ? "bg-purple-50 text-purple-500 shadow-purple-100/50" :
-                                        "bg-orange-50 text-orange-500 shadow-orange-100/50"
+                                stat.color === "purple" ? "bg-purple-50 text-purple-500 shadow-purple-100/50" :
+                                    "bg-orange-50 text-orange-500 shadow-orange-100/50"
                                 }`}>
                                 <span className="material-symbols-outlined text-3xl">{stat.icon}</span>
                             </div>
@@ -133,26 +133,26 @@ export default function NewsletterPage() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50 dark:divide-white/5">
-                                        {campaign campaigns.map((c) => (
-                                        <tr key={c.id} className="group hover:bg-[#f6f8f6] dark:hover:bg-white/5 transition-colors">
-                                            <td className="px-10 py-6 text-sm font-black text-[#0d1b12] dark:text-white">{c.name}</td>
-                                            <td className="px-8 py-6">
-                                                <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${c.status === "Sent" ? "bg-green-50 text-green-600 border-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20" :
+                                        {campaigns.map((c) => (
+                                            <tr key={c.id} className="group hover:bg-[#f6f8f6] dark:hover:bg-white/5 transition-colors">
+                                                <td className="px-10 py-6 text-sm font-black text-[#0d1b12] dark:text-white">{c.name}</td>
+                                                <td className="px-8 py-6">
+                                                    <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${c.status === "Sent" ? "bg-green-50 text-green-600 border-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20" :
                                                         c.status === "Scheduled" ? "bg-yellow-50 text-yellow-600 border-yellow-100 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20" :
                                                             "bg-gray-100 text-gray-500 border-gray-200 dark:bg-white/10 dark:text-gray-400 dark:border-white/10"
-                                                    } uppercase tracking-widest`}>
-                                                    {c.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.sentDate}</td>
-                                            <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.stats}</td>
-                                            <td className="px-10 py-6 text-right">
-                                                <button className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline">
-                                                    {c.status === "Sent" ? "View Report" : c.status === "Scheduled" ? "Edit" : "Resume"}
-                                                </button>
-                                            </td>
-                                        </tr>
-                    ))}
+                                                        } uppercase tracking-widest`}>
+                                                        {c.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.sentDate}</td>
+                                                <td className="px-8 py-6 text-xs font-bold text-gray-500">{c.stats}</td>
+                                                <td className="px-10 py-6 text-right">
+                                                    <button className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline">
+                                                        {c.status === "Sent" ? "View Report" : c.status === "Scheduled" ? "Edit" : "Resume"}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
