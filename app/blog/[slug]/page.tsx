@@ -55,8 +55,27 @@ export default async function BlogPostPage({ params }: PageProps) {
         },
     });
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "image": post.featuredImage || "https://renovamente-guiomarmelo.com.br/og-image.jpg",
+        "datePublished": post.publishedAt?.toISOString(),
+        "dateModified": post.updatedAt.toISOString(),
+        "author": [{
+            "@type": "Person",
+            "name": post.author.name,
+            "url": "https://renovamente-guiomarmelo.com.br"
+        }],
+        "description": post.excerpt || post.title,
+    };
+
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Header />
 
             <div className="layout-container flex grow flex-col w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">

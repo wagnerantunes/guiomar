@@ -9,22 +9,28 @@ export default function AdminHeader() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
     return (
-        <header className="sticky top-0 z-[60] w-full border-b border-[#e7f3eb] bg-[#f6f8f6]/95 backdrop-blur-sm dark:bg-[#102216]/95 dark:border-white/10">
-            <div className="px-4 md:px-10 lg:px-8 flex justify-center w-full">
+        <header
+            className="sticky top-0 z-[60] w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl dark:bg-[#0d1b12]/80 dark:border-white/5"
+            role="banner"
+        >
+            <div className="px-6 md:px-10 lg:px-8 flex justify-center w-full">
                 <div className="flex h-16 w-full items-center justify-between">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-6">
                         <button
                             onClick={() => setIsMobileMenuOpen(true)}
-                            className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-primary transition-colors"
+                            aria-label="Abrir menu lateral"
+                            className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-[#13ec5b] transition-all active:scale-95"
                         >
                             <span className="material-symbols-outlined">menu</span>
                         </button>
 
-                        <Link href="/" className="flex items-center gap-2 text-[#0d1b12] dark:text-white cursor-pointer">
-                            <span className="material-symbols-outlined text-3xl text-[#13ec5b]">spa</span>
+                        <Link href="/" className="flex items-center gap-3 text-[#0d1b12] dark:text-white cursor-pointer group">
+                            <div className="size-10 rounded-xl bg-[#13ec5b]/10 flex items-center justify-center text-[#13ec5b] group-hover:scale-110 transition-transform shadow-lg shadow-[#13ec5b]/5">
+                                <span className="material-symbols-outlined text-2xl">spa</span>
+                            </div>
                             <div className="flex flex-col">
-                                <h2 className="text-lg font-bold leading-tight tracking-tight">RenovaMente</h2>
-                                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Admin Panel</span>
+                                <h2 className="text-md font-black leading-tight tracking-tight uppercase tracking-widest">RenovaMente</h2>
+                                <span className="text-[9px] text-gray-400 uppercase tracking-[0.2em] font-black">Painel de Controle</span>
                             </div>
                         </Link>
                     </div>
@@ -34,39 +40,47 @@ export default function AdminHeader() {
                         onClose={() => setIsMobileMenuOpen(false)}
                     />
 
-                    <nav className="hidden md:flex flex-1 justify-end gap-6 items-center">
-                        <div className="flex items-center gap-1 bg-white dark:bg-zinc-800 p-1 rounded-full border border-gray-200 dark:border-gray-700">
-                            <span className="material-symbols-outlined text-gray-400 p-1 text-[20px]">search</span>
+                    <nav className="hidden md:flex flex-1 justify-end gap-8 items-center" aria-label="Navegação do cabeçalho">
+                        <div className="flex items-center gap-2 bg-[#f6f8f6] dark:bg-white/5 px-4 py-2 rounded-2xl border border-transparent focus-within:border-[#13ec5b]/30 focus-within:bg-white dark:focus-within:bg-[#183221] transition-all group">
+                            <span className="material-symbols-outlined text-gray-400 text-[20px] group-focus-within:text-[#13ec5b]">search</span>
                             <input
-                                className="bg-transparent border-none text-sm focus:ring-0 w-48 text-gray-700 dark:text-gray-200 placeholder-gray-400"
-                                placeholder="Search..."
+                                className="bg-transparent border-none text-xs font-bold focus:ring-0 w-40 lg:w-64 text-[#0d1b12] dark:text-gray-100 placeholder:text-gray-400 placeholder:font-medium"
+                                placeholder="Buscar no painel..."
                                 type="text"
+                                aria-label="Buscar"
                             />
                         </div>
 
-                        <div className="h-6 w-px bg-gray-300 dark:bg-gray-700"></div>
-
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                             <Link
                                 href="/"
-                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 dark:text-gray-200 dark:border-gray-700 transition-colors"
+                                aria-label="Ver site ao vivo"
+                                className="flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-xl hover:bg-[#13ec5b] hover:text-[#0d1b12] hover:border-[#13ec5b] transition-all shadow-sm active:scale-95"
                             >
                                 <span className="material-symbols-outlined text-sm">visibility</span>
-                                View Live Site
+                                Site Ao Vivo
                             </Link>
 
-                            <button className="relative p-2 text-gray-500 hover:text-[#13ec5b] transition-colors dark:text-gray-400">
+                            <button
+                                aria-label="Notificações"
+                                className="relative p-2.5 text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 rounded-xl transition-all active:scale-95"
+                            >
                                 <span className="material-symbols-outlined">notifications</span>
-                                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
+                                <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white dark:border-[#102216]"></span>
                             </button>
 
-                            <div className="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-gray-700">
-                                <img
-                                    alt="Admin"
-                                    className="h-8 w-8 rounded-full border border-gray-200 dark:border-gray-700"
-                                    src="https://lh3.googleusercontent.com/a/ACg8ocL0O7T_F-zL7W3J_GhcBEox7bdUyHxk5JShcprT5YPMDd3e7Q=s96-c"
-                                />
-                                <span className="text-sm font-medium dark:text-gray-200 hidden lg:block">Admin User</span>
+                            <div className="flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-white/5">
+                                <div className="text-right hidden lg:block">
+                                    <p className="text-[11px] font-black text-[#0d1b12] dark:text-white leading-none">Guiomar Melo</p>
+                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Administradora</p>
+                                </div>
+                                <div className="size-10 rounded-xl border-2 border-white dark:border-white/10 shadow-lg overflow-hidden shrink-0">
+                                    <img
+                                        alt="Avatar"
+                                        className="h-full w-full object-cover"
+                                        src="https://lh3.googleusercontent.com/a/ACg8ocL0O7T_F-zL7W3J_GhcBEox7bdUyHxk5JShcprT5YPMDd3e7Q=s96-c"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </nav>

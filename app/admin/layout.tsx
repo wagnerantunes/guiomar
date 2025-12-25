@@ -17,11 +17,14 @@ export default async function AdminLayout({
 
     return (
         <ToastProvider>
-            <div className="flex flex-col h-screen overflow-hidden bg-[#f6f8f6] dark:bg-[#102216]">
+            <div className="flex flex-col h-screen overflow-hidden bg-white dark:bg-[#0d1b12]">
                 <AdminHeader />
                 <div className="flex flex-1 overflow-hidden">
                     <Sidebar />
-                    <main className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-[#f6f8f6] dark:bg-[#102216]">
+                    <main
+                        className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-[#f8faf8] dark:bg-[#102216]/50"
+                        aria-label="Admin Content"
+                    >
                         {children}
                     </main>
                 </div>

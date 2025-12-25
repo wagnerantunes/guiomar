@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/admin/Toast";
 
@@ -18,22 +18,77 @@ export default function MediaLibraryPage() {
     const [filter, setFilter] = useState<string>("all");
     const [mediaFiles, setMediaFiles] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [syncing, setSyncing] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast } = useToast();
 
-    useEffect(() => {
-        async function fetchMedia() {
-            try {
-                const response = await fetch("/api/media");
-                const data = await response.json();
-                setMediaFiles(data);
-            } catch (error) {
-                console.error("Error fetching media:", error);
-            } finally {
-                setLoading(false);
-            }
+    const fetchMedia = async () => {
+        try {
+            const response = await fetch("/api/media");
+            const data = await response.json();
+            setMediaFiles(data);
+        } catch (error) {
+            console.error("Error fetching media:", error);
+            toast({ title: "Erro", description: "Falha ao carregar mídia.", type: "error" });
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         fetchMedia();
     }, []);
+
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setSyncing(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/media", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (res.ok) {
+                toast({ title: "Sucesso", description: "Arquivo enviado com sucesso.", type: "success" });
+                await fetchMedia();
+            } else {
+                throw new Error("Upload failed");
+            }
+        } catch (error) {
+            toast({ title: "Erro", description: "Falha ao enviar arquivo.", type: "error" });
+        } finally {
+            setSyncing(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("Tem certeza que deseja excluir este arquivo?")) return;
+
+        setSyncing(true);
+        try {
+            const res = await fetch(`/api/media?id=${id}`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                toast({ title: "Excluído", description: "Arquivo removido permanentemente.", type: "success" });
+                setSelectedItem(null);
+                await fetchMedia();
+            } else {
+                throw new Error("Delete failed");
+            }
+        } catch (error) {
+            toast({ title: "Erro", description: "Falha ao excluir arquivo.", type: "error" });
+        } finally {
+            setSyncing(false);
+        }
+    };
 
     const formatSize = (bytes: number) => {
         if (bytes === 0) return "0 Bytes";
@@ -48,20 +103,37 @@ export default function MediaLibraryPage() {
         : mediaFiles.filter(f => f.mimeType.includes(filter));
 
     return (
-        <div className="flex flex-col h-full bg-[#f6f8f6] dark:bg-[#102216]">
+        <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleUpload}
+                accept="image/*,video/*,application/pdf"
+            />
+
             {/* HEADER */}
-            <div className="px-6 py-6 md:px-10 border-b border-gray-200 dark:border-white/10 bg-white/50 dark:bg-[#102216]/50 backdrop-blur-sm z-10 shrink-0">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="px-6 py-6 md:px-10 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white tracking-tight">Media Library</h1>
-                        <p className="text-sm text-gray-400 font-medium mt-1 uppercase tracking-widest text-[10px]">
-                            Gerencie imagens e documentos do seu site.
+                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Biblioteca de Mídia</h1>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">
+                            Gerencie ativos visuais e documentos do sistema.
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-widest text-[#0d1b12] bg-[#13ec5b] rounded-xl hover:bg-[#13ec5b]/90 shadow-lg shadow-[#13ec5b]/20 transition-all hover:scale-105 active:scale-95">
-                            <span className="material-symbols-outlined text-[20px]">cloud_upload</span>
-                            Upload File
+                        <button
+                            disabled={syncing}
+                            aria-label="Fazer upload de novo arquivo"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex items-center gap-3 px-8 py-3 text-[10px] font-black uppercase tracking-widest text-[#0d1b12] bg-[#13ec5b] rounded-xl hover:scale-105 shadow-xl shadow-[#13ec5b]/20 transition-all active:scale-95 disabled:opacity-50"
+                        >
+                            {syncing ? (
+                                <span className="size-4 border-2 border-[#0d1b12]/30 border-t-[#0d1b12] rounded-full animate-spin" />
+                            ) : (
+                                <span className="material-symbols-outlined text-[20px]">cloud_upload</span>
+                            )}
+                            {syncing ? "Enviando..." : "Upload de Arquivo"}
                         </button>
                     </div>
                 </div>
@@ -69,18 +141,20 @@ export default function MediaLibraryPage() {
 
             <div className="flex flex-1 overflow-hidden relative">
                 {/* MAIN CONTENT */}
-                <div className={`${selectedItem && 'hidden lg:flex'} flex-1 flex flex-col p-6 md:p-8 overflow-y-auto custom-scrollbar`}>
+                <div className={`${selectedItem && 'hidden lg:flex'} flex-1 flex flex-col p-6 md:p-10 overflow-y-auto custom-scrollbar`}>
 
                     {/* TOOLBAR */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-                        <div className="flex items-center gap-2 p-1 bg-white dark:bg-[#183221] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-6 mb-10">
+                        <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-[#183221]/40 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm">
                             {["all", "image", "video", "pdf"].map((f) => (
                                 <button
                                     key={f}
+                                    aria-label={`Filtrar por: ${f}`}
+                                    aria-pressed={filter === f}
                                     onClick={() => setFilter(f)}
-                                    className={`px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${filter === f
-                                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-sm"
-                                        : "text-gray-400 hover:text-[#13ec5b]"
+                                    className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${filter === f
+                                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/10"
+                                        : "text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5"
                                         }`}
                                 >
                                     {f === "all" ? "Tudo" : f === "image" ? "Imagens" : f === "video" ? "Vídeos" : "Docs"}
@@ -89,12 +163,13 @@ export default function MediaLibraryPage() {
                         </div>
 
                         <div className="flex items-center gap-4 flex-1 max-w-md">
-                            <div className="relative flex-1">
-                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+                            <div className="relative flex-1 group">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px] group-focus-within:text-[#13ec5b] transition-colors">search</span>
                                 <input
                                     type="text"
-                                    placeholder="Procurar arquivos..."
-                                    className="w-full bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#13ec5b]/30 outline-none shadow-sm"
+                                    aria-label="Procurar arquivos"
+                                    placeholder="Procurar na biblioteca..."
+                                    className="w-full bg-white dark:bg-[#183221]/40 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-3.5 text-xs font-bold focus:ring-4 focus:ring-[#13ec5b]/10 outline-none shadow-sm transition-all focus:bg-white dark:focus:bg-[#183221]"
                                 />
                             </div>
                         </div>
@@ -102,15 +177,26 @@ export default function MediaLibraryPage() {
 
                     {/* GRID */}
                     {loading ? (
-                        <div className="flex-1 flex items-center justify-center p-20 text-gray-400 font-bold uppercase tracking-widest text-xs">
-                            Carregando arquivos...
+                        <div className="flex-1 flex items-center justify-center p-20">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="size-12 border-4 border-gray-100 border-t-[#13ec5b] rounded-full animate-spin"></div>
+                                <p className="text-gray-400 font-black uppercase tracking-widest text-[10px]">Acessando storage...</p>
+                            </div>
                         </div>
                     ) : mediaFiles.length === 0 ? (
-                        <div className="bg-white dark:bg-[#183221] p-20 rounded-[3rem] border border-gray-100 dark:border-white/5 text-center space-y-4 shadow-sm mt-10">
-                            <span className="material-symbols-outlined text-6xl text-gray-200">photo_library</span>
-                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Sua biblioteca está vazia</p>
-                            <button className="text-[#13ec5b] font-black text-xs hover:underline uppercase tracking-widest">
-                                Fazer meu primeiro upload
+                        <div className="bg-white dark:bg-[#183221]/40 p-20 rounded-[3.5rem] border border-gray-100 dark:border-white/5 text-center space-y-6 shadow-sm mt-10 max-w-2xl mx-auto w-full">
+                            <div className="size-24 rounded-[2rem] bg-gray-50 dark:bg-white/5 flex items-center justify-center mx-auto">
+                                <span className="material-symbols-outlined text-5xl text-gray-200">photo_library</span>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-[#0d1b12] dark:text-white font-black uppercase tracking-widest text-xs">Vazio por aqui</p>
+                                <p className="text-gray-400 font-medium text-xs">Inicie o upload de imagens para usar em seus posts.</p>
+                            </div>
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="px-8 py-3 bg-[#13ec5b] text-[#0d1b12] font-black text-[10px] rounded-xl hover:scale-105 transition-all shadow-lg shadow-[#13ec5b]/10 uppercase tracking-widest active:scale-95"
+                            >
+                                Fazer Primeiro Upload
                             </button>
                         </div>
                     ) : (
@@ -118,41 +204,61 @@ export default function MediaLibraryPage() {
                             {filteredFiles.map((file) => (
                                 <div
                                     key={file.id}
+                                    tabIndex={0}
+                                    role="button"
+                                    aria-label={`Selecionar arquivo: ${file.filename}`}
                                     onClick={() => setSelectedItem(file)}
-                                    className={`group relative bg-white dark:bg-[#183221] rounded-[2rem] border transition-all cursor-pointer overflow-hidden ${selectedItem?.id === file.id
+                                    onKeyDown={(e) => e.key === 'Enter' && setSelectedItem(file)}
+                                    className={`group relative bg-white dark:bg-[#183221]/40 rounded-[2.5rem] border transition-all cursor-pointer overflow-hidden outline-none ${selectedItem?.id === file.id
                                         ? "ring-4 ring-[#13ec5b]/30 border-[#13ec5b]"
-                                        : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/50 hover:shadow-2xl"
+                                        : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/50 hover:shadow-2xl focus-visible:ring-4 focus-visible:ring-[#13ec5b]/20"
                                         }`}
                                 >
-                                    <div className="aspect-square bg-gray-50 dark:bg-zinc-900 flex items-center justify-center overflow-hidden">
+                                    <div className="aspect-square bg-gray-50 dark:bg-zinc-900/50 flex items-center justify-center overflow-hidden">
                                         {file.mimeType.startsWith("image/") ? (
-                                            <img src={file.url} alt={file.filename} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                            <img src={file.url} alt={file.filename} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
                                             <div className="flex flex-col items-center text-[#13ec5b]">
-                                                <span className="material-symbols-outlined text-5xl">
+                                                <span className="material-symbols-outlined text-5xl transition-transform group-hover:scale-110 duration-500">
                                                     {file.mimeType.includes("pdf") ? "picture_as_pdf" : "description"}
                                                 </span>
-                                                <span className="text-[10px] font-black mt-2 uppercase tracking-widest opacity-50">
+                                                <span className="text-[9px] font-black mt-3 uppercase tracking-widest opacity-50">
                                                     {file.mimeType.split("/")[1]}
                                                 </span>
                                             </div>
                                         )}
                                     </div>
-                                    <div className="p-4 bg-white dark:bg-[#183221] border-t border-gray-50 dark:border-white/5">
-                                        <p className="text-[11px] font-black text-[#0d1b12] dark:text-white truncate" title={file.filename}>
+                                    <div className="p-5 bg-white/50 dark:bg-[#183221]/50 backdrop-blur-sm border-t border-gray-50 dark:border-white/5">
+                                        <p className="text-[10px] font-black text-[#0d1b12] dark:text-white truncate" title={file.filename}>
                                             {file.filename}
                                         </p>
-                                        <p className="text-[9px] text-gray-400 mt-1 uppercase font-black tracking-widest">
-                                            {formatSize(file.size)}
+                                        <p className="text-[8px] text-gray-400 mt-1 uppercase font-black tracking-widest flex items-center justify-between">
+                                            <span>{formatSize(file.size)}</span>
+                                            <span className="text-[#13ec5b] opacity-0 group-hover:opacity-100 transition-opacity">Detalhes →</span>
                                         </p>
                                     </div>
 
                                     {/* QUICK ACTIONS OVERLAY */}
-                                    <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                                        <button className="size-8 bg-white/90 dark:bg-[#0d1b12]/90 backdrop-blur flex items-center justify-center text-[#0d1b12] dark:text-white rounded-lg shadow-lg hover:text-[#13ec5b] transition-colors">
+                                    <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                                        <button
+                                            aria-label="Copiar link"
+                                            className="size-9 bg-white dark:bg-[#0d1b12] flex items-center justify-center text-[#0d1b12] dark:text-white rounded-xl shadow-xl hover:text-[#13ec5b] transition-all active:scale-90"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigator.clipboard.writeText(file.url);
+                                                toast({ title: "Copiado", description: "URL da imagem copiada.", type: "success" });
+                                            }}
+                                        >
                                             <span className="material-symbols-outlined text-sm">content_copy</span>
                                         </button>
-                                        <button className="size-8 bg-white/90 dark:bg-[#0d1b12]/90 backdrop-blur flex items-center justify-center text-red-500 rounded-lg shadow-lg hover:bg-red-500 hover:text-white transition-all">
+                                        <button
+                                            aria-label="Excluir arquivo"
+                                            className="size-9 bg-white dark:bg-[#0d1b12] flex items-center justify-center text-red-500 rounded-xl shadow-xl hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDelete(file.id);
+                                            }}
+                                        >
                                             <span className="material-symbols-outlined text-sm">delete</span>
                                         </button>
                                     </div>
@@ -164,54 +270,59 @@ export default function MediaLibraryPage() {
 
                 {/* DETAILS SIDEBAR */}
                 {selectedItem && (
-                    <div className={`${!selectedItem && 'hidden lg:flex'} w-full lg:w-96 border-l border-gray-200 dark:border-white/10 bg-white dark:bg-[#183221] flex flex-col shrink-0 animate-in slide-in-from-right duration-300 overflow-y-auto custom-scrollbar shadow-2xl`}>
-                        <div className="p-6 md:p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-white/5">
-                            <div className="flex items-center gap-3">
+                    <div className={`${!selectedItem && 'hidden lg:flex'} w-full lg:w-[400px] border-l border-gray-100 dark:border-white/5 bg-white dark:bg-[#112418] flex flex-col shrink-0 animate-in slide-in-from-right duration-500 overflow-y-auto custom-scrollbar shadow-2xl z-30`}>
+                        <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#112418]/95 backdrop-blur-xl z-10">
+                            <div className="flex items-center gap-4">
                                 <button
+                                    aria-label="Voltar para a biblioteca"
                                     onClick={() => setSelectedItem(null)}
-                                    className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-primary transition-colors"
+                                    className="lg:hidden size-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-white/5 text-gray-500 hover:text-[#13ec5b] transition-colors"
                                 >
                                     <span className="material-symbols-outlined">arrow_back</span>
                                 </button>
-                                <h3 className="font-black text-xs text-[#0d1b12] dark:text-white uppercase tracking-widest">Detalhes do Arquivo</h3>
+                                <div>
+                                    <h3 className="font-black text-xs text-[#0d1b12] dark:text-white uppercase tracking-widest">Ativo de Mídia</h3>
+                                    <p className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest mt-1">Metadados e Ações</p>
+                                </div>
                             </div>
                             <button
+                                aria-label="Fechar detalhes"
                                 onClick={() => setSelectedItem(null)}
-                                className="hidden lg:flex size-8 items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                                className="hidden lg:flex size-10 items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
                             >
-                                <span className="material-symbols-outlined text-lg">close</span>
+                                <span className="material-symbols-outlined text-xl">close</span>
                             </button>
                         </div>
 
-                        <div className="p-8 space-y-8">
-                            <div className="aspect-square bg-gray-50 dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-gray-100 dark:border-zinc-800 flex items-center justify-center shadow-inner">
+                        <div className="p-10 space-y-10 pb-20">
+                            <div className="aspect-square bg-gray-50 dark:bg-black/20 rounded-[3rem] overflow-hidden border border-gray-100 dark:border-white/5 flex items-center justify-center shadow-inner group/preview">
                                 {selectedItem.mimeType.startsWith("image/") ? (
-                                    <img src={selectedItem.url} alt={selectedItem.filename} className="w-full h-full object-contain p-4" />
+                                    <img src={selectedItem.url} alt={selectedItem.filename} className="w-full h-full object-contain p-6 transform group-hover/preview:scale-105 transition-transform duration-700" />
                                 ) : (
-                                    <span className="material-symbols-outlined text-7xl text-gray-200">
+                                    <span className="material-symbols-outlined text-8xl text-gray-200 dark:text-white/5">
                                         {selectedItem.mimeType.includes("pdf") ? "picture_as_pdf" : "description"}
                                     </span>
                                 )}
                             </div>
 
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-1">File Name</label>
-                                    <p className="text-sm font-black mt-2 text-[#0d1b12] dark:text-white break-all bg-gray-50 dark:bg-white/5 p-4 rounded-2xl">{selectedItem.filename}</p>
+                            <div className="space-y-8">
+                                <div className="bg-gray-50 dark:bg-white/5 p-6 rounded-[2rem] border border-gray-100 dark:border-white/5">
+                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 ml-1">Nome do Arquivo</label>
+                                    <p className="text-sm font-black text-[#0d1b12] dark:text-white break-all leading-tight">{selectedItem.filename}</p>
                                 </div>
                                 <div className="grid grid-cols-2 gap-6">
-                                    <div className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Format</label>
-                                        <p className="text-xs font-black mt-1 uppercase text-[#13ec5b]">{selectedItem.mimeType.split("/")[1]}</p>
+                                    <div className="bg-gray-50 dark:bg-white/5 p-6 rounded-[2rem] border border-gray-100 dark:border-white/5">
+                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 ml-1">Formato</label>
+                                        <p className="text-xs font-black uppercase text-[#13ec5b]">{selectedItem.mimeType.split("/")[1]}</p>
                                     </div>
-                                    <div className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Size</label>
-                                        <p className="text-xs font-black mt-1 text-[#0d1b12] dark:text-white">{formatSize(selectedItem.size)}</p>
+                                    <div className="bg-gray-50 dark:bg-white/5 p-6 rounded-[2rem] border border-gray-100 dark:border-white/5">
+                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 ml-1">Tamanho</label>
+                                        <p className="text-xs font-black text-[#0d1b12] dark:text-white">{formatSize(selectedItem.size)}</p>
                                     </div>
                                 </div>
-                                <div className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Upload Date</label>
-                                    <p className="text-xs font-black mt-1 text-gray-600 dark:text-gray-400">
+                                <div className="bg-gray-50 dark:bg-white/5 p-6 rounded-[2rem] border border-gray-100 dark:border-white/5">
+                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 ml-1">Data de Upload</label>
+                                    <p className="text-xs font-black text-gray-600 dark:text-gray-400">
                                         {new Date(selectedItem.createdAt).toLocaleDateString("pt-BR", {
                                             day: "2-digit",
                                             month: "long",
@@ -223,29 +334,42 @@ export default function MediaLibraryPage() {
                                 </div>
                             </div>
 
-                            <div className="pt-6 space-y-3">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-1">Public URL</label>
+                            <div className="space-y-4">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-1 ml-1">URL Pública</label>
                                 <div className="flex gap-2">
                                     <input
                                         readOnly
+                                        aria-label="URL Pública do arquivo"
                                         value={selectedItem.url}
-                                        className="flex-1 text-[10px] bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-xl px-4 py-3 text-gray-500 font-mono focus:ring-1 focus:ring-[#13ec5b]"
+                                        className="flex-1 text-[10px] bg-white dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-xl px-4 py-3 text-gray-500 font-mono focus:ring-2 focus:ring-[#13ec5b]/30 outline-none"
                                     />
-                                    <button className="bg-[#0d1b12] dark:bg-white text-white dark:text-[#0d1b12] px-6 rounded-xl hover:scale-102 transition-all font-black text-[10px] uppercase tracking-widest active:scale-95">
+                                    <button
+                                        aria-label="Copiar link do arquivo"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(selectedItem.url);
+                                            toast({ title: "Copiado", description: "URL copiada.", type: "success" });
+                                        }}
+                                        className="bg-[#0d1b12] dark:bg-white text-white dark:text-[#0d1b12] px-6 rounded-xl hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest active:scale-95 shadow-md"
+                                    >
                                         Copy
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="pt-8 grid grid-cols-2 gap-4">
+                            <div className="pt-8 grid grid-cols-2 gap-6">
                                 <a
+                                    aria-label="Baixar arquivo"
                                     href={selectedItem.url}
                                     download
-                                    className="flex items-center justify-center py-4 text-[10px] font-black uppercase tracking-widest border border-gray-200 dark:border-white/10 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all active:scale-95"
+                                    className="flex items-center justify-center py-5 text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-white/5 rounded-[1.5rem] bg-white dark:bg-transparent shadow-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-all active:scale-95"
                                 >
                                     Download
                                 </a>
-                                <button className="py-4 text-[10px] font-black uppercase tracking-widest bg-red-50 text-red-500 border border-red-100 rounded-2xl hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-sm">
+                                <button
+                                    onClick={() => handleDelete(selectedItem.id)}
+                                    aria-label="Excluir arquivo permanentemente"
+                                    className="py-5 text-[10px] font-black uppercase tracking-widest bg-red-500 text-white rounded-[1.5rem] hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-red-500/10"
+                                >
                                     Excluir
                                 </button>
                             </div>

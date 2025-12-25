@@ -73,66 +73,82 @@ export default function NewPostPage() {
     }
 
     return (
-        <div className="p-6 md:p-10 space-y-10 max-w-5xl mx-auto w-full pb-20">
+        <div className="p-6 md:p-10 space-y-10 max-w-6xl mx-auto w-full pb-20 bg-[#f8faf8] dark:bg-[#0d1b12]">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 sticky top-0 z-30 shadow-sm">
+                <div className="flex items-center gap-6">
                     <Link
                         href="/admin/posts"
-                        className="size-12 rounded-2xl bg-white dark:bg-[#183221] border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] transition-all group shadow-sm"
+                        aria-label="Voltar para lista de posts"
+                        className="size-14 rounded-[1.5rem] bg-[#f8faf8] dark:bg-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 transition-all group shadow-sm border border-gray-100 dark:border-white/5"
                     >
                         <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white tracking-tight uppercase tracking-widest">Novo Post</h1>
-                        <p className="text-gray-500 font-medium mt-1">Crie um novo artigo para o seu blog.</p>
+                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Criação de Conteúdo</h1>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Escriba um novo artigo memorável.</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                    <div className="bg-[#f8faf8] dark:bg-black/20 p-1.5 rounded-2xl flex items-center border border-gray-100 dark:border-white/5">
+                        <button
+                            aria-label="Definir como rascunho"
+                            aria-pressed={formData.status === 'DRAFT'}
+                            onClick={() => setFormData(prev => ({ ...prev, status: 'DRAFT' }))}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-white dark:bg-[#183221] text-[#0d1b12] dark:text-white shadow-sm border border-gray-100 dark:border-white/10' : 'text-gray-400 hover:text-[#0d1b12]'}`}
+                        >
+                            Rascunho
+                        </button>
+                        <button
+                            aria-label="Definir como publicado"
+                            aria-pressed={formData.status === 'PUBLISHED'}
+                            onClick={() => setFormData(prev => ({ ...prev, status: 'PUBLISHED' }))}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'PUBLISHED' ? 'bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/20' : 'text-gray-400 hover:text-[#13ec5b]'}`}
+                        >
+                            Publicado
+                        </button>
+                    </div>
+                    <div className="w-px h-10 bg-gray-100 dark:bg-white/5 mx-2" />
                     <button
-                        onClick={() => setFormData(prev => ({ ...prev, status: 'DRAFT' }))}
-                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-[#0d1b12] dark:bg-white text-white dark:text-[#0d1b12]' : 'text-gray-400 hover:text-[#0d1b12]'}`}
-                    >
-                        Rascunho
-                    </button>
-                    <button
-                        onClick={() => setFormData(prev => ({ ...prev, status: 'PUBLISHED' }))}
-                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${formData.status === 'PUBLISHED' ? 'bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/20' : 'text-gray-400 hover:text-[#13ec5b]'}`}
-                    >
-                        Publicado
-                    </button>
-                    <div className="w-px h-8 bg-gray-100 dark:bg-white/5 mx-2" />
-                    <button
+                        aria-label="Salvar post"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="px-8 py-3.5 bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-xl text-xs font-black hover:scale-105 active:scale-95 transition-all shadow-xl uppercase tracking-widest disabled:opacity-50"
+                        className="px-8 py-4 bg-[#0d1b12] dark:bg-[#13ec5b] dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/5 uppercase tracking-[0.2em] disabled:opacity-50 flex items-center gap-2"
                     >
-                        {loading ? 'Salvando...' : 'Salvar Post'}
+                        {loading && <span className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                        {loading ? 'Processando...' : 'Finalizar Artigo'}
                     </button>
                 </div>
             </div>
 
             {/* Form Content */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                <div className="lg:col-span-8 space-y-8">
+                <div className="lg:col-span-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {/* Main Settings */}
-                    <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-2xl overflow-hidden">
-                        <div className="p-10 space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Título do Post *</label>
+                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
+                        <div className="p-10 md:p-14 space-y-12">
+                            <div className="space-y-4">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2 block">Título do Artigo <span className="text-red-500">*</span></label>
                                 <input
+                                    aria-label="Título do post"
                                     type="text"
                                     value={formData.title}
                                     onChange={(e) => handleTitleChange(e.target.value)}
-                                    className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-[1.5rem] px-8 py-5 text-lg font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none placeholder:text-gray-300 dark:text-white"
-                                    placeholder="Como a meditação transforma..."
+                                    className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-[2.5rem] px-10 py-7 text-2xl font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none placeholder:text-gray-200 dark:placeholder:text-white/10 transition-all dark:text-white"
+                                    placeholder="Comece com um título impactante..."
                                     required
                                 />
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Conteúdo do Artigo *</label>
-                                <div className="border border-gray-100 dark:border-white/5 rounded-[2rem] overflow-hidden bg-white dark:bg-transparent">
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between px-2">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] block">Corpo do Conteúdo <span className="text-red-500">*</span></label>
+                                    <div className="flex items-center gap-2">
+                                        <span className="size-2 rounded-full bg-[#13ec5b] animate-pulse" />
+                                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Salvamento Automático</span>
+                                    </div>
+                                </div>
+                                <div className="border border-gray-100 dark:border-white/5 rounded-[3rem] overflow-hidden bg-[#f8faf8] dark:bg-black/20 p-2">
                                     <RichTextEditor
                                         content={formData.content}
                                         onChange={(content) => setFormData({ ...formData, content })}
@@ -143,15 +159,21 @@ export default function NewPostPage() {
                     </div>
                 </div>
 
-                <div className="lg:col-span-4 space-y-8">
+                <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150">
                     {/* Publishing Settings */}
-                    <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-2xl overflow-hidden p-8 space-y-8">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Categoria</label>
+                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-10">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="size-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-sm">category</span>
+                                </div>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Classificação</label>
+                            </div>
                             <select
+                                aria-label="Selecionar categoria"
                                 value={formData.categoryId}
                                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-[#0d1b12] dark:text-white appearance-none cursor-pointer uppercase tracking-widest"
+                                className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none text-[#0d1b12] dark:text-white appearance-none cursor-pointer uppercase tracking-[0.2em]"
                             >
                                 <option value="">Sem Categoria</option>
                                 {categories.map((cat) => (
@@ -161,41 +183,57 @@ export default function NewPostPage() {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Slug (URL)</label>
-                            <div className="flex items-center gap-2 p-4 bg-[#f6f8f6] dark:bg-[#102216] rounded-2xl border border-transparent focus-within:ring-4 focus-within:ring-[#13ec5b]/20 transition-all">
-                                <span className="material-symbols-outlined text-gray-400 text-sm">link</span>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="size-8 rounded-lg bg-purple-50 dark:bg-purple-500/10 text-purple-500 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-sm">link</span>
+                                </div>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Identificador Único</label>
+                            </div>
+                            <div className="flex items-center gap-4 px-6 py-4 bg-[#f8faf8] dark:bg-black/20 rounded-2xl border border-gray-100 dark:border-white/5 focus-within:ring-4 focus-within:ring-[#13ec5b]/10 transition-all">
                                 <input
+                                    aria-label="URL do post (slug)"
                                     type="text"
                                     value={formData.slug}
                                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                                    className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-widest outline-none text-gray-500"
-                                    placeholder="slug-do-post"
+                                    className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-gray-500 dark:text-gray-400"
+                                    placeholder="identificador-url"
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Resumo do Post (Excerpt)</label>
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="size-8 rounded-lg bg-orange-50 dark:bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-sm">subject</span>
+                                </div>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Resumo Executivo</label>
+                            </div>
                             <textarea
+                                aria-label="Resumo do post"
                                 value={formData.excerpt}
                                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                                rows={5}
-                                className="w-full bg-[#f6f8f6] dark:bg-[#102216] border-transparent rounded-[2rem] p-6 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 transition-all outline-none resize-none leading-relaxed dark:text-gray-300"
-                                placeholder="Uma breve descrição que aparece na listagem do blog..."
+                                rows={6}
+                                className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-[2rem] p-8 text-[11px] font-bold focus:ring-4 focus:ring-[#13ec5b]/10 transition-all outline-none resize-none leading-relaxed dark:text-gray-300 placeholder:text-gray-200 dark:placeholder:text-white/5"
+                                placeholder="Uma síntese que despertará curiosidade no leitor..."
                             />
                         </div>
 
-                        <div className="pt-6 border-t border-gray-100 dark:border-white/5 space-y-4 text-center">
-                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em]">Otimização de SEO</p>
-                            <div className="flex justify-center gap-3">
-                                <div className="size-10 rounded-xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-500 shadow-sm">
-                                    <span className="material-symbols-outlined text-lg">check</span>
+                        <div className="pt-10 border-t border-gray-100 dark:border-white/5 space-y-6">
+                            <div className="flex items-center justify-center gap-3">
+                                <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Health Score</span>
+                                <div className="flex-1 h-1 bg-gray-50 dark:bg-white/5 rounded-full overflow-hidden">
+                                    <div className="w-3/4 h-full bg-[#13ec5b] rounded-full" />
                                 </div>
-                                <div className="size-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-sm">
-                                    <span className="material-symbols-outlined text-lg">description</span>
+                            </div>
+                            <div className="flex justify-center gap-4">
+                                <div aria-label="SEO Otimizado" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-[#13ec5b] shadow-sm border border-gray-100 dark:border-white/5">
+                                    <span className="material-symbols-outlined text-lg">check_circle</span>
                                 </div>
-                                <div className="size-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shadow-sm">
-                                    <span className="material-symbols-outlined text-lg">social_distance</span>
+                                <div aria-label="Meta tags prontas" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-blue-400 shadow-sm border border-gray-100 dark:border-white/5">
+                                    <span className="material-symbols-outlined text-lg">alternate_email</span>
+                                </div>
+                                <div aria-label="Preview disponível" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-purple-400 shadow-sm border border-gray-100 dark:border-white/5">
+                                    <span className="material-symbols-outlined text-lg">visibility</span>
                                 </div>
                             </div>
                         </div>

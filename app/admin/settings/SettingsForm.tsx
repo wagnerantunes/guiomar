@@ -52,66 +52,85 @@ export default function SettingsForm({ site }: SettingsFormProps) {
     };
 
     return (
-        <div className="space-y-10 max-w-5xl mx-auto w-full pb-20">
+        <div className="space-y-12 max-w-5xl mx-auto w-full pb-24">
             {/* HEADER */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-b border-gray-100 dark:border-white/5 pb-10">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white tracking-tight uppercase tracking-widest">
-                        Global Settings
+                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">
+                        Configurações
                     </h1>
-                    <p className="text-gray-500 font-medium mt-1">
-                        Configure as diretrizes mestre, SEO e integrações do seu site.
+                    <p className="text-gray-400 font-bold mt-2 uppercase tracking-widest text-[10px]">
+                        Controle mestre das diretrizes de marca e SEO.
                     </p>
                 </div>
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-8 py-4 bg-[#13ec5b] text-[#0d1b12] rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-[#13ec5b]/20 hover:scale-105 transition-all active:scale-95 disabled:opacity-50"
+                    aria-label="Salvar todas as configurações"
+                    className="px-10 py-4 bg-[#13ec5b] text-[#0d1b12] rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-[#13ec5b]/20 active:scale-95 disabled:opacity-50 uppercase tracking-[0.1em]"
                 >
-                    {saving ? "Salvando..." : "Salvar Tudo"}
+                    {saving ? "Processando..." : "Salvar Alterações"}
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 gap-12">
                 {/* SEO SECTION */}
-                <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
-                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-4">
-                        <div className="size-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
-                            <span className="material-symbols-outlined">search</span>
+                <div className="bg-white dark:bg-[#183221]/40 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-5 bg-gray-50/30 dark:bg-white/5">
+                        <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                            <span className="material-symbols-outlined text-2xl">search</span>
                         </div>
-                        <h3 className="text-lg font-black text-[#0d1b12] dark:text-white">SEO & Indexação</h3>
+                        <div>
+                            <h3 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">SEO & Indexação</h3>
+                            <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Como o site aparece nos motores de busca.</p>
+                        </div>
                     </div>
-                    <div className="p-8 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                                    Site Name (Title Tag)
+                    <div className="p-10 space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <label
+                                    htmlFor="site-name"
+                                    className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3"
+                                >
+                                    Nome do Site (Title Tag)
                                 </label>
                                 <input
-                                    className="w-full bg-gray-50 dark:bg-zinc-800 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:ring-[#13ec5b]/30 outline-none text-[#0d1b12] dark:text-white"
+                                    id="site-name"
+                                    aria-label="Nome do Site"
+                                    className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                                    Custom Domain
+                            <div className="space-y-3">
+                                <label
+                                    htmlFor="custom-domain"
+                                    className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3"
+                                >
+                                    Domínio Customizado
                                 </label>
                                 <input
-                                    className="w-full bg-gray-50 dark:bg-zinc-800 border-transparent rounded-xl px-4 py-3 text-sm font-mono focus:ring-[#13ec5b]/30 outline-none text-[#0d1b12] dark:text-white"
+                                    id="custom-domain"
+                                    aria-label="Domínio Customizado"
+                                    className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white font-mono"
                                     value={formData.domain}
                                     onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                                    placeholder="exemplo.com"
+                                    placeholder="exemplo.com.br"
                                 />
                             </div>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                                Global Meta Description
+                        <div className="space-y-3">
+                            <label
+                                htmlFor="meta-description"
+                                className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3"
+                            >
+                                Descrição Global (Meta Description)
                             </label>
                             <textarea
-                                rows={3}
-                                className="w-full bg-gray-50 dark:bg-zinc-800 border-transparent rounded-xl px-4 py-3 text-sm font-medium focus:ring-[#13ec5b]/30 outline-none resize-none text-[#0d1b12] dark:text-white"
+                                id="meta-description"
+                                aria-label="Meta Description"
+                                rows={4}
+                                className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[2rem] px-6 py-5 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             />
@@ -120,26 +139,30 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                 </div>
 
                 {/* BRANDING SECTION */}
-                <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
-                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-4">
-                        <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
-                            <span className="material-symbols-outlined">brush</span>
+                <div className="bg-white dark:bg-[#183221]/40 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-5 bg-gray-50/30 dark:bg-white/5">
+                        <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                            <span className="material-symbols-outlined text-2xl">brush</span>
                         </div>
-                        <h3 className="text-lg font-black text-[#0d1b12] dark:text-white">Branding & Ícones</h3>
+                        <div>
+                            <h3 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Identidade Visual</h3>
+                            <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Logos, favicons e imagens de compartilhamento.</p>
+                        </div>
                     </div>
-                    <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="space-y-4 text-center md:text-left">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">
-                                Favicon (32x32)
+                    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div className="space-y-4">
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Favicon (Ícone do Navegador)
                             </label>
-                            <div className="size-24 mx-auto md:mx-0 bg-gray-50 dark:bg-zinc-800 border-2 border-dashed border-gray-200 dark:border-zinc-700 rounded-3xl flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-colors group relative overflow-hidden">
+                            <div className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav">
                                 {formData.favicon ? (
-                                    <img src={formData.favicon} alt="Favicon" className="size-10 object-contain" />
+                                    <img src={formData.favicon} alt="Favicon" className="size-12 object-contain group-hover/fav:scale-110 transition-transform" />
                                 ) : (
-                                    <span className="material-symbols-outlined text-[#13ec5b] text-4xl group-hover:scale-110 transition-transform">spa</span>
+                                    <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
                                 )}
                                 <input
                                     type="text"
+                                    aria-label="URL do Favicon"
                                     title="URL do Favicon"
                                     placeholder="URL"
                                     className="absolute inset-0 opacity-0 cursor-pointer"
@@ -148,13 +171,15 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </div>
                         </div>
                         <div className="space-y-4 md:col-span-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">
-                                Social Sharing Image (1200x630)
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Imagem de Compartilhamento (OG Image)
                             </label>
-                            <div className="aspect-video w-full bg-gray-50 dark:bg-zinc-800 border-2 border-dashed border-gray-200 dark:border-zinc-700 rounded-3xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#13ec5b]/50 transition-colors group">
-                                <span className="material-symbols-outlined text-gray-300 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                            <div className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[3rem] flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#13ec5b]/50 transition-all group/og">
+                                <div className="size-16 rounded-[1.5rem] bg-white dark:bg-white/5 flex items-center justify-center shadow-sm group-hover/og:scale-110 transition-transform">
+                                    <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-3xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                </div>
                                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-[#13ec5b] transition-colors">
-                                    Upload OG Image (Indisponível)
+                                    Upload Indisponível (Use a /og-image.jpg padrão)
                                 </span>
                             </div>
                         </div>
@@ -162,23 +187,24 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                 </div>
 
                 {/* SYSTEM STATUS */}
-                <div className="bg-[#0d1b12] rounded-[2.5rem] p-10 flex flex-col md:flex-row items-center justify-between gap-6 border border-white/5">
-                    <div className="flex items-center gap-6">
-                        <div className="size-16 rounded-3xl bg-[#13ec5b]/20 flex items-center justify-center text-[#13ec5b]">
-                            <span className="material-symbols-outlined text-3xl">verified</span>
+                <div className="bg-[#0d1b12] rounded-[3.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-white/5 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#13ec5b]/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+                    <div className="flex items-center gap-8 relative z-10">
+                        <div className="size-20 rounded-[2rem] bg-[#13ec5b]/20 flex items-center justify-center text-[#13ec5b] shadow-[0_0_40px_rgba(19,236,91,0.1)]">
+                            <span className="material-symbols-outlined text-4xl">verified_user</span>
                         </div>
                         <div>
-                            <h4 className="text-xl font-black text-white tracking-tight uppercase tracking-widest">
-                                RenovaMente Admin v2.5
+                            <h4 className="text-2xl font-black text-white tracking-tight uppercase tracking-widest">
+                                RenovaMente Engine v2.5
                             </h4>
-                            <p className="text-gray-400 text-sm font-medium">
-                                Todos os sistemas estão operacionais. Nenhuma atualização pendente.
+                            <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mt-2">
+                                Núcleo de gestão e proteção de dados operacional.
                             </p>
                         </div>
                     </div>
-                    <div className="hidden lg:block">
-                        <span className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">
-                            Last Backup: Hoje, 04:00 AM
+                    <div className="relative z-10">
+                        <span className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                            Última Sincronização: Hoje às 09:30
                         </span>
                     </div>
                 </div>

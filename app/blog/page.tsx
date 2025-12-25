@@ -12,7 +12,21 @@ import {
 } from "@/components/blog";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: "Blog | RenovaMente - Insights sobre Bem-Estar e Gestão",
+        description: "Artigos, dicas e insights profundos sobre saúde mental corporativa, liderança humana e transformação organizacional.",
+        openGraph: {
+            title: "Blog | RenovaMente",
+            description: "Explore nossos artigos sobre bem-estar corporativo.",
+            type: "website",
+        }
+    };
+}
 
 export default async function BlogPage() {
     const site = await prisma.site.findFirst({

@@ -96,24 +96,30 @@ export default function PageSections() {
 
 
     return (
-        <div className="flex flex-col h-full bg-[#f6f8f6] dark:bg-[#102216]">
+        <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
             {/* HEADER FIXO */}
-            <div className="px-6 py-6 md:px-10 border-b border-gray-200 dark:border-white/10 bg-white/80 dark:bg-[#102216]/80 backdrop-blur-md z-20 shrink-0 sticky top-0">
+            <div className="px-6 py-6 md:px-10 border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white tracking-tight uppercase tracking-widest">
+                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">
                             Home Page Sections
                         </h1>
-                        <p className="text-sm text-gray-500 font-medium mt-1">
+                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">
                             Organize e edite o conteúdo de cada bloco da sua Landing Page.
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all uppercase tracking-widest bg-white dark:bg-transparent">
+                        <button
+                            aria-label="Visualizar site ao vivo"
+                            className="flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-gray-100 dark:border-white/5 rounded-xl hover:bg-[#13ec5b]/5 hover:text-[#13ec5b] transition-all uppercase tracking-widest bg-white dark:bg-transparent"
+                        >
                             <span className="material-symbols-outlined text-sm">visibility</span>
                             Preview site
                         </button>
-                        <button className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-[#0d1b12] dark:bg-[#13ec5b] text-white dark:text-[#0d1b12] rounded-xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest">
+                        <button
+                            aria-label="Salvar alterações de estrutura"
+                            className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-[#0d1b12] dark:bg-[#13ec5b] text-white dark:text-[#0d1b12] rounded-xl shadow-xl shadow-black/10 hover:scale-105 transition-all uppercase tracking-widest"
+                        >
                             Salvar Estrutura
                         </button>
                     </div>

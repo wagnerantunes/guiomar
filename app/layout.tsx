@@ -7,6 +7,8 @@ const manrope = Manrope({ subsets: ["latin"] });
 import prisma from "@/lib/prisma";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br';
+
   try {
     const site = await prisma.site.findFirst({
       where: {
@@ -22,11 +24,41 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     });
 
+    const title = site?.name || "RenovaMente - Consultoria em Bem-Estar Corporativo";
+    const description = site?.description || "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.";
+    const ogImage = `${baseUrl}/og-image.jpg`;
+
     return {
-      title: site?.name || "RenovaMente - Consultoria em Bem-Estar Corporativo",
-      description: site?.description || "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.",
+      title,
+      description,
       icons: {
         icon: site?.favicon || "/favicon.ico",
+      },
+      openGraph: {
+        title,
+        description,
+        url: baseUrl,
+        siteName: "RenovaMente",
+        images: [
+          {
+            url: ogImage,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+        locale: "pt_BR",
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogImage],
+      },
+      robots: {
+        index: true,
+        follow: true,
       }
     };
   } catch (error) {
@@ -48,6 +80,26 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "RenovaMente",
+              "url": "https://renovamente-guiomarmelo.com.br",
+              "logo": "https://renovamente-guiomarmelo.com.br/logo.png",
+              "description": "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "BR"
+              },
+              "sameAs": [
+                "https://www.instagram.com/renovamente"
+              ]
+            })
+          }}
         />
       </head>
       <body className={manrope.className}>{children}</body>
