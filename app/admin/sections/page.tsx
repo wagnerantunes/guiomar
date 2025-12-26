@@ -642,14 +642,51 @@ export default function PageSections() {
                                                             <input type="color" className="w-full h-10 rounded-xl bg-gray-50 dark:bg-white/5 border-none cursor-pointer" value={sec.content?.textColor || "#0d1b12"} onChange={(e) => handleContentChange(sec.id, "textColor", e.target.value)} />
                                                         </div>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-4">
+                                                    <div className="space-y-4">
                                                         <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Title Size</label>
-                                                            <input type="number" className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.titleSize || 32} onChange={(e) => handleContentChange(sec.id, "titleSize", e.target.value)} />
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Tamanho do Título</label>
+                                                            <select
+                                                                className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                value={sec.content?.titleSize || "text-4xl"}
+                                                                onChange={(e) => handleContentChange(sec.id, "titleSize", e.target.value)}
+                                                            >
+                                                                <option value="text-xl">XL (20px)</option>
+                                                                <option value="text-2xl">2XL (24px)</option>
+                                                                <option value="text-3xl">3XL (30px)</option>
+                                                                <option value="text-4xl">4XL (36px) - Padrão</option>
+                                                                <option value="text-5xl">5XL (48px)</option>
+                                                                <option value="text-6xl">6XL (60px)</option>
+                                                                <option value="text-7xl">7XL (72px)</option>
+                                                            </select>
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Subtitle Size</label>
-                                                            <input type="number" className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.subtitleSize || 18} onChange={(e) => handleContentChange(sec.id, "subtitleSize", e.target.value)} />
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Tamanho do Subtítulo</label>
+                                                            <select
+                                                                className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                value={sec.content?.subtitleSize || "text-xl"}
+                                                                onChange={(e) => handleContentChange(sec.id, "subtitleSize", e.target.value)}
+                                                            >
+                                                                <option value="text-sm">SM (14px)</option>
+                                                                <option value="text-base">Base (16px)</option>
+                                                                <option value="text-lg">LG (18px)</option>
+                                                                <option value="text-xl">XL (20px) - Padrão</option>
+                                                                <option value="text-2xl">2XL (24px)</option>
+                                                                <option value="text-3xl">3XL (30px)</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Tamanho do Texto</label>
+                                                            <select
+                                                                className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                value={sec.content?.bodySize || "text-base"}
+                                                                onChange={(e) => handleContentChange(sec.id, "bodySize", e.target.value)}
+                                                            >
+                                                                <option value="text-xs">XS (12px)</option>
+                                                                <option value="text-sm">SM (14px)</option>
+                                                                <option value="text-base">Base (16px) - Padrão</option>
+                                                                <option value="text-lg">LG (18px)</option>
+                                                                <option value="text-xl">XL (20px)</option>
+                                                            </select>
                                                         </div>
                                                     </div>
 
