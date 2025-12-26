@@ -176,6 +176,48 @@ export default function PageSections() {
         }
     };
 
+    const handleSingleImageUpload = async (secId: string, file: File, fieldName: string = "image") => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/media", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                // Set single image field
+                setSections(prev => prev.map(sec => {
+                    if (sec.id === secId) {
+                        return { ...sec, content: { ...sec.content, [fieldName]: data.url } };
+                    }
+                    return sec;
+                }));
+                toast({
+                    title: "Upload Concluído",
+                    description: "A imagem foi atualizada com sucesso.",
+                    type: "success"
+                });
+                // Refresh media library
+                fetchMediaLibrary();
+            } else {
+                toast({
+                    title: "Erro no Upload",
+                    description: "Não foi possível processar a imagem.",
+                    type: "error"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Erro de Conexão",
+                description: "Falha ao enviar imagem para o servidor.",
+                type: "error"
+            });
+        }
+    };
+
     const removeImageFromSlider = (secId: string, index: number) => {
         setSections(prev => prev.map(sec => {
             if (sec.id === secId) {
@@ -437,6 +479,59 @@ export default function PageSections() {
                                                                         <input className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.statLabel || ""} onChange={(e) => handleContentChange(sec.id, "statLabel", e.target.value)} />
                                                                     </div>
                                                                 </div>
+                                                            )}
+
+                                                            {/* GUIOMAR SECTION - IMAGE UPLOAD */}
+                                                            {sec.id === "guiomar" && (
+                                                                <>
+                                                                    <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                                        <div className="flex items-center justify-between">
+                                                                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Foto da Fundadora</h4>
+                                                                        </div>
+                                                                        <div className="flex gap-3 flex-wrap">
+                                                                            {sec.content?.image && (
+                                                                                <div className="relative size-32 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 group">
+                                                                                    <img src={sec.content.image} alt="Guiomar" className="w-full h-full object-cover" />
+                                                                                    <button
+                                                                                        onClick={() => handleContentChange(sec.id, "image", "")}
+                                                                                        className="absolute top-2 right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                                                                                        title="Remover imagem"
+                                                                                    >
+                                                                                        <span className="material-symbols-outlined text-sm">close</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                            )}
+                                                                            <div
+                                                                                onClick={() => document.getElementById(`upload-guiomar-image`)?.click()}
+                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
+                                                                            >
+                                                                                <span className="material-symbols-outlined text-2xl">add_a_photo</span>
+                                                                                <span className="text-[8px] font-bold">Upload</span>
+                                                                            </div>
+                                                                            <input
+                                                                                id="upload-guiomar-image"
+                                                                                type="file"
+                                                                                className="hidden"
+                                                                                accept="image/*"
+                                                                                onChange={(e) => {
+                                                                                    const file = e.target.files?.[0];
+                                                                                    if (file) handleSingleImageUpload(sec.id, file, "image");
+                                                                                    e.target.value = '';
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="grid grid-cols-2 gap-4">
+                                                                        <div className="space-y-2">
+                                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Anos de Experiência</label>
+                                                                            <input className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.yearsExp || ""} onChange={(e) => handleContentChange(sec.id, "yearsExp", e.target.value)} placeholder="15+" />
+                                                                        </div>
+                                                                        <div className="space-y-2">
+                                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Projetos Entregues</label>
+                                                                            <input className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.projectsCount || ""} onChange={(e) => handleContentChange(sec.id, "projectsCount", e.target.value)} placeholder="500+" />
+                                                                        </div>
+                                                                    </div>
+                                                                </>
                                                             )}
 
                                                             {sec.id !== "hero" && (

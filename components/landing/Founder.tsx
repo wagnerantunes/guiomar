@@ -31,11 +31,11 @@ export function Founder({ getSetting }: FounderProps) {
                     </p>
                     <div className="flex gap-4 pt-4">
                         <div className="p-4 bg-[var(--color-background-light)]/50 rounded-2xl border border-gray-100 flex-1">
-                            <span className="text-2xl font-black text-[var(--color-primary)] block">15+</span>
+                            <span className="text-2xl font-black text-[var(--color-primary)] block">{content.yearsExp || "15+"}</span>
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Anos de Experiência</span>
                         </div>
                         <div className="p-4 bg-[var(--color-background-light)]/50 rounded-2xl border border-gray-100 flex-1">
-                            <span className="text-2xl font-black text-[var(--color-primary)] block">500+</span>
+                            <span className="text-2xl font-black text-[var(--color-primary)] block">{content.projectsCount || "500+"}</span>
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Projetos Entregues</span>
                         </div>
                     </div>
