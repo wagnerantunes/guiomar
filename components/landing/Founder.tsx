@@ -20,13 +20,13 @@ export function Founder({ getSetting }: FounderProps) {
                     <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
                         Fundadora
                     </div>
-                    <h2 className="text-4xl font-black text-[var(--color-text-main)] leading-tight">
+                    <h2 className={`${content.titleSize || 'text-4xl'} font-black text-[var(--color-text-main)] leading-tight`}>
                         {content.title}
                     </h2>
-                    <p className="text-lg text-gray-500 font-bold italic">
+                    <p className={`${content.subtitleSize || 'text-lg'} text-gray-500 font-bold italic`}>
                         {content.subtitle}
                     </p>
-                    <p className="text-gray-600 leading-relaxed text-lg font-medium">
+                    <p className={`text-gray-600 leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}>
                         {content.description}
                     </p>
                     <div className="flex gap-4 pt-4">
