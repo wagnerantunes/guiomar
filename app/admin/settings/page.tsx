@@ -8,7 +8,19 @@ export default async function SettingsPage() {
 
     const siteUser = await prisma.siteUser.findFirst({
         where: { userId: session?.user?.id },
-        include: { site: true },
+        include: {
+            site: {
+                select: {
+                    id: true,
+                    name: true,
+                    domain: true,
+                    description: true,
+                    favicon: true,
+                    logo: true,
+                    ogImage: true,
+                }
+            }
+        },
     });
 
     if (!siteUser) {

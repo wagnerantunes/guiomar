@@ -10,18 +10,60 @@ interface SettingsFormProps {
         domain: string | null;
         description: string | null;
         favicon: string | null;
+        logo: string | null;
+        ogImage: string | null;
     };
 }
 
 export default function SettingsForm({ site }: SettingsFormProps) {
     const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState<string | null>(null);
     const { toast } = useToast();
     const [formData, setFormData] = useState({
         name: site.name,
         domain: site.domain || "",
         description: site.description || "",
         favicon: site.favicon || "",
+        logo: site.logo || "",
+        ogImage: site.ogImage || "",
     });
+
+    const handleImageUpload = async (file: File, field: 'favicon' | 'logo' | 'ogImage') => {
+        setUploading(field);
+        const formDataUpload = new FormData();
+        formDataUpload.append("file", file);
+
+        try {
+            const res = await fetch("/api/media", {
+                method: "POST",
+                body: formDataUpload,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setFormData(prev => ({ ...prev, [field]: data.url }));
+                toast({
+                    title: "Upload Concluído",
+                    description: `${field === 'favicon' ? 'Favicon' : field === 'logo' ? 'Logo' : 'OG Image'} atualizado com sucesso.`,
+                    type: "success"
+                });
+            } else {
+                toast({
+                    title: "Erro no Upload",
+                    description: "Não foi possível processar a imagem.",
+                    type: "error"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Erro de Conexão",
+                description: "Falha ao enviar imagem para o servidor.",
+                type: "error"
+            });
+        } finally {
+            setUploading(null);
+        }
+    };
 
     const handleSave = async () => {
         setSaving(true);
@@ -150,38 +192,142 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                         </div>
                     </div>
                     <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+                        {/* FAVICON */}
                         <div className="space-y-4">
                             <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
                                 Favicon (Ícone do Navegador)
                             </label>
-                            <div className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav">
-                                {formData.favicon ? (
-                                    <img src={formData.favicon} alt="Favicon" className="size-12 object-contain group-hover/fav:scale-110 transition-transform" />
-                                ) : (
-                                    <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
-                                )}
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('favicon-upload')?.click()}
+                                    className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav"
+                                >
+                                    {formData.favicon ? (
+                                        <>
+                                            <img src={formData.favicon} alt="Favicon" className="size-12 object-contain group-hover/fav:scale-110 transition-transform" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, favicon: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/fav:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover favicon"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
+                                            {uploading === 'favicon' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
+                                </div>
                                 <input
-                                    type="text"
-                                    aria-label="URL do Favicon"
-                                    title="URL do Favicon"
-                                    placeholder="URL"
-                                    className="absolute inset-0 opacity-0 cursor-pointer"
-                                    onChange={(e) => setFormData({ ...formData, favicon: e.target.value })}
+                                    id="favicon-upload"
+                                    type="file"
+                                    accept="image/png,image/x-icon,image/svg+xml"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'favicon');
+                                        e.target.value = '';
+                                    }}
                                 />
                             </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">PNG, ICO ou SVG (32x32px)</p>
                         </div>
-                        <div className="space-y-4 md:col-span-2">
+
+                        {/* LOGO */}
+                        <div className="space-y-4">
                             <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
-                                Imagem de Compartilhamento (OG Image)
+                                Logo Principal
                             </label>
-                            <div className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[3rem] flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#13ec5b]/50 transition-all group/og">
-                                <div className="size-16 rounded-[1.5rem] bg-white dark:bg-white/5 flex items-center justify-center shadow-sm group-hover/og:scale-110 transition-transform">
-                                    <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-3xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('logo-upload')?.click()}
+                                    className="h-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logo"
+                                >
+                                    {formData.logo ? (
+                                        <>
+                                            <img src={formData.logo} alt="Logo" className="max-h-20 max-w-full object-contain group-hover/logo:scale-110 transition-transform px-4" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, logo: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/logo:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover logo"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                            {uploading === 'logo' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
                                 </div>
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-[#13ec5b] transition-colors">
-                                    Upload Indisponível (Use a /og-image.jpg padrão)
-                                </span>
+                                <input
+                                    id="logo-upload"
+                                    type="file"
+                                    accept="image/png,image/svg+xml,image/jpeg"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'logo');
+                                        e.target.value = '';
+                                    }}
+                                />
                             </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Header/Footer)</p>
+                        </div>
+
+                        {/* OG IMAGE */}
+                        <div className="space-y-4">
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Imagem de Compartilhamento
+                            </label>
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('og-upload')?.click()}
+                                    className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/og"
+                                >
+                                    {formData.ogImage ? (
+                                        <>
+                                            <img src={formData.ogImage} alt="OG Image" className="w-full h-full object-cover rounded-[2.5rem] group-hover/og:scale-105 transition-transform" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, ogImage: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/og:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover OG image"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">share</span>
+                                            {uploading === 'ogImage' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    id="og-upload"
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/jpg"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'ogImage');
+                                        e.target.value = '';
+                                    }}
+                                />
+                            </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">JPG ou PNG (1200x630px)</p>
                         </div>
                     </div>
                 </div>

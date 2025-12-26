@@ -91,6 +91,7 @@ model Site {
   description String?
   logo        String?
   favicon     String?
+  ogImage     String?
   settings    Json?
   theme       Json?
   createdAt   DateTime @default(now())
