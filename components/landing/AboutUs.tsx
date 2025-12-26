@@ -29,19 +29,19 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                     />
                     <div className="absolute inset-0 bg-primary/20 rounded-[3rem] -rotate-3 -z-0"></div>
                 </div>
-                <div className="space-y-6">
-                    <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">
-                        SOBRE NÓS
+                <div className="space-y-8">
+                    <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+                        Sobre Nós
                     </div>
-                    <h2 className="text-4xl font-black text-[#0d1b12]">
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
                         {content.title}
                     </h2>
                     {content.subtitle && (
-                        <p className="text-lg text-primary font-bold italic">
+                        <p className="text-lg text-[var(--color-primary)] font-bold italic">
                             {content.subtitle}
                         </p>
                     )}
-                    <p className="text-gray-600 leading-relaxed text-lg">
+                    <p className="text-gray-600 leading-relaxed text-lg font-medium">
                         {content.description}
                     </p>
                     <button
@@ -49,7 +49,7 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                             const el = document.getElementById("servicos");
                             el?.scrollIntoView({ behavior: "smooth" });
                         }}
-                        className="bg-[#0d1b12] text-white px-8 py-4 rounded-2xl font-black text-xs hover:bg-primary transition-all uppercase tracking-widest inline-block"
+                        className="bg-[var(--color-background-dark)] text-white px-8 py-4 rounded-2xl font-black text-xs hover:bg-[var(--color-primary)] transition-all uppercase tracking-widest inline-block shadow-lg"
                     >
                         {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
                     </button>

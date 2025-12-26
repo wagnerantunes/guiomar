@@ -12,12 +12,14 @@
   --font-mono: var(--font-geist-mono);
 
   /* Brand Colors */
-  --color-primary: #13ec5b;
-  --color-primary-dark: #0eb646;
-  --color-background-light: #f6f8f6;
-  --color-background-dark: #102216;
-  --color-text-main: #0d1b12;
-  --color-text-muted: #4c9a66;
+  --color-primary: #0F758D;
+  --color-primary-dark: #0C5E71;
+  --color-primary-light: #1499b9;
+  --color-background-light: #FDF5E6;
+  --color-background-dark: #083B47;
+  --color-text-main: #101828;
+  --color-text-muted: #475467;
+  --color-accent: #0F758D;
 }
 
 @media (prefers-color-scheme: dark) {

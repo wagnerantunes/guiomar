@@ -22,10 +22,10 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                         }
                     }}
                 >
-                    <span className="material-symbols-outlined text-3xl text-primary transition-transform group-hover:rotate-12">
+                    <span className="material-symbols-outlined text-3xl text-[var(--color-primary)] transition-transform group-hover:rotate-12">
                         spa
                     </span>
-                    <span className="text-xl font-black tracking-tight text-[#0d1b12]">
+                    <span className="text-xl font-black tracking-tight text-[var(--color-text-main)]">
                         RenovaMente
                     </span>
                 </div>
@@ -53,7 +53,7 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                                     window.location.href = "/" + link.url;
                                 }
                             }}
-                            className="text-xs font-black text-gray-500 hover:text-primary transition-colors tracking-widest"
+                            className="text-xs font-black text-gray-500 hover:text-[var(--color-primary)] transition-colors tracking-widest"
                         >
                             {link.label}
                         </button>
@@ -63,14 +63,14 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                 <div className="flex items-center gap-3">
                     <Link
                         href="/admin"
-                        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-[10px] font-black text-gray-400 hover:text-primary hover:border-primary/30 uppercase transition-all"
+                        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-[10px] font-black text-gray-400 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30 uppercase transition-all"
                     >
                         <span className="material-symbols-outlined text-sm">settings</span>{" "}
                         ADMIN
                     </Link>
                     <a
                         href={`https://wa.me/${(getSetting ? getSetting("navigation_footer", { phone: "5511994416024" }) : { phone: "5511994416024" }).phone.replace(/\D/g, "")}`}
-                        className="bg-[#13ec5b] text-[#0d1b12] px-5 py-2.5 rounded-xl text-xs font-black hover:bg-[#0fdc53] shadow-lg shadow-primary/20 transition-all active:scale-95"
+                        className="bg-[var(--color-primary)] text-white px-5 py-2.5 rounded-xl text-xs font-black hover:bg-[var(--color-primary-dark)] shadow-lg shadow-primary/20 transition-all active:scale-95"
                     >
                         FALE CONOSCO
                     </a>

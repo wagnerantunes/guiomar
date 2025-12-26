@@ -43,9 +43,9 @@ async function main() {
                 },
             },
             theme: {
-                primaryColor: '#6366f1',
-                secondaryColor: '#8b5cf6',
-                fontFamily: 'Inter',
+                primaryColor: '#0F758D',
+                secondaryColor: '#FDF5E6',
+                fontFamily: 'Manrope',
             },
         },
     })

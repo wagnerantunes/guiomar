@@ -17,24 +17,31 @@ export function Founder({ getSetting }: FounderProps) {
         >
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="order-2 lg:order-1 space-y-8">
-                    <h2 className="text-4xl font-black text-[#0d1b12]">
+                    <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+                        Fundadora
+                    </div>
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)] leading-tight">
                         {content.title}
                     </h2>
-                    <p className="text-gray-600 text-lg leading-relaxed">
+                    <p className="text-lg text-gray-500 font-bold italic">
+                        {content.subtitle}
+                    </p>
+                    <p className="text-gray-600 leading-relaxed text-lg font-medium">
                         {content.description}
                     </p>
-                    <div className="bg-primary/5 p-10 rounded-[2.5rem] border-l-8 border-primary relative">
-                        <span className="material-symbols-outlined absolute -top-4 right-8 text-primary opacity-20 text-7xl select-none">
-                            format_quote
-                        </span>
-                        <p className="text-xl font-black text-[#0d1b12] italic leading-snug">
-                            "{content.quote}"
-                        </p>
+                    <div className="flex gap-4 pt-4">
+                        <div className="p-4 bg-[var(--color-background-light)]/50 rounded-2xl border border-gray-100 flex-1">
+                            <span className="text-2xl font-black text-[var(--color-primary)] block">15+</span>
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Anos de Experiência</span>
+                        </div>
+                        <div className="p-4 bg-[var(--color-background-light)]/50 rounded-2xl border border-gray-100 flex-1">
+                            <span className="text-2xl font-black text-[var(--color-primary)] block">500+</span>
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Projetos Entregues</span>
+                        </div>
                     </div>
                 </div>
                 <div className="order-1 lg:order-2 flex justify-center">
-                    <div className="relative w-full max-w-sm">
-                        <div className="absolute inset-0 bg-primary rounded-[3rem] rotate-6 scale-95 opacity-50"></div>
+                    <div className="relative group">
                         <img
                             src={content.image}
                             className="rounded-[3rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"

@@ -16,9 +16,14 @@ export function Methodology({ getSetting }: MethodologyProps) {
             className="py-24 px-6 bg-white overflow-hidden"
         >
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-4xl font-black text-[#0d1b12] text-center mb-20">
-                    {content.title}
-                </h2>
+                <div className="text-center mb-20 space-y-4">
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
+                        {content.title}
+                    </h2>
+                    <p className="text-lg text-[var(--color-primary)] font-bold italic max-w-2xl mx-auto">
+                        {content.subtitle}
+                    </p>
+                </div>
                 <div className="relative space-y-12">
                     <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2"></div>
                     {(content.steps || SECTION_DEFAULTS.metodologia.steps).map((m: any, i: number) => (

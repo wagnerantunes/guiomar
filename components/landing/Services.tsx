@@ -12,13 +12,13 @@ export function Services({ getSetting }: ServicesProps) {
     const services = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
 
     return (
-        <section id="servicos" className="py-24 px-6 bg-gray-50">
+        <section id="servicos" className="py-24 px-6 bg-[var(--color-background-light)]/30">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-4xl font-black text-[#0d1b12]">
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
                         {services.title}
                     </h2>
-                    <p className="text-lg text-gray-500 font-bold italic">
+                    <p className="text-lg text-[var(--color-primary)] font-bold italic">
                         {services.subtitle}
                     </p>
                 </div>

@@ -88,10 +88,10 @@ export function Footer({
                 {/* BIO COLUMN */}
                 <div className="space-y-8">
                     <div className="flex items-center gap-3">
-                        <div className="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                        <div className="size-10 bg-[var(--color-primary)] rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
                             <span className="material-symbols-outlined text-2xl">spa</span>
                         </div>
-                        <span className="text-2xl font-black text-[#0d1b12] tracking-tighter">
+                        <span className="text-2xl font-black text-[var(--color-text-main)] tracking-tighter">
                             RenovaMente
                         </span>
                     </div>
@@ -105,7 +105,7 @@ export function Footer({
                                 href={val as string}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="size-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
+                                className="size-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)] transition-all duration-300"
                                 title={key}
                             >
                                 <SocialIcon name={key} />
@@ -116,7 +116,7 @@ export function Footer({
 
                 {/* QUICK LINKS */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d1b12] mb-8">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
                         Links Rápidos
                     </h4>
                     <ul className="space-y-4">
@@ -130,7 +130,7 @@ export function Footer({
                                             window.location.href = link.url;
                                         }
                                     }}
-                                    className="text-sm font-bold text-gray-400 hover:text-primary transition-all flex items-center gap-2 group"
+                                    className="text-sm font-bold text-gray-400 hover:text-[var(--color-primary)] transition-all flex items-center gap-2 group"
                                 >
                                     <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                                     {link.label}
@@ -142,13 +142,13 @@ export function Footer({
 
                 {/* SERVICES */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d1b12] mb-8">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
                         Nossos Serviços
                     </h4>
                     <ul className="space-y-4">
                         {(footerSettings.services || []).map((service: string, i: number) => (
                             <li key={i}>
-                                <span className="text-sm font-bold text-gray-400 hover:text-primary cursor-pointer transition-all">
+                                <span className="text-sm font-bold text-gray-400 hover:text-[var(--color-primary)] cursor-pointer transition-all">
                                     {service}
                                 </span>
                             </li>
@@ -157,15 +157,15 @@ export function Footer({
                 </div>
 
                 {/* NEWSLETTER */}
-                <div className="bg-gray-50 p-8 rounded-[2.5rem] border border-gray-100">
-                    <h4 className="text-lg font-black text-[#0d1b12] mb-2">Receba novidades</h4>
+                <div className="bg-[var(--color-background-light)]/50 p-8 rounded-[2.5rem] border border-gray-100">
+                    <h4 className="text-lg font-black text-[var(--color-text-main)] mb-2">Receba novidades</h4>
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">
                         Dicas de bem-estar corporativo
                     </p>
                     <form className="space-y-3" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
                         <div className="space-y-1">
                             <input
-                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[#0d1b12] font-medium"
+                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[var(--color-text-main)] font-medium"
                                 placeholder="Seu nome"
                                 type="text"
                                 required
@@ -173,7 +173,7 @@ export function Footer({
                         </div>
                         <div className="space-y-1">
                             <input
-                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[#0d1b12] font-medium"
+                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[var(--color-text-main)] font-medium"
                                 placeholder="Seu melhor e-mail*"
                                 type="email"
                                 required
@@ -184,7 +184,7 @@ export function Footer({
                         <button
                             type="submit"
                             disabled={newsletterStatus === "loading" || !handleNewsletterSubmit}
-                            className="w-full bg-[#0d1b12] text-white font-black py-4 rounded-xl text-[10px] uppercase tracking-widest hover:bg-primary transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-black/5"
+                            className="w-full bg-[var(--color-text-main)] text-white font-black py-4 rounded-xl text-[10px] uppercase tracking-widest hover:bg-[var(--color-primary)] transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-black/5"
                         >
                             {newsletterStatus === "loading" ? "Processando..." :
                                 newsletterStatus === "success" ? "Inscrito!" :

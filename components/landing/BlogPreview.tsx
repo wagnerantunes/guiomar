@@ -10,20 +10,25 @@ interface BlogProps {
 }
 
 export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }: BlogProps) {
+    const content = getSetting("section_blog_content", {
+        title: "Insights & Bem-estar",
+        subtitle: "Explore nossos artigos e descubra dicas para uma vida mais saudável e equilibrada."
+    });
+
     return (
-        <section
-            id="blog"
-            className="py-24 bg-white px-6 border-t border-gray-50"
-        >
+        <section id="blog" className="py-24 px-6 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                    <div>
-                        <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase mb-4 tracking-widest">
-                            NOSSO BLOG
+                <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
+                    <div className="space-y-4 max-w-2xl">
+                        <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            Blog & Conteúdo
                         </div>
-                        <h2 className="text-4xl font-black text-[#0d1b12]">
-                            {getSetting("section_blog_content", { title: "Insights & Bem-estar" }).title}
+                        <h2 className="text-4xl font-black text-[var(--color-text-main)] leading-tight">
+                            {content.title}
                         </h2>
+                        <p className="text-lg text-gray-500 font-bold italic">
+                            {content.subtitle}
+                        </p>
                     </div>
                     <button
                         className="text-xs font-black text-primary uppercase border-b-2 border-primary pb-1"

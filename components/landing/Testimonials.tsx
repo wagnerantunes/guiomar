@@ -30,10 +30,10 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
         <section id="testimonials" className="py-24 px-6 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-4xl font-black text-[#0d1b12]">
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
                         {data.title}
                     </h2>
-                    <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+                    <div className="w-20 h-1 bg-[var(--color-primary)] mx-auto rounded-full" />
                 </div>
 
                 <div className="relative">
@@ -44,30 +44,30 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-gray-50 p-12 md:p-16 rounded-[3rem] border border-gray-100 shadow-xl relative overflow-hidden"
+                            className="bg-[var(--color-background-light)]/20 p-12 md:p-16 rounded-[3rem] border border-gray-100 shadow-xl relative overflow-hidden"
                         >
-                            <span className="material-symbols-outlined absolute top-10 left-10 text-9xl text-primary/5 select-none pointer-events-none">
+                            <span className="material-symbols-outlined absolute top-10 left-10 text-9xl text-[var(--color-primary)]/5 select-none pointer-events-none">
                                 format_quote
                             </span>
 
                             <div className="relative z-10 flex flex-col items-center text-center space-y-8">
-                                <p className="text-xl md:text-2xl text-[#0d1b12] font-medium leading-relaxed max-w-4xl italic">
+                                <p className="text-xl md:text-2xl text-[var(--color-text-main)] font-medium leading-relaxed max-w-4xl italic">
                                     "{data.items[activeIndex]?.quote}"
                                 </p>
 
                                 <div className="flex flex-col items-center space-y-4">
                                     <div className="size-20 rounded-full overflow-hidden border-4 border-white shadow-lg">
                                         <img
-                                            src={data.items[activeIndex]?.image || `https://ui-avatars.com/api/?name=${data.items[activeIndex]?.name}&background=13ec5b&color=0d1b12`}
+                                            src={data.items[activeIndex]?.image || `https://ui-avatars.com/api/?name=${data.items[activeIndex]?.name}&background=0F758D&color=ffffff`}
                                             alt={data.items[activeIndex]?.name}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
                                     <div>
-                                        <h4 className="font-black text-[#0d1b12] text-lg uppercase tracking-wider">
+                                        <h4 className="font-black text-[var(--color-text-main)] text-lg uppercase tracking-wider">
                                             {data.items[activeIndex]?.name}
                                         </h4>
-                                        <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-1">
+                                        <p className="text-[var(--color-primary)] font-black text-[10px] uppercase tracking-widest mt-1">
                                             {data.items[activeIndex]?.role}
                                         </p>
                                     </div>
@@ -82,7 +82,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                             <button
                                 key={idx}
                                 onClick={() => setActiveIndex(idx)}
-                                className={`h-2 transition-all duration-300 rounded-full ${activeIndex === idx ? "w-12 bg-primary" : "w-4 bg-gray-200"
+                                className={`h-2 transition-all duration-300 rounded-full ${activeIndex === idx ? "w-12 bg-[var(--color-primary)]" : "w-4 bg-gray-200"
                                     }`}
                             />
                         ))}

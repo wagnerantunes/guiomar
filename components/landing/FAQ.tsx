@@ -13,9 +13,9 @@ export function FAQ({ getSetting }: FAQProps) {
     const content = getSetting("section_faq_content", SECTION_DEFAULTS.faq);
 
     return (
-        <section id="faq" className="py-24 bg-gray-50 px-6">
+        <section id="faq" className="py-24 bg-[var(--color-background-light)]/20 px-6">
             <div className="max-w-3xl mx-auto">
-                <h2 className="text-4xl font-black text-[#0d1b12] text-center mb-16">
+                <h2 className="text-4xl font-black text-[var(--color-text-main)] text-center mb-16">
                     {content.title}
                 </h2>
                 <div className="space-y-4">
@@ -28,18 +28,18 @@ export function FAQ({ getSetting }: FAQProps) {
                                 onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                                 className="w-full px-8 py-6 flex items-center justify-between text-left group"
                             >
-                                <span className="font-black text-[#0d1b12] group-hover:text-primary transition-colors">
+                                <span className="font-black text-[var(--color-text-main)] group-hover:text-[var(--color-primary)] transition-colors">
                                     {f.q}
                                 </span>
                                 <span
-                                    className={`material-symbols-outlined transition-transform duration-300 ${activeFaq === i ? "rotate-180 text-primary" : "text-gray-400"
+                                    className={`material-symbols-outlined transition-transform duration-300 ${activeFaq === i ? "rotate-180 text-[var(--color-primary)]" : "text-gray-400"
                                         }`}
                                 >
                                     expand_more
                                 </span>
                             </button>
                             {activeFaq === i && (
-                                <div className="px-8 pb-6 text-sm text-gray-500 border-t border-gray-50 pt-5">
+                                <div className="px-8 pb-6 text-sm text-gray-500 border-t border-gray-50 pt-5 font-medium leading-relaxed">
                                     {f.r}
                                 </div>
                             )}

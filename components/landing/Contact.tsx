@@ -74,39 +74,39 @@ export function Contact({ getSetting }: ContactProps) {
         <section id="contato" className="py-24 px-6 bg-white">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div className="lg:col-span-12 mb-12 text-center">
-                    <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest mb-4">
+                    <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
                         CONTATO
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black text-[#0d1b12]">Vamos conversar?</h2>
+                    <h2 className="text-4xl md:text-5xl font-black text-[var(--color-text-main)]">Vamos conversar?</h2>
                 </div>
 
-                <div className="lg:col-span-5 bg-[#0d1b12] text-white p-12 rounded-[3.5rem] space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between">
+                <div className="lg:col-span-5 bg-[var(--color-background-dark)] text-white p-12 rounded-[3.5rem] space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between">
                     <span className="material-symbols-outlined absolute -bottom-10 -right-10 opacity-5 text-[200px] select-none">
                         contact_support
                     </span>
 
                     <div className="space-y-6">
-                        <h3 className="text-3xl font-black text-primary leading-tight">Pronto para<br />renovar sua empresa?</h3>
+                        <h3 className="text-3xl font-black text-[var(--color-primary)] leading-tight">Pronto para<br />renovar sua empresa?</h3>
                         <p className="text-gray-400 font-medium">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
                     </div>
 
                     <div className="space-y-8 relative z-10">
                         <div className="flex items-center gap-6 group">
-                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-[#0d1b12] transition-all">
+                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-all">
                                 <span className="material-symbols-outlined">call</span>
                             </div>
                             <div>
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Telefone</p>
-                                <p className="text-lg font-bold">{footerSetting.phone}</p>
+                                <p className="text-lg font-bold font-manrope">{footerSetting.phone}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-6 group">
-                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-[#0d1b12] transition-all">
+                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-all">
                                 <span className="material-symbols-outlined">mail</span>
                             </div>
                             <div>
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">E-mail</p>
-                                <p className="text-lg font-bold">{footerSetting.email}</p>
+                                <p className="text-lg font-bold font-manrope">{footerSetting.email}</p>
                             </div>
                         </div>
                     </div>
@@ -115,14 +115,14 @@ export function Contact({ getSetting }: ContactProps) {
                 <div className="lg:col-span-7 bg-white p-4 md:p-12 rounded-[3.5rem] border border-gray-100 shadow-2xl">
                     {status === "success" ? (
                         <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-fadeIn">
-                            <div className="size-24 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+                            <div className="size-24 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] mb-4">
                                 <span className="material-symbols-outlined text-5xl">check_circle</span>
                             </div>
-                            <h3 className="text-2xl font-black text-[#0d1b12]">Mensagem Enviada!</h3>
+                            <h3 className="text-2xl font-black text-[var(--color-text-main)]">Mensagem Enviada!</h3>
                             <p className="text-gray-500 font-medium max-w-sm mx-auto">{formConfig.successMessage}</p>
                             <button
                                 onClick={() => setStatus("idle")}
-                                className="text-primary font-black text-xs uppercase tracking-widest hover:underline"
+                                className="text-[var(--color-primary)] font-black text-xs uppercase tracking-widest hover:underline"
                             >
                                 Enviar outra mensagem
                             </button>
@@ -132,7 +132,7 @@ export function Contact({ getSetting }: ContactProps) {
                             {formConfig.fields.map((field: any) => (
                                 <div key={field.id} className="space-y-1.5">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">
-                                        {field.label} {field.required && <span className="text-primary">*</span>}
+                                        {field.label} {field.required && <span className="text-[var(--color-primary)]">*</span>}
                                     </label>
 
                                     {field.type === 'textarea' ? (
@@ -141,13 +141,13 @@ export function Contact({ getSetting }: ContactProps) {
                                             required={field.required}
                                             rows={4}
                                             placeholder={`Escreva seu ${field.label.toLowerCase()}...`}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[#0d1b12] text-sm focus:border-primary/20 focus:bg-white outline-none resize-none transition-all"
+                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none resize-none transition-all"
                                         />
                                     ) : field.type === 'select' ? (
                                         <select
                                             name={field.label}
                                             required={field.required}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[#0d1b12] text-sm focus:border-primary/20 focus:bg-white outline-none transition-all appearance-none"
+                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none transition-all appearance-none"
                                         >
                                             <option value="">Selecione uma opção...</option>
                                             {field.options?.map((opt: string) => (
@@ -160,7 +160,7 @@ export function Contact({ getSetting }: ContactProps) {
                                             name={field.label}
                                             required={field.required}
                                             placeholder={`Seu ${field.label.toLowerCase()}...`}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[#0d1b12] text-sm focus:border-primary/20 focus:bg-white outline-none transition-all"
+                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none transition-all"
                                         />
                                     )}
                                 </div>
@@ -170,7 +170,7 @@ export function Contact({ getSetting }: ContactProps) {
                                 <button
                                     type="submit"
                                     disabled={status === "loading"}
-                                    className="w-full bg-[#0d1b12] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                                    className="w-full bg-[var(--color-background-dark)] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-50"
                                 >
                                     {status === "loading" ? "Enviando para nossa equipe..." : "Enviar Mensagem"}
                                 </button>

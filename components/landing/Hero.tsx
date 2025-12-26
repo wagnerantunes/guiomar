@@ -76,7 +76,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                         alt={`Hero Slide ${currentSlide + 1}`}
                     />
                 </AnimatePresence>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#102216]/95 via-[#102216]/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-background-dark)]/95 via-[var(--color-background-dark)]/80 to-transparent"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -97,7 +97,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     </p>
                     <button
                         onClick={() => scrollTo("servicos")}
-                        className="bg-[#13ec5b] text-[#0d1b12] px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest"
+                        className="bg-[var(--color-primary)] text-white px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest"
                     >
                         {heroData.ctaText || "NOSSOS SERVIÇOS"}
                     </button>
@@ -158,7 +158,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                         <button
                             type="submit"
                             disabled={status === "loading"}
-                            className="w-full bg-[#0d1b12] text-white py-5 rounded-2xl font-black text-xs hover:bg-black transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest mt-4 shadow-lg"
+                            className="w-full bg-[var(--color-background-dark)] text-white py-5 rounded-2xl font-black text-xs hover:bg-black transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest mt-4 shadow-lg"
                         >
                             {status === "loading" ? "Enviando..." :
                                 status === "success" ? "Solicitação Enviada!" :
