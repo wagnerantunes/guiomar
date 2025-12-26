@@ -69,7 +69,7 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                         ADMIN
                     </Link>
                     <a
-                        href={`https://wa.me/${(getSetting ? getSetting("navigation_footer", { phone: "5511994416024" }) : { phone: "5511994416024" }).phone.replace(/\D/g, "")}`}
+                        href={`https://wa.me/${((getSetting ? getSetting("navigation_footer", { phone: "5511994416024" }) : { phone: "5511994416024" }).phone || "5511994416024").replace(/\D/g, "")}`}
                         className="bg-[var(--color-primary)] text-white px-5 py-2.5 rounded-xl text-xs font-black hover:bg-[var(--color-primary-dark)] shadow-lg shadow-primary/20 transition-all active:scale-95"
                     >
                         FALE CONOSCO
