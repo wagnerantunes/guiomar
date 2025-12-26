@@ -33,7 +33,8 @@ export function Footer({
     logo
 }: FooterProps) {
     const { toast } = useToast();
-    const footerSettings = getSetting ? getSetting("navigation_footer", {
+
+    const defaultFooterData = {
         bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
         quickLinks: [
             { label: "Sobre Nós", url: "#sobre" },
@@ -53,29 +54,16 @@ export function Footer({
             instagram: "https://www.instagram.com/renovamente.guiomarmelo/",
             facebook: "https://www.facebook.com/renovamente.guiomarmelo",
             linkedin: "https://www.linkedin.com/company/renovamente",
-        }
-    }) : {
-        bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
-        quickLinks: [
-            { label: "Sobre Nós", url: "#sobre" },
-            { label: "Nossos Serviços", url: "#servicos" },
-            { label: "Metodologia", url: "#metodologia" },
-            { label: "Blog", url: "/blog" },
-            { label: "Contato", url: "#contato" },
-        ],
-        services: [
-            "Ergonomia Legal",
-            "Clima Organizacional",
-            "Cultura Organizacional",
-            "Bem-Estar Corporativo",
-            "Recrutamento",
-        ],
-        socials: {
-            instagram: "https://www.instagram.com/renovamente.guiomarmelo/",
-            facebook: "https://www.facebook.com/renovamente.guiomarmelo",
-            linkedin: "https://www.linkedin.com/company/renovamente",
-        }
+        },
+        phone: "(11) 99441-6024",
+        email: "contato@renovamente.com.br",
+        address: "São Paulo, SP"
     };
+
+    const footerSettings = getSetting ? {
+        ...defaultFooterData,
+        ...getSetting("navigation_footer", defaultFooterData)
+    } : defaultFooterData;
 
     const SocialIcon = ({ name }: { name: string }) => {
         switch (name.toLowerCase()) {
