@@ -10,9 +10,10 @@ git pull origin main
 echo "📦 Instalando dependências..."
 npm install
 
-# Run database migrations
-echo "🗄️ Executando migrações do banco de dados..."
+# Run database migrations and seed
+echo "🗄️ Executando migrações e sementes do banco de dados..."
 npm run db:push
+npm run db:seed
 
 # Build application
 echo "🔨 Limpando cache e compilando aplicação..."

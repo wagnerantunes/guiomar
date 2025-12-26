@@ -1,6 +1,16 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
+import {
+    Instagram,
+    Facebook,
+    Linkedin,
+    Mail,
+    Phone,
+    MapPin,
+    ArrowRight
+} from "lucide-react";
 
 interface FooterProps {
     getSetting?: (key: string, defaultValue: any) => any;
@@ -20,113 +30,179 @@ export function Footer({
     newsletterStatus = "idle"
 }: FooterProps) {
     const footerSettings = getSetting ? getSetting("navigation_footer", {
-        bio: "Transformando ambientes de trabalho com técnica e humanização.",
+        bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
         quickLinks: [
-            { label: "Sobre", url: "#sobre" },
-            { label: "Serviços", url: "#servicos" },
-            { label: "Blog", url: "#blog" },
+            { label: "Sobre Nós", url: "#sobre" },
+            { label: "Nossos Serviços", url: "#servicos" },
+            { label: "Metodologia", url: "#metodologia" },
+            { label: "Blog", url: "/blog" },
+            { label: "Contato", url: "#contato" },
+        ],
+        services: [
+            "Ergonomia Legal",
+            "Clima Organizacional",
+            "Cultura Organizacional",
+            "Bem-Estar Corporativo",
+            "Recrutamento",
         ],
         socials: {
-            instagram: "#",
-            linkedin: "#",
-        },
-        phone: "5511994416024"
+            instagram: "https://www.instagram.com/renovamente.guiomarmelo/",
+            facebook: "https://www.facebook.com/renovamente.guiomarmelo",
+            linkedin: "https://www.linkedin.com/company/renovamente",
+        }
     }) : {
-        bio: "Transformando ambientes de trabalho com técnica e humanização.",
+        bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
         quickLinks: [
-            { label: "Sobre", url: "#sobre" },
-            { label: "Serviços", url: "#servicos" },
-            { label: "Blog", url: "#blog" },
+            { label: "Sobre Nós", url: "#sobre" },
+            { label: "Nossos Serviços", url: "#servicos" },
+            { label: "Metodologia", url: "#metodologia" },
+            { label: "Blog", url: "/blog" },
+            { label: "Contato", url: "#contato" },
+        ],
+        services: [
+            "Ergonomia Legal",
+            "Clima Organizacional",
+            "Cultura Organizacional",
+            "Bem-Estar Corporativo",
+            "Recrutamento",
         ],
         socials: {
-            instagram: "#",
-            linkedin: "#",
-        },
-        phone: "5511994416024"
+            instagram: "https://www.instagram.com/renovamente.guiomarmelo/",
+            facebook: "https://www.facebook.com/renovamente.guiomarmelo",
+            linkedin: "https://www.linkedin.com/company/renovamente",
+        }
+    };
+
+    const SocialIcon = ({ name }: { name: string }) => {
+        switch (name.toLowerCase()) {
+            case "instagram": return <Instagram size={18} />;
+            case "facebook": return <Facebook size={18} />;
+            case "linkedin": return <Linkedin size={18} />;
+            default: return null;
+        }
     };
 
     return (
-        <footer className="bg-gray-100 py-20 px-6 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div className="space-y-6">
-                    <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-3xl text-primary">
-                            spa
-                        </span>
-                        <span className="text-xl font-black text-[#0d1b12]">
+        <footer className="bg-white border-t border-gray-100 pt-24 pb-12 px-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
+                {/* BIO COLUMN */}
+                <div className="space-y-8">
+                    <div className="flex items-center gap-3">
+                        <div className="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                            <span className="material-symbols-outlined text-2xl">spa</span>
+                        </div>
+                        <span className="text-2xl font-black text-[#0d1b12] tracking-tighter">
                             RenovaMente
                         </span>
                     </div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 leading-relaxed font-medium">
                         {footerSettings.bio}
                     </p>
+                    <div className="flex items-center gap-3">
+                        {Object.entries(footerSettings.socials || {}).map(([key, val]) => (
+                            <a
+                                key={key}
+                                href={val as string}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="size-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
+                                title={key}
+                            >
+                                <SocialIcon name={key} />
+                            </a>
+                        ))}
+                    </div>
                 </div>
+
+                {/* QUICK LINKS */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-widest mb-6">
-                        Explore
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d1b12] mb-8">
+                        Links Rápidos
                     </h4>
-                    <ul className="space-y-4 text-sm font-bold text-gray-500">
+                    <ul className="space-y-4">
                         {(footerSettings.quickLinks || []).map((link: any, i: number) => (
                             <li key={i}>
                                 <button
                                     onClick={() => {
-                                        if (scrollTo) {
+                                        if (scrollTo && link.url.startsWith("#")) {
                                             scrollTo(link.url.replace("#", ""));
                                         } else {
-                                            window.location.href = "/" + link.url;
+                                            window.location.href = link.url;
                                         }
                                     }}
-                                    className="hover:text-primary transition-colors text-left"
+                                    className="text-sm font-bold text-gray-400 hover:text-primary transition-all flex items-center gap-2 group"
                                 >
+                                    <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                                     {link.label}
                                 </button>
                             </li>
                         ))}
                     </ul>
                 </div>
+
+                {/* SERVICES */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-widest mb-6">
-                        Redes Sociais
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d1b12] mb-8">
+                        Nossos Serviços
                     </h4>
-                    <div className="flex gap-4">
-                        {Object.entries(footerSettings.socials || {}).map(([key, val]) => (
-                            <a
-                                key={key}
-                                href={val as string}
-                                target="_blank"
-                                className="text-gray-400 hover:text-primary transition-colors capitalize"
-                            >
-                                {key}
-                            </a>
+                    <ul className="space-y-4">
+                        {(footerSettings.services || []).map((service: string, i: number) => (
+                            <li key={i}>
+                                <span className="text-sm font-bold text-gray-400 hover:text-primary cursor-pointer transition-all">
+                                    {service}
+                                </span>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm">
-                    <h4 className="text-xs font-black mb-4">Newsletter</h4>
-                    <form className="flex flex-col gap-2" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
-                        <input
-                            className="bg-gray-50 border-none rounded-xl text-xs py-2 px-4 outline-none focus:ring-2 focus:ring-primary/30 text-[#0d1b12]"
-                            placeholder="Seu e-mail"
-                            type="email"
-                            required
-                            value={newsletterEmail}
-                            onChange={(e) => setNewsletterEmail && setNewsletterEmail(e.target.value)}
-                        />
+
+                {/* NEWSLETTER */}
+                <div className="bg-gray-50 p-8 rounded-[2.5rem] border border-gray-100">
+                    <h4 className="text-lg font-black text-[#0d1b12] mb-2">Receba novidades</h4>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6">
+                        Dicas de bem-estar corporativo
+                    </p>
+                    <form className="space-y-3" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
+                        <div className="space-y-1">
+                            <input
+                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[#0d1b12] font-medium"
+                                placeholder="Seu nome"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <input
+                                className="w-full bg-white border border-gray-100 rounded-xl text-xs py-3.5 px-5 outline-none focus:ring-2 focus:ring-primary/20 text-[#0d1b12] font-medium"
+                                placeholder="Seu melhor e-mail*"
+                                type="email"
+                                required
+                                value={newsletterEmail}
+                                onChange={(e) => setNewsletterEmail && setNewsletterEmail(e.target.value)}
+                            />
+                        </div>
                         <button
                             type="submit"
                             disabled={newsletterStatus === "loading" || !handleNewsletterSubmit}
-                            className="bg-primary text-text-dark font-black py-2 rounded-xl text-[10px] uppercase hover:scale-105 transition-all active:scale-95 disabled:opacity-50"
+                            className="w-full bg-[#0d1b12] text-white font-black py-4 rounded-xl text-[10px] uppercase tracking-widest hover:bg-primary transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-black/5"
                         >
-                            {newsletterStatus === "loading" ? "..." :
-                                newsletterStatus === "success" ? "Sucesso!" :
-                                    newsletterStatus === "error" ? "Erro" : "Assinar"}
+                            {newsletterStatus === "loading" ? "Processando..." :
+                                newsletterStatus === "success" ? "Inscrito!" :
+                                    newsletterStatus === "error" ? "Tente novamente" : "Inscrever-se"}
                         </button>
                     </form>
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-gray-200 text-center text-[10px] text-gray-400 font-black uppercase tracking-widest">
-                © 2024 RenovaMente Consultoria de Bem-Estar. Todos os direitos
-                reservados.
+
+            {/* COPYRIGHT */}
+            <div className="max-w-7xl mx-auto pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
+                    © {new Date().getFullYear()} RenovaMente Consultoria de Bem-Estar. Todos os direitos reservados.
+                </p>
+                <div className="flex gap-8 text-[9px] font-black text-gray-300 uppercase tracking-widest">
+                    <a href="#" className="hover:text-primary transition-colors">Termos de Uso</a>
+                    <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
+                </div>
             </div>
         </footer>
     );

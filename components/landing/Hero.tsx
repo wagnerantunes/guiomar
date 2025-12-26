@@ -32,6 +32,8 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
         const data = {
             name: formData.get("name"),
             email: formData.get("email"),
+            company: formData.get("company"),
+            phone: formData.get("phone"),
             source: "Hero Section Lead Form",
             domain: window.location.hostname
         };
@@ -80,9 +82,9 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="text-white space-y-8 animate-fadeInLeft">
                     {heroData.subtitle && (
-                        <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] animate-fadeIn">
+                        <p className="text-lg md:text-xl font-bold text-primary italic max-w-xl animate-fadeIn">
                             {heroData.subtitle}
-                        </span>
+                        </p>
                     )}
                     <h1
                         className="text-4xl md:text-6xl font-black leading-[1.1]"
@@ -90,7 +92,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     >
                         {heroData.title}
                     </h1>
-                    <p className="text-lg md:text-xl font-bold text-gray-300 italic">
+                    <p className="text-base md:text-lg font-medium text-gray-300 max-w-xl">
                         {heroData.description}
                     </p>
                     <button
@@ -104,7 +106,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                 <div className="bg-white p-10 rounded-[3rem] shadow-2xl animate-fadeInRight max-w-md ml-auto border border-gray-100">
                     <div className="mb-8">
                         <h3 className="text-2xl font-black text-[#0d1b12]">
-                            Fale com um especialista
+                            Transforme seu ambiente de trabalho
                         </h3>
                         <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-2">
                             Consultoria técnica e humanizada
@@ -117,8 +119,8 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                 type="text"
                                 name="name"
                                 required
-                                placeholder="Como podemos te chamar?"
-                                className="w-full px-5 py-4 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                                placeholder="Seu nome"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                             />
                         </div>
                         <div className="space-y-1">
@@ -127,9 +129,31 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                 type="email"
                                 name="email"
                                 required
-                                placeholder="seu@empresa.com"
-                                className="w-full px-5 py-4 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                                placeholder="seu@email.com"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                             />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Empresa</label>
+                                <input
+                                    type="text"
+                                    name="company"
+                                    required
+                                    placeholder="Nome da empresa"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">WhatsApp</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    required
+                                    placeholder="(11) 99999-9999"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border-gray-100 text-[#0d1b12] text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                                />
+                            </div>
                         </div>
                         <button
                             type="submit"

@@ -140,6 +140,28 @@ async function main() {
         console.log('✅ Sample post created')
     }
 
+    // Seed section settings from SECTION_DEFAULTS
+    const { SECTION_DEFAULTS } = require('../lib/sectionDefaults')
+    for (const [id, content] of Object.entries(SECTION_DEFAULTS)) {
+        await prisma.siteSettings.upsert({
+            where: {
+                siteId_key: {
+                    siteId: renovamenteSite.id,
+                    key: `section_${id}_content`
+                }
+            },
+            update: {
+                value: JSON.stringify(content)
+            },
+            create: {
+                siteId: renovamenteSite.id,
+                key: `section_${id}_content`,
+                value: JSON.stringify(content)
+            }
+        })
+    }
+    console.log('✅ Section content settings seeded')
+
     console.log('🎉 Database seeded successfully!')
 }
 

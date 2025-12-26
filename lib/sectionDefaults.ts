@@ -1,95 +1,100 @@
 export const SECTION_DEFAULTS = {
     hero: {
         title: "Consciência que transforma ambientes de trabalho",
-        subtitle: "Bem-estar Corporativo",
-        description: "Ajudamos empresas a criar culturas organizacionais mais saudáveis e produtivas.",
+        subtitle: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.",
+        description: "A RenovaMente é uma consultoria em bem-estar corporativo que atua com ergonomia legal conforme NR-1 e NR-17, riscos psicossociais e cultura organizacional, unindo técnica, conformidade e cuidado humano para gerar resultados sustentáveis.",
         images: [
             "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
         ],
-        transitionEffect: "fade",
         duration: 5000,
         fontFamily: "Manrope",
         textColor: "#0d1b12",
         titleSize: 56,
-        subtitleSize: 18,
-        ctaText: "Agendar Consultoria",
-        ctaUrl: "#contato",
-        ctaColor: "#13ec5b"
+        ctaText: "NOSSOS SERVIÇOS",
+        ctaUrl: "#servicos"
     },
     sobre: {
         title: "Muito mais que uma consultoria comum",
-        description: "A RenovaMente une ergonomia técnica e humanização para transformar empresas, considerando pessoas, processos e exigências legais.",
+        subtitle: "A RenovaMente une ergonomia técnica e humanização para transformar empresas",
+        description: "A RenovaMente atua na transformação de ambientes corporativos a partir de uma abordagem integrada, que considera pessoas, processos e exigências legais. Nosso trabalho vai além do cumprimento de normas, promovendo prevenção de riscos, fortalecimento da cultura organizacional e ambientes mais saudáveis e produtivos.",
         experience: "30",
         image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-        fontFamily: "Manrope",
-        textColor: "#0d1b12",
-        bgColor: "#ffffff"
+        ctaText: "CONHEÇA NOSSOS SERVIÇOS",
+        ctaUrl: "#servicos"
     },
     desafio: {
         title: "O desafio das empresas hoje",
-        description: "Exigências como NR-1 e NR-17, somadas ao aumento de riscos psicossociais, tornam essencial uma atuação estruturada e preventiva.",
+        description: "Empresas enfrentam desafios cada vez mais complexos relacionados à saúde, segurança, engajamento e desempenho de seus colaboradores. Exigências legais como a NR-1 e a NR-17, somadas ao aumento de afastamentos e riscos psicossociais, tornam essencial uma atuação estruturada, preventiva e alinhada à realidade do negócio.",
         statValue: "+30%",
-        statLabel: "de produtividade em ambientes saudáveis",
-        bgColor: "#0d1b12",
-        textColor: "#ffffff"
+        statLabel: "de produtividade em ambientes saudáveis"
     },
     servicos: {
         title: "Nossos Serviços",
         subtitle: "Soluções completas para sua empresa",
         items: [
-            { t: "Ergonomia Legal", d: "Laudos NR-17 com foco em conformidade e saúde.", icon: "verified" },
-            { t: "Riscos Psicossociais", d: "Análise ARP integrada ao seu PGR.", icon: "verified" },
-            { t: "Clima Organizacional", d: "Diagnósticos para fortalecer relações internas.", icon: "verified" },
-            { t: "Cultura & Valores", d: "Desenvolvimento de práticas corporativas sólidas.", icon: "verified" },
-            { t: "Recrutamento", d: "Seleção humanizada alinhada ao propósito.", icon: "verified" },
-            { t: "Treinamentos", d: "Capacitações práticas para equipes e gestores.", icon: "verified" },
-        ],
-        bgColor: "#f8f9fa",
-        cardsPerView: 3,
-        autoplay: true,
-        infiniteScroll: true
+            { t: "Ergonomia Legal", d: "Avaliações e laudos ergonômicos conforme NR-1 e NR-17, com foco em prevenção de riscos, conformidade legal e melhoria das condições de trabalho." },
+            { t: "Riscos Psicossociais", d: "Análise de Riscos Psicossociais (ARP) integrada ao PGR, apoiando empresas no cumprimento da NR-1 e na promoção da saúde organizacional." },
+            { t: "Clima Organizacional", d: "Diagnósticos e ações estratégicas para compreender percepções internas, fortalecer relações e melhorar o ambiente de trabalho." },
+            { t: "Cultura Organizacional", d: "Desenvolvimento de práticas e valores que sustentam o crescimento da empresa e o engajamento das equipes." },
+            { t: "Recrutamento com Propósito", d: "Processos seletivos alinhados à cultura da empresa, considerando competências técnicas e comportamentais." },
+            { t: "Onboarding Humanizado", d: "Integração estruturada de novos colaboradores, fortalecendo pertencimento, clareza de papéis e engajamento desde o início." },
+            { t: "Palestras Corporativas", d: "Momentos de conscientização sobre ergonomia, saúde emocional e bem-estar no trabalho, promovendo mudanças de hábitos, prevenção de riscos psicossociais e fortalecimento da cultura organizacional." },
+            { t: "Treinamentos", d: "Capacitações práticas para colaboradores e gestores, voltadas à prevenção de riscos ergonômicos e psicossociais e ao desenvolvimento de equipes mais saudáveis e engajadas." },
+            { t: "Consultoria Personalizada", d: "Atendimento sob medida que integra ergonomia, riscos psicossociais e bem-estar corporativo, com foco em soluções práticas, prevenção de afastamentos e melhores resultados." }
+        ]
     },
     metodologia: {
         title: "Metodologia RenovaMente",
+        subtitle: "Uma abordagem integrada, técnica e humana para transformar ambientes corporativos.",
         steps: [
-            { t: "Diagnóstico Integrado", d: "Análise 360 do seu cenário atual." },
-            { t: "Inventário de Riscos", d: "Identificação técnica de pontos críticos." },
-            { t: "Plano de Ação", d: "Definição estratégica de soluções." },
-            { t: "Implementação", d: "Execução acompanhada por especialistas." },
-            { t: "Monitoramento", d: "Avaliação contínua de resultados." },
-            { t: "Sustentação", d: "Consolidação de uma cultura saudável." },
+            { t: "Diagnóstico Integrado", d: "Análise do ambiente de trabalho, práticas de gestão, exigências legais e percepções internas, considerando fatores ergonômicos, organizacionais e psicossociais." },
+            { t: "Inventário de Riscos", d: "Identificação e avaliação dos riscos ergonômicos e psicossociais, com base nas exigências da NR-1 e NR-17, servindo de base técnica para a definição das ações preventivas." },
+            { t: "Plano de Ação", d: "Definição e aplicação das ações preventivas e corretivas, com acompanhamento técnico e humano, respeitando a realidade e a cultura da empresa." },
+            { t: "Implementação", d: "Execução das ações planejadas junto às equipes e gestores, com orientação técnica, apoio na adaptação dos processos e estímulo à participação ativa dos colaboradores." },
+            { t: "Monitoramento", d: "Avaliação contínua dos resultados, acompanhamento dos indicadores e ajustes necessários para garantir eficácia e conformidade legal." },
+            { t: "Sustentação", d: "Fortalecimento das práticas adotadas para garantir continuidade, engajamento das equipes e impacto positivo no bem-estar e nos resultados da empresa." }
         ]
     },
     porque: {
         title: "Por que a RenovaMente?",
+        subtitle: "Nossa essência traduzida em valor para sua empresa",
         items: [
-            { t: "Evolução Constante", d: "Entregamos transformação real, não apenas papéis." },
-            { t: "Integração Total", d: "Razão e Emoção. Técnica e Humanização." },
+            { t: "Evolução Constante", d: "Não entregamos apenas relatórios. Entregamos transformação real." },
+            { t: "Integração Total", d: "Técnica e Humano. Razão e Emoção. Legalidade e Propósito." },
+            { t: "+30 Anos de Experiência", d: "Uma bagagem sólida aplicada aos desafios modernos das empresas." },
             { t: "Segurança Jurídica", d: "Compliance total com as normas NR-17 e NR-1." },
+            { t: "Metodologia Própria", d: "Desenvolvida para gerar autonomia e consciência na equipe." },
+            { t: "Foco em PMEs", d: "Soluções ágeis e acessíveis para pequenas e médias empresas." }
         ]
     },
     guiomar: {
         title: "Sobre Guiomar Melo",
-        description: "Fundadora da RenovaMente, Guiomar combina técnica e sensibilidade para apoiar empresas na construção de ambientes conscientes.",
+        description: "Guiomar Melo é Especialista em Bem-Estar Corporativo e fundadora da RenovaMente. Sua atuação combina experiência em ambientes corporativos, conhecimento técnico e uma abordagem humana, apoiando empresas na construção de ambientes mais saudáveis, conscientes e produtivos.",
         quote: "Transformar ambientes de trabalho começa pelo cuidado genuíno com as pessoas.",
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600"
     },
     faq: {
-        title: "Dúvidas Frequentes",
+        title: "Perguntas Frequentes",
         items: [
-            { q: "Como funciona a consultoria?", r: "Nossa consultoria começa com um diagnóstico detalhado para entender as necessidades específicas da sua empresa." },
-            { q: "Quais normas vocês atendem?", r: "Atendemos integralmente as normas NR-17 (Ergonomia) e NR-1 (Gerenciamento de Riscos), além de foco em riscos psicossociais." },
-            { q: "O suporte é contínuo?", r: "Sim, oferecemos planos de acompanhamento para garantir a sustentação das mudanças implementadas." },
+            { q: "A RenovaMente atende empresas de qual tamanho?", r: "Nosso foco principal são Pequenas e Médias Empresas (PMEs) de 10 a 500 colaboradores." },
+            { q: "O diagnóstico de ergonomia é obrigatório pela lei?", r: "Sim, a Norma Regulamentadora 17 (NR-17) do Ministério de Trabalho exige que as empresas realizem a Análise Ergonômica do Trabalho (AET) ou Avaliação Ergonômica Preliminar (AEP) para adaptar as condições de trabalho aos colaboradores." },
+            { q: "É possível contratar apenas um dos serviços?", r: "Sim, todos os nossos serviços podem ser contratados modularmente, de acordo com a necessidade específica da sua empresa." },
+            { q: "Atendem empresas fora da região?", r: "Sim, atendemos com formatos presenciais, híbridos ou online, dependendo do tipo de serviço e da localidade." },
+            { q: "Como funciona o primeiro contato?", r: "Basta clicar no botão de WhatsApp. Faremos uma breve conversa para entender seu cenário e agendar uma reunião de diagnóstico inicial." }
         ]
     },
     testimonials: {
-        title: "Client Testimonials",
+        title: "O que nossos clientes dizem",
         items: [
-            { name: "Sarah Johnson", role: "CTO, TechCorp", quote: "RenovaMente changed our entire office dynamic. Highly recommended for any growing team.", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" },
             { name: "Michael Chen", role: "HR Director, Innovate", quote: "The workshops were incredibly engaging and practical.", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200" }
-        ],
-        layout: "grid",
-        backgroundImage: ""
+        ]
+    },
+    contato: {
+        title: "Vamos conversar?",
+        subtitle: "Se sua empresa busca conformidade legal, prevenção de riscos e ambientes de trabalho mais saudáveis, a RenovaMente pode ajudar.",
+        whatsapp: "(11) 99441-6024",
+        email: "renova@renovamente-guiomarmelo.com.br",
+        formTitle: "Solicite uma avaliação inicial"
     }
 };

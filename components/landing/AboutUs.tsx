@@ -36,9 +36,23 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                     <h2 className="text-4xl font-black text-[#0d1b12]">
                         {content.title}
                     </h2>
+                    {content.subtitle && (
+                        <p className="text-lg text-primary font-bold italic">
+                            {content.subtitle}
+                        </p>
+                    )}
                     <p className="text-gray-600 leading-relaxed text-lg">
                         {content.description}
                     </p>
+                    <button
+                        onClick={() => {
+                            const el = document.getElementById("servicos");
+                            el?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="bg-[#0d1b12] text-white px-8 py-4 rounded-2xl font-black text-xs hover:bg-primary transition-all uppercase tracking-widest inline-block"
+                    >
+                        {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
+                    </button>
                 </div>
             </div>
         </section>
