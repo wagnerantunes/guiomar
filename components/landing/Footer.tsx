@@ -87,7 +87,7 @@ export function Footer({
     };
 
     return (
-        <footer className="bg-white border-t border-gray-100 pt-24 pb-12 px-6">
+        <footer className="bg-[#0f172a] border-t border-white/5 pt-24 pb-12 px-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
                 {/* BIO COLUMN */}
                 <div className="space-y-8 lg:col-span-1">
@@ -103,7 +103,7 @@ export function Footer({
                             </span>
                         </div>
                     )}
-                    <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                    <p className="text-sm text-gray-400 leading-relaxed font-medium">
                         {footerSettings.bio}
                     </p>
                     <div className="flex items-center gap-3">
@@ -113,7 +113,7 @@ export function Footer({
                                 href={val as string}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="size-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)] transition-all duration-300"
+                                className="size-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)] transition-all duration-300"
                                 title={key}
                             >
                                 <SocialIcon name={key} />
@@ -124,7 +124,7 @@ export function Footer({
 
                 {/* QUICK LINKS */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-8">
                         Links Rápidos
                     </h4>
                     <ul className="space-y-4">
@@ -150,7 +150,7 @@ export function Footer({
 
                 {/* SERVICES */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-8">
                         Nossos Serviços
                     </h4>
                     <ul className="space-y-4">
@@ -166,7 +166,7 @@ export function Footer({
 
                 {/* CONTACT INFO */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-8">
                         Contato
                     </h4>
                     <ul className="space-y-4">
@@ -238,7 +238,7 @@ export function Footer({
             </div>
 
             {/* COPYRIGHT */}
-            <div className="max-w-7xl mx-auto pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="max-w-7xl mx-auto pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
                     © {new Date().getFullYear()} RenovaMente Consultoria de Bem-Estar. Todos os direitos reservados.
                 </p>
