@@ -14,7 +14,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
-    const slides = heroData.images || [heroData.image];
+    const slides = (heroData.images || [heroData.image]).filter(Boolean);
 
     useEffect(() => {
         if (slides.length <= 1) return;
