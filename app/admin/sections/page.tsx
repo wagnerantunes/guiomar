@@ -32,6 +32,9 @@ export default function PageSections() {
 
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [showMediaPicker, setShowMediaPicker] = useState(false);
+    const [mediaLibrary, setMediaLibrary] = useState<any[]>([]);
+    const [mediaPickerTarget, setMediaPickerTarget] = useState<{ secId: string } | null>(null);
     const { toast } = useToast();
 
     useEffect(() => {
@@ -142,12 +145,21 @@ export default function PageSections() {
 
             if (res.ok) {
                 const data = await res.json();
-                handleContentChange(secId, "image", data.url);
+                // Add to images array instead of replacing
+                setSections(prev => prev.map(sec => {
+                    if (sec.id === secId) {
+                        const currentImages = sec.content?.images || [];
+                        return { ...sec, content: { ...sec.content, images: [...currentImages, data.url] } };
+                    }
+                    return sec;
+                }));
                 toast({
                     title: "Upload Concluído",
-                    description: "A imagem foi atualizada nesta seção.",
+                    description: "A imagem foi adicionada ao slider.",
                     type: "success"
                 });
+                // Refresh media library
+                fetchMediaLibrary();
             } else {
                 toast({
                     title: "Erro no Upload",
@@ -160,6 +172,52 @@ export default function PageSections() {
                 title: "Erro de Conexão",
                 description: "Falha ao enviar imagem para o servidor.",
                 type: "error"
+            });
+        }
+    };
+
+    const removeImageFromSlider = (secId: string, index: number) => {
+        setSections(prev => prev.map(sec => {
+            if (sec.id === secId) {
+                const images = (sec.content?.images || []).filter((_: any, i: number) => i !== index);
+                return { ...sec, content: { ...sec.content, images } };
+            }
+            return sec;
+        }));
+        toast({
+            title: "Imagem Removida",
+            description: "A imagem foi excluída do slider.",
+            type: "success"
+        });
+    };
+
+    const fetchMediaLibrary = async () => {
+        try {
+            const res = await fetch("/api/media");
+            if (res.ok) {
+                const data = await res.json();
+                setMediaLibrary(data);
+            }
+        } catch (error) {
+            console.error("Error fetching media:", error);
+        }
+    };
+
+    const selectFromMediaLibrary = (url: string) => {
+        if (mediaPickerTarget) {
+            setSections(prev => prev.map(sec => {
+                if (sec.id === mediaPickerTarget.secId) {
+                    const currentImages = sec.content?.images || [];
+                    return { ...sec, content: { ...sec.content, images: [...currentImages, url] } };
+                }
+                return sec;
+            }));
+            setShowMediaPicker(false);
+            setMediaPickerTarget(null);
+            toast({
+                title: "Imagem Adicionada",
+                description: "A imagem foi adicionada ao slider.",
+                type: "success"
             });
         }
     };
@@ -309,21 +367,48 @@ export default function PageSections() {
                                                                     <div className="space-y-4 pt-4">
                                                                         <div className="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2">
                                                                             <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Image Slider</h4>
-                                                                            <button className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1">+ Add Slide</button>
+                                                                            <div className="flex gap-2">
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        setMediaPickerTarget({ secId: sec.id });
+                                                                                        setShowMediaPicker(true);
+                                                                                        fetchMediaLibrary();
+                                                                                    }}
+                                                                                    className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1 hover:underline"
+                                                                                >
+                                                                                    <span className="material-symbols-outlined text-sm">photo_library</span>
+                                                                                    Biblioteca
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={() => document.getElementById(`upload-${sec.id}`)?.click()}
+                                                                                    className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1 hover:underline"
+                                                                                >
+                                                                                    <span className="material-symbols-outlined text-sm">add_a_photo</span>
+                                                                                    Upload
+                                                                                </button>
+                                                                            </div>
                                                                         </div>
                                                                         <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
-                                                                            {(sec.content?.images || [sec.content?.image]).map((img: string, idx: number) => (
+                                                                            {(sec.content?.images || []).filter(Boolean).map((img: string, idx: number) => (
                                                                                 <div key={idx} className="relative shrink-0 group/slide">
-                                                                                    <div className="size-32 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm transition-transform active:scale-95 cursor-pointer">
-                                                                                        <img src={img} className="w-full h-full object-cover" />
+                                                                                    <div className="size-32 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm transition-transform hover:scale-105 cursor-pointer">
+                                                                                        <img src={img} className="w-full h-full object-cover" alt={`Slide ${idx + 1}`} />
                                                                                     </div>
+                                                                                    <button
+                                                                                        onClick={() => removeImageFromSlider(sec.id, idx)}
+                                                                                        className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/slide:opacity-100 transition-all shadow-lg hover:scale-110 active:scale-95"
+                                                                                        title="Remover imagem"
+                                                                                    >
+                                                                                        <span className="material-symbols-outlined text-sm">close</span>
+                                                                                    </button>
                                                                                 </div>
                                                                             ))}
                                                                             <div
                                                                                 onClick={() => document.getElementById(`upload-${sec.id}`)?.click()}
-                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
                                                                             >
                                                                                 <span className="material-symbols-outlined text-2xl">add_a_photo</span>
+                                                                                <span className="text-[8px] font-bold">Upload</span>
                                                                             </div>
                                                                             <input
                                                                                 id={`upload-${sec.id}`}
@@ -333,6 +418,7 @@ export default function PageSections() {
                                                                                 onChange={(e) => {
                                                                                     const file = e.target.files?.[0];
                                                                                     if (file) handleImageUpload(sec.id, file);
+                                                                                    e.target.value = '';
                                                                                 }}
                                                                             />
                                                                         </div>
@@ -505,6 +591,49 @@ export default function PageSections() {
                     </button>
                 </div>
             </div>
+
+            {/* MEDIA LIBRARY PICKER MODAL */}
+            {showMediaPicker && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowMediaPicker(false)}>
+                    <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-xl font-black text-[#0d1b12] dark:text-white">Biblioteca de Mídia</h3>
+                                <p className="text-xs text-gray-400 mt-1">Selecione uma imagem existente</p>
+                            </div>
+                            <button
+                                onClick={() => setShowMediaPicker(false)}
+                                className="size-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
+                            >
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="p-8 overflow-y-auto max-h-[60vh] custom-scrollbar">
+                            {mediaLibrary.length === 0 ? (
+                                <div className="text-center py-12 text-gray-400">
+                                    <span className="material-symbols-outlined text-5xl mb-4 opacity-20">photo_library</span>
+                                    <p className="text-sm">Nenhuma imagem encontrada na biblioteca</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {mediaLibrary.map((media: any) => (
+                                        <div
+                                            key={media.id}
+                                            onClick={() => selectFromMediaLibrary(media.url)}
+                                            className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 hover:border-[#13ec5b] cursor-pointer transition-all group hover:scale-105"
+                                        >
+                                            <img src={media.url} className="w-full h-full object-cover" alt={media.filename} />
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-white text-3xl opacity-0 group-hover:opacity-100 transition-all">check_circle</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
