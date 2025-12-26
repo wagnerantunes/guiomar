@@ -2,44 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function Services({ getSetting }: ServicesProps) {
-    const defaultServices = [
-        {
-            t: "Ergonomia Legal",
-            d: "Laudos NR-17 com foco em conformidade e saúde.",
-        },
-        {
-            t: "Riscos Psicossociais",
-            d: "Análise ARP integrada ao seu PGR.",
-        },
-        {
-            t: "Clima Organizacional",
-            d: "Diagnósticos para fortalecer relações internas.",
-        },
-        {
-            t: "Cultura & Valores",
-            d: "Desenvolvimento de práticas corporativas sólidas.",
-        },
-        {
-            t: "Recrutamento",
-            d: "Seleção humanizada alinhada ao propósito.",
-        },
-        {
-            t: "Treinamentos",
-            d: "Capacitações práticas para equipes e gestores.",
-        },
-    ];
-
-    const services = getSetting("section_servicos_content", {
-        title: "Nossos Serviços",
-        subtitle: "Soluções completas para sua empresa",
-        items: defaultServices
-    });
+    const services = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
 
     return (
         <section id="servicos" className="py-24 px-6 bg-gray-50">
@@ -67,7 +37,7 @@ export function Services({ getSetting }: ServicesProps) {
                     }}
                     className="grid grid-cols-1 md:grid-cols-3 gap-8"
                 >
-                    {(services.items || defaultServices).map((s: any, i: number) => (
+                    {(services.items || SECTION_DEFAULTS.servicos.items).map((s: any, i: number) => (
                         <motion.div
                             key={i}
                             variants={{

@@ -13,6 +13,7 @@ import { WhyUs } from "@/components/landing/WhyUs";
 import { Founder } from "@/components/landing/Founder";
 import { FAQ } from "@/components/landing/FAQ";
 import { Contact } from "@/components/landing/Contact";
+import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 
@@ -94,7 +95,39 @@ export default function HomePage() {
 
   const getSetting = (key: string, defaultValue: any) => {
     const setting = siteSettings.find(s => s.key === key);
-    return setting?.value || defaultValue;
+    if (!setting) return defaultValue;
+
+    // If the key indicates section content, it's stored as a JSON string
+    if (key.includes("_content")) {
+      try {
+        let parsed = setting.value;
+        if (typeof parsed === 'string') {
+          try {
+            parsed = JSON.parse(parsed);
+          } catch (e) {
+            // If it's a string but NOT JSON, we still need to return an object if defaultValue is an object
+            if (typeof defaultValue === 'object' && defaultValue !== null) {
+              return defaultValue;
+            }
+            return parsed;
+          }
+        }
+
+        // Final safety check: if we expect an object but got something else (like null or string)
+        if (typeof defaultValue === 'object' && defaultValue !== null) {
+          if (typeof parsed !== 'object' || parsed === null) {
+            return defaultValue;
+          }
+          return { ...defaultValue, ...parsed };
+        }
+
+        return parsed || defaultValue;
+      } catch (e) {
+        return defaultValue;
+      }
+    }
+
+    return setting.value || defaultValue;
   };
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -227,6 +260,15 @@ export default function HomePage() {
             variants={sectionVariants}
           >
             <Founder getSetting={getSetting} />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={sectionVariants}
+          >
+            <Testimonials getSetting={getSetting} />
           </motion.section>
 
           <motion.section

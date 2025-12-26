@@ -1,18 +1,14 @@
 "use client";
 
 import React from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface FounderProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function Founder({ getSetting }: FounderProps) {
-    const content = getSetting("section_guiomar_content", {
-        title: "Sobre Guiomar Melo",
-        description: "Fundadora da RenovaMente, Guiomar combina técnica e sensibilidade para apoiar empresas na construção de ambientes conscientes.",
-        quote: "Transformar ambientes de trabalho começa pelo cuidado genuíno com as pessoas.",
-        image: "/images/founder.jpg" // Fallback placeholder
-    });
+    const content = getSetting("section_guiomar_content", SECTION_DEFAULTS.guiomar);
 
     return (
         <section

@@ -1,18 +1,14 @@
 "use client";
 
 import React from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface AboutUsProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function AboutUs({ getSetting }: AboutUsProps) {
-    const content = getSetting("section_sobre_content", {
-        title: "Muito mais que uma consultoria comum",
-        description: "A RenovaMente une ergonomia técnica e humanização para transformar empresas, considerando pessoas, processos e exigências legais.",
-        experience: "30",
-        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
-    });
+    const content = getSetting("section_sobre_content", SECTION_DEFAULTS.sobre);
 
     return (
         <section id="sobre" className="py-24 px-6 bg-white">

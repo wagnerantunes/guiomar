@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/admin/Toast";
 import { Skeleton } from "@/components/admin/Skeleton";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface Section {
     id: string;
@@ -16,16 +17,17 @@ interface Section {
 export default function PageSections() {
     const [expandedId, setExpandedId] = useState<string | null>("hero");
     const [sections, setSections] = useState<Section[]>([
-        { id: "hero", name: "01. Hero Banner", icon: "rocket_launch", desc: "Sessão principal com formulário de conversão.", status: "Ativa" },
+        { id: "hero", name: "01. Hero Banner", icon: "rocket_launch", desc: "Sessão principal com slider e conteúdo introdutório.", status: "Ativa" },
         { id: "sobre", name: "02. Sobre Nós", icon: "history_edu", desc: "História e o diferencial da RenovaMente.", status: "Ativa" },
         { id: "desafio", name: "03. O Desafio", icon: "warning", desc: "Box escuro com estatística de produtividade.", status: "Ativa" },
-        { id: "servicos", name: "04. Nossos Serviços", icon: "category", desc: "Grade com os 9 serviços principais.", status: "Ativa" },
+        { id: "servicos", name: "04. Nossos Serviços", icon: "category", desc: "Grade/Carousel com os serviços principais.", status: "Ativa" },
         { id: "metodologia", name: "05. Metodologia", icon: "account_tree", desc: "Linha do tempo dos processos.", status: "Ativa" },
         { id: "blog", name: "06. Blog Preview", icon: "rss_feed", desc: "Chamada para os últimos artigos do blog.", status: "Ativa" },
         { id: "porque", name: "07. Por que RenovaMente?", icon: "star", desc: "Cards com os diferenciais competitivos.", status: "Ativa" },
         { id: "guiomar", name: "08. Sobre Guiomar", icon: "person", desc: "Perfil da fundadora e citação.", status: "Ativa" },
-        { id: "faq", name: "09. FAQ (Perguntas)", icon: "quiz", desc: "Acordeões de dúvidas frequentes.", status: "Ativa" },
-        { id: "contato", name: "10. Contato Final", icon: "contact_support", desc: "Rodapé de contato e formulário detalhado.", status: "Ativa" },
+        { id: "testimonials", name: "09. Testemunhos", icon: "chat", desc: "Slider de depoimentos de clientes.", status: "Ativa" },
+        { id: "faq", name: "10. FAQ (Perguntas)", icon: "quiz", desc: "Acordeões de dúvidas frequentes.", status: "Ativa" },
+        { id: "contato", name: "11. Contato Final", icon: "contact_support", desc: "Rodapé de contato e formulário detalhado.", status: "Ativa" },
     ]);
 
     const [loading, setLoading] = useState(true);
@@ -37,18 +39,21 @@ export default function PageSections() {
             try {
                 const response = await fetch("/api/settings");
                 const data = await response.json();
-                if (data && data.length > 0) {
+                if (data) {
                     setSections(prev => prev.map(sec => {
                         const setting = data.find((s: any) => s.key === `section_${sec.id}_content`);
+                        const defaultContent = (SECTION_DEFAULTS as any)[sec.id] || {};
+
                         if (setting) {
                             try {
                                 const content = JSON.parse(setting.value);
-                                return { ...sec, content };
+                                // Merge saved content with defaults to ensure new fields are present
+                                return { ...sec, content: { ...defaultContent, ...content } };
                             } catch (e) {
-                                return sec;
+                                return { ...sec, content: defaultContent };
                             }
                         }
-                        return sec;
+                        return { ...sec, content: defaultContent };
                     }));
                 }
             } catch (error) {
@@ -60,10 +65,41 @@ export default function PageSections() {
         fetchSettings();
     }, []);
 
-    const handleContentChange = (id: string, field: string, value: string) => {
+    const handleContentChange = (id: string, field: string, value: any) => {
         setSections(prev => prev.map(sec =>
             sec.id === id ? { ...sec, content: { ...sec.content, [field]: value } } : sec
         ));
+    };
+
+    const handleArrayChange = (id: string, listKey: string, index: number, field: string, value: any) => {
+        setSections(prev => prev.map(sec => {
+            if (sec.id === id) {
+                const list = [...(sec.content?.[listKey] || [])];
+                list[index] = { ...list[index], [field]: value };
+                return { ...sec, content: { ...sec.content, [listKey]: list } };
+            }
+            return sec;
+        }));
+    };
+
+    const addItemToArray = (id: string, listKey: string, defaultItem: any) => {
+        setSections(prev => prev.map(sec => {
+            if (sec.id === id) {
+                const list = [...(sec.content?.[listKey] || []), defaultItem];
+                return { ...sec, content: { ...sec.content, [listKey]: list } };
+            }
+            return sec;
+        }));
+    };
+
+    const removeItemFromArray = (id: string, listKey: string, index: number) => {
+        setSections(prev => prev.map(sec => {
+            if (sec.id === id) {
+                const list = (sec.content?.[listKey] || []).filter((_: any, i: number) => i !== index);
+                return { ...sec, content: { ...sec.content, [listKey]: list } };
+            }
+            return sec;
+        }));
     };
 
     const saveSection = async (sec: Section) => {
@@ -94,6 +130,40 @@ export default function PageSections() {
         }
     };
 
+    const handleImageUpload = async (secId: string, file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/media", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                handleContentChange(secId, "image", data.url);
+                toast({
+                    title: "Upload Concluído",
+                    description: "A imagem foi atualizada nesta seção.",
+                    type: "success"
+                });
+            } else {
+                toast({
+                    title: "Erro no Upload",
+                    description: "Não foi possível processar a imagem.",
+                    type: "error"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Erro de Conexão",
+                description: "Falha ao enviar imagem para o servidor.",
+                type: "error"
+            });
+        }
+    };
+
 
     return (
         <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
@@ -118,6 +188,10 @@ export default function PageSections() {
                         </button>
                         <button
                             aria-label="Salvar alterações de estrutura"
+                            onClick={() => {
+                                sections.forEach(sec => saveSection(sec));
+                                toast({ title: "Sincronização Completa", description: "Todas as seções foram salvas.", type: "success" });
+                            }}
                             className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-[#0d1b12] dark:bg-[#13ec5b] text-white dark:text-[#0d1b12] rounded-xl shadow-xl shadow-black/10 hover:scale-105 transition-all uppercase tracking-widest"
                         >
                             Salvar Estrutura
@@ -196,100 +270,170 @@ export default function PageSections() {
                                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                                             <div className="lg:col-span-8 space-y-8">
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
-                                                        <span className="material-symbols-outlined text-[#13ec5b] text-sm">edit_note</span>
-                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Editor de Conteúdo</h4>
-                                                    </div>
-                                                    <div className="space-y-6">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Título Principal</label>
-                                                            <input
-                                                                className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
-                                                                value={sec.content?.title || ""}
-                                                                onChange={(e) => handleContentChange(sec.id, "title", e.target.value)}
-                                                                placeholder="Texto de exemplo da sessão..."
-                                                            />
+                                                    {/* CONTENT EDITOR */}
+                                                    <div className="space-y-4">
+                                                        <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
+                                                            <span className="material-symbols-outlined text-[#13ec5b] text-sm">edit_note</span>
+                                                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Content Editor</h4>
                                                         </div>
-
-                                                        {sec.id === "desafio" && (
-                                                            <div className="grid grid-cols-2 gap-4">
-                                                                <div className="space-y-2">
-                                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Valor Estatístico</label>
-                                                                    <input
-                                                                        className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
-                                                                        value={sec.content?.statValue || ""}
-                                                                        onChange={(e) => handleContentChange(sec.id, "statValue", e.target.value)}
-                                                                        placeholder="+30%"
-                                                                    />
-                                                                </div>
-                                                                <div className="space-y-2">
-                                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Rótulo Estatístico</label>
-                                                                    <input
-                                                                        className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
-                                                                        value={sec.content?.statLabel || ""}
-                                                                        onChange={(e) => handleContentChange(sec.id, "statLabel", e.target.value)}
-                                                                        placeholder="produtividade..."
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        )}
-
-                                                        {sec.id === "sobre" && (
+                                                        <div className="space-y-6">
                                                             <div className="space-y-2">
-                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Anos de Experiência</label>
+                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Title</label>
                                                                 <input
-                                                                    className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
-                                                                    value={sec.content?.experience || ""}
-                                                                    onChange={(e) => handleContentChange(sec.id, "experience", e.target.value)}
-                                                                    placeholder="30"
+                                                                    className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
+                                                                    value={sec.content?.title || ""}
+                                                                    onChange={(e) => handleContentChange(sec.id, "title", e.target.value)}
                                                                 />
                                                             </div>
-                                                        )}
 
-                                                        {sec.id === "guiomar" && (
-                                                            <div className="space-y-2">
-                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Citação / Quote</label>
-                                                                <textarea
-                                                                    rows={3}
-                                                                    className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300"
-                                                                    value={sec.content?.quote || ""}
-                                                                    onChange={(e) => handleContentChange(sec.id, "quote", e.target.value)}
-                                                                    placeholder="A frase de destaque da Guiomar..."
-                                                                />
-                                                            </div>
-                                                        )}
+                                                            {sec.id === "hero" && (
+                                                                <>
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Subtitle</label>
+                                                                        <input
+                                                                            className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
+                                                                            value={sec.content?.subtitle || ""}
+                                                                            onChange={(e) => handleContentChange(sec.id, "subtitle", e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Body Text</label>
+                                                                        <textarea
+                                                                            rows={3}
+                                                                            className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
+                                                                            value={sec.content?.description || ""}
+                                                                            onChange={(e) => handleContentChange(sec.id, "description", e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    {/* IMAGE SLIDER UI */}
+                                                                    <div className="space-y-4 pt-4">
+                                                                        <div className="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2">
+                                                                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Image Slider</h4>
+                                                                            <button className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1">+ Add Slide</button>
+                                                                        </div>
+                                                                        <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
+                                                                            {(sec.content?.images || [sec.content?.image]).map((img: string, idx: number) => (
+                                                                                <div key={idx} className="relative shrink-0 group/slide">
+                                                                                    <div className="size-32 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm transition-transform active:scale-95 cursor-pointer">
+                                                                                        <img src={img} className="w-full h-full object-cover" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                            <div
+                                                                                onClick={() => document.getElementById(`upload-${sec.id}`)?.click()}
+                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+                                                                            >
+                                                                                <span className="material-symbols-outlined text-2xl">add_a_photo</span>
+                                                                            </div>
+                                                                            <input
+                                                                                id={`upload-${sec.id}`}
+                                                                                type="file"
+                                                                                className="hidden"
+                                                                                accept="image/*"
+                                                                                onChange={(e) => {
+                                                                                    const file = e.target.files?.[0];
+                                                                                    if (file) handleImageUpload(sec.id, file);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            )}
 
-                                                        <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Texto de Apoio / Descrição</label>
-                                                            <textarea
-                                                                rows={5}
-                                                                className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[2rem] px-6 py-5 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
-                                                                value={sec.content?.description || ""}
-                                                                onChange={(e) => handleContentChange(sec.id, "description", e.target.value)}
-                                                                placeholder="Descrição longa que aparece abaixo do título principal para dar mais contexto ao usuário..."
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="lg:col-span-4 space-y-8">
-                                                <div className="space-y-4">
-                                                    <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
-                                                        <span className="material-symbols-outlined text-[#13ec5b] text-sm">palette</span>
-                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Estilização & Mídia</h4>
-                                                    </div>
-                                                    <div className="space-y-6">
-                                                        <div className="space-y-3">
-                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Imagem / URL de Mídia</label>
-                                                            <input
-                                                                className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold text-[#0d1b12] dark:text-white outline-none focus:ring-2 focus:ring-[#13ec5b]/30"
-                                                                value={sec.content?.image || ""}
-                                                                onChange={(e) => handleContentChange(sec.id, "image", e.target.value)}
-                                                                placeholder="https://images.unsplash.com/..."
-                                                            />
-                                                            {sec.content?.image && (
-                                                                <div className="mt-4 aspect-video rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
-                                                                    <img src={sec.content.image} alt="Preview" className="w-full h-full object-cover" />
+                                                            {sec.id === "desafio" && (
+                                                                <div className="grid grid-cols-2 gap-4">
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Estatística</label>
+                                                                        <input className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.statValue || ""} onChange={(e) => handleContentChange(sec.id, "statValue", e.target.value)} />
+                                                                    </div>
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Rótulo</label>
+                                                                        <input className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.statLabel || ""} onChange={(e) => handleContentChange(sec.id, "statLabel", e.target.value)} />
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {sec.id !== "hero" && (
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Descrição</label>
+                                                                    <textarea rows={4} className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-2xl px-6 py-4 text-xs font-medium transition-all outline-none resize-none" value={sec.content?.description || ""} onChange={(e) => handleContentChange(sec.id, "description", e.target.value)} />
+                                                                </div>
+                                                            )}
+
+                                                            {/* REPEATERS */}
+                                                            {sec.id === "servicos" && (
+                                                                <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Service Cards</h4>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { t: "Novo", d: "...", icon: "verified" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Card</button>
+                                                                    </div>
+                                                                    <div className="grid grid-cols-1 gap-3">
+                                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center gap-4 group/item">
+                                                                                <div className="flex-1">
+                                                                                    <input className="w-full bg-transparent border-none p-0 text-xs font-black outline-none" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                                    <input className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none" value={item.d} onChange={(e) => handleArrayChange(sec.id, "items", idx, "d", e.target.value)} />
+                                                                                </div>
+                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 opacity-0 group-hover/item:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {sec.id === "testimonials" && (
+                                                                <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Client Testimonials</h4>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { name: "Cliente", role: "...", quote: "...", image: "" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Review</button>
+                                                                    </div>
+                                                                    <div className="space-y-3">
+                                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex flex-col gap-2 group/testi relative">
+                                                                                <input className="bg-transparent border-none p-0 text-xs font-black outline-none" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
+                                                                                <textarea rows={2} className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none resize-none" value={item.quote} onChange={(e) => handleArrayChange(sec.id, "items", idx, "quote", e.target.value)} />
+                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-4 right-4 text-gray-300 hover:text-red-500 opacity-0 group-hover/testi:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {sec.id === "metodologia" && (
+                                                                <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Methodology Steps</h4>
+                                                                        <button onClick={() => addItemToArray(sec.id, "steps", { t: "Novo Passo", d: "..." })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Step</button>
+                                                                    </div>
+                                                                    <div className="space-y-3">
+                                                                        {(sec.content?.steps || []).map((step: any, idx: number) => (
+                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center gap-4 group/step">
+                                                                                <div className="flex-1">
+                                                                                    <input className="w-full bg-transparent border-none p-0 text-xs font-black outline-none" value={step.t} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "t", e.target.value)} />
+                                                                                    <input className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none" value={step.d} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "d", e.target.value)} />
+                                                                                </div>
+                                                                                <button onClick={() => removeItemFromArray(sec.id, "steps", idx)} className="text-gray-300 hover:text-red-500 opacity-0 group-hover/step:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {sec.id === "faq" && (
+                                                                <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">FAQ Items</h4>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { q: "Nova Pergunta", r: "..." })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Q&A</button>
+                                                                    </div>
+                                                                    <div className="space-y-3">
+                                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex flex-col gap-2 group/faq relative">
+                                                                                <input className="bg-transparent border-none p-0 text-xs font-black outline-none" value={item.q} onChange={(e) => handleArrayChange(sec.id, "items", idx, "q", e.target.value)} />
+                                                                                <textarea rows={2} className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none resize-none" value={item.r} onChange={(e) => handleArrayChange(sec.id, "items", idx, "r", e.target.value)} />
+                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-4 right-4 text-gray-300 hover:text-red-500 opacity-0 group-hover/faq:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>
@@ -297,17 +441,57 @@ export default function PageSections() {
                                                 </div>
                                             </div>
 
-                                        </div>
-                                        <div className="mt-12 pt-8 border-t border-gray-100 dark:border-white/5 flex justify-end gap-4">
-                                            <button className="px-8 py-3 text-[10px] font-black text-gray-400 hover:text-red-500 transition-colors uppercase tracking-widest">Pausar Sessão</button>
-                                            <button
-                                                onClick={() => saveSection(sec)}
-                                                disabled={saving}
-                                                className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
-                                            >
-                                                {saving ? "Salvando..." : "Aplicar Alterações"}
-                                            </button>
+                                            {/* STYLING COLUMN */}
+                                            <div className="lg:col-span-4 space-y-8">
+                                                <div className="space-y-6">
+                                                    <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
+                                                        <span className="material-symbols-outlined text-[#13ec5b] text-sm">palette</span>
+                                                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Styling</h4>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Font</label>
+                                                            <select className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.fontFamily || "Manrope"} onChange={(e) => handleContentChange(sec.id, "fontFamily", e.target.value)}>
+                                                                <option value="Manrope">Manrope</option>
+                                                                <option value="Inter">Inter</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Color</label>
+                                                            <input type="color" className="w-full h-10 rounded-xl bg-gray-50 dark:bg-white/5 border-none cursor-pointer" value={sec.content?.textColor || "#0d1b12"} onChange={(e) => handleContentChange(sec.id, "textColor", e.target.value)} />
+                                                        </div>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Title Size</label>
+                                                            <input type="number" className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.titleSize || 32} onChange={(e) => handleContentChange(sec.id, "titleSize", e.target.value)} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Subtitle Size</label>
+                                                            <input type="number" className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.subtitleSize || 18} onChange={(e) => handleContentChange(sec.id, "subtitleSize", e.target.value)} />
+                                                        </div>
+                                                    </div>
 
+                                                    {/* CALL TO ACTION */}
+                                                    <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                        <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Call to Action</h4>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Button Text</label>
+                                                            <input className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.ctaText || "Solicitar Contato"} onChange={(e) => handleContentChange(sec.id, "ctaText", e.target.value)} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-12 flex justify-end">
+                                                    <button
+                                                        onClick={() => saveSection(sec)}
+                                                        disabled={saving}
+                                                        className="px-10 py-4 text-[10px] font-black bg-[#0d1b12] dark:bg-[#13ec5b] text-white dark:text-[#0d1b12] rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                                                    >
+                                                        {saving ? "Salvando..." : "Aplicar Alterações"}
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 )}

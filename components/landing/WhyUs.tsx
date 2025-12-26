@@ -1,31 +1,14 @@
 "use client";
 
 import React from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface WhyUsProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function WhyUs({ getSetting }: WhyUsProps) {
-    const defaultItems = [
-        {
-            t: "Evolução Constante",
-            d: "Entregamos transformação real, não apenas papéis.",
-        },
-        {
-            t: "Integração Total",
-            d: "Razão e Emoção. Técnica e Humanização.",
-        },
-        {
-            t: "Segurança Jurídica",
-            d: "Compliance total com as normas NR-17 e NR-1.",
-        },
-    ];
-
-    const content = getSetting("section_porque_content", {
-        title: "Por que a RenovaMente?",
-        items: defaultItems
-    });
+    const content = getSetting("section_porque_content", SECTION_DEFAULTS.porque);
 
     return (
         <section id="porque" className="py-24 bg-primary/5 px-6">
@@ -34,7 +17,7 @@ export function WhyUs({ getSetting }: WhyUsProps) {
                     {content.title}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {(content.items || defaultItems).map((v: any, i: number) => (
+                    {(content.items || SECTION_DEFAULTS.porque.items).map((v: any, i: number) => (
                         <div
                             key={i}
                             className="bg-white p-10 rounded-[2.5rem] border border-gray-100 text-center space-y-4"

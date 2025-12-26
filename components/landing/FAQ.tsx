@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface FAQProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -9,25 +10,7 @@ interface FAQProps {
 export function FAQ({ getSetting }: FAQProps) {
     const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-    const defaultFaqs = [
-        {
-            q: "Como funciona a consultoria?",
-            r: "Nossa consultoria começa com um diagnóstico detalhado para entender as necessidades específicas da sua empresa.",
-        },
-        {
-            q: "Quais normas vocês atendem?",
-            r: "Atendemos integralmente as normas NR-17 (Ergonomia) e NR-1 (Gerenciamento de Riscos), além de foco em riscos psicossociais.",
-        },
-        {
-            q: "O suporte é contínuo?",
-            r: "Sim, oferecemos planos de acompanhamento para garantir a sustentação das mudanças implementadas.",
-        },
-    ];
-
-    const content = getSetting("section_faq_content", {
-        title: "Dúvidas Frequentes",
-        items: defaultFaqs
-    });
+    const content = getSetting("section_faq_content", SECTION_DEFAULTS.faq);
 
     return (
         <section id="faq" className="py-24 bg-gray-50 px-6">
@@ -36,7 +19,7 @@ export function FAQ({ getSetting }: FAQProps) {
                     {content.title}
                 </h2>
                 <div className="space-y-4">
-                    {(content.items || defaultFaqs).map((f: any, i: number) => (
+                    {(content.items || SECTION_DEFAULTS.faq.items).map((f: any, i: number) => (
                         <div
                             key={i}
                             className="bg-white rounded-[1.5rem] border border-gray-100 overflow-hidden shadow-sm"

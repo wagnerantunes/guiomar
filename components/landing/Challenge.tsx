@@ -1,18 +1,14 @@
 "use client";
 
 import React from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface ChallengeProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function Challenge({ getSetting }: ChallengeProps) {
-    const content = getSetting("section_desafio_content", {
-        title: "O desafio das empresas hoje",
-        description: "Exigências como NR-1 e NR-17, somadas ao aumento de riscos psicossociais, tornam essencial uma atuação estruturada e preventiva.",
-        statValue: "+30%",
-        statLabel: "de produtividade em ambientes saudáveis"
-    });
+    const content = getSetting("section_desafio_content", SECTION_DEFAULTS.desafio);
 
     return (
         <section id="desafio" className="py-24 bg-[#0d1b12] text-white">

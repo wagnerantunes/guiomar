@@ -1,43 +1,14 @@
 "use client";
 
 import React from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface MethodologyProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function Methodology({ getSetting }: MethodologyProps) {
-    const defaultSteps = [
-        {
-            t: "Diagnóstico Integrado",
-            d: "Análise 360 do seu cenário atual.",
-        },
-        {
-            t: "Inventário de Riscos",
-            d: "Identificação técnica de pontos críticos.",
-        },
-        {
-            t: "Plano de Ação",
-            d: "Definição estratégica de soluções.",
-        },
-        {
-            t: "Implementação",
-            d: "Execução acompanhada por especialistas.",
-        },
-        {
-            t: "Monitoramento",
-            d: "Avaliação contínua de resultados.",
-        },
-        {
-            t: "Sustentação",
-            d: "Consolidação de uma cultura saudável.",
-        },
-    ];
-
-    const content = getSetting("section_metodologia_content", {
-        title: "Metodologia RenovaMente",
-        steps: defaultSteps
-    });
+    const content = getSetting("section_metodologia_content", SECTION_DEFAULTS.metodologia);
 
     return (
         <section
@@ -50,7 +21,7 @@ export function Methodology({ getSetting }: MethodologyProps) {
                 </h2>
                 <div className="relative space-y-12">
                     <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2"></div>
-                    {(content.steps || defaultSteps).map((m: any, i: number) => (
+                    {(content.steps || SECTION_DEFAULTS.metodologia.steps).map((m: any, i: number) => (
                         <div
                             key={i}
                             className={`flex flex-col lg:flex-row items-center gap-8 ${i % 2 !== 0 ? "lg:flex-row-reverse" : ""
