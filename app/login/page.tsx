@@ -37,23 +37,23 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0F758D] via-[#0d6378] to-[#0a4f5f] p-4">
             <div className="w-full max-w-md">
-                <div className="bg-white rounded-2xl shadow-2xl p-8">
+                <div className="bg-[#FDF5E6] rounded-[2.5rem] shadow-2xl p-10 border border-[#0F758D]/10">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">RenovaMente CMS</h1>
-                        <p className="text-gray-600">Faça login para acessar o painel</p>
+                        <h1 className="text-3xl font-black text-[#0F758D] mb-2 tracking-tight">RenovaMente CMS</h1>
+                        <p className="text-[#0F758D]/70 font-medium text-sm">Faça login para acessar o painel</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
-                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                            <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-xl text-sm font-medium">
                                 {error}
                             </div>
                         )}
 
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="email" className="block text-xs font-black text-[#0F758D]/70 uppercase tracking-widest mb-2 ml-1">
                                 Email
                             </label>
                             <input
@@ -62,13 +62,13 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                className="w-full px-5 py-3.5 border-2 border-[#0F758D]/20 bg-white rounded-xl focus:ring-4 focus:ring-[#0F758D]/20 focus:border-[#0F758D] transition-all outline-none text-[#0F758D] font-medium"
                                 placeholder="seu@email.com"
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="password" className="block text-xs font-black text-[#0F758D]/70 uppercase tracking-widest mb-2 ml-1">
                                 Senha
                             </label>
                             <input
@@ -77,7 +77,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                className="w-full px-5 py-3.5 border-2 border-[#0F758D]/20 bg-white rounded-xl focus:ring-4 focus:ring-[#0F758D]/20 focus:border-[#0F758D] transition-all outline-none text-[#0F758D] font-medium"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -85,15 +85,15 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-[#0F758D] text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-[#0d6378] focus:outline-none focus:ring-4 focus:ring-[#0F758D]/30 transition-all shadow-lg shadow-[#0F758D]/20 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                         >
                             {loading ? 'Entrando...' : 'Entrar'}
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center text-sm text-gray-600">
-                        <p>Credenciais padrão:</p>
-                        <p className="font-mono text-xs mt-1">admin@renovamente.com / admin123</p>
+                    <div className="mt-8 text-center text-xs text-[#0F758D]/60">
+                        <p className="font-bold uppercase tracking-wider">Credenciais padrão:</p>
+                        <p className="font-mono text-[10px] mt-2 bg-white/50 py-2 px-4 rounded-lg border border-[#0F758D]/10">admin@renovamente.com / admin123</p>
                     </div>
                 </div>
             </div>
