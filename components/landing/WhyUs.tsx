@@ -26,10 +26,10 @@ export function WhyUs({ getSetting }: { getSetting: any }) {
                                 <span className="material-symbols-outlined text-3xl">done_all</span>
                             </div>
                             <h3 className="text-lg font-black text-[var(--color-text-main)] mb-3">
-                                {item.title}
+                                {item.t}
                             </h3>
                             <p className="text-gray-500 text-sm font-medium leading-relaxed">
-                                {item.description}
+                                {item.d}
                             </p>
                         </div>
                     ))}
