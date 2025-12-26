@@ -90,6 +90,9 @@ model Site {
   subdomain   String?  @unique
   description String?
   logo        String?
+  logoDark    String?  // Logo for dark backgrounds (Footer)
+  logoLight   String?  // Logo for light backgrounds (Header)
+  logoAdmin   String?  // Logo for admin sidebar
   favicon     String?
   ogImage     String?
   settings    Json?

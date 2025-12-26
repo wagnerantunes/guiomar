@@ -17,6 +17,9 @@ export default async function SettingsPage() {
                     description: true,
                     favicon: true,
                     logo: true,
+                    logoDark: true,
+                    logoLight: true,
+                    logoAdmin: true,
                     ogImage: true,
                 }
             }

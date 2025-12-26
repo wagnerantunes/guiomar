@@ -11,6 +11,9 @@ interface SettingsFormProps {
         description: string | null;
         favicon: string | null;
         logo: string | null;
+        logoDark: string | null;
+        logoLight: string | null;
+        logoAdmin: string | null;
         ogImage: string | null;
     };
 }
@@ -25,10 +28,13 @@ export default function SettingsForm({ site }: SettingsFormProps) {
         description: site.description || "",
         favicon: site.favicon || "",
         logo: site.logo || "",
+        logoDark: site.logoDark || "",
+        logoLight: site.logoLight || "",
+        logoAdmin: site.logoAdmin || "",
         ogImage: site.ogImage || "",
     });
 
-    const handleImageUpload = async (file: File, field: 'favicon' | 'logo' | 'ogImage') => {
+    const handleImageUpload = async (file: File, field: 'favicon' | 'logo' | 'logoDark' | 'logoLight' | 'logoAdmin' | 'ogImage') => {
         setUploading(field);
         const formDataUpload = new FormData();
         formDataUpload.append("file", file);
@@ -42,9 +48,19 @@ export default function SettingsForm({ site }: SettingsFormProps) {
             if (res.ok) {
                 const data = await res.json();
                 setFormData(prev => ({ ...prev, [field]: data.url }));
+
+                const fieldNames: Record<typeof field, string> = {
+                    favicon: 'Favicon',
+                    logo: 'Logo Principal',
+                    logoDark: 'Logo Dark',
+                    logoLight: 'Logo Light',
+                    logoAdmin: 'Logo Admin',
+                    ogImage: 'OG Image'
+                };
+
                 toast({
                     title: "Upload Concluído",
-                    description: `${field === 'favicon' ? 'Favicon' : field === 'logo' ? 'Logo' : 'OG Image'} atualizado com sucesso.`,
+                    description: `${fieldNames[field]} atualizado com sucesso.`,
                     type: "success"
                 });
             } else {
@@ -191,7 +207,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Logos, favicons e imagens de compartilhamento.</p>
                         </div>
                     </div>
-                    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div className="p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {/* FAVICON */}
                         <div className="space-y-4">
                             <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
@@ -328,6 +344,144 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                 />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">JPG ou PNG (1200x630px)</p>
+                        </div>
+
+                        {/* LOGO DARK */}
+                        <div className="space-y-4">
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Logo Dark (Fundo Escuro)
+                            </label>
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('logo-dark-upload')?.click()}
+                                    className="h-32 mx-auto md:mx-0 bg-gray-800 border-2 border-dashed border-gray-700 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logodark"
+                                >
+                                    {formData.logoDark && formData.logoDark.trim() ? (
+                                        <>
+                                            <img src={formData.logoDark} alt="Logo Dark" className="max-h-20 max-w-full object-contain group-hover/logodark:scale-110 transition-transform px-4" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, logoDark: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/logodark:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover logo dark"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-gray-600 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                            {uploading === 'logoDark' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    id="logo-dark-upload"
+                                    type="file"
+                                    accept="image/png,image/svg+xml,image/jpeg"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'logoDark');
+                                        e.target.value = '';
+                                    }}
+                                />
+                            </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Footer)</p>
+                        </div>
+
+                        {/* LOGO LIGHT */}
+                        <div className="space-y-4">
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Logo Light (Fundo Claro)
+                            </label>
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('logo-light-upload')?.click()}
+                                    className="h-32 mx-auto md:mx-0 bg-white border-2 border-dashed border-gray-200 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logolight"
+                                >
+                                    {formData.logoLight && formData.logoLight.trim() ? (
+                                        <>
+                                            <img src={formData.logoLight} alt="Logo Light" className="max-h-20 max-w-full object-contain group-hover/logolight:scale-110 transition-transform px-4" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, logoLight: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/logolight:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover logo light"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-gray-200 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                            {uploading === 'logoLight' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    id="logo-light-upload"
+                                    type="file"
+                                    accept="image/png,image/svg+xml,image/jpeg"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'logoLight');
+                                        e.target.value = '';
+                                    }}
+                                />
+                            </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Header)</p>
+                        </div>
+
+                        {/* LOGO ADMIN */}
+                        <div className="space-y-4">
+                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3 block">
+                                Logo Admin (Sidebar)
+                            </label>
+                            <div className="relative">
+                                <div
+                                    onClick={() => document.getElementById('logo-admin-upload')?.click()}
+                                    className="h-32 mx-auto md:mx-0 bg-[#0d1b12] border-2 border-dashed border-[#13ec5b]/20 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logoadmin"
+                                >
+                                    {formData.logoAdmin && formData.logoAdmin.trim() ? (
+                                        <>
+                                            <img src={formData.logoAdmin} alt="Logo Admin" className="max-h-20 max-w-full object-contain group-hover/logoadmin:scale-110 transition-transform px-4" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, logoAdmin: "" }));
+                                                }}
+                                                className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/logoadmin:opacity-100 transition-all shadow-lg hover:scale-110"
+                                                title="Remover logo admin"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">close</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="text-center">
+                                            <span className="material-symbols-outlined text-[#13ec5b]/30 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                            {uploading === 'logoAdmin' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    id="logo-admin-upload"
+                                    type="file"
+                                    accept="image/png,image/svg+xml,image/jpeg"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, 'logoAdmin');
+                                        e.target.value = '';
+                                    }}
+                                />
+                            </div>
+                            <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Sidebar)</p>
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ export async function PATCH(req: Request) {
         }
 
         const body = await req.json();
-        const { name, domain, description, favicon, logo, ogImage } = body;
+        const { name, domain, description, favicon, logo, logoDark, logoLight, logoAdmin, ogImage } = body;
 
         // Get user's site
         const siteUser = await prisma.siteUser.findFirst({
@@ -30,6 +30,9 @@ export async function PATCH(req: Request) {
                 description: description || null,
                 favicon: favicon || null,
                 logo: logo || null,
+                logoDark: logoDark || null,
+                logoLight: logoLight || null,
+                logoAdmin: logoAdmin || null,
                 ogImage: ogImage || null,
             },
         });
