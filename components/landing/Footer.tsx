@@ -11,6 +11,7 @@ import {
     MapPin,
     ArrowRight
 } from "lucide-react";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface FooterProps {
     getSetting?: (key: string, defaultValue: any) => any;
@@ -29,6 +30,7 @@ export function Footer({
     setNewsletterEmail,
     newsletterStatus = "idle"
 }: FooterProps) {
+    const { toast } = useToast();
     const footerSettings = getSetting ? getSetting("navigation_footer", {
         bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
         quickLinks: [
@@ -84,9 +86,9 @@ export function Footer({
 
     return (
         <footer className="bg-white border-t border-gray-100 pt-24 pb-12 px-6">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
                 {/* BIO COLUMN */}
-                <div className="space-y-8">
+                <div className="space-y-8 lg:col-span-1">
                     <div className="flex items-center gap-3">
                         <div className="size-10 bg-[var(--color-primary)] rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
                             <span className="material-symbols-outlined text-2xl">spa</span>
@@ -153,6 +155,41 @@ export function Footer({
                                 </span>
                             </li>
                         ))}
+                    </ul>
+                </div>
+
+                {/* CONTACT INFO */}
+                <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-text-main)] mb-8">
+                        Contato
+                    </h4>
+                    <ul className="space-y-4">
+                        <li>
+                            <a
+                                href={`https://wa.me/${((footerSettings.phone || "5511994416024").replace(/\D/g, ""))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm font-bold text-gray-400 hover:text-[var(--color-primary)] transition-all flex items-center gap-3 group"
+                            >
+                                <Phone size={16} className="text-[var(--color-primary)]" />
+                                <span>{footerSettings.phone || "(11) 99441-6024"}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href={`mailto:${footerSettings.email || "contato@renovamente.com.br"}`}
+                                className="text-sm font-bold text-gray-400 hover:text-[var(--color-primary)] transition-all flex items-center gap-3 group"
+                            >
+                                <Mail size={16} className="text-[var(--color-primary)]" />
+                                <span>{footerSettings.email || "contato@renovamente.com.br"}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <div className="text-sm font-bold text-gray-400 flex items-start gap-3">
+                                <MapPin size={16} className="text-[var(--color-primary)] mt-0.5 shrink-0" />
+                                <span>{footerSettings.address || "São Paulo, SP"}</span>
+                            </div>
+                        </li>
                     </ul>
                 </div>
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface HeroProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -12,6 +13,7 @@ interface HeroProps {
 export function Hero({ getSetting, scrollTo }: HeroProps) {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [currentSlide, setCurrentSlide] = useState(0);
+    const { toast } = useToast();
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
     const slides = (heroData.images || [heroData.image]).filter(Boolean);
@@ -48,12 +50,29 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             if (res.ok) {
                 setStatus("success");
                 (e.target as HTMLFormElement).reset();
-                setTimeout(() => setStatus("idle"), 3000);
+                toast({
+                    title: "Mensagem enviada com sucesso!",
+                    description: "Entraremos em contato em breve.",
+                    type: "success"
+                });
+                setTimeout(() => setStatus("idle"), 2000);
             } else {
                 setStatus("error");
+                toast({
+                    title: "Erro ao enviar mensagem",
+                    description: "Por favor, tente novamente.",
+                    type: "error"
+                });
+                setTimeout(() => setStatus("idle"), 3000);
             }
         } catch (err) {
             setStatus("error");
+            toast({
+                title: "Erro de conexão",
+                description: "Verifique sua internet e tente novamente.",
+                type: "error"
+            });
+            setTimeout(() => setStatus("idle"), 3000);
         }
     };
 

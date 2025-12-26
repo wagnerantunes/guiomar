@@ -16,6 +16,7 @@ import { Contact } from "@/components/landing/Contact";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
+import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
 
 interface BlogPost {
   id: string;
@@ -26,12 +27,13 @@ interface BlogPost {
   content?: string;
 }
 
-export default function HomePage() {
+function HomePageContent() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [siteSettings, setSiteSettings] = useState<any[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const { toast } = useToast();
 
   // Animation variants
   const sectionVariants: any = {
@@ -143,162 +145,189 @@ export default function HomePage() {
       if (res.ok) {
         setNewsletterStatus("success");
         setNewsletterEmail("");
-        setTimeout(() => setNewsletterStatus("idle"), 3000);
+        toast({
+          title: "Inscrição realizada!",
+          description: "Você receberá nossas novidades em breve.",
+          type: "success"
+        });
+        setTimeout(() => setNewsletterStatus("idle"), 2000);
       } else {
         setNewsletterStatus("error");
+        toast({
+          title: "Erro na inscrição",
+          description: "Por favor, tente novamente.",
+          type: "error"
+        });
+        setTimeout(() => setNewsletterStatus("idle"), 3000);
       }
     } catch (error) {
       setNewsletterStatus("error");
+      toast({
+        title: "Erro de conexão",
+        description: "Verifique sua internet e tente novamente.",
+        type: "error"
+      });
+      setTimeout(() => setNewsletterStatus("idle"), 3000);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-primary/30">
-      {siteSettings[0]?.siteId && <AnalyticsTracker siteId={siteSettings[0].siteId} />}
-      <Header
-        getSetting={getSetting}
-        scrollTo={scrollTo}
-        setSelectedPost={setSelectedPost}
-      />
+    <ToastProvider>
+      <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-primary/30">
+        {siteSettings[0]?.siteId && <AnalyticsTracker siteId={siteSettings[0].siteId} />}
+        <Header
+          getSetting={getSetting}
+          scrollTo={scrollTo}
+          setSelectedPost={setSelectedPost}
+        />
 
-      {selectedPost ? (
-        <article className="pt-32 pb-20 px-6 animate-fadeIn">
-          <div className="max-w-3xl mx-auto">
-            <button
-              onClick={() => setSelectedPost(null)}
-              className="mb-8 flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest hover:translate-x-[-4px] transition-transform"
-            >
-              <span className="material-symbols-outlined text-sm">arrow_back</span>
-              Voltar para o Início
-            </button>
-            <div className="aspect-[21/9] rounded-[2.5rem] overflow-hidden mb-10 shadow-2xl">
-              <img src={selectedPost.img} className="w-full h-full object-cover" alt={selectedPost.title} />
-            </div>
-            <div className="space-y-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
-                {selectedPost.cat}
-              </span>
-              <h1 className="text-4xl md:text-5xl font-black text-[#0d1b12] leading-tight">
-                {selectedPost.title}
-              </h1>
-              <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
-                {selectedPost.date}
-              </p>
-              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed font-medium">
-                {selectedPost.content}
+        {selectedPost ? (
+          <article className="pt-32 pb-20 px-6 animate-fadeIn">
+            <div className="max-w-3xl mx-auto">
+              <button
+                onClick={() => setSelectedPost(null)}
+                className="mb-8 flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest hover:translate-x-[-4px] transition-transform"
+              >
+                <span className="material-symbols-outlined text-sm">arrow_back</span>
+                Voltar para o Início
+              </button>
+              <div className="aspect-[21/9] rounded-[2.5rem] overflow-hidden mb-10 shadow-2xl">
+                <img src={selectedPost.img} className="w-full h-full object-cover" alt={selectedPost.title} />
+              </div>
+              <div className="space-y-6">
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                  {selectedPost.cat}
+                </span>
+                <h1 className="text-4xl md:text-5xl font-black text-[#0d1b12] leading-tight">
+                  {selectedPost.title}
+                </h1>
+                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
+                  {selectedPost.date}
+                </p>
+                <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed font-medium">
+                  {selectedPost.content}
+                </div>
               </div>
             </div>
+          </article>
+        ) : (
+          <div className="overflow-x-hidden">
+            <Hero getSetting={getSetting} scrollTo={scrollTo} />
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <AboutUs getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Challenge getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Services getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Methodology getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <BlogPreview
+                getSetting={getSetting}
+                blogPosts={blogPosts}
+                setSelectedPost={setSelectedPost}
+                scrollTo={scrollTo}
+              />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <WhyUs getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Founder getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Testimonials getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <FAQ getSetting={getSetting} />
+            </motion.section>
+
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={sectionVariants}
+            >
+              <Contact getSetting={getSetting} />
+            </motion.section>
           </div>
-        </article>
-      ) : (
-        <div className="overflow-x-hidden">
-          <Hero getSetting={getSetting} scrollTo={scrollTo} />
+        )}
 
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <AboutUs getSetting={getSetting} />
-          </motion.section>
+        <Footer
+          getSetting={getSetting}
+          scrollTo={scrollTo}
+          handleNewsletterSubmit={handleNewsletterSubmit}
+          newsletterEmail={newsletterEmail}
+          setNewsletterEmail={setNewsletterEmail}
+          newsletterStatus={newsletterStatus}
+        />
+      </div>
+    </ToastProvider>
+  );
+}
 
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Challenge getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Services getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Methodology getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <BlogPreview
-              getSetting={getSetting}
-              blogPosts={blogPosts}
-              setSelectedPost={setSelectedPost}
-              scrollTo={scrollTo}
-            />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <WhyUs getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Founder getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Testimonials getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <FAQ getSetting={getSetting} />
-          </motion.section>
-
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Contact getSetting={getSetting} />
-          </motion.section>
-        </div>
-      )}
-
-      <Footer
-        getSetting={getSetting}
-        scrollTo={scrollTo}
-        handleNewsletterSubmit={handleNewsletterSubmit}
-        newsletterEmail={newsletterEmail}
-        setNewsletterEmail={setNewsletterEmail}
-        newsletterStatus={newsletterStatus}
-      />
-    </div>
+export default function HomePage() {
+  return (
+    <ToastProvider>
+      <HomePageContent />
+    </ToastProvider>
   );
 }
