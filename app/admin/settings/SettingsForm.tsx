@@ -202,7 +202,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     onClick={() => document.getElementById('favicon-upload')?.click()}
                                     className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav"
                                 >
-                                    {formData.favicon ? (
+                                    {formData.favicon && formData.favicon.trim() ? (
                                         <>
                                             <img src={formData.favicon} alt="Favicon" className="size-12 object-contain group-hover/fav:scale-110 transition-transform" />
                                             <button
@@ -248,7 +248,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     onClick={() => document.getElementById('logo-upload')?.click()}
                                     className="h-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logo"
                                 >
-                                    {formData.logo ? (
+                                    {formData.logo && formData.logo.trim() ? (
                                         <>
                                             <img src={formData.logo} alt="Logo" className="max-h-20 max-w-full object-contain group-hover/logo:scale-110 transition-transform px-4" />
                                             <button
@@ -294,7 +294,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     onClick={() => document.getElementById('og-upload')?.click()}
                                     className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/og"
                                 >
-                                    {formData.ogImage ? (
+                                    {formData.ogImage && formData.ogImage.trim() ? (
                                         <>
                                             <img src={formData.ogImage} alt="OG Image" className="w-full h-full object-cover rounded-[2.5rem] group-hover/og:scale-105 transition-transform" />
                                             <button
