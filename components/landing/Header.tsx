@@ -7,9 +7,10 @@ interface HeaderProps {
     getSetting?: (key: string, defaultValue: any) => any;
     scrollTo?: (id: string) => void;
     setSelectedPost?: (post: any) => void;
+    logo?: string | null;
 }
 
-export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
+export function Header({ getSetting, scrollTo, setSelectedPost, logo }: HeaderProps) {
     return (
         <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -22,12 +23,18 @@ export function Header({ getSetting, scrollTo, setSelectedPost }: HeaderProps) {
                         }
                     }}
                 >
-                    <span className="material-symbols-outlined text-3xl text-[var(--color-primary)] transition-transform group-hover:rotate-12">
-                        spa
-                    </span>
-                    <span className="text-xl font-black tracking-tight text-[var(--color-text-main)]">
-                        RenovaMente
-                    </span>
+                    {logo ? (
+                        <img src={logo} alt="RenovaMente" className="h-12 object-contain" />
+                    ) : (
+                        <>
+                            <span className="material-symbols-outlined text-3xl text-[var(--color-primary)] transition-transform group-hover:rotate-12">
+                                spa
+                            </span>
+                            <span className="text-xl font-black tracking-tight text-[var(--color-text-main)]">
+                                RenovaMente
+                            </span>
+                        </>
+                    )}
                 </div>
 
                 <div className="hidden lg:flex items-center gap-8">

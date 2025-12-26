@@ -20,6 +20,7 @@ interface FooterProps {
     newsletterEmail?: string;
     setNewsletterEmail?: (email: string) => void;
     newsletterStatus?: string;
+    logo?: string | null;
 }
 
 export function Footer({
@@ -28,7 +29,8 @@ export function Footer({
     handleNewsletterSubmit,
     newsletterEmail = "",
     setNewsletterEmail,
-    newsletterStatus = "idle"
+    newsletterStatus = "idle",
+    logo
 }: FooterProps) {
     const { toast } = useToast();
     const footerSettings = getSetting ? getSetting("navigation_footer", {
@@ -89,14 +91,18 @@ export function Footer({
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
                 {/* BIO COLUMN */}
                 <div className="space-y-8 lg:col-span-1">
-                    <div className="flex items-center gap-3">
-                        <div className="size-10 bg-[var(--color-primary)] rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
-                            <span className="material-symbols-outlined text-2xl">spa</span>
+                    {logo ? (
+                        <img src={logo} alt="RenovaMente" className="h-12 object-contain" />
+                    ) : (
+                        <div className="flex items-center gap-3">
+                            <div className="size-10 bg-[var(--color-primary)] rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                                <span className="material-symbols-outlined text-2xl">spa</span>
+                            </div>
+                            <span className="text-2xl font-black text-[var(--color-text-main)] tracking-tighter">
+                                RenovaMente
+                            </span>
                         </div>
-                        <span className="text-2xl font-black text-[var(--color-text-main)] tracking-tighter">
-                            RenovaMente
-                        </span>
-                    </div>
+                    )}
                     <p className="text-sm text-gray-500 leading-relaxed font-medium">
                         {footerSettings.bio}
                     </p>

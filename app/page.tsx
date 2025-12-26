@@ -30,6 +30,7 @@ interface BlogPost {
 function HomePageContent() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [siteSettings, setSiteSettings] = useState<any[]>([]);
+  const [siteData, setSiteData] = useState<any>(null);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -71,6 +72,18 @@ function HomePageContent() {
       }
     };
 
+    const fetchSiteData = async () => {
+      try {
+        const res = await fetch("/api/settings/site");
+        if (res.ok) {
+          const data = await res.json();
+          setSiteData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching site data:", error);
+      }
+    };
+
     const fetchPosts = async () => {
       try {
         const res = await fetch("/api/posts");
@@ -92,6 +105,7 @@ function HomePageContent() {
     };
 
     fetchSettings();
+    fetchSiteData();
     fetchPosts();
   }, []);
 
@@ -179,6 +193,7 @@ function HomePageContent() {
           getSetting={getSetting}
           scrollTo={scrollTo}
           setSelectedPost={setSelectedPost}
+          logo={siteData?.logoLight || siteData?.logo}
         />
 
         {selectedPost ? (
@@ -318,6 +333,7 @@ function HomePageContent() {
           newsletterEmail={newsletterEmail}
           setNewsletterEmail={setNewsletterEmail}
           newsletterStatus={newsletterStatus}
+          logo={siteData?.logoDark || siteData?.logo}
         />
       </div>
     </ToastProvider>
