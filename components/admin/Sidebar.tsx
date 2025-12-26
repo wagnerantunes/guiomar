@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -18,6 +18,22 @@ export const menuItems = [
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const [logoAdmin, setLogoAdmin] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSiteData = async () => {
+            try {
+                const res = await fetch("/api/settings/site");
+                if (res.ok) {
+                    const data = await res.json();
+                    setLogoAdmin(data.logoAdmin || data.logo);
+                }
+            } catch (error) {
+                console.error("Error fetching site data:", error);
+            }
+        };
+        fetchSiteData();
+    }, []);
 
     const handleSignOut = () => {
         signOut({ callbackUrl: "/login" });
@@ -29,6 +45,21 @@ export default function Sidebar() {
             role="navigation"
             aria-label="Sidebar principal"
         >
+            <div className="p-6 border-b border-gray-100 dark:border-white/5">
+                {logoAdmin ? (
+                    <img src={logoAdmin} alt="RenovaMente" className="h-10 object-contain" />
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <div className="size-8 bg-[#13ec5b] rounded-xl flex items-center justify-center text-[#0d1b12]">
+                            <span className="material-symbols-outlined text-xl">spa</span>
+                        </div>
+                        <div>
+                            <h1 className="text-sm font-black text-[#0d1b12] dark:text-white tracking-tight">RENOVAMENTE</h1>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Admin Dashboard</p>
+                        </div>
+                    </div>
+                )}
+            </div>
             <div className="p-8 flex flex-col gap-1.5 overflow-y-auto custom-scrollbar flex-1">
                 <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 px-3">
                     Menu Principal
