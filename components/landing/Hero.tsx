@@ -64,18 +64,22 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
         >
             {/* BACKGROUND SLIDER */}
             <div className="absolute inset-0 z-0">
-                <AnimatePresence mode="popLayout">
-                    <motion.img
-                        key={currentSlide}
-                        src={slides[currentSlide]}
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="w-full h-full object-cover"
-                        alt={`Hero Slide ${currentSlide + 1}`}
-                    />
-                </AnimatePresence>
+                {slides.length > 0 ? (
+                    <AnimatePresence mode="popLayout">
+                        <motion.img
+                            key={currentSlide}
+                            src={slides[currentSlide]}
+                            initial={{ opacity: 0, scale: 1.1 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="w-full h-full object-cover"
+                            alt={`Hero Slide ${currentSlide + 1}`}
+                        />
+                    </AnimatePresence>
+                ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[var(--color-background-dark)] to-[var(--color-primary)]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-background-dark)]/95 via-[var(--color-background-dark)]/80 to-transparent"></div>
             </div>
 
