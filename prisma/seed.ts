@@ -6,8 +6,19 @@ const prisma = new PrismaClient()
 async function main() {
     console.log('🌱 Starting database seed...')
 
-    // Create admin user
-    const hashedPassword = await bcrypt.hash('admin123', 10)
+    // Generate strong random password
+    const generateStrongPassword = () => {
+        const length = 16
+        const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
+        let password = ''
+        for (let i = 0; i < length; i++) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length))
+        }
+        return password
+    }
+
+    const adminPassword = process.env.ADMIN_PASSWORD || generateStrongPassword()
+    const hashedPassword = await bcrypt.hash(adminPassword, 10)
 
     const adminUser = await prisma.user.upsert({
         where: { email: 'admin@renovamente.com' },
@@ -21,6 +32,15 @@ async function main() {
     })
 
     console.log('✅ Admin user created:', adminUser.email)
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    console.log('🔐 CREDENCIAIS DE ACESSO:')
+    console.log('   Email: admin@renovamente.com')
+    console.log(`   Senha: ${adminPassword}`)
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    console.log('⚠️  IMPORTANTE: Salve estas credenciais em local seguro!')
+    console.log('   Você pode alterar a senha no painel admin.')
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+
 
     // Create RenovaMente site
     const renovamenteSite = await prisma.site.upsert({

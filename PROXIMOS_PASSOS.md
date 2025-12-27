@@ -40,8 +40,8 @@ npm run dev
 - **Homepage**: http://localhost:3001
 - **Blog**: http://localhost:3001/blog
 - **Login Admin**: http://localhost:3001/login
-  - Email: `admin@renovamente.com`
-  - Senha: `admin123`
+  - **Credenciais**: Serão geradas automaticamente e exibidas no seu terminal após executar o comando `npm run db:seed`.
+  - Você pode alterar a senha em `/admin/settings/password` após o primeiro acesso.
 
 ---
 
@@ -101,7 +101,7 @@ Cole:
 ```env
 DATABASE_URL="postgresql://renovamente:SenhaForte123!@localhost:5432/renovamente_cms?schema=public"
 NEXTAUTH_URL="https://renovamente-guiomarmelo.com.br"
-NEXTAUTH_SECRET="gere-uma-chave-muito-segura-aqui-min-32-chars"
+NEXTAUTH_SECRET="INSIRA_UMA_CHAVE_SEGURA_AQUI"
 NEXT_PUBLIC_APP_URL="https://renovamente-guiomarmelo.com.br"
 ```
 

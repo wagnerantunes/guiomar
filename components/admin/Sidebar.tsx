@@ -14,6 +14,7 @@ export const menuItems = [
     { id: "blog", label: "Blog Posts", icon: "article", href: "/admin/posts" },
     { id: "forms", label: "Forms Editor", icon: "check_box", href: "/admin/forms" },
     { id: "media", label: "Media Library", icon: "image", href: "/admin/media" },
+    { id: "users", label: "Usuários", icon: "group", href: "/admin/users" },
 ];
 
 export default function Sidebar() {
@@ -106,6 +107,18 @@ export default function Sidebar() {
                 >
                     <span className="material-symbols-outlined text-[22px]">settings</span>
                     <span className="text-[13px] tracking-tight">Configurações</span>
+                </Link>
+                <Link
+                    href="/admin/settings/password"
+                    aria-label="Alterar Senha"
+                    aria-current={pathname === "/admin/settings/password" ? "page" : undefined}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${pathname === "/admin/settings/password"
+                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg"
+                        : "text-gray-500 hover:bg-white hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
+                        }`}
+                >
+                    <span className="material-symbols-outlined text-[22px]">lock</span>
+                    <span className="text-[13px] tracking-tight">Alterar Senha</span>
                 </Link>
                 <button
                     onClick={handleSignOut}

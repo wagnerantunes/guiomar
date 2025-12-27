@@ -11,82 +11,79 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
     const data = getSetting("section_testimonials_content", {
         title: "O que nossos clientes dizem",
         items: [
-            { name: "Sarah Johnson", role: "CTO, TechCorp", quote: "RenovaMente changed our entire office dynamic. Highly recommended for any growing team.", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" },
-            { name: "Michael Chen", role: "HR Director, Innovate", quote: "The workshops were incredibly engaging and practical.", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200" }
+            { id: 1, name: "Sarah Johnson", role: "Digital Strategy", quote: "A RenovaMente transformou nossa dinâmica de trabalho. Recomendo fortemente.", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" },
+            { id: 2, name: "Michael Chen", role: "Sales Director", quote: "Estratégias impecáveis e suporte humanizado. Um divisor de águas.", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200" },
+            { id: 3, name: "Elena Rodriguez", role: "Marketing Manager", quote: "Atenção aos detalhes e resultados que superaram nossas expectativas.", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200" },
+            { id: 4, name: "David Kim", role: "CEO, TechFlow", quote: "Equipe extremamente profissional e competente. Resultados sólidos.", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200" }
         ]
     });
 
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    useEffect(() => {
-        if (data.items.length <= 1) return;
-        const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % data.items.length);
-        }, 6000);
-        return () => clearInterval(interval);
-    }, [data.items.length]);
+    const items = [...data.items, ...data.items]; // Duplicar para loop infinito
 
     return (
-        <section id="testimonials" className="py-24 px-6 bg-white overflow-hidden">
-            <div className="max-w-7xl mx-auto">
+        <section id="testimonials" className="py-24 bg-white dark:bg-[#09090b] overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
+                    <h2 className="text-4xl font-black text-[var(--color-text-main)] dark:text-white uppercase tracking-tighter">
                         {data.title}
                     </h2>
-                    <div className="w-20 h-1 bg-[var(--color-primary)] mx-auto rounded-full" />
+                    <div className="w-12 h-1.5 bg-[#13ec5b] mx-auto rounded-full" />
                 </div>
 
-                <div className="relative">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeIndex}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.5 }}
-                            className="bg-[var(--color-background-light)]/20 p-12 md:p-16 rounded-[3rem] border border-gray-100 shadow-xl relative overflow-hidden"
-                        >
-                            <span className="material-symbols-outlined absolute top-10 left-10 text-9xl text-[var(--color-primary)]/5 select-none pointer-events-none">
-                                format_quote
-                            </span>
+                <div className="relative mt-20">
+                    {/* Gradient Overlays for Edge Fading */}
+                    <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white dark:from-[#09090b] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white dark:from-[#09090b] to-transparent z-10 pointer-events-none" />
 
-                            <div className="relative z-10 flex flex-col items-center text-center space-y-8">
-                                <p className="text-xl md:text-2xl text-[var(--color-text-main)] font-medium leading-relaxed max-w-4xl italic">
-                                    "{data.items[activeIndex]?.quote}"
-                                </p>
-
-                                <div className="flex flex-col items-center space-y-4">
-                                    <div className="size-20 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                                        <img
-                                            src={data.items[activeIndex]?.image || `https://ui-avatars.com/api/?name=${data.items[activeIndex]?.name}&background=0F758D&color=ffffff`}
-                                            alt={data.items[activeIndex]?.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-black text-[var(--color-text-main)] text-lg uppercase tracking-wider">
-                                            {data.items[activeIndex]?.name}
-                                        </h4>
-                                        <p className="text-[var(--color-primary)] font-black text-[10px] uppercase tracking-widest mt-1">
-                                            {data.items[activeIndex]?.role}
+                    <motion.div
+                        className="flex gap-8"
+                        animate={{
+                            x: [0, -100 * (data.items.length) + "%"]
+                        }}
+                        transition={{
+                            duration: 30,
+                            repeat: Infinity,
+                            ease: "linear",
+                            repeatType: "loop"
+                        }}
+                        style={{ width: "fit-content" }}
+                    >
+                        {items.map((item: any, idx: number) => (
+                            <div
+                                key={idx}
+                                className="w-[350px] md:w-[450px] shrink-0 bg-[#f8faf8] dark:bg-white/5 p-10 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-xl shadow-gray-100/20 dark:shadow-none hover:border-[#13ec5b]/30 transition-all group"
+                            >
+                                <div className="flex flex-col h-full justify-between gap-8">
+                                    <div className="relative">
+                                        <span className="material-symbols-outlined text-6xl text-[#13ec5b]/10 absolute -top-4 -left-2 select-none">
+                                            format_quote
+                                        </span>
+                                        <p className="relative z-10 text-base md:text-lg text-[var(--color-text-main)] dark:text-gray-300 font-medium leading-relaxed italic">
+                                            "{item.quote}"
                                         </p>
+                                    </div>
+
+                                    <div className="flex items-center gap-5">
+                                        <div className="size-14 rounded-2xl overflow-hidden border-2 border-white dark:border-[#13ec5b]/20 shadow-md group-hover:scale-110 transition-transform">
+                                            <img
+                                                src={item.image || `https://ui-avatars.com/api/?name=${item.name}&background=13ec5b&color=0d1b12`}
+                                                alt={item.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-[var(--color-text-main)] dark:text-white text-sm uppercase tracking-wider">
+                                                {item.name}
+                                            </h4>
+                                            <p className="text-[#13ec5b] font-black text-[9px] uppercase tracking-[0.2em] mt-0.5">
+                                                {item.role}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
-                    </AnimatePresence>
-
-                    {/* Indicators */}
-                    <div className="flex justify-center gap-3 mt-10">
-                        {data.items.map((_: any, idx: number) => (
-                            <button
-                                key={idx}
-                                onClick={() => setActiveIndex(idx)}
-                                className={`h-2 transition-all duration-300 rounded-full ${activeIndex === idx ? "w-12 bg-[var(--color-primary)]" : "w-4 bg-gray-200"
-                                    }`}
-                            />
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

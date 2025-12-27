@@ -90,11 +90,6 @@ export default function LoginPage() {
                             {loading ? 'Entrando...' : 'Entrar'}
                         </button>
                     </form>
-
-                    <div className="mt-8 text-center text-xs text-[#0F758D]/60">
-                        <p className="font-bold uppercase tracking-wider">Credenciais padrão:</p>
-                        <p className="font-mono text-[10px] mt-2 bg-white/50 py-2 px-4 rounded-lg border border-[#0F758D]/10">admin@renovamente.com / admin123</p>
-                    </div>
                 </div>
             </div>
         </div>

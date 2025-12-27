@@ -7,6 +7,22 @@ import MobileSidebar from "./MobileSidebar";
 
 export default function AdminHeader() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const [logo, setLogo] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch("/api/settings/site");
+                if (res.ok) {
+                    const data = await res.json();
+                    setLogo(data.logoAdmin || data.logo);
+                }
+            } catch (error) {
+                console.error("Error fetching header settings:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     return (
         <header
@@ -25,13 +41,19 @@ export default function AdminHeader() {
                         </button>
 
                         <Link href="/" className="flex items-center gap-3 text-[#0d1b12] dark:text-white cursor-pointer group">
-                            <div className="size-10 rounded-xl bg-[#13ec5b]/10 flex items-center justify-center text-[#13ec5b] group-hover:scale-110 transition-transform shadow-lg shadow-[#13ec5b]/5">
-                                <span className="material-symbols-outlined text-2xl">spa</span>
-                            </div>
-                            <div className="flex flex-col">
-                                <h2 className="text-md font-black leading-tight tracking-tight uppercase tracking-widest">RenovaMente</h2>
-                                <span className="text-[9px] text-gray-400 uppercase tracking-[0.2em] font-black">Painel de Controle</span>
-                            </div>
+                            {logo ? (
+                                <img src={logo} alt="RenovaMente" className="h-8 object-contain" />
+                            ) : (
+                                <>
+                                    <div className="size-10 rounded-xl bg-[#13ec5b]/10 flex items-center justify-center text-[#13ec5b] group-hover:scale-110 transition-transform shadow-lg shadow-[#13ec5b]/5">
+                                        <span className="material-symbols-outlined text-2xl">spa</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <h2 className="text-md font-black leading-tight tracking-tight uppercase tracking-widest">RenovaMente</h2>
+                                        <span className="text-[9px] text-gray-400 uppercase tracking-[0.2em] font-black">Painel de Controle</span>
+                                    </div>
+                                </>
+                            )}
                         </Link>
                     </div>
 

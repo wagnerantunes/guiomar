@@ -173,40 +173,46 @@ export default function LeadsPage() {
                             ))}
                         </div>
                     ) : filteredLeads.length === 0 ? (
-                        <div className="p-20 text-center space-y-4">
+                        <div className="p-20 text-center space-y-4 animate-in fade-in zoom-in-95 duration-500">
                             <span className="material-symbols-outlined text-4xl text-gray-200 dark:text-white/5">search_off</span>
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Nenhum lead encontrado</p>
                         </div>
                     ) : (
-                        <div className="space-y-1 pb-10">
-                            {filteredLeads.map((lead) => (
+                        <div className="space-y-2 pb-10">
+                            {filteredLeads.map((lead, idx) => (
                                 <button
                                     key={lead.id}
                                     onClick={() => setSelectedLeadId(lead.id)}
-                                    aria-label={`Ver detalhes de ${lead.name}`}
-                                    className={`w-full text-left p-6 rounded-3xl transition-all relative group outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${selectedLeadId === lead.id
-                                        ? 'bg-white dark:bg-[#18181b] shadow-xl shadow-[#13ec5b]/5 border-transparent'
+                                    // Staggered entrance animation
+                                    style={{ animationDelay: `${idx * 50}ms` }}
+                                    className={`w-full text-left p-6 rounded-[2rem] transition-all relative group outline-none animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-both ${selectedLeadId === lead.id
+                                        ? 'bg-white dark:bg-[#111111] shadow-xl shadow-[#13ec5b]/5 border-transparent ring-1 ring-[#13ec5b]/20'
                                         : 'hover:bg-white/60 dark:hover:bg-white/5 border-transparent'
                                         }`}
                                 >
                                     {lead.status === 'New' && (
-                                        <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#13ec5b] rounded-full shadow-[0_0_12px_#13ec5b]"></div>
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#13ec5b] rounded-full shadow-[0_0_12px_#13ec5b] z-20"></div>
                                     )}
-                                    <div className="flex justify-between items-start mb-2">
+                                    <div className="flex justify-between items-start mb-2 relative z-10">
                                         <h4 className={`text-[13px] font-black uppercase tracking-tight transition-colors ${selectedLeadId === lead.id ? 'text-[#13ec5b]' : 'text-[#0d1b12] dark:text-gray-100'}`}>
                                             {lead.name}
                                         </h4>
-                                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest bg-[#f6f8f6] dark:bg-white/5 px-2 py-0.5 rounded-md">
+                                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 dark:bg-white/5 px-2 py-0.5 rounded-md">
                                             {new Date(lead.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short' })}
                                         </span>
                                     </div>
-                                    <p className="text-[10px] font-black text-gray-500 mb-3 truncate uppercase tracking-widest flex items-center gap-1.5 border-b border-gray-100/50 dark:border-white/5 pb-2">
+                                    <p className="text-[10px] font-black text-gray-400 mb-3 truncate uppercase tracking-widest flex items-center gap-1.5 border-b border-gray-100/50 dark:border-white/5 pb-2 relative z-10">
                                         <span className="material-symbols-outlined text-xs">corporate_fare</span>
                                         {lead.company || "Pessoa Física"}
                                     </p>
-                                    <p className="text-[11px] font-medium text-gray-400 line-clamp-2 leading-relaxed italic">
+                                    <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed italic relative z-10">
                                         "{lead.message}"
                                     </p>
+
+                                    {/* Subtle Glass Glow on Active */}
+                                    {selectedLeadId === lead.id && (
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-[#13ec5b]/5 to-transparent rounded-[2rem] pointer-events-none" />
+                                    )}
                                 </button>
                             ))}
                         </div>
@@ -216,13 +222,13 @@ export default function LeadsPage() {
 
             {/* DETALHE DO LEAD */}
             <div
-                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-white dark:bg-[#18181b]/20 relative`}
+                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-[#f8faf8] dark:bg-[#09090b] relative`}
                 role="main"
                 aria-label="Detalhes do Lead"
             >
                 {selectedLead ? (
-                    <>
-                        <div className="h-24 px-6 md:px-12 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl shrink-0 z-10 shadow-sm">
+                    <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-8 duration-700">
+                        <div className="h-24 px-6 md:px-12 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/40 dark:bg-black/20 backdrop-blur-2xl shrink-0 z-10 shadow-sm ring-1 ring-white/10">
                             <div className="flex items-center gap-4 md:gap-6 overflow-hidden">
                                 <button
                                     onClick={() => setSelectedLeadId(null)}
@@ -231,14 +237,14 @@ export default function LeadsPage() {
                                 >
                                     <span className="material-symbols-outlined">arrow_back</span>
                                 </button>
-                                <div className="size-12 md:size-14 rounded-2xl bg-[#13ec5b]/10 flex items-center justify-center text-[#13ec5b] font-black text-xl uppercase shadow-inner shrink-0 border border-[#13ec5b]/10 group-hover:scale-110 transition-transform">
+                                <div className="size-12 md:size-14 rounded-2xl bg-[#13ec5b] text-[#0d1b12] flex items-center justify-center font-black text-xl uppercase shadow-[0_0_30px_rgba(19,236,91,0.2)] shrink-0 border border-[#13ec5b]/20 group-hover:scale-110 transition-transform">
                                     {selectedLead.name.charAt(0)}
                                 </div>
                                 <div className="truncate">
                                     <h3 className="text-sm md:text-base font-black text-[#0d1b12] dark:text-white uppercase tracking-wider truncate">{selectedLead.name}</h3>
-                                    <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-gray-50 dark:bg-white/5 w-fit rounded-lg border border-gray-100 dark:border-white/5">
-                                        <span className="material-symbols-outlined text-[12px] text-gray-400">explore</span>
-                                        <span className="text-[9px] md:text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] truncate">{selectedLead.source || "Origem Direta"}</span>
+                                    <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-[#13ec5b]/10 w-fit rounded-lg border border-[#13ec5b]/10">
+                                        <span className="material-symbols-outlined text-[10px] text-[#13ec5b]">explore</span>
+                                        <span className="text-[9px] md:text-[10px] text-[#13ec5b] font-black uppercase tracking-[0.2em] truncate">{selectedLead.source || "Origem Direta"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -246,7 +252,7 @@ export default function LeadsPage() {
                                 <button
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Archived")}
                                     aria-label="Arquivar lead"
-                                    className="flex items-center gap-2 px-5 py-3 text-[10px] font-black border border-gray-100 dark:border-white/5 rounded-2xl hover:bg-red-50 hover:text-red-500 hover:border-red-100 dark:hover:bg-red-500/10 transition-all uppercase tracking-widest active:scale-95 group shadow-sm"
+                                    className="flex items-center gap-2 px-5 py-3 text-[10px] font-black border border-gray-200 dark:border-white/10 rounded-2xl hover:bg-red-50 hover:text-red-500 hover:border-red-100 dark:hover:bg-red-500/10 transition-all uppercase tracking-widest active:scale-95 group shadow-sm bg-white dark:bg-white/5"
                                 >
                                     <span className="material-symbols-outlined text-sm transition-transform group-hover:rotate-12">archive</span>
                                     <span className="hidden md:inline">Arquivar</span>
@@ -254,9 +260,9 @@ export default function LeadsPage() {
                                 <button
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Contacted")}
                                     aria-label="Marcar como respondido"
-                                    className={`flex items-center gap-3 px-6 py-4 md:px-8 md:py-4 text-[10px] md:text-xs font-black rounded-2xl shadow-xl shadow-[#13ec5b]/10 hover:shadow-[#13ec5b]/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest ${selectedLead.status === "Contacted"
-                                        ? "bg-[#0d1b12] text-[#13ec5b] border border-[#13ec5b]/30"
-                                        : "bg-[#13ec5b] text-[#0d1b12]"
+                                    className={`flex items-center gap-3 px-6 py-4 md:px-8 md:py-4 text-[10px] md:text-xs font-black rounded-2xl shadow-xl hover:shadow-[#13ec5b]/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest ${selectedLead.status === "Contacted"
+                                        ? "bg-[#0d1b12] dark:bg-[#13ec5b]/20 text-[#13ec5b] border border-[#13ec5b]/30"
+                                        : "bg-[#13ec5b] text-[#0d1b12] shadow-[#13ec5b]/10"
                                         }`}
                                 >
                                     <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -266,36 +272,36 @@ export default function LeadsPage() {
                             </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto custom-scrollbar p-10 md:p-20 bg-[#fefefe] dark:bg-transparent">
-                            <div className="max-w-4xl mx-auto space-y-16">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-16 lg:p-24 bg-transparent">
+                            <div className="max-w-4xl mx-auto space-y-12">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Dados do Consultante</label>
-                                        <div className="bg-white dark:bg-white/5 rounded-[2.5rem] p-10 space-y-8 border border-gray-100 dark:border-white/5 shadow-xl shadow-gray-100/20 dark:shadow-none">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Informações de Contato</label>
+                                        <div className="bg-white dark:bg-[#18181b]/60 backdrop-blur-sm rounded-[2.5rem] p-10 space-y-8 border border-gray-100 dark:border-white/5 shadow-xl shadow-gray-200/20 dark:shadow-none">
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-sm border border-blue-50 dark:border-blue-500/10 group-hover:scale-110 transition-transform">
+                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">mail</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">E-mail Corporativo</span>
-                                                    <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200">{selectedLead.email}</span>
+                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">E-mail</span>
+                                                    <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200 break-all">{selectedLead.email}</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-[#13ec5b]/10 flex items-center justify-center text-[#13ec5b] shadow-sm border border-[#13ec5b]/10 group-hover:scale-110 transition-transform">
+                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">call</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Telefone / WhatsApp</span>
+                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Telefone</span>
                                                     <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200">{selectedLead.phone || "Não informado"}</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-500 shadow-sm border border-purple-50 dark:border-purple-500/10 group-hover:scale-110 transition-transform">
+                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">apartment</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Empresa / Instituição</span>
+                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Empresa</span>
                                                     <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200">{selectedLead.company || "Pessoa Física"}</span>
                                                 </div>
                                             </div>
@@ -303,94 +309,92 @@ export default function LeadsPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Linha do Tempo</label>
-                                        <div className="bg-[#13ec5b] dark:bg-[#13ec5b] rounded-[2.5rem] p-10 text-zinc-950 shadow-2xl shadow-[#13ec5b]/20 relative overflow-hidden group border border-[#13ec5b]/30">
-                                            <div className="relative z-10 flex flex-col justify-between h-full space-y-8">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Dados Técnicos</label>
+                                        <div className="bg-[#0d1b12] dark:bg-black/40 rounded-[2.5rem] p-10 text-white shadow-2xl shadow-gray-200 dark:shadow-none relative overflow-hidden group border border-white/5">
+                                            <div className="relative z-10 flex flex-col justify-between h-full space-y-10">
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-4 opacity-70">
+                                                    <div className="flex items-center gap-2 mb-4 opacity-50">
                                                         <span className="material-symbols-outlined text-[16px]">history</span>
-                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Registro de Entrada</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Recebido em</span>
                                                     </div>
-                                                    <p className="text-2xl font-black leading-tight uppercase tracking-tight">
+                                                    <p className="text-2xl font-black leading-tight uppercase tracking-tight text-[#13ec5b]">
                                                         {new Date(selectedLead.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'long', year: 'numeric' })}
                                                     </p>
-                                                    <p className="text-base font-black mt-1 opacity-70">
+                                                    <p className="text-base font-black mt-1 opacity-50">
                                                         às {new Date(selectedLead.createdAt).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                                                     </p>
                                                 </div>
 
-                                                <div className="bg-[#0d1b12]/5 dark:bg-black/10 p-5 rounded-3xl border border-[#0d1b12]/10">
-                                                    <div className="flex items-center justify-between items-center">
+                                                <div className="bg-white/5 p-5 rounded-3xl border border-white/10">
+                                                    <div className="flex items-center justify-between">
                                                         <div>
-                                                            <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-1">Tratamento</p>
-                                                            <p className="text-xs font-black uppercase">{selectedLead.status === 'New' ? 'Aguardando Resposta' : 'Processado'}</p>
+                                                            <p className="text-[9px] font-black uppercase tracking-widest opacity-40 mb-1">Status Interno</p>
+                                                            <p className="text-xs font-black uppercase tracking-widest">{selectedLead.status === 'New' ? 'Aguardando' : 'Processado'}</p>
                                                         </div>
-                                                        <div className="size-10 rounded-2xl bg-[#0d1b12] text-[#13ec5b] flex items-center justify-center shadow-lg">
-                                                            <span className="material-symbols-outlined text-[20px]">bolt</span>
+                                                        <div className="size-12 rounded-2xl bg-[#13ec5b] text-[#0d1b12] flex items-center justify-center shadow-[0_0_20px_rgba(19,236,91,0.3)]">
+                                                            <span className="material-symbols-outlined text-[24px]">bolt</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="absolute -right-10 -top-10 size-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+                                            {/* Decorative Element */}
+                                            <div className="absolute -right-20 -bottom-20 size-64 bg-[#13ec5b]/5 rounded-full blur-[80px] pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="space-y-6">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Mensagem Recebida</label>
-                                    <div className="bg-[#f8faf8] dark:bg-white/5 rounded-[3rem] p-12 md:p-16 border border-gray-100 dark:border-white/5 relative group">
-                                        <span className="material-symbols-outlined absolute top-10 left-10 text-6xl text-primary/10 select-none group-hover:scale-110 transition-transform">format_quote</span>
-                                        <p className="text-xl md:text-2xl text-[#0d1b12] dark:text-gray-200 leading-relaxed italic font-medium relative z-10 pl-6 border-l-4 border-[#13ec5b]/30">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Conteúdo da Mensagem</label>
+                                    <div className="bg-white dark:bg-[#18181b]/60 backdrop-blur-sm rounded-[3rem] p-12 md:p-16 border border-gray-100 dark:border-white/5 relative group shadow-sm">
+                                        <span className="material-symbols-outlined absolute top-10 left-10 text-7xl text-[#13ec5b]/5 select-none transition-transform duration-700 group-hover:scale-110">format_quote</span>
+                                        <p className="text-xl md:text-2xl text-[#0d1b12] dark:text-gray-100 leading-relaxed italic font-medium relative z-10 pl-6 border-l-2 border-[#13ec5b]/20">
                                             {selectedLead.message}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="pt-20 border-t border-gray-50 dark:border-white/5 space-y-8 pb-20">
-                                    <div className="flex items-center justify-between">
-                                        <h4 className="text-lg font-black text-[#0d1b12] dark:text-white uppercase tracking-widest flex items-center gap-3">
+                                <div className="pt-12 border-t border-gray-100 dark:border-white/5 space-y-8 pb-32">
+                                    <div className="flex items-center justify-between px-4">
+                                        <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] flex items-center gap-3">
                                             <span className="material-symbols-outlined text-[#13ec5b]">edit_note</span>
-                                            Notas Internas
+                                            Área de Anotações Estratégicas
                                         </h4>
-                                        {selectedLead.notes && <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Última edição: hoje</span>}
                                     </div>
                                     <div className="relative group">
                                         <textarea
                                             value={noteText}
                                             onChange={(e) => setNoteText(e.target.value)}
                                             aria-label="Notas internas do lead"
-                                            className="w-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-10 text-base font-medium focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 h-64 resize-none outline-none shadow-xl shadow-gray-50/50 dark:shadow-none transition-all placeholder:text-gray-400"
-                                            placeholder="Descreva o andamento da negociação, pontos chave ou próximos passos... (Apenas para uso interno)"
+                                            className="w-full bg-white dark:bg-[#18181b]/60 backdrop-blur-sm border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-10 text-base font-medium focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 h-72 resize-none outline-none shadow-xl shadow-gray-100/10 transition-all placeholder:text-gray-300 dark:placeholder:text-white/5 dark:text-gray-200"
+                                            placeholder="Documente aqui o progresso do lead..."
                                         />
-                                        <div className="absolute bottom-10 right-10">
+                                        <div className="absolute bottom-8 right-8">
                                             <button
                                                 onClick={handleSaveNote}
                                                 disabled={isSavingNote}
-                                                className="px-8 py-4 bg-[#0d1b12] dark:bg-[#13ec5b] dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-2xl disabled:opacity-50 flex items-center gap-3 group/btn"
+                                                className="px-8 py-4 bg-[#0d1b12] dark:bg-[#13ec5b] dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/10 disabled:opacity-50 flex items-center gap-3 group/btn"
                                             >
                                                 {isSavingNote ? (
-                                                    "Sincronizando..."
+                                                    <span className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                                 ) : (
-                                                    <>
-                                                        Salvar Alterações
-                                                        <span className="material-symbols-outlined text-[16px] group-hover/btn:translate-x-1 transition-transform">save</span>
-                                                    </>
+                                                    <span className="material-symbols-outlined text-lg">save</span>
                                                 )}
+                                                {isSavingNote ? "Salvando..." : "Atualizar Notas"}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </>
+                    </div>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-gray-200 dark:text-white/5 p-20 text-center animate-in fade-in duration-1000">
-                        <div className="size-48 rounded-[3rem] bg-[#f6f8f6] dark:bg-white/5 flex items-center justify-center mb-10 shadow-inner">
-                            <span className="material-symbols-outlined text-8xl">inbox</span>
+                    <div className="flex-1 flex flex-col items-center justify-center text-gray-100 dark:text-white/5 p-20 text-center animate-in fade-in zoom-in-95 duration-1000">
+                        <div className="size-48 rounded-[4rem] bg-white dark:bg-white/5 flex items-center justify-center mb-10 shadow-2xl shadow-gray-100 dark:shadow-none border border-gray-50 dark:border-white/5 group">
+                            <span className="material-symbols-outlined text-8xl transition-all group-hover:scale-110 group-hover:text-[#13ec5b] opacity-20">inbox</span>
                         </div>
-                        <h3 className="text-2xl font-black text-[#0d1b12] dark:text-white mb-4 uppercase tracking-[0.2em]">Selecione uma Mentoria</h3>
-                        <p className="max-w-sm text-sm font-bold text-gray-400 uppercase tracking-widest leading-loose">
-                            Clique em algum lead na lista lateral para iniciar a gestão estratégica e responder ao contato.
+                        <h3 className="text-2xl font-black text-[#0d1b12] dark:text-white mb-4 uppercase tracking-[0.2em]">Selecione um Lead</h3>
+                        <p className="max-w-xs text-[10px] font-black text-gray-400 uppercase tracking-widest leading-loose">
+                            Sua caixa de entrada estratégica está aguardando ação. Inicie a conversão agora.
                         </p>
                     </div>
                 )}

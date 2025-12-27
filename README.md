@@ -70,8 +70,8 @@ Acesse: http://localhost:3001
 ## 🔐 Acesso ao Painel Admin
 
 - URL: http://localhost:3001/login
-- Email: `admin@renovamente.com`
-- Senha: `admin123`
+- As credenciais serão exibidas no console após executar `npm run db:seed`
+- Você pode alterar a senha no painel admin em `/admin/settings/password`
 
 ## 🚀 Deploy para VPS (Hostinger)
 

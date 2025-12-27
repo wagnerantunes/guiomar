@@ -13,6 +13,23 @@ interface MobileSidebarProps {
 
 export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
     const pathname = usePathname();
+    const [logo, setLogo] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        if (!isOpen) return;
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch("/api/settings/site");
+                if (res.ok) {
+                    const data = await res.json();
+                    setLogo(data.logoAdmin || data.logo);
+                }
+            } catch (error) {
+                console.error("Error fetching mobile sidebar settings:", error);
+            }
+        };
+        fetchSettings();
+    }, [isOpen]);
 
     const handleSignOut = () => {
         signOut({ callbackUrl: "/login" });
@@ -31,9 +48,15 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             {/* Drawer */}
             <aside className="absolute inset-y-0 left-0 w-72 bg-white dark:bg-[#0d1b12] shadow-2xl flex flex-col animate-in slide-in-from-left duration-500">
                 <div className="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
-                    <Link href="/admin" onClick={onClose} className="flex items-center gap-2 text-[#0d1b12] dark:text-white">
-                        <span className="material-symbols-outlined text-3xl text-[#13ec5b]">spa</span>
-                        <h2 className="text-lg font-bold tracking-tight">RenovaMente</h2>
+                    <Link href="/admin" onClick={onClose} className="flex items-center gap-3 text-[#0d1b12] dark:text-white">
+                        {logo ? (
+                            <img src={logo} alt="RenovaMente" className="h-8 object-contain" />
+                        ) : (
+                            <>
+                                <span className="material-symbols-outlined text-3xl text-[#13ec5b]">spa</span>
+                                <h2 className="text-lg font-bold tracking-tight">RenovaMente</h2>
+                            </>
+                        )}
                     </Link>
                     <button onClick={onClose} className="p-2 text-gray-400 hover:text-black dark:hover:text-white">
                         <span className="material-symbols-outlined">close</span>
