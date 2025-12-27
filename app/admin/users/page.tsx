@@ -137,21 +137,24 @@ export default function UsersPage() {
 
     if (loading) {
         return (
-            <div className="p-8">
-                <div className="animate-pulse space-y-4">
-                    <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-                    <div className="h-64 bg-gray-200 rounded"></div>
+            <div className="p-8 space-y-8">
+                <div className="flex justify-between">
+                    <div className="h-10 w-48 bg-white/5 rounded-xl animate-pulse" />
+                    <div className="h-10 w-32 bg-white/5 rounded-xl animate-pulse" />
                 </div>
+                <div className="h-96 bg-white/5 rounded-[2.5rem] animate-pulse" />
             </div>
         )
     }
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
+        <div className="p-8 md:p-10 space-y-10 pb-24">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0F758D]">Usuários</h1>
-                    <p className="text-gray-600 mt-1">Gerencie os usuários do sistema</p>
+                    <h1 className="text-3xl font-black text-white uppercase tracking-[0.2em]">Usuários</h1>
+                    <p className="text-gray-400 font-bold mt-2 uppercase tracking-widest text-[10px]">
+                        Gerencie permissões e acesso ao sistema.
+                    </p>
                 </div>
                 <button
                     onClick={() => {
@@ -163,54 +166,60 @@ export default function UsersPage() {
                             setShowCreateForm(true)
                         }
                     }}
-                    className="px-6 py-3 bg-[#0F758D] text-white rounded-xl font-bold hover:bg-[#0d6378] transition-colors"
+                    className={`px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${showCreateForm
+                            ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20 shadow-red-500/10'
+                            : 'bg-[#13ec5b] text-[#0d1b12] shadow-[#13ec5b]/20'
+                        }`}
                 >
-                    {showCreateForm ? 'Cancelar' : '+ Novo Usuário'}
+                    {showCreateForm ? 'Cancelar' : 'Novo Usuário'}
                 </button>
             </div>
 
             {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex justify-between items-center">
+                <div className="p-6 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl flex justify-between items-center text-xs font-bold uppercase tracking-widest animate-in slide-in-from-top-2">
                     <span>{error}</span>
-                    <button onClick={() => setError('')} className="text-red-700 hover:text-red-900">
+                    <button onClick={() => setError('')} className="hover:text-red-300 transition-colors">
                         <span className="material-symbols-outlined">close</span>
                     </button>
                 </div>
             )}
 
             {success && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex justify-between items-center">
+                <div className="p-6 bg-[#13ec5b]/10 border border-[#13ec5b]/20 text-[#13ec5b] rounded-2xl flex justify-between items-center text-xs font-bold uppercase tracking-widest animate-in slide-in-from-top-2">
                     <span>{success}</span>
-                    <button onClick={() => setSuccess('')} className="text-green-700 hover:text-green-900">
+                    <button onClick={() => setSuccess('')} className="hover:text-[#13ec5b]/80 transition-colors">
                         <span className="material-symbols-outlined">close</span>
                     </button>
                 </div>
             )}
 
             {showCreateForm && (
-                <div className="mb-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                    <h2 className="text-xl font-bold text-[#0F758D] mb-4">
-                        {editingUser ? `Editar Usuário: ${editingUser.name}` : 'Criar Novo Usuário'}
+                <div className="bg-[#09090b]/40 backdrop-blur-xl rounded-[3rem] shadow-2xl p-10 border border-white/5 animate-in slide-in-from-top-4 duration-300">
+                    <h2 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
+                        <span className="size-8 rounded-lg bg-[#13ec5b]/20 flex items-center justify-center text-[#13ec5b]">
+                            <span className="material-symbols-outlined text-sm">{editingUser ? 'edit' : 'person_add'}</span>
+                        </span>
+                        {editingUser ? `Editar: ${editingUser.name}` : 'Criar Novo Usuário'}
                     </h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">
-                                    Nome
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                                    Nome Completo
                                 </label>
                                 <input
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F758D] focus:border-transparent transition-all"
-                                    placeholder="Nome completo"
+                                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-[1.5rem] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white text-xs font-bold shadow-inner"
+                                    placeholder="Ex: Ana Silva"
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">
-                                    Email
+                            <div className="space-y-4">
+                                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                                    Email Corporativo
                                 </label>
                                 <input
                                     type="email"
@@ -218,117 +227,121 @@ export default function UsersPage() {
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
                                     disabled={!!editingUser}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F758D] focus:border-transparent transition-all disabled:bg-gray-50 disabled:text-gray-500"
-                                    placeholder="email@exemplo.com"
+                                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-[1.5rem] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white text-xs font-bold shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
+                                    placeholder="email@renovamente.com"
                                 />
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">
-                                    {editingUser ? 'Nova Senha (opcional)' : 'Senha'}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                                    {editingUser ? 'Alterar Senha (opcional)' : 'Senha de Acesso'}
                                 </label>
                                 <input
                                     type="password"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required={!editingUser}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F758D] focus:border-transparent transition-all"
-                                    placeholder={editingUser ? 'Deixe em branco para manter' : 'Mínimo 8 caracteres'}
+                                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-[1.5rem] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white text-xs font-bold shadow-inner"
+                                    placeholder={editingUser ? 'Manter senha atual' : '••••••••'}
                                 />
                                 <PasswordStrengthIndicator password={formData.password} />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">
-                                    Função
+                            <div className="space-y-4">
+                                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                                    Nível de Acesso
                                 </label>
-                                <select
-                                    value={formData.role}
-                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F758D] focus:border-transparent transition-all"
-                                >
-                                    <option value="VIEWER">Visualizador</option>
-                                    <option value="EDITOR">Editor</option>
-                                    <option value="ADMIN">Administrador</option>
-                                </select>
+                                <div className="relative">
+                                    <select
+                                        value={formData.role}
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                        className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-[1.5rem] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white text-xs font-bold shadow-inner appearance-none cursor-pointer"
+                                    >
+                                        <option value="VIEWER" className="bg-[#09090b] text-gray-400">Visualizador (Apenas Leitura)</option>
+                                        <option value="EDITOR" className="bg-[#09090b] text-white">Editor (Gerencia Conteúdo)</option>
+                                        <option value="ADMIN" className="bg-[#09090b] text-[#13ec5b]">Administrador (Acesso Total)</option>
+                                    </select>
+                                    <span className="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">expand_more</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex gap-3 pt-2">
+                        <div className="flex gap-4 pt-4 border-t border-white/5">
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="flex-1 px-6 py-3 bg-[#0F758D] text-white rounded-xl font-bold hover:bg-[#0d6378] transition-colors disabled:opacity-50"
+                                className="flex-1 px-8 py-4 bg-[#13ec5b] text-[#0d1b12] rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.02] transition-all shadow-xl shadow-[#13ec5b]/20 disabled:opacity-50 active:scale-[0.98]"
                             >
                                 {submitting ? 'Processando...' : editingUser ? 'Salvar Alterações' : 'Criar Usuário'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setShowCreateForm(false)
-                                    setEditingUser(null)
-                                    setFormData({ name: '', email: '', password: '', role: 'EDITOR' })
-                                }}
-                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition-colors"
-                            >
-                                Cancelar
                             </button>
                         </div>
                     </form>
                 </div>
             )}
 
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+            <div className="bg-[#09090b]/40 backdrop-blur-md rounded-[3rem] shadow-sm overflow-hidden border border-white/5">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
+                        <thead className="bg-white/5 border-b border-white/5">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-black text-gray-600 uppercase tracking-wider">
-                                    Nome / Email
+                                <th className="px-10 py-6 text-left text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                                    Usuário
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-black text-gray-600 uppercase tracking-wider">
+                                <th className="px-6 py-6 text-left text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
                                     Função
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-black text-gray-600 uppercase tracking-wider">
-                                    Criado em
+                                <th className="px-6 py-6 text-left text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                                    Data de Criação
                                 </th>
-                                <th className="px-6 py-4 text-right text-xs font-black text-gray-600 uppercase tracking-wider">
+                                <th className="px-10 py-6 text-right text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
                                     Ações
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200">
+                        <tbody className="divide-y divide-white/5">
                             {users.map((user) => (
-                                <tr key={user.id} className="hover:bg-gray-50 transition-colors group">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="font-bold text-gray-900">{user.name}</div>
-                                        <div className="text-sm text-gray-500">{user.email}</div>
+                                <tr key={user.id} className="hover:bg-white/[0.02] transition-colors group">
+                                    <td className="px-10 py-6 whitespace-nowrap">
+                                        <div className="flex items-center gap-4">
+                                            <div className="size-10 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-white font-black text-xs">
+                                                {user.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-white text-sm">{user.name}</div>
+                                                <div className="text-xs text-gray-500 font-mono mt-0.5">{user.email}</div>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black border uppercase tracking-wider ${getRoleBadgeColor(user.role)}`}>
+                                    <td className="px-6 py-6 whitespace-nowrap">
+                                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black border uppercase tracking-wider ${user.role === 'ADMIN'
+                                                ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                                : user.role === 'EDITOR'
+                                                    ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                                    : 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                                            }`}>
                                             {user.role}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                    <td className="px-6 py-6 whitespace-nowrap text-xs text-gray-500 font-bold uppercase tracking-wider">
                                         {new Date(user.createdAt).toLocaleDateString('pt-BR')}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                                    <td className="px-10 py-6 whitespace-nowrap text-right">
                                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                                 onClick={() => startEdit(user)}
-                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                className="size-10 flex items-center justify-center text-white bg-white/5 hover:bg-[#13ec5b] hover:text-[#0d1b12] rounded-xl transition-all shadow-lg hover:shadow-[#13ec5b]/20"
                                                 title="Editar"
                                             >
-                                                <span className="material-symbols-outlined text-[20px]">edit</span>
+                                                <span className="material-symbols-outlined text-[18px]">edit</span>
                                             </button>
                                             <button
                                                 onClick={() => setShowDeleteConfirm(user.id)}
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                className="size-10 flex items-center justify-center text-gray-400 bg-white/5 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-lg hover:shadow-red-500/20"
                                                 title="Excluir"
                                             >
-                                                <span className="material-symbols-outlined text-[20px]">delete</span>
+                                                <span className="material-symbols-outlined text-[18px]">delete</span>
                                             </button>
                                         </div>
                                     </td>
@@ -339,35 +352,39 @@ export default function UsersPage() {
                 </div>
 
                 {users.length === 0 && (
-                    <div className="text-center py-12">
-                        <span className="material-symbols-outlined text-4xl text-gray-300 mb-2">group_off</span>
-                        <p className="text-gray-500 font-medium">Nenhum usuário encontrado</p>
+                    <div className="text-center py-24">
+                        <div className="size-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span className="material-symbols-outlined text-4xl text-white/20">group_off</span>
+                        </div>
+                        <p className="text-gray-500 font-black uppercase tracking-widest text-xs">Nenhum usuário encontrado</p>
                     </div>
                 )}
             </div>
 
             {/* Modal de Confirmação de Exclusão */}
             {showDeleteConfirm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-[2rem] shadow-2xl p-8 max-w-sm w-full border border-gray-100 animate-in fade-in zoom-in duration-200">
-                        <div className="size-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-                            <span className="material-symbols-outlined text-3xl">warning</span>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-[#09090b] rounded-[2.5rem] shadow-2xl p-10 max-w-sm w-full border border-white/10 animate-in zoom-in-95 duration-200 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/20 blur-[50px] rounded-full -mr-16 -mt-16 pointer-events-none" />
+
+                        <div className="size-20 bg-red-500/10 text-red-500 rounded-3xl flex items-center justify-center mb-6 mx-auto border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+                            <span className="material-symbols-outlined text-4xl">warning</span>
                         </div>
-                        <h3 className="text-xl font-black text-gray-900 text-center mb-2">Excluir Usuário?</h3>
-                        <p className="text-gray-500 text-center mb-8 font-medium">
-                            Esta ação não pode ser desfeita. O usuário perderá o acesso imediatamente.
+                        <h3 className="text-xl font-black text-white text-center mb-2 uppercase tracking-wide">Excluir Usuário?</h3>
+                        <p className="text-gray-400 text-center mb-8 font-medium text-xs leading-relaxed px-4">
+                            Esta ação é irreversível. O usuário perderá o acesso ao painel imediatamente.
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex flex-col gap-3">
                             <button
                                 onClick={() => handleDelete(showDeleteConfirm)}
                                 disabled={submitting}
-                                className="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50"
+                                className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95"
                             >
-                                {submitting ? 'Excluindo...' : 'Sim, Excluir'}
+                                {submitting ? 'Excluindo...' : 'Confirmar Exclusão'}
                             </button>
                             <button
                                 onClick={() => setShowDeleteConfirm(null)}
-                                className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                                className="w-full py-4 bg-white/5 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
                             >
                                 Cancelar
                             </button>

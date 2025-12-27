@@ -28,9 +28,12 @@ export default async function SettingsPage() {
 
     if (!siteUser) {
         return (
-            <div className="p-10 text-center">
-                <h2 className="text-xl font-bold text-gray-900">Site não encontrado</h2>
-                <p className="text-gray-600 mt-2">Certifique-se de que sua conta está vinculada a um site.</p>
+            <div className="p-20 text-center">
+                <div className="size-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="material-symbols-outlined text-4xl text-white/20">domain_disabled</span>
+                </div>
+                <h2 className="text-xl font-black text-white uppercase tracking-[0.2em]">Site não encontrado</h2>
+                <p className="text-gray-500 font-bold mt-2 uppercase tracking-widest text-[10px]">Certifique-se de que sua conta está vinculada a um site.</p>
             </div>
         );
     }

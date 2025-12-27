@@ -76,9 +76,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
     return (
         <div className="space-y-12 max-w-5xl mx-auto w-full pb-24">
             {/* HEADER */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-b border-gray-100 dark:border-white/5 pb-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-b border-white/5 pb-10">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">
+                    <h1 className="text-3xl font-black text-white uppercase tracking-[0.2em]">
                         Configurações
                     </h1>
                     <p className="text-gray-400 font-bold mt-2 uppercase tracking-widest text-[10px]">
@@ -97,13 +97,13 @@ export default function SettingsForm({ site }: SettingsFormProps) {
 
             <div className="grid grid-cols-1 gap-12">
                 {/* SEO SECTION */}
-                <div className="bg-white dark:bg-[#183221]/40 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
-                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-5 bg-gray-50/30 dark:bg-white/5">
+                <div className="bg-[#09090b]/40 backdrop-blur-md rounded-[3rem] border border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                    <div className="p-8 border-b border-white/5 flex items-center gap-5 bg-white/5">
                         <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
                             <span className="material-symbols-outlined text-2xl">search</span>
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">SEO & Indexação</h3>
+                            <h3 className="text-sm font-black text-white uppercase tracking-widest">SEO & Indexação</h3>
                             <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Como o site aparece nos motores de busca.</p>
                         </div>
                     </div>
@@ -119,7 +119,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                 <input
                                     id="site-name"
                                     aria-label="Nome do Site"
-                                    className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
+                                    className="w-full bg-[#09090b]/50 border-white/5 border rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white shadow-inner placeholer:text-gray-600"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
@@ -134,7 +134,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                 <input
                                     id="custom-domain"
                                     aria-label="Domínio Customizado"
-                                    className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white font-mono"
+                                    className="w-full bg-[#09090b]/50 border-white/5 border rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none text-white font-mono shadow-inner"
                                     value={formData.domain}
                                     onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
                                     placeholder="exemplo.com.br"
@@ -152,7 +152,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                 id="meta-description"
                                 aria-label="Meta Description"
                                 rows={4}
-                                className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[2rem] px-6 py-5 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
+                                className="w-full bg-[#09090b]/50 border-white/5 border rounded-[2rem] px-6 py-5 text-xs font-medium focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all outline-none resize-none text-gray-300 leading-relaxed shadow-inner"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             />
@@ -161,13 +161,13 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                 </div>
 
                 {/* BRANDING SECTION */}
-                <div className="bg-white dark:bg-[#183221]/40 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
-                    <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center gap-5 bg-gray-50/30 dark:bg-white/5">
+                <div className="bg-[#09090b]/40 backdrop-blur-md rounded-[3rem] border border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                    <div className="p-8 border-b border-white/5 flex items-center gap-5 bg-white/5">
                         <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
                             <span className="material-symbols-outlined text-2xl">brush</span>
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Identidade Visual</h3>
+                            <h3 className="text-sm font-black text-white uppercase tracking-widest">Identidade Visual</h3>
                             <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Logos, favicons e imagens de compartilhamento.</p>
                         </div>
                     </div>
@@ -183,7 +183,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         setMediaTarget('favicon');
                                         setShowMediaPicker(true);
                                     }}
-                                    className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav"
+                                    className="size-32 mx-auto md:mx-0 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav"
                                 >
                                     {formData.favicon && formData.favicon.trim() ? (
                                         <>
@@ -201,7 +201,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         </>
                                     ) : (
                                         <div className="text-center">
-                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
+                                            <span className="material-symbols-outlined text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
                                         </div>
                                     )}
                                 </div>
@@ -220,7 +220,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         setMediaTarget('logo');
                                         setShowMediaPicker(true);
                                     }}
-                                    className="h-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logo"
+                                    className="h-32 mx-auto md:mx-0 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logo"
                                 >
                                     {formData.logo && formData.logo.trim() ? (
                                         <>
@@ -238,7 +238,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         </>
                                     ) : (
                                         <div className="text-center">
-                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
+                                            <span className="material-symbols-outlined text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
                                         </div>
                                     )}
                                 </div>
@@ -257,7 +257,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         setMediaTarget('ogImage');
                                         setShowMediaPicker(true);
                                     }}
-                                    className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/og"
+                                    className="aspect-[1.91/1] w-full bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/og"
                                 >
                                     {formData.ogImage && formData.ogImage.trim() ? (
                                         <>
@@ -275,7 +275,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                         </>
                                     ) : (
                                         <div className="text-center">
-                                            <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">share</span>
+                                            <span className="material-symbols-outlined text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">share</span>
                                         </div>
                                     )}
                                 </div>
