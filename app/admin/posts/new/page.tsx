@@ -6,6 +6,7 @@ import RichTextEditor from '@/components/admin/RichTextEditor'
 import { MediaPicker } from '@/components/admin/MediaPicker'
 import { slugify } from '@/lib/utils'
 import Link from 'next/link'
+import { SEOHealthCheck } from '@/components/admin/SEOHealthCheck'
 
 interface Category {
     id: string;
@@ -221,24 +222,14 @@ export default function NewPostPage() {
                             />
                         </div>
 
-                        <div className="pt-10 border-t border-gray-100 dark:border-white/5 space-y-6">
-                            <div className="flex items-center justify-center gap-3">
-                                <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Health Score</span>
-                                <div className="flex-1 h-1 bg-gray-50 dark:bg-white/5 rounded-full overflow-hidden">
-                                    <div className="w-3/4 h-full bg-[#13ec5b] rounded-full" />
-                                </div>
-                            </div>
-                            <div className="flex justify-center gap-4">
-                                <div aria-label="SEO Otimizado" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-[#13ec5b] shadow-sm border border-gray-100 dark:border-white/5">
-                                    <span className="material-symbols-outlined text-lg">check_circle</span>
-                                </div>
-                                <div aria-label="Meta tags prontas" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-blue-400 shadow-sm border border-gray-100 dark:border-white/5">
-                                    <span className="material-symbols-outlined text-lg">alternate_email</span>
-                                </div>
-                                <div aria-label="Preview disponível" className="size-11 rounded-2xl bg-[#f8faf8] dark:bg-black/20 flex items-center justify-center text-purple-400 shadow-sm border border-gray-100 dark:border-white/5">
-                                    <span className="material-symbols-outlined text-lg">visibility</span>
-                                </div>
-                            </div>
+                        <div className="pt-10 border-t border-gray-100 dark:border-white/5">
+                            <SEOHealthCheck
+                                title={formData.title}
+                                content={formData.content}
+                                excerpt={formData.excerpt}
+                                image={formData.image}
+                                slug={formData.slug}
+                            />
                         </div>
                     </div>
 
