@@ -11,6 +11,7 @@ import {
     CategoriesWidget,
     TagsWidget,
 } from "@/components/blog";
+import { RichText } from "@/components/ui/RichText";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +60,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": post.title,
-        "image": post.featuredImage || "https://renovamente-guiomarmelo.com.br/og-image.jpg",
+        "image": post.image || "https://renovamente-guiomarmelo.com.br/og-image.jpg",
         "datePublished": post.publishedAt?.toISOString(),
         "dateModified": post.updatedAt.toISOString(),
         "author": [{
@@ -134,17 +135,17 @@ export default async function BlogPostPage({ params }: PageProps) {
                             </header>
 
                             {/* Featured Image */}
-                            {post.featuredImage && (
+                            {post.image && (
                                 <div
                                     className="w-full h-64 md:h-96 bg-cover bg-center rounded-lg mb-8"
-                                    style={{ backgroundImage: `url("${post.featuredImage}")` }}
+                                    style={{ backgroundImage: `url("${post.image}")` }}
                                 ></div>
                             )}
 
                             {/* Content */}
-                            <div
-                                className="prose prose-lg max-w-none prose-headings:text-text-main dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-a:text-primary hover:prose-a:text-primary-dark prose-strong:text-text-main dark:prose-strong:text-white"
-                                dangerouslySetInnerHTML={{ __html: post.content }}
+                            <RichText
+                                content={post.content}
+                                className="prose-lg prose-headings:text-text-main dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-a:text-primary hover:prose-a:text-primary-dark prose-strong:text-text-main dark:prose-strong:text-white"
                             />
                         </article>
                     </main>

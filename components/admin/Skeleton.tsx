@@ -7,7 +7,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className = "", variant = "rect", style }: SkeletonProps) {
-    const baseClass = "animate-pulse bg-gray-200 dark:bg-white/5";
+    const baseClass = "relative overflow-hidden bg-gray-100 dark:bg-white/5";
     const variantClass = {
         rect: "rounded-2xl",
         circle: "rounded-full",
@@ -19,7 +19,9 @@ export function Skeleton({ className = "", variant = "rect", style }: SkeletonPr
             className={`${baseClass} ${variantClass} ${className}`}
             aria-hidden="true"
             style={style}
-        />
+        >
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+        </div>
     );
 }
 

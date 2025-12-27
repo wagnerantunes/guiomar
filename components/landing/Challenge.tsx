@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface ChallengeProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -18,9 +18,10 @@ export function Challenge({ getSetting }: ChallengeProps) {
                     <h2 className="text-4xl md:text-5xl font-black leading-tight">
                         {content.title}
                     </h2>
-                    <p className="text-xl text-gray-400 font-medium leading-relaxed">
-                        {content.description}
-                    </p>
+                    <RichText
+                        content={content.description}
+                        className="text-xl text-gray-400 font-medium leading-relaxed prose-invert"
+                    />
                     <div className="h-1.5 w-24 bg-[var(--color-primary)] rounded-full"></div>
                 </div>
                 <div className="lg:col-span-4">

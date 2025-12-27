@@ -17,6 +17,7 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
+import { RichText } from "@/components/ui/RichText";
 
 interface BlogPost {
   id: string;
@@ -219,9 +220,10 @@ function HomePageContent() {
                 <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
                   {selectedPost.date}
                 </p>
-                <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed font-medium">
-                  {selectedPost.content}
-                </div>
+                <RichText
+                  content={selectedPost.content || ""}
+                  className="prose-lg text-gray-600 leading-relaxed font-medium"
+                />
               </div>
             </div>
           </article>

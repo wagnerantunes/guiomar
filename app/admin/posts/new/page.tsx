@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import RichTextEditor from '@/components/admin/RichTextEditor'
+import { MediaPicker } from '@/components/admin/MediaPicker'
 import { slugify } from '@/lib/utils'
 import Link from 'next/link'
 
@@ -15,11 +16,13 @@ export default function NewPostPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState<Category[]>([])
+    const [showMediaPicker, setShowMediaPicker] = useState(false)
     const [formData, setFormData] = useState({
         title: '',
         slug: '',
         content: '',
         excerpt: '',
+        image: '',
         categoryId: '',
         status: 'DRAFT' as 'DRAFT' | 'PUBLISHED'
     })
@@ -238,8 +241,60 @@ export default function NewPostPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Featured Image */}
+                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-6">
+                        <div className="flex items-center gap-3">
+                            <div className="size-8 rounded-lg bg-green-50 dark:bg-green-500/10 text-[#13ec5b] flex items-center justify-center">
+                                <span className="material-symbols-outlined text-sm">image</span>
+                            </div>
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Imagem de Destaque</label>
+                        </div>
+
+                        {formData.image ? (
+                            <div className="relative group aspect-video rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-black/20">
+                                <img src={formData.image} alt="Preview" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                    <button
+                                        onClick={() => setShowMediaPicker(true)}
+                                        className="p-3 bg-white text-[#0d1b12] rounded-full hover:scale-110 transition-all"
+                                    >
+                                        <span className="material-symbols-outlined">sync</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                                        className="p-3 bg-white text-red-500 rounded-full hover:scale-110 transition-all"
+                                    >
+                                        <span className="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => setShowMediaPicker(true)}
+                                className="w-full aspect-video rounded-3xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-3 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all group"
+                            >
+                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span className="material-symbols-outlined text-2xl">add_a_photo</span>
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest">Selecionar Imagem</span>
+                            </button>
+                        )}
+                        <p className="text-[9px] text-gray-400 font-medium text-center px-4 uppercase tracking-tighter">
+                            Recomendado: 1200x630px para redes sociais.
+                        </p>
+                    </div>
                 </div>
             </div>
+
+            <MediaPicker
+                isOpen={showMediaPicker}
+                onClose={() => setShowMediaPicker(false)}
+                onSelect={(url) => {
+                    setFormData(prev => ({ ...prev, image: url }));
+                    setShowMediaPicker(false);
+                }}
+            />
         </div>
     )
 }

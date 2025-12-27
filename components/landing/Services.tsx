@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -55,7 +56,7 @@ export function Services({ getSetting }: ServicesProps) {
                             <h3 className="text-xl font-black text-[#0d1b12] mb-4">
                                 {s.t}
                             </h3>
-                            <p className="text-sm text-gray-500 leading-relaxed">{s.d}</p>
+                            <RichText content={s.d} className="text-sm text-gray-500 leading-relaxed prose-p:text-sm" />
                         </motion.div>
                     ))}
                 </motion.div>

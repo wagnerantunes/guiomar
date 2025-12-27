@@ -17,9 +17,9 @@ CREATE DATABASE renovamente_cms;
 Crie um arquivo `.env` na raiz do projeto com:
 ```env
 DATABASE_URL="postgresql://seu_usuario:sua_senha@localhost:5432/renovamente_cms?schema=public"
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_URL="http://localhost:3001"
 NEXTAUTH_SECRET="qualquer-string-secreta-aqui"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3001"
 ```
 
 **Importante**: Substitua `seu_usuario` e `sua_senha` pelas suas credenciais do PostgreSQL.
@@ -37,9 +37,9 @@ npm run dev
 ```
 
 ### 4. Acesse o sistema
-- **Homepage**: http://localhost:3000
-- **Blog**: http://localhost:3000/blog
-- **Login Admin**: http://localhost:3000/login
+- **Homepage**: http://localhost:3001
+- **Blog**: http://localhost:3001/blog
+- **Login Admin**: http://localhost:3001/login
   - Email: `admin@renovamente.com`
   - Senha: `admin123`
 
@@ -145,7 +145,7 @@ server {
     server_name renovamente-guiomarmelo.com.br;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3001;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -239,8 +239,8 @@ sudo systemctl restart postgresql
 # Ver logs detalhados
 pm2 logs renovamente-cms --lines 100
 
-# Verificar porta 3000
-sudo netstat -tulpn | grep 3000
+# Verificar porta 3001
+sudo netstat -tulpn | grep 3001
 
 # Rebuild
 npm run build

@@ -7,7 +7,7 @@ export async function GET() {
     if (!session?.user?.id) {
         // For public landing page access, we need a way to fetch settings
         // Usually by domain or site slug.
-        const url = new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+        const url = new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001");
         const domain = url.hostname;
 
         try {

@@ -12,7 +12,7 @@ export function BlogCard({ post }: BlogCardProps) {
             <div
                 className="h-48 w-full bg-cover bg-center"
                 style={{
-                    backgroundImage: `url("${post.featuredImage || "/placeholder.jpg"}")`,
+                    backgroundImage: `url("${post.image || "/placeholder.jpg"}")`,
                 }}
             ></div>
             <div className="p-5 flex flex-col flex-1">

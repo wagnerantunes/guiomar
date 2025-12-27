@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface WhyUsProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
-export function WhyUs({ getSetting }: { getSetting: any }) {
+export function WhyUs({ getSetting }: WhyUsProps) {
     const content = getSetting("section_porque_content", SECTION_DEFAULTS.porque);
 
     return (
@@ -28,9 +28,7 @@ export function WhyUs({ getSetting }: { getSetting: any }) {
                             <h3 className="text-lg font-black text-[var(--color-text-main)] mb-3">
                                 {item.t}
                             </h3>
-                            <p className="text-gray-500 text-sm font-medium leading-relaxed">
-                                {item.d}
-                            </p>
+                            <RichText content={item.d} className="text-gray-500 text-sm font-medium leading-relaxed prose-p:text-sm" />
                         </div>
                     ))}
                 </div>

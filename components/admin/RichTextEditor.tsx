@@ -16,13 +16,19 @@ import {
     ImageIcon,
     Link as LinkIcon
 } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { MediaPicker } from './MediaPicker'
 
 interface RichTextEditorProps {
     content: string
     onChange: (content: string) => void
+    minHeight?: string
 }
 
-export default function RichTextEditor({ content, onChange }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange, minHeight = "500px" }: RichTextEditorProps) {
+    const fileInputRef = useRef<HTMLInputElement>(null)
+    const [isUploading, setIsUploading] = useState(false)
+    const [showMediaPicker, setShowMediaPicker] = useState(false)
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -49,6 +55,35 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         const url = window.prompt('URL da imagem:')
         if (url) {
             editor.chain().focus().setImage({ src: url }).run()
+        }
+    }
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file || !editor) return
+
+        setIsUploading(true)
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            const res = await fetch('/api/media', {
+                method: 'POST',
+                body: formData,
+            })
+
+            if (res.ok) {
+                const data = await res.json()
+                editor.chain().focus().setImage({ src: data.url, alt: file.name }).run()
+            } else {
+                alert('Erro ao fazer upload da imagem')
+            }
+        } catch (error) {
+            console.error('Upload error:', error)
+            alert('Falha na conexão ao subir imagem')
+        } finally {
+            setIsUploading(false)
+            if (fileInputRef.current) fileInputRef.current.value = ''
         }
     }
 
@@ -135,13 +170,37 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 <div className="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2" />
 
                 <div className="flex items-center gap-1">
-                    <ToolbarButton onClick={addImage} title="Inserir Imagem">
-                        <ImageIcon size={18} strokeWidth={2.5} />
+                    <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Upload Imagem">
+                        {isUploading ? (
+                            <div className="size-4 border-2 border-[#0d1b12] border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <ImageIcon size={18} strokeWidth={2.5} />
+                        )}
+                    </ToolbarButton>
+                    <ToolbarButton onClick={() => setShowMediaPicker(true)} title="Biblioteca de Mídia">
+                        <span className="material-symbols-outlined text-lg">photo_library</span>
                     </ToolbarButton>
                     <ToolbarButton onClick={addLink} isActive={editor.isActive('link')} title="Inserir Link">
                         <LinkIcon size={18} strokeWidth={2.5} />
                     </ToolbarButton>
                 </div>
+
+                <MediaPicker
+                    isOpen={showMediaPicker}
+                    onClose={() => setShowMediaPicker(false)}
+                    onSelect={(url) => {
+                        editor.chain().focus().setImage({ src: url }).run()
+                        setShowMediaPicker(false)
+                    }}
+                />
+
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                />
 
                 <div className="flex-1" />
 
@@ -156,7 +215,10 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
             </div>
 
             {/* Editor Content Area */}
-            <div className="p-8 md:p-12 min-h-[500px] cursor-text bg-white dark:bg-[#102216]">
+            <div
+                className="p-8 md:p-12 cursor-text bg-white dark:bg-[#102216]"
+                style={{ minHeight }}
+            >
                 <EditorContent
                     editor={editor}
                     className="prose prose-lg max-w-none focus:outline-none dark:prose-invert 

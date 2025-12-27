@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/components/admin/Toast";
+import { MediaPicker } from "@/components/admin/MediaPicker";
 
 interface SettingsFormProps {
     site: {
@@ -20,7 +21,8 @@ interface SettingsFormProps {
 
 export default function SettingsForm({ site }: SettingsFormProps) {
     const [saving, setSaving] = useState(false);
-    const [uploading, setUploading] = useState<string | null>(null);
+    const [showMediaPicker, setShowMediaPicker] = useState(false);
+    const [mediaTarget, setMediaTarget] = useState<string | null>(null);
     const { toast } = useToast();
     const [formData, setFormData] = useState({
         name: site.name,
@@ -34,52 +36,14 @@ export default function SettingsForm({ site }: SettingsFormProps) {
         ogImage: site.ogImage || "",
     });
 
-    const handleImageUpload = async (file: File, field: 'favicon' | 'logo' | 'logoDark' | 'logoLight' | 'logoAdmin' | 'ogImage') => {
-        setUploading(field);
-        const formDataUpload = new FormData();
-        formDataUpload.append("file", file);
-
-        try {
-            const res = await fetch("/api/media", {
-                method: "POST",
-                body: formDataUpload,
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setFormData(prev => ({ ...prev, [field]: data.url }));
-
-                const fieldNames: Record<typeof field, string> = {
-                    favicon: 'Favicon',
-                    logo: 'Logo Principal',
-                    logoDark: 'Logo Dark',
-                    logoLight: 'Logo Light',
-                    logoAdmin: 'Logo Admin',
-                    ogImage: 'OG Image'
-                };
-
-                toast({
-                    title: "Upload Concluído",
-                    description: `${fieldNames[field]} atualizado com sucesso.`,
-                    type: "success"
-                });
-            } else {
-                toast({
-                    title: "Erro no Upload",
-                    description: "Não foi possível processar a imagem.",
-                    type: "error"
-                });
-            }
-        } catch (error) {
-            toast({
-                title: "Erro de Conexão",
-                description: "Falha ao enviar imagem para o servidor.",
-                type: "error"
-            });
-        } finally {
-            setUploading(null);
+    const onSelectMedia = (url: string) => {
+        if (mediaTarget) {
+            setFormData(prev => ({ ...prev, [mediaTarget]: url }));
+            setShowMediaPicker(false);
+            setMediaTarget(null);
         }
     };
+
 
     const handleSave = async () => {
         setSaving(true);
@@ -215,7 +179,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('favicon-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('favicon');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="size-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/fav"
                                 >
                                     {formData.favicon && formData.favicon.trim() ? (
@@ -235,21 +202,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">circle</span>
-                                            {uploading === 'favicon' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="favicon-upload"
-                                    type="file"
-                                    accept="image/png,image/x-icon,image/svg+xml"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'favicon');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">PNG, ICO ou SVG (32x32px)</p>
                         </div>
@@ -261,7 +216,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('logo-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('logo');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="h-32 mx-auto md:mx-0 bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logo"
                                 >
                                     {formData.logo && formData.logo.trim() ? (
@@ -281,21 +239,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
-                                            {uploading === 'logo' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="logo-upload"
-                                    type="file"
-                                    accept="image/png,image/svg+xml,image/jpeg"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'logo');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Header/Footer)</p>
                         </div>
@@ -307,7 +253,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('og-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('ogImage');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="aspect-[1.91/1] w-full bg-gray-50/50 dark:bg-white/5 border-2 border-dashed border-gray-100 dark:border-white/10 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/og"
                                 >
                                     {formData.ogImage && formData.ogImage.trim() ? (
@@ -327,21 +276,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-gray-200 dark:text-white/10 text-5xl group-hover:text-[#13ec5b] transition-colors">share</span>
-                                            {uploading === 'ogImage' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="og-upload"
-                                    type="file"
-                                    accept="image/png,image/jpeg,image/jpg"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'ogImage');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">JPG ou PNG (1200x630px)</p>
                         </div>
@@ -353,7 +290,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('logo-dark-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('logoDark');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="h-32 mx-auto md:mx-0 bg-gray-800 border-2 border-dashed border-gray-700 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logodark"
                                 >
                                     {formData.logoDark && formData.logoDark.trim() ? (
@@ -373,21 +313,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-gray-600 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
-                                            {uploading === 'logoDark' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="logo-dark-upload"
-                                    type="file"
-                                    accept="image/png,image/svg+xml,image/jpeg"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'logoDark');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Footer)</p>
                         </div>
@@ -399,7 +327,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('logo-light-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('logoLight');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="h-32 mx-auto md:mx-0 bg-white border-2 border-dashed border-gray-200 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logolight"
                                 >
                                     {formData.logoLight && formData.logoLight.trim() ? (
@@ -419,21 +350,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-gray-200 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
-                                            {uploading === 'logoLight' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="logo-light-upload"
-                                    type="file"
-                                    accept="image/png,image/svg+xml,image/jpeg"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'logoLight');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Header)</p>
                         </div>
@@ -445,7 +364,10 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             </label>
                             <div className="relative">
                                 <div
-                                    onClick={() => document.getElementById('logo-admin-upload')?.click()}
+                                    onClick={() => {
+                                        setMediaTarget('logoAdmin');
+                                        setShowMediaPicker(true);
+                                    }}
                                     className="h-32 mx-auto md:mx-0 bg-[#0d1b12] border-2 border-dashed border-[#13ec5b]/20 rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:border-[#13ec5b]/50 transition-all group relative overflow-hidden group/logoadmin"
                                 >
                                     {formData.logoAdmin && formData.logoAdmin.trim() ? (
@@ -465,21 +387,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     ) : (
                                         <div className="text-center">
                                             <span className="material-symbols-outlined text-[#13ec5b]/30 text-5xl group-hover:text-[#13ec5b] transition-colors">image</span>
-                                            {uploading === 'logoAdmin' && <p className="text-[8px] text-[#13ec5b] mt-2 font-bold">Uploading...</p>}
                                         </div>
                                     )}
                                 </div>
-                                <input
-                                    id="logo-admin-upload"
-                                    type="file"
-                                    accept="image/png,image/svg+xml,image/jpeg"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, 'logoAdmin');
-                                        e.target.value = '';
-                                    }}
-                                />
                             </div>
                             <p className="text-[8px] text-gray-400 text-center md:text-left">SVG ou PNG (Sidebar)</p>
                         </div>
@@ -509,6 +419,17 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                     </div>
                 </div>
             </div>
+
+            <MediaPicker
+                isOpen={showMediaPicker}
+                onClose={() => {
+                    setShowMediaPicker(false);
+                    setMediaTarget(null);
+                }}
+                onSelect={onSelectMedia}
+                title="SelecioneAsset"
+                subtitle="Dica: Formatos SVG são melhores para logos"
+            />
         </div>
     );
 }

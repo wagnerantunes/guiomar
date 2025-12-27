@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/admin/Toast";
 import { Skeleton } from "@/components/admin/Skeleton";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { MediaPicker } from "@/components/admin/MediaPicker";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 interface Section {
     id: string;
@@ -33,8 +35,7 @@ export default function PageSections() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [showMediaPicker, setShowMediaPicker] = useState(false);
-    const [mediaLibrary, setMediaLibrary] = useState<any[]>([]);
-    const [mediaPickerTarget, setMediaPickerTarget] = useState<{ secId: string } | null>(null);
+    const [mediaPickerTarget, setMediaPickerTarget] = useState<{ secId: string, fieldName?: string } | null>(null);
     const { toast } = useToast();
 
     useEffect(() => {
@@ -133,90 +134,6 @@ export default function PageSections() {
         }
     };
 
-    const handleImageUpload = async (secId: string, file: File) => {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const res = await fetch("/api/media", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                // Add to images array instead of replacing
-                setSections(prev => prev.map(sec => {
-                    if (sec.id === secId) {
-                        const currentImages = sec.content?.images || [];
-                        return { ...sec, content: { ...sec.content, images: [...currentImages, data.url] } };
-                    }
-                    return sec;
-                }));
-                toast({
-                    title: "Upload Concluído",
-                    description: "A imagem foi adicionada ao slider.",
-                    type: "success"
-                });
-                // Refresh media library
-                fetchMediaLibrary();
-            } else {
-                toast({
-                    title: "Erro no Upload",
-                    description: "Não foi possível processar a imagem.",
-                    type: "error"
-                });
-            }
-        } catch (error) {
-            toast({
-                title: "Erro de Conexão",
-                description: "Falha ao enviar imagem para o servidor.",
-                type: "error"
-            });
-        }
-    };
-
-    const handleSingleImageUpload = async (secId: string, file: File, fieldName: string = "image") => {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const res = await fetch("/api/media", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                // Set single image field
-                setSections(prev => prev.map(sec => {
-                    if (sec.id === secId) {
-                        return { ...sec, content: { ...sec.content, [fieldName]: data.url } };
-                    }
-                    return sec;
-                }));
-                toast({
-                    title: "Upload Concluído",
-                    description: "A imagem foi atualizada com sucesso.",
-                    type: "success"
-                });
-                // Refresh media library
-                fetchMediaLibrary();
-            } else {
-                toast({
-                    title: "Erro no Upload",
-                    description: "Não foi possível processar a imagem.",
-                    type: "error"
-                });
-            }
-        } catch (error) {
-            toast({
-                title: "Erro de Conexão",
-                description: "Falha ao enviar imagem para o servidor.",
-                type: "error"
-            });
-        }
-    };
 
     const removeImageFromSlider = (secId: string, index: number) => {
         setSections(prev => prev.map(sec => {
@@ -233,22 +150,15 @@ export default function PageSections() {
         });
     };
 
-    const fetchMediaLibrary = async () => {
-        try {
-            const res = await fetch("/api/media");
-            if (res.ok) {
-                const data = await res.json();
-                setMediaLibrary(data);
-            }
-        } catch (error) {
-            console.error("Error fetching media:", error);
-        }
-    };
-
     const selectFromMediaLibrary = (url: string) => {
         if (mediaPickerTarget) {
             setSections(prev => prev.map(sec => {
                 if (sec.id === mediaPickerTarget.secId) {
+                    // If fieldName is provided, it's a single image upload
+                    if (mediaPickerTarget.fieldName) {
+                        return { ...sec, content: { ...sec.content, [mediaPickerTarget.fieldName]: url } };
+                    }
+                    // Otherwise it's a slider (images array)
                     const currentImages = sec.content?.images || [];
                     return { ...sec, content: { ...sec.content, images: [...currentImages, url] } };
                 }
@@ -258,7 +168,7 @@ export default function PageSections() {
             setMediaPickerTarget(null);
             toast({
                 title: "Imagem Adicionada",
-                description: "A imagem foi adicionada ao slider.",
+                description: "A imagem foi vinculada com sucesso.",
                 type: "success"
             });
         }
@@ -396,13 +306,12 @@ export default function PageSections() {
                                                                             onChange={(e) => handleContentChange(sec.id, "subtitle", e.target.value)}
                                                                         />
                                                                     </div>
-                                                                    <div className="space-y-2">
-                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Body Text</label>
-                                                                        <textarea
-                                                                            rows={3}
-                                                                            className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none resize-none text-gray-600 dark:text-gray-300 leading-relaxed"
-                                                                            value={sec.content?.description || ""}
-                                                                            onChange={(e) => handleContentChange(sec.id, "description", e.target.value)}
+                                                                    <div className="space-y-4">
+                                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Texto Principal (HTML)</label>
+                                                                        <RichTextEditor
+                                                                            content={sec.content?.description || ""}
+                                                                            onChange={(val) => handleContentChange(sec.id, "description", val)}
+                                                                            minHeight="200px"
                                                                         />
                                                                     </div>
                                                                     {/* IMAGE SLIDER UI */}
@@ -414,19 +323,11 @@ export default function PageSections() {
                                                                                     onClick={() => {
                                                                                         setMediaPickerTarget({ secId: sec.id });
                                                                                         setShowMediaPicker(true);
-                                                                                        fetchMediaLibrary();
                                                                                     }}
-                                                                                    className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1 hover:underline"
+                                                                                    className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1 hover:underline px-3 py-1 bg-[#13ec5b]/5 rounded-lg"
                                                                                 >
                                                                                     <span className="material-symbols-outlined text-sm">photo_library</span>
-                                                                                    Biblioteca
-                                                                                </button>
-                                                                                <button
-                                                                                    onClick={() => document.getElementById(`upload-${sec.id}`)?.click()}
-                                                                                    className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest flex items-center gap-1 hover:underline"
-                                                                                >
-                                                                                    <span className="material-symbols-outlined text-sm">add_a_photo</span>
-                                                                                    Upload
+                                                                                    Adicionar Imagem
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -446,23 +347,15 @@ export default function PageSections() {
                                                                                 </div>
                                                                             ))}
                                                                             <div
-                                                                                onClick={() => document.getElementById(`upload-${sec.id}`)?.click()}
+                                                                                onClick={() => {
+                                                                                    setMediaPickerTarget({ secId: sec.id });
+                                                                                    setShowMediaPicker(true);
+                                                                                }}
                                                                                 className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
                                                                             >
-                                                                                <span className="material-symbols-outlined text-2xl">add_a_photo</span>
-                                                                                <span className="text-[8px] font-bold">Upload</span>
+                                                                                <span className="material-symbols-outlined text-2xl">photo_library</span>
+                                                                                <span className="text-[8px] font-bold">Mídia</span>
                                                                             </div>
-                                                                            <input
-                                                                                id={`upload-${sec.id}`}
-                                                                                type="file"
-                                                                                className="hidden"
-                                                                                accept="image/*"
-                                                                                onChange={(e) => {
-                                                                                    const file = e.target.files?.[0];
-                                                                                    if (file) handleImageUpload(sec.id, file);
-                                                                                    e.target.value = '';
-                                                                                }}
-                                                                            />
                                                                         </div>
                                                                     </div>
                                                                 </>
@@ -502,23 +395,15 @@ export default function PageSections() {
                                                                                 </div>
                                                                             )}
                                                                             <div
-                                                                                onClick={() => document.getElementById(`upload-guiomar-image`)?.click()}
+                                                                                onClick={() => {
+                                                                                    setMediaPickerTarget({ secId: sec.id, fieldName: "image" });
+                                                                                    setShowMediaPicker(true);
+                                                                                }}
                                                                                 className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
                                                                             >
-                                                                                <span className="material-symbols-outlined text-2xl">add_a_photo</span>
-                                                                                <span className="text-[8px] font-bold">Upload</span>
+                                                                                <span className="material-symbols-outlined text-2xl">photo_library</span>
+                                                                                <span className="text-[8px] font-bold">Mídia</span>
                                                                             </div>
-                                                                            <input
-                                                                                id="upload-guiomar-image"
-                                                                                type="file"
-                                                                                className="hidden"
-                                                                                accept="image/*"
-                                                                                onChange={(e) => {
-                                                                                    const file = e.target.files?.[0];
-                                                                                    if (file) handleSingleImageUpload(sec.id, file, "image");
-                                                                                    e.target.value = '';
-                                                                                }}
-                                                                            />
                                                                         </div>
                                                                     </div>
                                                                     <div className="grid grid-cols-2 gap-4">
@@ -537,7 +422,10 @@ export default function PageSections() {
                                                             {sec.id !== "hero" && (
                                                                 <div className="space-y-2">
                                                                     <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Descrição</label>
-                                                                    <textarea rows={4} className="w-full bg-gray-50 dark:bg-white/5 border-transparent rounded-2xl px-6 py-4 text-xs font-medium transition-all outline-none resize-none" value={sec.content?.description || ""} onChange={(e) => handleContentChange(sec.id, "description", e.target.value)} />
+                                                                    <RichTextEditor
+                                                                        content={sec.content?.description || ""}
+                                                                        onChange={(val) => handleContentChange(sec.id, "description", val)}
+                                                                    />
                                                                 </div>
                                                             )}
 
@@ -546,16 +434,23 @@ export default function PageSections() {
                                                                 <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
                                                                     <div className="flex items-center justify-between">
                                                                         <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Service Cards</h4>
-                                                                        <button onClick={() => addItemToArray(sec.id, "items", { t: "Novo", d: "...", icon: "verified" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Card</button>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { t: "Novo Serviço", d: "<p>Descrição do serviço...</p>", icon: "verified" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Card</button>
                                                                     </div>
                                                                     <div className="grid grid-cols-1 gap-3">
                                                                         {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center gap-4 group/item">
-                                                                                <div className="flex-1">
-                                                                                    <input className="w-full bg-transparent border-none p-0 text-xs font-black outline-none" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
-                                                                                    <input className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none" value={item.d} onChange={(e) => handleArrayChange(sec.id, "items", idx, "d", e.target.value)} />
+                                                                            <div key={idx} className="p-6 bg-gray-50 dark:bg-white/5 rounded-[2rem] flex flex-col gap-4 group/item">
+                                                                                <div className="flex items-center justify-between">
+                                                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Card #{idx + 1}</label>
+                                                                                    <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
                                                                                 </div>
-                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 opacity-0 group-hover/item:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
+                                                                                <div className="space-y-3">
+                                                                                    <input className="w-full bg-white dark:bg-[#102216] border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                                    <RichTextEditor
+                                                                                        content={item.d}
+                                                                                        onChange={(val) => handleArrayChange(sec.id, "items", idx, "d", val)}
+                                                                                        minHeight="100px"
+                                                                                    />
+                                                                                </div>
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -566,14 +461,20 @@ export default function PageSections() {
                                                                 <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
                                                                     <div className="flex items-center justify-between">
                                                                         <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Client Testimonials</h4>
-                                                                        <button onClick={() => addItemToArray(sec.id, "items", { name: "Cliente", role: "...", quote: "...", image: "" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Review</button>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { name: "Novo Cliente", role: "Cargo/Empresa", quote: "<p>O depoimento aqui...</p>", image: "" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Review</button>
                                                                     </div>
                                                                     <div className="space-y-3">
                                                                         {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex flex-col gap-2 group/testi relative">
-                                                                                <input className="bg-transparent border-none p-0 text-xs font-black outline-none" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
-                                                                                <textarea rows={2} className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none resize-none" value={item.quote} onChange={(e) => handleArrayChange(sec.id, "items", idx, "quote", e.target.value)} />
-                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-4 right-4 text-gray-300 hover:text-red-500 opacity-0 group-hover/testi:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                            <div key={idx} className="p-6 bg-gray-50 dark:bg-white/5 rounded-[2rem] flex flex-col gap-4 group/testi relative">
+                                                                                <div className="flex items-center justify-between">
+                                                                                    <input className="bg-white dark:bg-[#102216] border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Nome do Cliente" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
+                                                                                    <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                                </div>
+                                                                                <RichTextEditor
+                                                                                    content={item.quote}
+                                                                                    onChange={(val) => handleArrayChange(sec.id, "items", idx, "quote", val)}
+                                                                                    minHeight="100px"
+                                                                                />
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -584,16 +485,23 @@ export default function PageSections() {
                                                                 <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
                                                                     <div className="flex items-center justify-between">
                                                                         <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Methodology Steps</h4>
-                                                                        <button onClick={() => addItemToArray(sec.id, "steps", { t: "Novo Passo", d: "..." })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Step</button>
+                                                                        <button onClick={() => addItemToArray(sec.id, "steps", { t: "Novo Passo", d: "<p>Descreva o passo...</p>" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Step</button>
                                                                     </div>
                                                                     <div className="space-y-3">
                                                                         {(sec.content?.steps || []).map((step: any, idx: number) => (
-                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center gap-4 group/step">
-                                                                                <div className="flex-1">
-                                                                                    <input className="w-full bg-transparent border-none p-0 text-xs font-black outline-none" value={step.t} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "t", e.target.value)} />
-                                                                                    <input className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none" value={step.d} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "d", e.target.value)} />
+                                                                            <div key={idx} className="p-6 bg-gray-50 dark:bg-white/5 rounded-[2rem] flex flex-col gap-4 group/step">
+                                                                                <div className="flex items-center justify-between">
+                                                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Passo #{idx + 1}</label>
+                                                                                    <button onClick={() => removeItemFromArray(sec.id, "steps", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
                                                                                 </div>
-                                                                                <button onClick={() => removeItemFromArray(sec.id, "steps", idx)} className="text-gray-300 hover:text-red-500 opacity-0 group-hover/step:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
+                                                                                <div className="space-y-3">
+                                                                                    <input className="w-full bg-white dark:bg-[#102216] border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título do Passo" value={step.t} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "t", e.target.value)} />
+                                                                                    <RichTextEditor
+                                                                                        content={step.d}
+                                                                                        onChange={(val) => handleArrayChange(sec.id, "steps", idx, "d", val)}
+                                                                                        minHeight="80px"
+                                                                                    />
+                                                                                </div>
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -604,14 +512,20 @@ export default function PageSections() {
                                                                 <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
                                                                     <div className="flex items-center justify-between">
                                                                         <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">FAQ Items</h4>
-                                                                        <button onClick={() => addItemToArray(sec.id, "items", { q: "Nova Pergunta", r: "..." })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Q&A</button>
+                                                                        <button onClick={() => addItemToArray(sec.id, "items", { q: "Nova Pergunta", r: "<p>Resposta detalhada aqui...</p>" })} className="text-[10px] font-black text-[#13ec5b] uppercase">+ Add Q&A</button>
                                                                     </div>
                                                                     <div className="space-y-3">
                                                                         {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                                            <div key={idx} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex flex-col gap-2 group/faq relative">
-                                                                                <input className="bg-transparent border-none p-0 text-xs font-black outline-none" value={item.q} onChange={(e) => handleArrayChange(sec.id, "items", idx, "q", e.target.value)} />
-                                                                                <textarea rows={2} className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 outline-none resize-none" value={item.r} onChange={(e) => handleArrayChange(sec.id, "items", idx, "r", e.target.value)} />
-                                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-4 right-4 text-gray-300 hover:text-red-500 opacity-0 group-hover/faq:opacity-100 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                            <div key={idx} className="p-6 bg-gray-50 dark:bg-white/5 rounded-[2rem] flex flex-col gap-4 group/faq relative">
+                                                                                <div className="flex items-center justify-between">
+                                                                                    <input className="bg-white dark:bg-[#102216] border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Pergunta" value={item.q} onChange={(e) => handleArrayChange(sec.id, "items", idx, "q", e.target.value)} />
+                                                                                    <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                                </div>
+                                                                                <RichTextEditor
+                                                                                    content={item.r}
+                                                                                    onChange={(val) => handleArrayChange(sec.id, "items", idx, "r", val)}
+                                                                                    minHeight="100px"
+                                                                                />
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -724,48 +638,14 @@ export default function PageSections() {
                 </div>
             </div>
 
-            {/* MEDIA LIBRARY PICKER MODAL */}
-            {showMediaPicker && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowMediaPicker(false)}>
-                    <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
-                            <div>
-                                <h3 className="text-xl font-black text-[#0d1b12] dark:text-white">Biblioteca de Mídia</h3>
-                                <p className="text-xs text-gray-400 mt-1">Selecione uma imagem existente</p>
-                            </div>
-                            <button
-                                onClick={() => setShowMediaPicker(false)}
-                                className="size-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
-                            >
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-8 overflow-y-auto max-h-[60vh] custom-scrollbar">
-                            {mediaLibrary.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400">
-                                    <span className="material-symbols-outlined text-5xl mb-4 opacity-20">photo_library</span>
-                                    <p className="text-sm">Nenhuma imagem encontrada na biblioteca</p>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    {mediaLibrary.map((media: any) => (
-                                        <div
-                                            key={media.id}
-                                            onClick={() => selectFromMediaLibrary(media.url)}
-                                            className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 hover:border-[#13ec5b] cursor-pointer transition-all group hover:scale-105"
-                                        >
-                                            <img src={media.url} className="w-full h-full object-cover" alt={media.filename} />
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
-                                                <span className="material-symbols-outlined text-white text-3xl opacity-0 group-hover:opacity-100 transition-all">check_circle</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+            <MediaPicker
+                isOpen={showMediaPicker}
+                onClose={() => {
+                    setShowMediaPicker(false);
+                    setMediaPickerTarget(null);
+                }}
+                onSelect={(url) => selectFromMediaLibrary(url)}
+            />
         </div>
     );
 }

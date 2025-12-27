@@ -20,6 +20,12 @@
   --color-text-main: #101828;
   --color-text-muted: #475467;
   --color-accent: #0F758D;
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,4 +44,48 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Typography / Rich Text Styles */
+.prose {
+  max-width: none;
+}
+
+.prose p {
+  margin-bottom: 1.25em;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.625em;
+  margin-bottom: 1.25em;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.625em;
+  margin-bottom: 1.25em;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding: 1.5rem;
+  background: rgba(15, 117, 141, 0.05);
+  border-radius: 0 1rem 1rem 0;
+  font-style: italic;
+  margin-bottom: 1.25em;
+}
+
+.prose img {
+  border-radius: 1.5rem;
+  margin: 2rem auto;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
 }

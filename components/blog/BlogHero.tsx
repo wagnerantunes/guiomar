@@ -21,7 +21,7 @@ export function BlogHero({ post }: FeaturedPostProps) {
                 <div
                     className="w-full h-64 md:h-80 bg-cover bg-center"
                     style={{
-                        backgroundImage: `url("${post.featuredImage || "/placeholder.jpg"}")`,
+                        backgroundImage: `url("${post.image || "/placeholder.jpg"}")`,
                     }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>

@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface AboutUsProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -41,9 +41,7 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                             {content.subtitle}
                         </p>
                     )}
-                    <p className="text-gray-600 leading-relaxed text-lg font-medium">
-                        {content.description}
-                    </p>
+                    <RichText content={content.description} className="text-gray-600 leading-relaxed text-lg font-medium" />
                     <button
                         onClick={() => {
                             const el = document.getElementById("servicos");

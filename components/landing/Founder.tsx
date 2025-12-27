@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface FounderProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -26,9 +26,10 @@ export function Founder({ getSetting }: FounderProps) {
                     <p className={`${content.subtitleSize || 'text-lg'} text-gray-500 font-bold italic`}>
                         {content.subtitle}
                     </p>
-                    <p className={`text-gray-600 leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}>
-                        {content.description}
-                    </p>
+                    <RichText
+                        content={content.description}
+                        className={`text-gray-600 leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}
+                    />
                     <div className="flex gap-4 pt-4">
                         <div className="p-4 bg-[var(--color-background-light)]/50 rounded-2xl border border-gray-100 flex-1">
                             <span className="text-2xl font-black text-[var(--color-primary)] block">{content.yearsExp || "15+"}</span>

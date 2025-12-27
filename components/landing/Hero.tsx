@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { useToast } from "@/components/ui/ToastProvider";
+import { RichText } from "@/components/ui/RichText";
 
 interface HeroProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -115,9 +116,10 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     >
                         {heroData.title}
                     </h1>
-                    <p className="text-base md:text-lg font-medium text-gray-300 max-w-xl">
-                        {heroData.description}
-                    </p>
+                    <RichText
+                        content={heroData.description}
+                        className="text-base md:text-lg font-medium text-gray-300 max-w-xl prose-invert"
+                    />
                     <button
                         onClick={() => scrollTo("servicos")}
                         className="bg-[var(--color-primary)] text-white px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest"

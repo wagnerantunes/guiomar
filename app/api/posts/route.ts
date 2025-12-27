@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
-        const { title, slug, content, excerpt, categoryId, status } = body
+        const { title, slug, content, excerpt, categoryId, status, image } = body
 
         const post = await prisma.post.create({
             data: {
@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
                 content,
                 excerpt,
                 status,
+                image,
                 siteId: siteUser.siteId,
                 authorId: session.user.id,
                 categoryId: categoryId || null,

@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface MethodologyProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -38,7 +38,7 @@ export function Methodology({ getSetting }: MethodologyProps) {
                                         <h4 className="text-xl font-black text-primary mb-2">
                                             0{i + 1}. {m.t}
                                         </h4>
-                                        <p className="text-sm text-gray-500">{m.d}</p>
+                                        <RichText content={m.d} className="text-sm text-gray-500 prose-p:text-sm" />
                                     </div>
                                 )}
                             </div>
@@ -51,7 +51,7 @@ export function Methodology({ getSetting }: MethodologyProps) {
                                         <h4 className="text-xl font-black text-primary mb-2">
                                             0{i + 1}. {m.t}
                                         </h4>
-                                        <p className="text-sm text-gray-500">{m.d}</p>
+                                        <RichText content={m.d} className="text-sm text-gray-500 prose-p:text-sm" />
                                     </div>
                                 )}
                             </div>

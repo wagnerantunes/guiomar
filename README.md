@@ -37,9 +37,9 @@ CREATE DATABASE renovamente_cms;
 Crie um arquivo `.env` na raiz do projeto:
 ```env
 DATABASE_URL="postgresql://seu_usuario:sua_senha@localhost:5432/renovamente_cms?schema=public"
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_URL="http://localhost:3001"
 NEXTAUTH_SECRET="sua-chave-secreta-aqui"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3001"
 ```
 
 **Importante**: Substitua `seu_usuario` e `sua_senha` pelas credenciais do seu PostgreSQL.
@@ -65,11 +65,11 @@ Isso criará:
 npm run dev
 ```
 
-Acesse: http://localhost:3000
+Acesse: http://localhost:3001
 
 ## 🔐 Acesso ao Painel Admin
 
-- URL: http://localhost:3000/login
+- URL: http://localhost:3001/login
 - Email: `admin@renovamente.com`
 - Senha: `admin123`
 
@@ -134,7 +134,7 @@ server {
     server_name renovamente-guiomarmelo.com.br;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3001;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
