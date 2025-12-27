@@ -11,46 +11,66 @@ export function AboutUs({ getSetting }: AboutUsProps) {
     const content = getSetting("section_sobre_content", SECTION_DEFAULTS.sobre);
 
     return (
-        <section id="sobre" className="py-24 px-6 bg-white">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <div className="relative">
-                    <div className="absolute -bottom-6 -right-6 bg-primary p-8 rounded-3xl shadow-xl z-20 hidden md:block">
-                        <span className="text-4xl font-black block text-text-dark tracking-tighter">
-                            + DE {content.experience}
-                        </span>
-                        <span className="text-[10px] font-bold text-text-dark uppercase tracking-widest leading-none">
-                            Anos de Experiência
-                        </span>
+        <section id="sobre" className="py-32 px-6 bg-white relative overflow-hidden">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                <div className="relative group">
+                    <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 blur-3xl rounded-full"></div>
+
+                    <div className="relative z-10">
+                        <img
+                            src={content.image}
+                            className="rounded-[3.5rem] shadow-2xl w-full aspect-[4/5] object-cover"
+                            alt="Sobre"
+                        />
+
+                        {/* Experience Badge */}
+                        <div className="absolute -bottom-8 -right-8 bg-black/90 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl z-20 border border-white/10 group-hover:scale-105 transition-transform duration-500">
+                            <span className="text-5xl font-black block text-primary tracking-tighter leading-none mb-2">
+                                +{content.experience}
+                            </span>
+                            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] leading-tight block">
+                                ANOS DE<br />EXCELÊNCIA
+                            </span>
+                        </div>
                     </div>
-                    <img
-                        src={content.image}
-                        className="rounded-[3rem] shadow-2xl w-full aspect-[4/3] object-cover relative z-10"
-                        alt="Sobre"
-                    />
-                    <div className="absolute inset-0 bg-primary/20 rounded-[3rem] -rotate-3 -z-0"></div>
+
+                    <div className="absolute inset-0 border-2 border-primary/10 rounded-[3.5rem] translate-x-6 translate-y-6 -z-0 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-700"></div>
                 </div>
-                <div className="space-y-8">
-                    <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
-                        Sobre Nós
+
+                <div className="space-y-10">
+                    <div className="space-y-4">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Sobre Nós</span>
+                        <h2 className="text-4xl md:text-6xl font-black text-[#09090b] leading-[1.1] tracking-tighter uppercase italic">
+                            {content.title}
+                        </h2>
                     </div>
-                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
-                        {content.title}
-                    </h2>
+
                     {content.subtitle && (
-                        <p className="text-lg text-[var(--color-primary)] font-bold italic">
+                        <p className="text-xl text-zinc-900 font-bold italic border-l-4 border-primary pl-6">
                             {content.subtitle}
                         </p>
                     )}
-                    <RichText content={content.description} className="text-gray-600 leading-relaxed text-lg font-medium" />
-                    <button
-                        onClick={() => {
-                            const el = document.getElementById("servicos");
-                            el?.scrollIntoView({ behavior: "smooth" });
-                        }}
-                        className="bg-[var(--color-background-dark)] text-white px-8 py-4 rounded-2xl font-black text-xs hover:bg-[var(--color-primary)] transition-all uppercase tracking-widest inline-block shadow-lg"
-                    >
-                        {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
-                    </button>
+
+                    <div className="relative">
+                        <RichText content={content.description} className="text-zinc-500 leading-relaxed text-lg font-medium" />
+                    </div>
+
+                    <div className="pt-6">
+                        <button
+                            onClick={() => {
+                                const el = document.getElementById("servicos");
+                                el?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="group flex items-center gap-6"
+                        >
+                            <div className="bg-[#09090b] text-white px-10 py-5 rounded-2xl font-black text-xs hover:bg-primary hover:text-black transition-all uppercase tracking-widest shadow-xl shadow-black/10">
+                                {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
+                            </div>
+                            <div className="w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all duration-500">
+                                <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

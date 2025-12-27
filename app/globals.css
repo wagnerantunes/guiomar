@@ -11,21 +11,41 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Brand Colors */
-  --color-primary: #0F758D;
-  --color-primary-dark: #0C5E71;
-  --color-primary-light: #1499b9;
-  --color-background-light: #FDF5E6;
-  --color-background-dark: #083B47;
-  --color-text-main: #101828;
-  --color-text-muted: #475467;
-  --color-accent: #0F758D;
+  /* Modern Tech-Luxury Colors */
+  --color-primary: #13ec5b;
+  --color-primary-dark: #0ebf49;
+  --color-primary-light: #41f17a;
+
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+
+  --color-background-light: #ffffff;
+  --color-background-dark: #09090b;
+
+  --color-text-main: #09090b;
+  --color-text-muted: #71717a;
+
+  --animate-shimmer: shimmer 2s linear infinite;
 
   @keyframes shimmer {
     100% {
       transform: translateX(100%);
     }
   }
+}
+
+/* Utility Background Effects */
+.bg-grid-white {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(0 0 0 / 0.04)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+}
+
+.bg-grid-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.02)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {

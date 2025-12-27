@@ -9,7 +9,7 @@ interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
-const ServiceCard = ({ s }: { s: any }) => {
+const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
     const [rotateX, setRotateX] = React.useState(0);
     const [rotateY, setRotateY] = React.useState(0);
 
@@ -19,8 +19,8 @@ const ServiceCard = ({ s }: { s: any }) => {
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-        const moveX = (y - centerY) / 8;
-        const moveY = (centerX - x) / 8;
+        const moveX = (y - centerY) / 10;
+        const moveY = (centerX - x) / 10;
         setRotateX(moveX);
         setRotateY(moveY);
     };
@@ -33,49 +33,66 @@ const ServiceCard = ({ s }: { s: any }) => {
     return (
         <motion.div
             variants={{
-                hidden: { opacity: 0, y: 20 },
+                hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 }
             }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             animate={{ rotateX, rotateY }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-primary/40 hover:shadow-2xl transition-all group cursor-default"
+            className={`bg-white p-10 rounded-[2.5rem] border border-zinc-100 hover:border-primary/40 hover:shadow-2xl transition-all group cursor-default relative overflow-hidden ${isLarge ? "md:col-span-2 md:row-span-2" : "col-span-1"
+                }`}
             style={{ transformStyle: "preserve-3d" }}
         >
-            <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors" style={{ transform: "translateZ(30px)" }}>
-                <span className="material-symbols-outlined text-2xl">
-                    verified
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-primary/10 transition-colors"></div>
+
+            <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center text-[#09090b] mb-10 group-hover:bg-primary group-hover:text-black transition-all duration-500 shadow-sm" style={{ transform: "translateZ(30px)" }}>
+                <span className="material-symbols-outlined text-3xl">
+                    {isLarge ? "star" : "verified"}
                 </span>
             </div>
-            <h3 className="text-xl font-black text-[#0d1b12] mb-4" style={{ transform: "translateZ(20px)" }}>
+
+            <h3 className={`font-black text-[#09090b] leading-tight mb-6 ${isLarge ? "text-3xl" : "text-xl"}`} style={{ transform: "translateZ(20px)" }}>
                 {s.t}
             </h3>
+
             <div style={{ transform: "translateZ(10px)" }}>
-                <RichText content={s.d} className="text-sm text-gray-500 leading-relaxed prose-p:text-sm" />
+                <RichText content={s.d} className={`${isLarge ? "text-lg" : "text-sm"} text-zinc-500 leading-relaxed font-medium`} />
             </div>
+
+            {isLarge && (
+                <div className="mt-10 flex items-center gap-3 text-xs font-black uppercase tracking-widest text-[#09090b]">
+                    Saiba mais
+                    <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </div>
+            )}
         </motion.div>
     );
 };
 
 export function Services({ getSetting }: ServicesProps) {
     const services = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
+    const items = services.items || SECTION_DEFAULTS.servicos.items;
 
     return (
-        <section id="servicos" className="py-24 px-6 bg-[var(--color-background-light)]/30">
+        <section id="servicos" className="py-32 px-6 bg-white">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-4xl font-black text-[var(--color-text-main)]">
-                        {services.title}
-                    </h2>
-                    <p className="text-lg text-[var(--color-primary)] font-bold italic">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                    <div className="max-w-2xl space-y-6">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Nossos Serviços</span>
+                        <h2 className="text-4xl md:text-6xl font-black text-[#09090b] leading-none tracking-tighter uppercase italic">
+                            {services.title}
+                        </h2>
+                    </div>
+                    <p className="text-lg text-zinc-400 font-bold italic max-w-sm border-l-2 border-primary pl-6 py-2">
                         {services.subtitle}
                     </p>
                 </div>
+
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-100px" }}
                     variants={{
                         hidden: { opacity: 0 },
                         visible: {
@@ -85,10 +102,10 @@ export function Services({ getSetting }: ServicesProps) {
                             }
                         }
                     }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
                 >
-                    {(services.items || SECTION_DEFAULTS.servicos.items).map((s: any, i: number) => (
-                        <ServiceCard key={i} s={s} />
+                    {items.map((s: any, i: number) => (
+                        <ServiceCard key={i} s={s} isLarge={i === 0} />
                     ))}
                 </motion.div>
             </div>

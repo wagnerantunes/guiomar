@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from "react";
 
@@ -71,68 +73,72 @@ export function Contact({ getSetting }: ContactProps) {
     };
 
     return (
-        <section id="contato" className="py-24 px-6 bg-white">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <div className="lg:col-span-12 mb-12 text-center">
-                    <div className="inline-block bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-                        CONTATO
-                    </div>
-                    <h2 className="text-4xl md:text-5xl font-black text-[var(--color-text-main)]">Vamos conversar?</h2>
+        <section id="contato" className="py-32 px-6 bg-zinc-50 relative overflow-hidden">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+                <div className="lg:col-span-12 mb-16 text-center space-y-6">
+                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Contato</span>
+                    <h2 className="text-4xl md:text-6xl font-black text-[#09090b] tracking-tighter uppercase italic">
+                        Vamos conversar?
+                    </h2>
                 </div>
 
-                <div className="lg:col-span-5 bg-[var(--color-background-dark)] text-white p-12 rounded-[3.5rem] space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                    <span className="material-symbols-outlined absolute -bottom-10 -right-10 opacity-5 text-[200px] select-none">
+                <div className="lg:col-span-5 bg-[#09090b] text-white p-12 rounded-[3.5rem] space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-colors duration-700"></div>
+
+                    <span className="material-symbols-outlined absolute -bottom-10 -right-10 opacity-5 text-[200px] select-none text-white">
                         contact_support
                     </span>
 
-                    <div className="space-y-6">
-                        <h3 className="text-3xl font-black text-[var(--color-primary)] leading-tight">Pronto para<br />renovar sua empresa?</h3>
-                        <p className="text-gray-400 font-medium">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
+                    <div className="space-y-6 relative z-10">
+                        <h3 className="text-3xl font-black text-white leading-tight">Pronto para<br /><span className="text-primary italic">renovar</span> sua empresa?</h3>
+                        <p className="text-zinc-400 font-medium text-lg">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
                     </div>
 
                     <div className="space-y-8 relative z-10">
-                        <div className="flex items-center gap-6 group">
-                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-all">
-                                <span className="material-symbols-outlined">call</span>
+                        <div className="flex items-center gap-8 group/item">
+                            <div className="size-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-black transition-all duration-300 shadow-lg">
+                                <span className="material-symbols-outlined text-2xl">call</span>
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Telefone</p>
-                                <p className="text-lg font-bold font-manrope">{footerSetting.phone}</p>
+                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Telefone</p>
+                                <p className="text-xl font-bold font-manrope text-white">{footerSetting.phone}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-6 group">
-                            <div className="size-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-all">
-                                <span className="material-symbols-outlined">mail</span>
+                        <div className="flex items-center gap-8 group/item">
+                            <div className="size-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-black transition-all duration-300 shadow-lg">
+                                <span className="material-symbols-outlined text-2xl">mail</span>
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">E-mail</p>
-                                <p className="text-lg font-bold font-manrope">{footerSetting.email}</p>
+                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">E-mail</p>
+                                <p className="text-xl font-bold font-manrope text-white">{footerSetting.email}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-white p-4 md:p-12 rounded-[3.5rem] border border-gray-100 shadow-2xl">
+                <div className="lg:col-span-7 bg-white p-8 md:p-14 rounded-[3.5rem] border border-zinc-100 shadow-2xl relative overflow-hidden">
                     {status === "success" ? (
-                        <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-fadeIn">
-                            <div className="size-24 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] mb-4">
-                                <span className="material-symbols-outlined text-5xl">check_circle</span>
+                        <div className="h-full flex flex-col items-center justify-center text-center space-y-8 animate-fadeIn py-20">
+                            <div className="size-32 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 shadow-xl shadow-primary/20">
+                                <span className="material-symbols-outlined text-6xl">check_circle</span>
                             </div>
-                            <h3 className="text-2xl font-black text-[var(--color-text-main)]">Mensagem Enviada!</h3>
-                            <p className="text-gray-500 font-medium max-w-sm mx-auto">{formConfig.successMessage}</p>
+                            <div className="space-y-4">
+                                <h3 className="text-3xl font-black text-[#09090b]">Mensagem Enviada!</h3>
+                                <p className="text-zinc-500 font-medium max-w-sm mx-auto text-lg">{formConfig.successMessage}</p>
+                            </div>
                             <button
                                 onClick={() => setStatus("idle")}
-                                className="text-[var(--color-primary)] font-black text-xs uppercase tracking-widest hover:underline"
+                                className="text-[#09090b] font-black text-xs uppercase tracking-widest hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary pb-1"
                             >
                                 Enviar outra mensagem
                             </button>
                         </div>
                     ) : (
-                        <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+                        <form className="grid grid-cols-1 gap-8" onSubmit={handleSubmit}>
                             {formConfig.fields.map((field: any) => (
-                                <div key={field.id} className="space-y-1.5">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">
-                                        {field.label} {field.required && <span className="text-[var(--color-primary)]">*</span>}
+                                <div key={field.id} className="space-y-2 group">
+                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-4 group-focus-within:text-primary transition-colors">
+                                        {field.label} {field.required && <span className="text-primary">*</span>}
                                     </label>
 
                                     {field.type === 'textarea' ? (
@@ -141,13 +147,13 @@ export function Contact({ getSetting }: ContactProps) {
                                             required={field.required}
                                             rows={4}
                                             placeholder={`Escreva seu ${field.label.toLowerCase()}...`}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none resize-none transition-all"
+                                            className="w-full px-8 py-6 rounded-[2rem] bg-zinc-50 border-2 border-transparent text-[#09090b] text-base font-medium focus:border-primary/20 focus:bg-white focus:shadow-xl outline-none resize-none transition-all placeholder:text-zinc-300"
                                         />
                                     ) : field.type === 'select' ? (
                                         <select
                                             name={field.label}
                                             required={field.required}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none transition-all appearance-none"
+                                            className="w-full px-8 py-6 rounded-[2rem] bg-zinc-50 border-2 border-transparent text-[#09090b] text-base font-medium focus:border-primary/20 focus:bg-white focus:shadow-xl outline-none transition-all appearance-none"
                                         >
                                             <option value="">Selecione uma opção...</option>
                                             {field.options?.map((opt: string) => (
@@ -160,22 +166,27 @@ export function Contact({ getSetting }: ContactProps) {
                                             name={field.label}
                                             required={field.required}
                                             placeholder={`Seu ${field.label.toLowerCase()}...`}
-                                            className="w-full px-6 py-5 rounded-[1.5rem] bg-gray-50 border-2 border-transparent text-[var(--color-text-main)] text-sm focus:border-[var(--color-primary)]/20 focus:bg-white outline-none transition-all"
+                                            className="w-full px-8 py-6 rounded-[2rem] bg-zinc-50 border-2 border-transparent text-[#09090b] text-base font-medium focus:border-primary/20 focus:bg-white focus:shadow-xl outline-none transition-all placeholder:text-zinc-300"
                                         />
                                     )}
                                 </div>
                             ))}
 
-                            <div className="pt-4">
+                            <div className="pt-6">
                                 <button
                                     type="submit"
                                     disabled={status === "loading"}
-                                    className="w-full bg-[var(--color-background-dark)] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                                    className="w-full bg-[#09090b] text-white py-6 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-primary hover:text-black transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-[#09090b] disabled:hover:text-white"
                                 >
-                                    {status === "loading" ? "Enviando para nossa equipe..." : "Enviar Mensagem"}
+                                    {status === "loading" ? (
+                                        <span className="flex items-center justify-center gap-3">
+                                            <span className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                            Enviando...
+                                        </span>
+                                    ) : "Enviar Mensagem"}
                                 </button>
                                 {status === "error" && (
-                                    <p className="text-red-500 text-[10px] font-black uppercase text-center mt-4 tracking-widest">
+                                    <p className="text-red-500 text-[10px] font-black uppercase text-center mt-6 tracking-widest animate-pulse">
                                         Erro ao enviar. Tente novamente ou use nossos contatos diretos.
                                     </p>
                                 )}
