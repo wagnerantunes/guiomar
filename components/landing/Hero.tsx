@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
@@ -18,6 +18,25 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
     const slides = (heroData.images || [heroData.image]).filter(Boolean);
+
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springConfig = { damping: 25, stiffness: 400 };
+    const dx = useSpring(mouseX, springConfig);
+    const dy = useSpring(mouseY, springConfig);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) * 0.4;
+        const y = (e.clientY - rect.top - rect.height / 2) * 0.4;
+        mouseX.set(x);
+        mouseY.set(y);
+    };
+
+    const handleMouseLeave = () => {
+        mouseX.set(0);
+        mouseY.set(0);
+    };
 
     useEffect(() => {
         if (slides.length <= 1) return;
@@ -106,26 +125,44 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="text-white space-y-8 animate-fadeInLeft">
                     {heroData.subtitle && (
-                        <p className="text-lg md:text-xl font-bold text-primary italic max-w-xl animate-fadeIn">
+                        <motion.p
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-lg md:text-xl font-bold text-primary italic max-w-xl"
+                        >
                             {heroData.subtitle}
-                        </p>
+                        </motion.p>
                     )}
-                    <h1
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
                         className="text-4xl md:text-6xl font-black leading-[1.1]"
                         style={{ fontSize: heroData.titleSize ? `${heroData.titleSize}px` : undefined }}
                     >
                         {heroData.title}
-                    </h1>
+                    </motion.h1>
                     <RichText
                         content={heroData.description}
                         className="text-base md:text-lg font-medium text-gray-300 max-w-xl prose-invert"
                     />
-                    <button
-                        onClick={() => scrollTo("servicos")}
-                        className="bg-[var(--color-primary)] text-white px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest"
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.5 }}
+                        className="relative inline-block"
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
+                        style={{ x: dx, y: dy }}
                     >
-                        {heroData.ctaText || "NOSSOS SERVIÇOS"}
-                    </button>
+                        <button
+                            onClick={() => scrollTo("servicos")}
+                            className="bg-[var(--color-primary)] text-white px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest relative z-10"
+                        >
+                            {heroData.ctaText || "NOSSOS SERVIÇOS"}
+                        </button>
+                    </motion.div>
                 </div>
 
                 <div className="bg-white p-10 rounded-[3rem] shadow-2xl animate-fadeInRight max-w-md ml-auto border border-gray-100">

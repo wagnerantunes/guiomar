@@ -9,6 +9,55 @@ interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
+const ServiceCard = ({ s }: { s: any }) => {
+    const [rotateX, setRotateX] = React.useState(0);
+    const [rotateY, setRotateY] = React.useState(0);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const moveX = (y - centerY) / 8;
+        const moveY = (centerX - x) / 8;
+        setRotateX(moveX);
+        setRotateY(moveY);
+    };
+
+    const handleMouseLeave = () => {
+        setRotateX(0);
+        setRotateY(0);
+    };
+
+    return (
+        <motion.div
+            variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            animate={{ rotateX, rotateY }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-primary/40 hover:shadow-2xl transition-all group cursor-default"
+            style={{ transformStyle: "preserve-3d" }}
+        >
+            <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors" style={{ transform: "translateZ(30px)" }}>
+                <span className="material-symbols-outlined text-2xl">
+                    verified
+                </span>
+            </div>
+            <h3 className="text-xl font-black text-[#0d1b12] mb-4" style={{ transform: "translateZ(20px)" }}>
+                {s.t}
+            </h3>
+            <div style={{ transform: "translateZ(10px)" }}>
+                <RichText content={s.d} className="text-sm text-gray-500 leading-relaxed prose-p:text-sm" />
+            </div>
+        </motion.div>
+    );
+};
+
 export function Services({ getSetting }: ServicesProps) {
     const services = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
 
@@ -39,25 +88,7 @@ export function Services({ getSetting }: ServicesProps) {
                     className="grid grid-cols-1 md:grid-cols-3 gap-8"
                 >
                     {(services.items || SECTION_DEFAULTS.servicos.items).map((s: any, i: number) => (
-                        <motion.div
-                            key={i}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: { opacity: 1, y: 0 }
-                            }}
-                            whileHover={{ y: -5, scale: 1.02 }}
-                            className="bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-primary/40 hover:shadow-2xl transition-all group cursor-default"
-                        >
-                            <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span className="material-symbols-outlined text-2xl">
-                                    verified
-                                </span>
-                            </div>
-                            <h3 className="text-xl font-black text-[#0d1b12] mb-4">
-                                {s.t}
-                            </h3>
-                            <RichText content={s.d} className="text-sm text-gray-500 leading-relaxed prose-p:text-sm" />
-                        </motion.div>
+                        <ServiceCard key={i} s={s} />
                     ))}
                 </motion.div>
             </div>

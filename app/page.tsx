@@ -18,6 +18,7 @@ import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
+import { SectionWrapper } from "@/components/ui/SectionWrapper";
 
 interface BlogPost {
   id: string;
@@ -37,15 +38,6 @@ function HomePageContent() {
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const { toast } = useToast();
 
-  // Animation variants
-  const sectionVariants: any = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
 
   const scrollTo = (id: string) => {
     if (selectedPost) {
@@ -231,100 +223,50 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             <Hero getSetting={getSetting} scrollTo={scrollTo} />
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="sobre">
               <AboutUs getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="challenge">
               <Challenge getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="servicos">
               <Services getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="metodologia">
               <Methodology getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="blog">
               <BlogPreview
                 getSetting={getSetting}
                 blogPosts={blogPosts}
                 setSelectedPost={setSelectedPost}
                 scrollTo={scrollTo}
               />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper>
               <WhyUs getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper>
               <Founder getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="testimonials">
               <Testimonials getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper>
               <FAQ getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={sectionVariants}
-            >
+            <SectionWrapper id="contato">
               <Contact getSetting={getSetting} />
-            </motion.section>
+            </SectionWrapper>
           </div>
         )}
 

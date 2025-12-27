@@ -70,6 +70,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { ToastProvider } from "@/components/ui/ToastProvider";
+import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 export default function RootLayout({
   children,
@@ -106,6 +108,8 @@ export default function RootLayout({
       </head>
       <body className={manrope.className}>
         <ToastProvider>
+          <FloatingOrbs />
+          <CustomCursor />
           {children}
         </ToastProvider>
       </body>
