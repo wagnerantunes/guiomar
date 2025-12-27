@@ -42,7 +42,7 @@ export default function Sidebar() {
 
     return (
         <aside
-            className="w-64 bg-white dark:bg-[#09090b] border-r border-gray-100 dark:border-white/5 hidden lg:flex flex-col flex-shrink-0"
+            className="w-64 bg-[#09090b]/50 backdrop-blur-xl border-r border-white/5 hidden lg:flex flex-col flex-shrink-0 relative z-20"
             role="navigation"
             aria-label="Sidebar principal"
         >
@@ -61,7 +61,7 @@ export default function Sidebar() {
                     </div>
                 )}
             </div>
-            <div className="p-8 flex flex-col gap-1.5 overflow-y-auto custom-scrollbar flex-1">
+            <div className="p-6 flex flex-col gap-1 overflow-y-auto custom-scrollbar flex-1">
                 <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 px-3">
                     Menu Principal
                 </h2>
@@ -95,7 +95,7 @@ export default function Sidebar() {
                 })}
             </div>
 
-            <div className="mt-auto p-8 space-y-2 border-t border-gray-50 dark:border-white/5 bg-gray-50/50 dark:bg-black/10">
+            <div className="mt-auto p-6 space-y-2 border-t border-white/5 bg-white/[0.02]">
                 <Link
                     href="/admin/settings"
                     aria-label="Configurações"

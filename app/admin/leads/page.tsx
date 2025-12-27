@@ -115,29 +115,34 @@ export default function LeadsPage() {
     };
 
     return (
-        <div className="flex h-full bg-white dark:bg-[#09090b] overflow-hidden relative">
+        <div className="flex h-full bg-[#09090b] overflow-hidden relative">
+            {/* Ambient Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#13ec5b]/5 blur-[100px] rounded-full opacity-20" />
+            </div>
+
             {/* LISTA DE LEADS */}
             <div
-                className={`${selectedLeadId && 'hidden lg:flex'} w-full lg:w-[400px] border-r border-gray-100 dark:border-white/5 flex flex-col shrink-0 bg-[#f8faf8] dark:bg-black/10`}
+                className={`${selectedLeadId && 'hidden lg:flex'} w-full lg:w-[400px] border-r border-white/5 flex flex-col shrink-0 bg-[#09090b]/80 backdrop-blur-sm`}
                 role="region"
                 aria-label="Lista de Leads"
             >
-                <div className="p-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white dark:bg-transparent">
-                    <h2 className="text-lg font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Inbox Leads</h2>
+                <div className="p-8 border-b border-white/5 flex items-center justify-between bg-transparent">
+                    <h2 className="text-lg font-black text-white uppercase tracking-[0.2em]">Inbox Leads</h2>
                     <span className="bg-[#13ec5b] text-[#0d1b12] text-[10px] font-black px-2.5 py-1 rounded-full shadow-lg shadow-[#13ec5b]/20">
                         {leads.filter(l => l.status === "New").length} NOVOS
                     </span>
                 </div>
 
                 <div className="p-6 space-y-6">
-                    <div className="flex items-center gap-1.5 p-1.5 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm">
+                    <div className="flex items-center gap-1.5 p-1.5 bg-white/5 rounded-2xl border border-white/5 shadow-sm">
                         {["All", "New", "Contacted", "Archived"].map((status) => (
                             <button
                                 key={status}
                                 onClick={() => setStatusFilter(status)}
                                 aria-label={`Filtrar por ${status}`}
                                 className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${statusFilter === status
-                                    ? "bg-[#13ec5b] text-[#0d1b12] shadow-md"
+                                    ? "bg-[#13ec5b] text-[#0d1b12] shadow-md shadow-[#13ec5b]/20"
                                     : "text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5"
                                     }`}
                             >
@@ -147,9 +152,9 @@ export default function LeadsPage() {
                     </div>
 
                     <div className="relative group">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px] group-focus-within:text-[#13ec5b] transition-colors">search</span>
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#13ec5b] transition-colors">search</span>
                         <input
-                            className="w-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-4 py-3.5 text-xs font-bold text-[#0d1b12] dark:text-white focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 outline-none transition-all placeholder:text-gray-400 placeholder:font-medium shadow-sm"
+                            className="w-full bg-[#09090b] border border-white/5 rounded-2xl pl-12 pr-4 py-3.5 text-xs font-bold text-white focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 outline-none transition-all placeholder:text-gray-600 placeholder:font-medium shadow-sm"
                             placeholder="Pesquisar contatos..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -162,13 +167,13 @@ export default function LeadsPage() {
                     {loading ? (
                         <div className="p-5 space-y-6">
                             {Array.from({ length: 5 }).map((_, i) => (
-                                <div key={i} className="space-y-4 p-4 rounded-3xl bg-white/50 dark:bg-white/5 border border-transparent">
+                                <div key={i} className="space-y-4 p-4 rounded-3xl bg-white/5 border border-transparent">
                                     <div className="flex justify-between">
-                                        <Skeleton className="h-4 w-32" />
-                                        <Skeleton className="h-3 w-12" />
+                                        <Skeleton className="h-4 w-32 bg-white/5" />
+                                        <Skeleton className="h-3 w-12 bg-white/5" />
                                     </div>
-                                    <Skeleton className="h-3 w-24" />
-                                    <Skeleton className="h-12 w-full" />
+                                    <Skeleton className="h-3 w-24 bg-white/5" />
+                                    <Skeleton className="h-12 w-full bg-white/5" />
                                 </div>
                             ))}
                         </div>
@@ -186,26 +191,26 @@ export default function LeadsPage() {
                                     // Staggered entrance animation
                                     style={{ animationDelay: `${idx * 50}ms` }}
                                     className={`w-full text-left p-6 rounded-[2rem] transition-all relative group outline-none animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-both ${selectedLeadId === lead.id
-                                        ? 'bg-white dark:bg-[#111111] shadow-xl shadow-[#13ec5b]/5 border-transparent ring-1 ring-[#13ec5b]/20'
-                                        : 'hover:bg-white/60 dark:hover:bg-white/5 border-transparent'
+                                        ? 'bg-[#13ec5b]/5 shadow-xl shadow-[#13ec5b]/5 border-transparent ring-1 ring-[#13ec5b]/20'
+                                        : 'hover:bg-white/5 border-transparent'
                                         }`}
                                 >
                                     {lead.status === 'New' && (
                                         <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#13ec5b] rounded-full shadow-[0_0_12px_#13ec5b] z-20"></div>
                                     )}
                                     <div className="flex justify-between items-start mb-2 relative z-10">
-                                        <h4 className={`text-[13px] font-black uppercase tracking-tight transition-colors ${selectedLeadId === lead.id ? 'text-[#13ec5b]' : 'text-[#0d1b12] dark:text-gray-100'}`}>
+                                        <h4 className={`text-[13px] font-black uppercase tracking-tight transition-colors ${selectedLeadId === lead.id ? 'text-[#13ec5b]' : 'text-gray-100'}`}>
                                             {lead.name}
                                         </h4>
-                                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 dark:bg-white/5 px-2 py-0.5 rounded-md">
+                                        <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded-md">
                                             {new Date(lead.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short' })}
                                         </span>
                                     </div>
-                                    <p className="text-[10px] font-black text-gray-400 mb-3 truncate uppercase tracking-widest flex items-center gap-1.5 border-b border-gray-100/50 dark:border-white/5 pb-2 relative z-10">
+                                    <p className="text-[10px] font-black text-gray-500 mb-3 truncate uppercase tracking-widest flex items-center gap-1.5 border-b border-white/5 pb-2 relative z-10">
                                         <span className="material-symbols-outlined text-xs">corporate_fare</span>
                                         {lead.company || "Pessoa Física"}
                                     </p>
-                                    <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed italic relative z-10">
+                                    <p className="text-[11px] font-medium text-gray-400 line-clamp-2 leading-relaxed italic relative z-10">
                                         "{lead.message}"
                                     </p>
 
@@ -222,13 +227,13 @@ export default function LeadsPage() {
 
             {/* DETALHE DO LEAD */}
             <div
-                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-[#f8faf8] dark:bg-[#09090b] relative`}
+                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-[#09090b]/50 relative z-10`}
                 role="main"
                 aria-label="Detalhes do Lead"
             >
                 {selectedLead ? (
                     <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-8 duration-700">
-                        <div className="h-24 px-6 md:px-12 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/40 dark:bg-black/20 backdrop-blur-2xl shrink-0 z-10 shadow-sm ring-1 ring-white/10">
+                        <div className="h-24 px-6 md:px-12 border-b border-white/5 flex items-center justify-between bg-[#09090b]/40 backdrop-blur-2xl shrink-0 z-10 shadow-sm ring-1 ring-white/5">
                             <div className="flex items-center gap-4 md:gap-6 overflow-hidden">
                                 <button
                                     onClick={() => setSelectedLeadId(null)}
@@ -241,7 +246,7 @@ export default function LeadsPage() {
                                     {selectedLead.name.charAt(0)}
                                 </div>
                                 <div className="truncate">
-                                    <h3 className="text-sm md:text-base font-black text-[#0d1b12] dark:text-white uppercase tracking-wider truncate">{selectedLead.name}</h3>
+                                    <h3 className="text-sm md:text-base font-black text-white uppercase tracking-wider truncate">{selectedLead.name}</h3>
                                     <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-[#13ec5b]/10 w-fit rounded-lg border border-[#13ec5b]/10">
                                         <span className="material-symbols-outlined text-[10px] text-[#13ec5b]">explore</span>
                                         <span className="text-[9px] md:text-[10px] text-[#13ec5b] font-black uppercase tracking-[0.2em] truncate">{selectedLead.source || "Origem Direta"}</span>
@@ -252,7 +257,7 @@ export default function LeadsPage() {
                                 <button
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Archived")}
                                     aria-label="Arquivar lead"
-                                    className="flex items-center gap-2 px-5 py-3 text-[10px] font-black border border-gray-200 dark:border-white/10 rounded-2xl hover:bg-red-50 hover:text-red-500 hover:border-red-100 dark:hover:bg-red-500/10 transition-all uppercase tracking-widest active:scale-95 group shadow-sm bg-white dark:bg-white/5"
+                                    className="flex items-center gap-2 px-5 py-3 text-[10px] font-black border border-white/10 rounded-2xl hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all uppercase tracking-widest active:scale-95 group shadow-sm bg-white/5"
                                 >
                                     <span className="material-symbols-outlined text-sm transition-transform group-hover:rotate-12">archive</span>
                                     <span className="hidden md:inline">Arquivar</span>
@@ -261,8 +266,8 @@ export default function LeadsPage() {
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Contacted")}
                                     aria-label="Marcar como respondido"
                                     className={`flex items-center gap-3 px-6 py-4 md:px-8 md:py-4 text-[10px] md:text-xs font-black rounded-2xl shadow-xl hover:shadow-[#13ec5b]/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest ${selectedLead.status === "Contacted"
-                                        ? "bg-[#0d1b12] dark:bg-[#13ec5b]/20 text-[#13ec5b] border border-[#13ec5b]/30"
-                                        : "bg-[#13ec5b] text-[#0d1b12] shadow-[#13ec5b]/10"
+                                        ? "bg-[#13ec5b]/10 text-[#13ec5b] border border-[#13ec5b]/30"
+                                        : "bg-[#13ec5b] text-[#0d1b12] shadow-[#13ec5b]/10 hover:bg-[#13ec5b]/90"
                                         }`}
                                 >
                                     <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -277,32 +282,32 @@ export default function LeadsPage() {
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     <div className="space-y-4">
                                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Informações de Contato</label>
-                                        <div className="bg-white dark:bg-[#18181b]/60 backdrop-blur-sm rounded-[2.5rem] p-10 space-y-8 border border-gray-100 dark:border-white/5 shadow-xl shadow-gray-200/20 dark:shadow-none">
+                                        <div className="bg-[#09090b]/50 backdrop-blur-sm rounded-[2.5rem] p-10 space-y-8 border border-white/5 shadow-xl shadow-black/20">
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
+                                                <div className="size-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">mail</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">E-mail</span>
-                                                    <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200 break-all">{selectedLead.email}</span>
+                                                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">E-mail</span>
+                                                    <span className="text-sm font-bold text-gray-200 break-all">{selectedLead.email}</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
+                                                <div className="size-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">call</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Telefone</span>
-                                                    <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200">{selectedLead.phone || "Não informado"}</span>
+                                                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Telefone</span>
+                                                    <span className="text-sm font-bold text-gray-200">{selectedLead.phone || "Não informado"}</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6 group">
-                                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-gray-100 dark:border-white/5">
+                                                <div className="size-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-[#13ec5b] group-hover:bg-[#13ec5b]/10 transition-all border border-white/5">
                                                     <span className="material-symbols-outlined text-2xl">apartment</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Empresa</span>
-                                                    <span className="text-sm font-bold text-[#0d1b12] dark:text-gray-200">{selectedLead.company || "Pessoa Física"}</span>
+                                                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Empresa</span>
+                                                    <span className="text-sm font-bold text-gray-200">{selectedLead.company || "Pessoa Física"}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -345,9 +350,9 @@ export default function LeadsPage() {
 
                                 <div className="space-y-6">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Conteúdo da Mensagem</label>
-                                    <div className="bg-white dark:bg-[#18181b]/60 backdrop-blur-sm rounded-[3rem] p-12 md:p-16 border border-gray-100 dark:border-white/5 relative group shadow-sm">
+                                    <div className="bg-[#09090b]/50 backdrop-blur-sm rounded-[3rem] p-12 md:p-16 border border-white/5 relative group shadow-sm hover:border-[#13ec5b]/10 transition-colors">
                                         <span className="material-symbols-outlined absolute top-10 left-10 text-7xl text-[#13ec5b]/5 select-none transition-transform duration-700 group-hover:scale-110">format_quote</span>
-                                        <p className="text-xl md:text-2xl text-[#0d1b12] dark:text-gray-100 leading-relaxed italic font-medium relative z-10 pl-6 border-l-2 border-[#13ec5b]/20">
+                                        <p className="text-xl md:text-2xl text-gray-200 leading-relaxed italic font-medium relative z-10 pl-6 border-l-2 border-[#13ec5b]/20">
                                             {selectedLead.message}
                                         </p>
                                     </div>
@@ -365,14 +370,14 @@ export default function LeadsPage() {
                                             value={noteText}
                                             onChange={(e) => setNoteText(e.target.value)}
                                             aria-label="Notas internas do lead"
-                                            className="w-full bg-white dark:bg-[#18181b]/60 backdrop-blur-sm border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-10 text-base font-medium focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 h-72 resize-none outline-none shadow-xl shadow-gray-100/10 transition-all placeholder:text-gray-300 dark:placeholder:text-white/5 dark:text-gray-200"
+                                            className="w-full bg-[#09090b]/50 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-10 text-base font-medium focus:ring-2 focus:ring-[#13ec5b]/20 focus:border-[#13ec5b]/30 h-72 resize-none outline-none shadow-xl shadow-black/10 transition-all placeholder:text-white/10 text-gray-200"
                                             placeholder="Documente aqui o progresso do lead..."
                                         />
                                         <div className="absolute bottom-8 right-8">
                                             <button
                                                 onClick={handleSaveNote}
                                                 disabled={isSavingNote}
-                                                className="px-8 py-4 bg-[#0d1b12] dark:bg-[#13ec5b] dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/10 disabled:opacity-50 flex items-center gap-3 group/btn"
+                                                className="px-8 py-4 bg-[#13ec5b] text-[#0d1b12] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/10 disabled:opacity-50 flex items-center gap-3 group/btn"
                                             >
                                                 {isSavingNote ? (
                                                     <span className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -388,11 +393,11 @@ export default function LeadsPage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-gray-100 dark:text-white/5 p-20 text-center animate-in fade-in zoom-in-95 duration-1000">
-                        <div className="size-48 rounded-[4rem] bg-white dark:bg-white/5 flex items-center justify-center mb-10 shadow-2xl shadow-gray-100 dark:shadow-none border border-gray-50 dark:border-white/5 group">
+                    <div className="flex-1 flex flex-col items-center justify-center text-white/5 p-20 text-center animate-in fade-in zoom-in-95 duration-1000">
+                        <div className="size-48 rounded-[4rem] bg-white/5 flex items-center justify-center mb-10 shadow-lg shadow-black/5 border border-white/5 group">
                             <span className="material-symbols-outlined text-8xl transition-all group-hover:scale-110 group-hover:text-[#13ec5b] opacity-20">inbox</span>
                         </div>
-                        <h3 className="text-2xl font-black text-[#0d1b12] dark:text-white mb-4 uppercase tracking-[0.2em]">Selecione um Lead</h3>
+                        <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-[0.2em]">Selecione um Lead</h3>
                         <p className="max-w-xs text-[10px] font-black text-gray-400 uppercase tracking-widest leading-loose">
                             Sua caixa de entrada estratégica está aguardando ação. Inicie a conversão agora.
                         </p>

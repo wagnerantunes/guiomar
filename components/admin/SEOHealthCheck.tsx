@@ -65,7 +65,7 @@ export function SEOHealthCheck({ title, content, excerpt, image, slug }: SEOHeal
                 {checks.map((check) => (
                     <div
                         key={check.id}
-                        className="bg-[#f8faf8] dark:bg-black/20 p-4 rounded-2xl border border-gray-100 dark:border-white/5 flex flex-col gap-2 transition-all hover:scale-[1.02]"
+                        className="bg-white/[0.02] backdrop-blur-sm p-4 rounded-2xl border border-white/5 flex flex-col gap-2 transition-all hover:scale-[1.02] hover:bg-white/[0.05]"
                     >
                         <div className="flex items-center justify-between">
                             <span className={`material-symbols-outlined text-sm ${check.status === 'success' ? 'text-[#13ec5b]' : check.status === 'warning' ? 'text-orange-400' : 'text-red-500'}`}>
@@ -74,7 +74,7 @@ export function SEOHealthCheck({ title, content, excerpt, image, slug }: SEOHeal
                             <span className={`size-1.5 rounded-full ${check.status === 'success' ? 'bg-[#13ec5b]' : check.status === 'warning' ? 'bg-orange-400' : 'bg-red-500'}`}></span>
                         </div>
                         <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{check.label}</span>
-                        <span className={`text-[10px] font-bold uppercase tracking-tighter ${check.status === 'success' ? 'text-[#0d1b12] dark:text-gray-300' : 'text-gray-400'}`}>
+                        <span className={`text-[10px] font-bold uppercase tracking-tighter ${check.status === 'success' ? 'text-white' : 'text-gray-500'}`}>
                             {check.message}
                         </span>
                     </div>

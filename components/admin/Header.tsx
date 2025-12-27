@@ -26,7 +26,7 @@ export default function AdminHeader() {
 
     return (
         <header
-            className="sticky top-0 z-[60] w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl dark:bg-[#0d1b12]/80 dark:border-white/5"
+            className="sticky top-0 z-[60] w-full border-b border-white/5 bg-[#09090b]/60 backdrop-blur-2xl"
             role="banner"
         >
             <div className="px-6 md:px-10 lg:px-8 flex justify-center w-full">
@@ -63,10 +63,10 @@ export default function AdminHeader() {
                     />
 
                     <nav className="hidden md:flex flex-1 justify-end gap-8 items-center" aria-label="Navegação do cabeçalho">
-                        <div className="flex items-center gap-2 bg-[#f6f8f6] dark:bg-white/5 px-4 py-2 rounded-2xl border border-transparent focus-within:border-[#13ec5b]/30 focus-within:bg-white dark:focus-within:bg-[#183221] transition-all group">
-                            <span className="material-symbols-outlined text-gray-400 text-[20px] group-focus-within:text-[#13ec5b]">search</span>
+                        <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-2xl border border-white/5 focus-within:border-[#13ec5b]/50 focus-within:bg-[#09090b] transition-all group w-64">
+                            <span className="material-symbols-outlined text-gray-500 text-[20px] group-focus-within:text-[#13ec5b] transition-colors">search</span>
                             <input
-                                className="bg-transparent border-none text-xs font-bold focus:ring-0 w-40 lg:w-64 text-[#0d1b12] dark:text-gray-100 placeholder:text-gray-400 placeholder:font-medium"
+                                className="bg-transparent border-none text-xs font-bold focus:ring-0 w-full text-white placeholder:text-gray-600 outline-none"
                                 placeholder="Buscar no painel..."
                                 type="text"
                                 aria-label="Buscar"

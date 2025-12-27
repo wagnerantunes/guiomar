@@ -88,9 +88,9 @@ export default function PostsPage() {
     return (
         <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto w-full">
             {/* HEADER */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-b border-gray-100 dark:border-white/5 pb-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 border-b border-white/5 pb-10">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">
+                    <h1 className="text-3xl font-black text-white uppercase tracking-[0.2em]">
                         Blog Posts
                     </h1>
                     <p className="text-gray-400 font-bold mt-2 uppercase tracking-widest text-[10px]">
@@ -110,14 +110,14 @@ export default function PostsPage() {
             {/* FILTROS E BUSCA */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2 relative group">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#13ec5b] transition-colors">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#13ec5b] transition-colors">
                         search
                     </span>
                     <input
                         type="text"
                         placeholder="Buscar por título ou slug..."
                         aria-label="Buscar posts"
-                        className="w-full pl-12 pr-4 py-4 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-2xl text-xs font-bold text-[#0d1b12] dark:text-white focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 outline-none shadow-sm transition-all placeholder:text-gray-400 placeholder:font-medium"
+                        className="w-full pl-12 pr-4 py-4 bg-[#09090b]/50 backdrop-blur-sm border border-white/5 rounded-2xl text-xs font-bold text-white focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 outline-none shadow-sm transition-all placeholder:text-gray-500 placeholder:font-medium"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -125,7 +125,7 @@ export default function PostsPage() {
                 <div className="relative group">
                     <select
                         aria-label="Filtrar por status"
-                        className="w-full px-6 py-4 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-2xl text-[10px] focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 outline-none shadow-sm font-black text-gray-500 dark:text-gray-300 appearance-none cursor-pointer uppercase tracking-widest transition-all"
+                        className="w-full px-6 py-4 bg-[#09090b]/50 backdrop-blur-sm border border-white/5 rounded-2xl text-[10px] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 outline-none shadow-sm font-black text-gray-400 appearance-none cursor-pointer uppercase tracking-widest transition-all hover:bg-white/5"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
@@ -133,12 +133,12 @@ export default function PostsPage() {
                         <option value="PUBLISHED">Publicado</option>
                         <option value="DRAFT">Rascunho</option>
                     </select>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span>
+                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-lg">expand_more</span>
                 </div>
                 <div className="relative group">
                     <select
                         aria-label="Filtrar por categoria"
-                        className="w-full px-6 py-4 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-2xl text-[10px] focus:ring-4 focus:ring-[#13ec5b]/10 focus:border-[#13ec5b]/30 outline-none shadow-sm font-black text-gray-500 dark:text-gray-300 appearance-none cursor-pointer uppercase tracking-widest transition-all"
+                        className="w-full px-6 py-4 bg-[#09090b]/50 backdrop-blur-sm border border-white/5 rounded-2xl text-[10px] focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 outline-none shadow-sm font-black text-gray-400 appearance-none cursor-pointer uppercase tracking-widest transition-all hover:bg-white/5"
                         value={categoryFilter}
                         onChange={(e) => setCategoryFilter(e.target.value)}
                     >
@@ -147,7 +147,7 @@ export default function PostsPage() {
                             <option key={cat.id} value={cat.id}>{cat.name}</option>
                         ))}
                     </select>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">category</span>
+                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-lg">category</span>
                 </div>
             </div>
 
@@ -156,29 +156,29 @@ export default function PostsPage() {
                 {loading ? (
                     <div className="grid grid-cols-1 gap-6">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="bg-white dark:bg-white/5 p-8 rounded-[3rem] border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center gap-10">
-                                <Skeleton className="w-full md:w-64 aspect-video rounded-[2rem]" />
+                            <div key={i} className="bg-white/5 p-8 rounded-[3rem] border border-white/5 flex flex-col md:flex-row items-center gap-10">
+                                <Skeleton className="w-full md:w-64 aspect-video rounded-[2rem] bg-white/5" />
                                 <div className="flex-1 space-y-6">
                                     <div className="flex gap-4">
-                                        <Skeleton className="h-4 w-20" />
-                                        <Skeleton className="h-4 w-24" />
+                                        <Skeleton className="h-4 w-20 bg-white/5" />
+                                        <Skeleton className="h-4 w-24 bg-white/5" />
                                     </div>
-                                    <Skeleton className="h-10 w-3/4" />
+                                    <Skeleton className="h-10 w-3/4 bg-white/5" />
                                     <div className="flex gap-8">
-                                        <Skeleton className="h-4 w-24" />
-                                        <Skeleton className="h-4 w-24" />
+                                        <Skeleton className="h-4 w-24 bg-white/5" />
+                                        <Skeleton className="h-4 w-24 bg-white/5" />
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : filteredPosts.length === 0 ? (
-                    <div className="bg-[#f8faf8] dark:bg-white/5 p-32 rounded-[4rem] border border-dashed border-gray-200 dark:border-white/10 text-center space-y-8 shadow-inner">
-                        <div className="size-32 rounded-[2.5rem] bg-white dark:bg-white/5 flex items-center justify-center mx-auto shadow-sm">
-                            <span className="material-symbols-outlined text-5xl text-gray-200 dark:text-white/10">auto_stories</span>
+                    <div className="bg-[#09090b]/50 p-32 rounded-[4rem] border border-dashed border-white/5 text-center space-y-8 shadow-inner">
+                        <div className="size-32 rounded-[2.5rem] bg-white/5 flex items-center justify-center mx-auto shadow-sm">
+                            <span className="material-symbols-outlined text-5xl text-white/10">auto_stories</span>
                         </div>
                         <div>
-                            <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px]">
+                            <p className="text-gray-500 font-bold uppercase tracking-[0.2em] text-[10px]">
                                 Nenhum artigo encontrado na sua biblioteca
                             </p>
                             <Link
@@ -194,9 +194,9 @@ export default function PostsPage() {
                     filteredPosts.map((post) => (
                         <div
                             key={post.id}
-                            className="bg-white dark:bg-[#18181b] p-8 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:shadow-[#13ec5b]/5 hover:border-[#13ec5b]/30 transition-all flex flex-col md:flex-row items-center gap-10 group relative overflow-hidden"
+                            className="bg-[#09090b]/40 backdrop-blur-md p-8 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:shadow-[#13ec5b]/5 hover:border-[#13ec5b]/30 transition-all flex flex-col md:flex-row items-center gap-10 group relative overflow-hidden"
                         >
-                            <div className="w-full md:w-64 aspect-video rounded-[2rem] bg-gray-50 dark:bg-white/5 overflow-hidden shrink-0 border border-gray-100 dark:border-white/5 relative">
+                            <div className="w-full md:w-64 aspect-video rounded-[2rem] bg-white/5 overflow-hidden shrink-0 border border-white/5 relative">
                                 {post.image ? (
                                     <img
                                         src={post.image}
@@ -204,11 +204,11 @@ export default function PostsPage() {
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-200 dark:text-white/5">
+                                    <div className="w-full h-full flex items-center justify-center text-white/5">
                                         <span className="material-symbols-outlined text-6xl">image</span>
                                     </div>
                                 )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
 
                             <div className="flex-1 space-y-5 text-center md:text-left min-w-0">
@@ -216,28 +216,28 @@ export default function PostsPage() {
                                     <span
                                         className={`text-[9px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest ${post.status === "PUBLISHED"
                                             ? "bg-[#13ec5b] text-[#0d1b12] shadow-[0_0_15px_rgba(19,236,91,0.2)]"
-                                            : "bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-gray-400"
+                                            : "bg-white/5 text-gray-400"
                                             }`}
                                     >
                                         {post.status === "PUBLISHED" ? "Publicado" : "Rascunho"}
                                     </span>
-                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] bg-gray-50 dark:bg-white/5 px-2.5 py-1 rounded-lg">
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] bg-white/5 px-2.5 py-1 rounded-lg">
                                         {new Date(post.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short' })}
                                     </span>
                                 </div>
-                                <h3 className="text-2xl md:text-3xl font-black text-[#0d1b12] dark:text-white group-hover:text-[#13ec5b] transition-colors leading-tight tracking-tight truncate max-w-full">
+                                <h3 className="text-2xl md:text-3xl font-black text-white group-hover:text-[#13ec5b] transition-colors leading-tight tracking-tight truncate max-w-full">
                                     {post.title}
                                 </h3>
                                 <div className="flex items-center justify-center md:justify-start gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex-wrap">
-                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-primary transition-colors">
+                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-gray-300 transition-colors">
                                         <span className="material-symbols-outlined text-xl opacity-60">category</span>
                                         {post.category?.name || "Sem categoria"}
                                     </span>
-                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-primary transition-colors">
+                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-gray-300 transition-colors">
                                         <span className="material-symbols-outlined text-xl opacity-60">visibility</span>
                                         {post.views || 0} acessos
                                     </span>
-                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-primary transition-colors">
+                                    <span className="flex items-center gap-2.5 shrink-0 group-hover:text-gray-300 transition-colors">
                                         <span className="material-symbols-outlined text-xl opacity-60">edit_square</span>
                                         {post.author.name || "Admin"}
                                     </span>
@@ -249,21 +249,21 @@ export default function PostsPage() {
                                     href={`/blog/${post.slug}`}
                                     target="_blank"
                                     aria-label="Visualizar post no site"
-                                    className="size-14 rounded-2xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 hover:border-[#13ec5b]/20 transition-all active:scale-90 group/btn"
+                                    className="size-14 rounded-2xl border border-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 hover:border-[#13ec5b]/20 transition-all active:scale-90 group/btn"
                                 >
                                     <span className="material-symbols-outlined text-[22px] group-hover/btn:scale-110 transition-transform">open_in_new</span>
                                 </Link>
                                 <Link
                                     href={`/admin/posts/${post.id}/edit`}
                                     aria-label="Editar post"
-                                    className="size-14 rounded-2xl bg-[#0d1b12] dark:bg-white text-white dark:text-[#0d1b12] flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-black/10 active:scale-90 group/btn"
+                                    className="size-14 rounded-2xl bg-white text-[#0d1b12] flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-black/10 active:scale-90 group/btn hover:bg-[#13ec5b] hover:text-[#0d1b12]"
                                 >
                                     <span className="material-symbols-outlined text-[22px] group-hover/btn:rotate-12 transition-transform">edit</span>
                                 </Link>
                                 <button
                                     onClick={() => handleDelete(post.id)}
                                     aria-label="Excluir post"
-                                    className="size-14 rounded-2xl border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-100 transition-all active:scale-95 group/btn"
+                                    className="size-14 rounded-2xl border border-white/5 flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500/20 transition-all active:scale-95 group/btn"
                                 >
                                     <span className="material-symbols-outlined text-[22px] group-hover/btn:scale-125 transition-transform">delete</span>
                                 </button>
