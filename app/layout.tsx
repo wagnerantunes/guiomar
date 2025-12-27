@@ -69,6 +69,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+import { ToastProvider } from "@/components/ui/ToastProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -102,7 +104,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={manrope.className}>{children}</body>
+      <body className={manrope.className}>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
+      </body>
     </html>
   );
 }
