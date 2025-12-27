@@ -57,7 +57,7 @@ export default function DashboardContent({ session }: { session: any }) {
                 </div>
                 <SkeletonGrid count={4} />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 bg-white dark:bg-[#183221] rounded-[2.5rem] p-8 border border-gray-100 dark:border-white/5 shadow-sm space-y-8">
+                    <div className="lg:col-span-2 bg-white dark:bg-[#18181b] rounded-[2.5rem] p-8 border border-gray-100 dark:border-white/5 shadow-sm space-y-8">
                         <div className="flex justify-between">
                             <Skeleton className="h-6 w-48" />
                             <Skeleton className="h-10 w-32" />
@@ -68,7 +68,7 @@ export default function DashboardContent({ session }: { session: any }) {
                             ))}
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-[#183221] rounded-[2.5rem] p-8 border border-gray-100 dark:border-white/5 shadow-sm space-y-6">
+                    <div className="bg-white dark:bg-[#18181b] rounded-[2.5rem] p-8 border border-gray-100 dark:border-white/5 shadow-sm space-y-6">
                         <Skeleton className="h-6 w-32" />
                         <div className="space-y-6">
                             {Array.from({ length: 5 }).map((_, i) => (
@@ -109,7 +109,7 @@ export default function DashboardContent({ session }: { session: any }) {
                 {statCards.map((s, i) => (
                     <div
                         key={i}
-                        className="bg-white dark:bg-[#183221] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-xl hover:border-[#13ec5b]/30 transition-all group duration-500"
+                        className="bg-white dark:bg-[#18181b] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-xl hover:border-[#13ec5b]/30 transition-all group duration-500"
                         style={{ animationDelay: `${i * 100}ms` }}
                     >
                         <div className="flex items-center justify-between mb-6">
@@ -128,7 +128,7 @@ export default function DashboardContent({ session }: { session: any }) {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* CHART ACESSOS */}
-                <div className="lg:col-span-2 bg-white dark:bg-[#183221] rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm p-10 flex flex-col hover:shadow-xl transition-all duration-500">
+                <div className="lg:col-span-2 bg-white dark:bg-[#18181b] rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm p-10 flex flex-col hover:shadow-xl transition-all duration-500">
                     <div className="flex items-center justify-between mb-10">
                         <div>
                             <h3 className="text-xl font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Performance Semanal</h3>
@@ -164,7 +164,7 @@ export default function DashboardContent({ session }: { session: any }) {
                 </div>
 
                 {/* LEAD TRENDS / SPARKLINE */}
-                <div className="bg-[#0d1b12] dark:bg-[#13ec5b] rounded-[3rem] p-10 flex flex-col justify-between text-white dark:text-[#0d1b12] shadow-2xl relative overflow-hidden group border border-white/5">
+                <div className="bg-zinc-950 dark:bg-[#13ec5b] rounded-[3rem] p-10 flex flex-col justify-between text-white dark:text-zinc-950 shadow-2xl relative overflow-hidden group border border-white/5">
                     <div className="relative z-10">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-50">Lead Acquisition</h4>
                         <div className="flex items-baseline gap-3 mt-4">
@@ -199,7 +199,7 @@ export default function DashboardContent({ session }: { session: any }) {
             </div>
 
             {/* COMBINED RECENT ACTIVITY */}
-            <div className="bg-white dark:bg-[#183221] rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm p-10 hover:shadow-xl transition-all duration-500">
+            <div className="bg-white dark:bg-[#18181b] rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm p-10 hover:shadow-xl transition-all duration-500">
                 <div className="flex items-center justify-between mb-10">
                     <div>
                         <h3 className="text-xl font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Atividade Recente</h3>

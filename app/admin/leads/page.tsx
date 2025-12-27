@@ -115,7 +115,7 @@ export default function LeadsPage() {
     };
 
     return (
-        <div className="flex h-full bg-white dark:bg-[#0d1b12] overflow-hidden relative">
+        <div className="flex h-full bg-white dark:bg-[#09090b] overflow-hidden relative">
             {/* LISTA DE LEADS */}
             <div
                 className={`${selectedLeadId && 'hidden lg:flex'} w-full lg:w-[400px] border-r border-gray-100 dark:border-white/5 flex flex-col shrink-0 bg-[#f8faf8] dark:bg-black/10`}
@@ -185,7 +185,7 @@ export default function LeadsPage() {
                                     onClick={() => setSelectedLeadId(lead.id)}
                                     aria-label={`Ver detalhes de ${lead.name}`}
                                     className={`w-full text-left p-6 rounded-3xl transition-all relative group outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${selectedLeadId === lead.id
-                                        ? 'bg-white dark:bg-[#183221] shadow-xl shadow-[#13ec5b]/5 border-transparent'
+                                        ? 'bg-white dark:bg-[#18181b] shadow-xl shadow-[#13ec5b]/5 border-transparent'
                                         : 'hover:bg-white/60 dark:hover:bg-white/5 border-transparent'
                                         }`}
                                 >
@@ -216,13 +216,13 @@ export default function LeadsPage() {
 
             {/* DETALHE DO LEAD */}
             <div
-                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-white dark:bg-[#102216]/20 relative`}
+                className={`${!selectedLeadId && 'hidden lg:flex'} flex-1 flex flex-col min-w-0 bg-white dark:bg-[#18181b]/20 relative`}
                 role="main"
                 aria-label="Detalhes do Lead"
             >
                 {selectedLead ? (
                     <>
-                        <div className="h-24 px-6 md:px-12 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl shrink-0 z-10 shadow-sm">
+                        <div className="h-24 px-6 md:px-12 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl shrink-0 z-10 shadow-sm">
                             <div className="flex items-center gap-4 md:gap-6 overflow-hidden">
                                 <button
                                     onClick={() => setSelectedLeadId(null)}
@@ -255,8 +255,8 @@ export default function LeadsPage() {
                                     onClick={() => handleStatusUpdate(selectedLead.id, "Contacted")}
                                     aria-label="Marcar como respondido"
                                     className={`flex items-center gap-3 px-6 py-4 md:px-8 md:py-4 text-[10px] md:text-xs font-black rounded-2xl shadow-xl shadow-[#13ec5b]/10 hover:shadow-[#13ec5b]/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest ${selectedLead.status === "Contacted"
-                                            ? "bg-[#0d1b12] text-[#13ec5b] border border-[#13ec5b]/30"
-                                            : "bg-[#13ec5b] text-[#0d1b12]"
+                                        ? "bg-[#0d1b12] text-[#13ec5b] border border-[#13ec5b]/30"
+                                        : "bg-[#13ec5b] text-[#0d1b12]"
                                         }`}
                                 >
                                     <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -304,7 +304,7 @@ export default function LeadsPage() {
 
                                     <div className="space-y-4">
                                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] block ml-4">Linha do Tempo</label>
-                                        <div className="bg-[#13ec5b] dark:bg-[#13ec5b] rounded-[2.5rem] p-10 text-[#0d1b12] shadow-2xl shadow-[#13ec5b]/20 relative overflow-hidden group border border-[#13ec5b]/30">
+                                        <div className="bg-[#13ec5b] dark:bg-[#13ec5b] rounded-[2.5rem] p-10 text-zinc-950 shadow-2xl shadow-[#13ec5b]/20 relative overflow-hidden group border border-[#13ec5b]/30">
                                             <div className="relative z-10 flex flex-col justify-between h-full space-y-8">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-4 opacity-70">

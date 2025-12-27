@@ -103,7 +103,7 @@ export default function MediaLibraryPage() {
         : mediaFiles.filter(f => f.mimeType.includes(filter));
 
     return (
-        <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
+        <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#09090b]">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -113,7 +113,7 @@ export default function MediaLibraryPage() {
             />
 
             {/* HEADER */}
-            <div className="px-6 py-6 md:px-10 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
+            <div className="px-6 py-6 md:px-10 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
                         <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Biblioteca de Mídia</h1>
@@ -145,7 +145,7 @@ export default function MediaLibraryPage() {
 
                     {/* TOOLBAR */}
                     <div className="flex flex-wrap items-center justify-between gap-6 mb-10">
-                        <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-[#183221]/40 rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm">
+                        <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-[#18181b] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm">
                             {["all", "image", "video", "pdf"].map((f) => (
                                 <button
                                     key={f}
@@ -169,7 +169,7 @@ export default function MediaLibraryPage() {
                                     type="text"
                                     aria-label="Procurar arquivos"
                                     placeholder="Procurar na biblioteca..."
-                                    className="w-full bg-white dark:bg-[#183221]/40 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-3.5 text-xs font-bold focus:ring-4 focus:ring-[#13ec5b]/10 outline-none shadow-sm transition-all focus:bg-white dark:focus:bg-[#183221]"
+                                    className="w-full bg-white dark:bg-[#18181b] border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-3.5 text-xs font-bold focus:ring-4 focus:ring-[#13ec5b]/10 outline-none shadow-sm transition-all focus:bg-white dark:focus:bg-[#1f1f23]"
                                 />
                             </div>
                         </div>
@@ -184,7 +184,7 @@ export default function MediaLibraryPage() {
                             </div>
                         </div>
                     ) : mediaFiles.length === 0 ? (
-                        <div className="bg-white dark:bg-[#183221]/40 p-20 rounded-[3.5rem] border border-gray-100 dark:border-white/5 text-center space-y-6 shadow-sm mt-10 max-w-2xl mx-auto w-full">
+                        <div className="bg-white dark:bg-[#18181b] p-20 rounded-[3.5rem] border border-gray-100 dark:border-white/5 text-center space-y-6 shadow-sm mt-10 max-w-2xl mx-auto w-full">
                             <div className="size-24 rounded-[2rem] bg-gray-50 dark:bg-white/5 flex items-center justify-center mx-auto">
                                 <span className="material-symbols-outlined text-5xl text-gray-200">photo_library</span>
                             </div>
@@ -209,7 +209,7 @@ export default function MediaLibraryPage() {
                                     aria-label={`Selecionar arquivo: ${file.filename}`}
                                     onClick={() => setSelectedItem(file)}
                                     onKeyDown={(e) => e.key === 'Enter' && setSelectedItem(file)}
-                                    className={`group relative bg-white dark:bg-[#183221]/40 rounded-[2.5rem] border transition-all cursor-pointer overflow-hidden outline-none ${selectedItem?.id === file.id
+                                    className={`group relative bg-white dark:bg-[#18181b] rounded-[2.5rem] border transition-all cursor-pointer overflow-hidden outline-none ${selectedItem?.id === file.id
                                         ? "ring-4 ring-[#13ec5b]/30 border-[#13ec5b]"
                                         : "border-gray-100 dark:border-white/5 hover:border-[#13ec5b]/50 hover:shadow-2xl focus-visible:ring-4 focus-visible:ring-[#13ec5b]/20"
                                         }`}
@@ -228,7 +228,7 @@ export default function MediaLibraryPage() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="p-5 bg-white/50 dark:bg-[#183221]/50 backdrop-blur-sm border-t border-gray-50 dark:border-white/5">
+                                    <div className="p-5 bg-white/50 dark:bg-[#18181b]/50 backdrop-blur-sm border-t border-gray-50 dark:border-white/5">
                                         <p className="text-[10px] font-black text-[#0d1b12] dark:text-white truncate" title={file.filename}>
                                             {file.filename}
                                         </p>
@@ -270,8 +270,8 @@ export default function MediaLibraryPage() {
 
                 {/* DETAILS SIDEBAR */}
                 {selectedItem && (
-                    <div className={`${!selectedItem && 'hidden lg:flex'} w-full lg:w-[400px] border-l border-gray-100 dark:border-white/5 bg-white dark:bg-[#112418] flex flex-col shrink-0 animate-in slide-in-from-right duration-500 overflow-y-auto custom-scrollbar shadow-2xl z-30`}>
-                        <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#112418]/95 backdrop-blur-xl z-10">
+                    <div className={`${!selectedItem && 'hidden lg:flex'} w-full lg:w-[400px] border-l border-gray-100 dark:border-white/5 bg-white dark:bg-[#111111] flex flex-col shrink-0 animate-in slide-in-from-right duration-500 overflow-y-auto custom-scrollbar shadow-2xl z-30`}>
+                        <div className="p-8 border-b border-gray-50 dark:border-white/5 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl z-10">
                             <div className="flex items-center gap-4">
                                 <button
                                     aria-label="Voltar para a biblioteca"

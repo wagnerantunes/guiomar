@@ -41,7 +41,7 @@ export default function Sidebar() {
 
     return (
         <aside
-            className="w-64 bg-white dark:bg-[#183221] border-r border-gray-100 dark:border-white/5 hidden lg:flex flex-col flex-shrink-0"
+            className="w-64 bg-white dark:bg-[#09090b] border-r border-gray-100 dark:border-white/5 hidden lg:flex flex-col flex-shrink-0"
             role="navigation"
             aria-label="Sidebar principal"
         >
@@ -74,7 +74,7 @@ export default function Sidebar() {
                             aria-current={isActive ? "page" : undefined}
                             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left group outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${isActive
                                 ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/10"
-                                : "text-gray-500 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                                : "text-gray-500 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
                                 }`}
                         >
                             <span
@@ -101,7 +101,7 @@ export default function Sidebar() {
                     aria-current={pathname === "/admin/settings" ? "page" : undefined}
                     className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${pathname === "/admin/settings"
                         ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg"
-                        : "text-gray-500 hover:bg-white hover:text-[#13ec5b] dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                        : "text-gray-500 hover:bg-white hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
                         }`}
                 >
                     <span className="material-symbols-outlined text-[22px]">settings</span>

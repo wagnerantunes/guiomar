@@ -194,7 +194,7 @@ export default function PostsPage() {
                     filteredPosts.map((post) => (
                         <div
                             key={post.id}
-                            className="bg-white dark:bg-[#183221]/40 p-8 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:shadow-[#13ec5b]/5 hover:border-[#13ec5b]/30 transition-all flex flex-col md:flex-row items-center gap-10 group relative overflow-hidden"
+                            className="bg-white dark:bg-[#18181b] p-8 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:shadow-[#13ec5b]/5 hover:border-[#13ec5b]/30 transition-all flex flex-col md:flex-row items-center gap-10 group relative overflow-hidden"
                         >
                             <div className="w-full md:w-64 aspect-video rounded-[2rem] bg-gray-50 dark:bg-white/5 overflow-hidden shrink-0 border border-gray-100 dark:border-white/5 relative">
                                 {post.image ? (

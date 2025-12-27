@@ -216,7 +216,7 @@ export default function PageSections() {
                     {loading ? (
                         <>
                             {Array.from({ length: 5 }).map((_, i) => (
-                                <div key={i} className="bg-white dark:bg-[#183221] p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 flex items-center justify-between">
+                                <div key={i} className="bg-white dark:bg-[#09090b]/40 rounded-[2.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden mb-6 p-8">
                                     <div className="flex items-center gap-6">
                                         <Skeleton className="size-5 rounded-md" />
                                         <Skeleton className="size-16 rounded-3xl" />
@@ -334,7 +334,7 @@ export default function PageSections() {
                                                                         <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
                                                                             {(sec.content?.images || []).filter(Boolean).map((img: string, idx: number) => (
                                                                                 <div key={idx} className="relative shrink-0 group/slide">
-                                                                                    <div className="size-32 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm transition-transform hover:scale-105 cursor-pointer">
+                                                                                    <div className="bg-white dark:bg-[#18181b] rounded-3xl border border-gray-100 dark:border-white/5 p-10 space-y-10 group relative transition-all hover:bg-white/60 dark:hover:bg-[#1f1f23]">
                                                                                         <img src={img} className="w-full h-full object-cover" alt={`Slide ${idx + 1}`} />
                                                                                     </div>
                                                                                     <button

@@ -128,9 +128,9 @@ export default function EditPostPage({ params }: PageProps) {
     }
 
     return (
-        <div className="p-6 md:p-10 space-y-10 max-w-6xl mx-auto w-full pb-20 bg-[#f8faf8] dark:bg-[#0d1b12]">
+        <div className="p-6 md:p-10 space-y-10 max-w-6xl mx-auto w-full pb-20 bg-[#f8faf8] dark:bg-[#09090b]">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 sticky top-0 z-30 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 sticky top-0 z-30 shadow-sm">
                 <div className="flex items-center gap-6">
                     <Link
                         href="/admin/posts"
@@ -150,7 +150,7 @@ export default function EditPostPage({ params }: PageProps) {
                             aria-label="Definir como rascunho"
                             aria-pressed={formData.status === 'DRAFT'}
                             onClick={() => setFormData(prev => ({ ...prev, status: 'DRAFT' }))}
-                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-white dark:bg-[#183221] text-[#0d1b12] dark:text-white shadow-sm border border-gray-100 dark:border-white/10' : 'text-gray-400 hover:text-[#0d1b12]'}`}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-white dark:bg-[#18181b] text-[#0d1b12] dark:text-white shadow-sm border border-gray-100 dark:border-white/10' : 'text-gray-400 hover:text-[#0d1b12]'}`}
                         >
                             Rascunho
                         </button>
@@ -180,7 +180,7 @@ export default function EditPostPage({ params }: PageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div className="lg:col-span-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {/* Main Settings */}
-                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
+                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
                         <div className="p-10 md:p-14 space-y-12">
                             <div className="space-y-4">
                                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2 block">Título da Publicação <span className="text-red-500">*</span></label>
@@ -216,7 +216,7 @@ export default function EditPostPage({ params }: PageProps) {
 
                 <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150">
                     {/* Publishing Settings */}
-                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-10">
+                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-10">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3 mb-2">
                                 <div className="size-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center">
@@ -295,7 +295,7 @@ export default function EditPostPage({ params }: PageProps) {
                     </div>
 
                     {/* Featured Image */}
-                    <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-6">
+                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-6">
                         <div className="flex items-center gap-3">
                             <div className="size-8 rounded-lg bg-green-50 dark:bg-green-500/10 text-[#13ec5b] flex items-center justify-center">
                                 <span className="material-symbols-outlined text-sm">image</span>
