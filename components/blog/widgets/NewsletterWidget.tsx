@@ -1,29 +1,31 @@
 export function NewsletterWidget() {
     return (
-        <div className="bg-[#e7f3eb] dark:bg-[#1f422b] rounded-xl p-6 relative overflow-hidden">
-            <div className="absolute -right-4 -top-4 text-primary/10 dark:text-primary/5">
-                <span className="material-symbols-outlined text-[120px] font-bold">
-                    mail
-                </span>
-            </div>
+        <div className="bg-[#13ec5b] rounded-[2.5rem] p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 blur-[50px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+
             <div className="relative z-10">
-                <h3 className="text-xl font-bold text-text-main dark:text-white mb-2">
-                    Newsletter Semanal
+                <h3 className="text-xl font-black text-[#0d1b12] uppercase tracking-wider mb-2">
+                    Receba Novidades
                 </h3>
-                <p className="text-sm text-text-muted dark:text-gray-300 mb-4">
-                    Receba dicas de bem-estar e produtividade toda segunda-feira.
+                <p className="text-[#0d1b12]/80 text-xs font-bold uppercase tracking-widest mb-8 max-w-[200px]">
+                    Insights exclusivos de bem-estar toda semana.
                 </p>
-                <div className="flex flex-col gap-3">
+
+                <div className="space-y-4">
                     <input
-                        className="w-full h-10 rounded-lg border-none bg-white dark:bg-black/20 text-text-main dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-primary px-3 text-sm outline-none"
-                        placeholder="Seu melhor e-mail"
+                        className="w-full h-12 rounded-2xl border-none bg-white/20 text-[#0d1b12] placeholder:text-[#0d1b12]/50 font-bold px-6 text-xs uppercase tracking-wider outline-none focus:bg-white focus:text-black transition-all"
+                        placeholder="Seu e-mail"
                         type="email"
                     />
-                    <button className="w-full h-10 rounded-lg bg-primary hover:bg-primary-dark text-[#0d1b12] font-bold text-sm transition-colors">
+                    <button className="w-full h-12 rounded-2xl bg-[#0d1b12] text-white font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 shadow-xl shadow-black/10">
                         Inscrever-se
                     </button>
                 </div>
             </div>
+
+            <span className="material-symbols-outlined absolute -bottom-8 -right-8 text-9xl text-white/20 group-hover:scale-110 transition-transform duration-700">
+                mail
+            </span>
         </div>
     );
 }

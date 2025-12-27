@@ -72,60 +72,74 @@ export default async function BlogPostPage({ params }: PageProps) {
     };
 
     return (
-        <div className="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+        <div className="bg-[#09090b] font-sans min-h-screen flex flex-col relative selection:bg-[#13ec5b] selection:text-black">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <Header />
 
-            <div className="layout-container flex grow flex-col w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
-                <div className="flex flex-col lg:flex-row gap-10">
+            {/* Ambient Background */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#13ec5b]/5 to-transparent blur-3xl opacity-30" />
+                <div className="absolute top-[20%] right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full opacity-20" />
+            </div>
+
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 py-32 md:py-40">
+                <div className="flex flex-col lg:flex-row gap-16">
                     {/* Left Column: Content */}
-                    <main className="w-full lg:w-2/3 flex flex-col gap-10">
-                        <article className="bg-card-light dark:bg-card-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 bg-white">
+                    <main className="w-full lg:w-[65%] flex flex-col gap-16">
+                        <article className="bg-[#09090b] border border-white/5 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-3xl -z-10"></div>
+
                             {/* Breadcrumb / Back Link */}
                             <Link
                                 href="/blog"
-                                className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary-dark mb-8 transition-colors text-sm uppercase tracking-wide"
+                                className="inline-flex items-center gap-2 text-gray-500 font-bold hover:text-[#13ec5b] mb-12 transition-colors text-[10px] uppercase tracking-[0.2em]"
                             >
-                                <span className="material-symbols-outlined text-[18px]">
+                                <span className="material-symbols-outlined text-[16px]">
                                     arrow_back
                                 </span>
                                 Voltar para o blog
                             </Link>
 
                             {/* Header */}
-                            <header className="mb-8">
+                            <header className="mb-12 border-b border-white/5 pb-10">
                                 {post.category && (
-                                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary-dark rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                                    <span className="inline-block px-4 py-1.5 bg-[#13ec5b]/10 text-[#13ec5b] rounded-full text-[9px] font-black uppercase tracking-widest mb-6 border border-[#13ec5b]/20">
                                         {post.category.name}
                                     </span>
                                 )}
-                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-text-main dark:text-white mb-6 leading-tight">
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tighter">
                                     {post.title}
                                 </h1>
-                                <div className="flex flex-wrap items-center gap-6 text-text-muted dark:text-gray-400 text-sm border-b border-gray-100 dark:border-gray-800 pb-8">
-                                    <div className="flex items-center gap-2">
+                                <div className="flex flex-wrap items-center gap-8 text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                                    <div className="flex items-center gap-3">
                                         {post.author.image ? (
                                             <div
-                                                className="size-8 rounded-full bg-gray-300 bg-cover"
+                                                className="size-10 rounded-xl bg-gray-800 bg-cover border border-white/10"
                                                 style={{
                                                     backgroundImage: `url("${post.author.image}")`,
                                                 }}
                                             />
                                         ) : (
-                                            <span className="material-symbols-outlined">person</span>
+                                            <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                                <span className="material-symbols-outlined text-gray-500">person</span>
+                                            </div>
                                         )}
-                                        <span className="font-medium">{post.author.name}</span>
+                                        <div className="flex flex-col">
+                                            <span className="text-white">{post.author.name}</span>
+                                            <span className="text-[9px] text-[#13ec5b]">Autor</span>
+                                        </div>
                                     </div>
+                                    <div className="h-4 w-px bg-white/10"></div>
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-[18px]">
+                                        <span className="material-symbols-outlined text-[16px]">
                                             calendar_today
                                         </span>
                                         <span>
                                             {post.publishedAt
-                                                ? format(new Date(post.publishedAt), "d 'de' MMM, yyyy", {
+                                                ? format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", {
                                                     locale: ptBR,
                                                 })
                                                 : ""}
@@ -137,7 +151,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                             {/* Featured Image */}
                             {post.image && (
                                 <div
-                                    className="w-full h-64 md:h-96 bg-cover bg-center rounded-lg mb-8"
+                                    className="w-full aspect-video bg-cover bg-center rounded-[2rem] mb-16 shadow-2xl border border-white/5"
                                     style={{ backgroundImage: `url("${post.image}")` }}
                                 ></div>
                             )}
@@ -145,13 +159,21 @@ export default async function BlogPostPage({ params }: PageProps) {
                             {/* Content */}
                             <RichText
                                 content={post.content}
-                                className="prose-lg prose-headings:text-text-main dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-a:text-primary hover:prose-a:text-primary-dark prose-strong:text-text-main dark:prose-strong:text-white"
+                                className="prose-lg max-w-none text-gray-300 prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-p:leading-relaxed prose-a:text-[#13ec5b] hover:prose-a:text-[#13ec5b]/80 prose-strong:text-white prose-blockquote:border-[#13ec5b] prose-blockquote:bg-[#13ec5b]/5 prose-blockquote:text-white prose-code:text-[#13ec5b] prose-pre:bg-black/50 prose-li:text-gray-300 pointer-events-auto"
                             />
                         </article>
+
+                        {/* Navigation / Next Post (Optional placeholder) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Link href="/blog" className="group bg-white/5 rounded-[2rem] p-8 hover:bg-white/10 transition-colors border border-white/5">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[#13ec5b] mb-2 block">Anterior</span>
+                                <h4 className="text-lg font-bold text-white group-hover:underline decoration-[#13ec5b] decoration-2 underline-offset-4">Explorar mais artigos</h4>
+                            </Link>
+                        </div>
                     </main>
 
                     {/* Right Column: Sidebar */}
-                    <aside className="w-full lg:w-1/3 flex flex-col gap-8">
+                    <aside className="w-full lg:w-[35%] flex flex-col gap-8 sticky top-32 h-fit">
                         <SearchWidget />
                         <NewsletterWidget />
                         <CategoriesWidget categories={categories} />
