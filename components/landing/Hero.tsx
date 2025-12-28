@@ -118,9 +118,9 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                         />
                     </AnimatePresence>
                 ) : (
-                    <div className="w-full h-full bg-zinc-950" />
+                    <div className="w-full h-full bg-background-dark" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/80 to-transparent"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
