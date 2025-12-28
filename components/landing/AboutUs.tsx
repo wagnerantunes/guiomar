@@ -11,7 +11,7 @@ export function AboutUs({ getSetting }: AboutUsProps) {
     const content = getSetting("section_sobre_content", SECTION_DEFAULTS.sobre);
 
     return (
-        <section id="sobre" className="py-32 px-6 bg-white relative overflow-hidden">
+        <section id="sobre" className="py-32 px-6 bg-background-dark relative overflow-hidden">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                 <div className="relative group">
                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 blur-3xl rounded-full"></div>
@@ -40,19 +40,19 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                 <div className="space-y-10">
                     <div className="space-y-4">
                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Sobre Nós</span>
-                        <h2 className="text-4xl md:text-6xl font-black text-[#09090b] leading-[1.1] tracking-tighter uppercase italic">
+                        <h2 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">
                             {content.title}
                         </h2>
                     </div>
 
                     {content.subtitle && (
-                        <p className="text-xl text-zinc-900 font-bold italic border-l-4 border-primary pl-6">
+                        <p className="text-xl text-zinc-100 font-bold italic border-l-4 border-primary pl-6">
                             {content.subtitle}
                         </p>
                     )}
 
                     <div className="relative">
-                        <RichText content={content.description} className="text-zinc-500 leading-relaxed text-lg font-medium" />
+                        <RichText content={content.description} className="text-zinc-400 leading-relaxed text-lg font-medium" />
                     </div>
 
                     <div className="pt-6">
@@ -63,11 +63,11 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                             }}
                             className="group flex items-center gap-6"
                         >
-                            <div className="bg-[#09090b] text-white px-10 py-5 rounded-2xl font-black text-xs hover:bg-primary hover:text-black transition-all uppercase tracking-widest shadow-xl shadow-black/10">
+                            <div className="bg-white text-background-dark px-10 py-5 rounded-2xl font-black text-xs hover:bg-primary hover:text-background-dark transition-all uppercase tracking-widest shadow-xl shadow-black/10">
                                 {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
                             </div>
-                            <div className="w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all duration-500">
-                                <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all duration-500">
+                                <span className="material-symbols-outlined text-sm text-white group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
                         </button>
                     </div>

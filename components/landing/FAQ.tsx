@@ -14,10 +14,10 @@ export function FAQ({ getSetting }: FAQProps) {
     const content = getSetting("section_faq_content", SECTION_DEFAULTS.faq);
 
     return (
-        <section id="faq" className="py-32 bg-white px-6 relative overflow-hidden">
+        <section id="faq" className="py-32 bg-background-dark px-6 relative overflow-hidden">
             <div className="max-w-3xl mx-auto relative z-10">
                 <div className="text-center mb-20 space-y-4">
-                    <h2 className="text-4xl md:text-5xl font-black text-[#0d1b12] tracking-tight">
+                    <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
                         {content.title}
                     </h2>
                     <div className="w-12 h-1 bg-primary mx-auto rounded-full"></div>
@@ -32,14 +32,14 @@ export function FAQ({ getSetting }: FAQProps) {
                             <button
                                 onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                                 className={`w-full px-8 py-7 flex items-center justify-between text-left transition-all duration-500 rounded-[2rem] border ${activeFaq === i
-                                        ? "bg-[#0d1b12] text-white border-[#0d1b12] shadow-2xl scale-[1.02]"
-                                        : "bg-gray-50/50 border-gray-100 text-[#0d1b12] hover:bg-white hover:border-primary/30"
+                                    ? "bg-white text-background-dark border-white shadow-2xl scale-[1.02]"
+                                    : "bg-white/5 border-white/5 text-white hover:bg-white/10 hover:border-primary/30"
                                     }`}
                             >
                                 <span className={`font-black text-lg transition-colors duration-300 ${activeFaq === i ? "text-white" : "group-hover:text-primary"}`}>
                                     {f.q}
                                 </span>
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${activeFaq === i ? "bg-primary text-white rotate-180" : "bg-white text-gray-400 border border-gray-100"
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${activeFaq === i ? "bg-primary text-background-dark rotate-180" : "bg-white/10 text-zinc-500 border border-white/10"
                                     }`}>
                                     <span className="material-symbols-outlined text-xl">
                                         expand_more
@@ -56,7 +56,7 @@ export function FAQ({ getSetting }: FAQProps) {
                                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                         className="overflow-hidden"
                                     >
-                                        <div className="px-10 py-8 text-base text-gray-500 font-medium leading-relaxed">
+                                        <div className="px-10 py-8 text-base text-zinc-400 font-medium leading-relaxed">
                                             {f.r}
                                         </div>
                                     </motion.div>
