@@ -17,20 +17,22 @@ export default async function AdminLayout({
 
     return (
         <ToastProvider>
-            <div className="flex flex-col h-screen overflow-hidden bg-[#09090b] text-gray-100 font-sans selection:bg-[#13ec5b] selection:text-black">
-                {/* Ambient Background */}
-                <div className="fixed inset-0 z-0 pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#13ec5b]/5 to-transparent blur-3xl opacity-20" />
+            <div className="flex flex-col h-screen overflow-hidden bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+                {/* Ambient Background Overlay - subtle and premium */}
+                <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
+                    <div className="absolute top-0 left-1/4 w-1/2 h-[500px] bg-gradient-to-b from-primary/10 to-transparent blur-[120px]" />
                 </div>
 
                 <AdminHeader />
-                <div className="flex flex-1 overflow-hidden relative z-10">
+                <div className="flex flex-1 overflow-hidden relative z-10 transition-colors duration-500">
                     <Sidebar />
                     <main
-                        className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-[#09090b]"
+                        className="flex-1 min-w-0 overflow-y-auto custom-scrollbar bg-background/40 backdrop-blur-sm"
                         aria-label="Admin Content"
                     >
-                        {children}
+                        <div className="relative z-10">
+                            {children}
+                        </div>
                     </main>
                 </div>
             </div>

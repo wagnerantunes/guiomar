@@ -223,23 +223,23 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             <Hero getSetting={getSetting} scrollTo={scrollTo} />
 
-            <SectionWrapper id="sobre" content={getSetting("section_sobre_content", {})}>
+            <SectionWrapper id="sobre" nextId="challenge" content={getSetting("section_sobre_content", {})}>
               <AboutUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="challenge" content={getSetting("section_challenge_content", {})}>
+            <SectionWrapper id="challenge" nextId="servicos" content={getSetting("section_challenge_content", {})}>
               <Challenge getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="servicos" content={getSetting("section_servicos_content", {})}>
+            <SectionWrapper id="servicos" nextId="metodologia" content={getSetting("section_servicos_content", {})}>
               <Services getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="metodologia" content={getSetting("section_metodologia_content", {})}>
+            <SectionWrapper id="metodologia" nextId="blog" content={getSetting("section_metodologia_content", {})}>
               <Methodology getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="blog" content={getSetting("section_blog_content", {})}>
+            <SectionWrapper id="blog" nextId="whyus" content={getSetting("section_blog_content", {})}>
               <BlogPreview
                 getSetting={getSetting}
                 blogPosts={blogPosts}
@@ -248,19 +248,19 @@ function HomePageContent() {
               />
             </SectionWrapper>
 
-            <SectionWrapper id="whyus" content={getSetting("section_whyus_content", {})}>
+            <SectionWrapper id="whyus" nextId="founder" content={getSetting("section_whyus_content", {})}>
               <WhyUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="founder" content={getSetting("section_founder_content", {})}>
+            <SectionWrapper id="founder" nextId="testimonials" content={getSetting("section_founder_content", {})}>
               <Founder getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="testimonials" content={getSetting("section_testimonials_content", {})}>
+            <SectionWrapper id="testimonials" nextId="faq" content={getSetting("section_testimonials_content", {})}>
               <Testimonials getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="faq" content={getSetting("section_faq_content", {})}>
+            <SectionWrapper id="faq" nextId="contato" content={getSetting("section_faq_content", {})}>
               <FAQ getSetting={getSetting} />
             </SectionWrapper>
 

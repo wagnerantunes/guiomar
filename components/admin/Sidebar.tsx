@@ -42,27 +42,27 @@ export default function Sidebar() {
 
     return (
         <aside
-            className="w-64 bg-[#09090b]/50 backdrop-blur-xl border-r border-white/5 hidden lg:flex flex-col flex-shrink-0 relative z-20"
+            className="w-64 bg-background/50 backdrop-blur-xl border-r border-border hidden lg:flex flex-col flex-shrink-0 relative z-20"
             role="navigation"
             aria-label="Sidebar principal"
         >
-            <div className="p-6 border-b border-gray-100 dark:border-white/5">
+            <div className="p-6 border-b border-border">
                 {logoAdmin ? (
                     <img src={logoAdmin} alt="RenovaMente" className="h-10 object-contain" />
                 ) : (
                     <div className="flex items-center gap-2">
-                        <div className="size-8 bg-[#13ec5b] rounded-xl flex items-center justify-center text-[#0d1b12]">
+                        <div className="size-8 bg-primary rounded-xl flex items-center justify-center text-primary-foreground">
                             <span className="material-symbols-outlined text-xl">spa</span>
                         </div>
                         <div>
-                            <h1 className="text-sm font-black text-[#0d1b12] dark:text-white tracking-tight">RENOVAMENTE</h1>
-                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Admin Dashboard</p>
+                            <h1 className="text-sm font-black text-foreground tracking-tight">RENOVAMENTE</h1>
+                            <p className="text-[9px] font-bold text-muted uppercase tracking-wider">Admin Dashboard</p>
                         </div>
                     </div>
                 )}
             </div>
             <div className="p-6 flex flex-col gap-1 overflow-y-auto custom-scrollbar flex-1">
-                <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 px-3">
+                <h2 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-4 px-3">
                     Menu Principal
                 </h2>
                 {menuItems.map((item) => {
@@ -73,9 +73,9 @@ export default function Sidebar() {
                             href={item.href}
                             aria-label={item.label}
                             aria-current={isActive ? "page" : undefined}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left group outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${isActive
-                                ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/10"
-                                : "text-gray-500 hover:bg-gray-50 hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left group outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${isActive
+                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/10"
+                                : "text-muted hover:bg-card-muted hover:text-primary"
                                 }`}
                         >
                             <span
@@ -86,7 +86,7 @@ export default function Sidebar() {
                             </span>
                             <span className="text-[13px] tracking-tight">{item.label}</span>
                             {item.badge && (
-                                <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? "bg-[#0d1b12] text-[#13ec5b]" : "bg-[#13ec5b] text-[#0d1b12]"}`}>
+                                <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground"}`}>
                                     {item.badge}
                                 </span>
                             )}
@@ -95,14 +95,14 @@ export default function Sidebar() {
                 })}
             </div>
 
-            <div className="mt-auto p-6 space-y-2 border-t border-white/5 bg-white/[0.02]">
+            <div className="mt-auto p-6 space-y-2 border-t border-border bg-card-muted/30">
                 <Link
                     href="/admin/settings"
                     aria-label="Configurações"
                     aria-current={pathname === "/admin/settings" ? "page" : undefined}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${pathname === "/admin/settings"
-                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg"
-                        : "text-gray-500 hover:bg-white hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${pathname === "/admin/settings"
+                        ? "bg-primary text-primary-foreground shadow-lg"
+                        : "text-muted hover:bg-card-muted hover:text-primary"
                         }`}
                 >
                     <span className="material-symbols-outlined text-[22px]">settings</span>
@@ -112,9 +112,9 @@ export default function Sidebar() {
                     href="/admin/settings/password"
                     aria-label="Alterar Senha"
                     aria-current={pathname === "/admin/settings/password" ? "page" : undefined}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-[#13ec5b]/50 ${pathname === "/admin/settings/password"
-                        ? "bg-[#13ec5b] text-[#0d1b12] shadow-lg"
-                        : "text-gray-500 hover:bg-white hover:text-[#13ec5b] dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-[#13ec5b]"
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-left outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${pathname === "/admin/settings/password"
+                        ? "bg-primary text-primary-foreground shadow-lg"
+                        : "text-muted hover:bg-card-muted hover:text-primary"
                         }`}
                 >
                     <span className="material-symbols-outlined text-[22px]">lock</span>
@@ -123,7 +123,7 @@ export default function Sidebar() {
                 <button
                     onClick={handleSignOut}
                     aria-label="Sair da conta"
-                    className="w-full flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
                 >
                     <span className="material-symbols-outlined text-[22px]">logout</span>
                     <span className="text-[13px] tracking-tight">Sair</span>

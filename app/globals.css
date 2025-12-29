@@ -1,36 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FDF5E6;
-  /* Renda Antiga / Creme */
-  --foreground: #0F758D;
-  /* Deep Teal */
+  --background: #FDFBF7;
+  /* Lighter, cleaner lace */
+  --foreground: #0A4D5D;
+  /* Darker teal for better contrast */
   --card: #ffffff;
-  --card-foreground: #0F758D;
-  --card-muted: rgba(15, 117, 141, 0.05);
-  --border: rgba(15, 117, 141, 0.1);
+  --card-foreground: #0A4D5D;
+  --card-muted: rgba(10, 77, 93, 0.04);
+  --border: rgba(10, 77, 93, 0.1);
   --primary: #0F758D;
   --primary-rgb: 15, 117, 141;
-  --primary-foreground: #FDF5E6;
-  --muted: #859EA2;
-  /* Apoio 1 */
-  --muted-foreground: #0F758D;
-  --grid-color: rgba(15, 117, 141, 0.05);
+  --primary-foreground: #FDFBF7;
+  --muted: #6B8E96;
+  --muted-foreground: #4A6D75;
+  --grid-color: rgba(10, 77, 93, 0.03);
 }
 
 .dark {
   --background: #09090b;
-  --foreground: #fafafa;
-  --card: rgba(255, 255, 255, 0.03);
-  --card-foreground: #fafafa;
+  --foreground: #F2F2F2;
+  /* Pure white can be harsh, slightly off-white is premium */
+  --card: #121214;
+  --card-foreground: #F2F2F2;
   --card-muted: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
   --primary: #13ec5b;
-  /* Keep Neon Green for Tech-Luxury dark mode */
   --primary-rgb: 19, 236, 91;
   --primary-foreground: #09090b;
-  --muted: #a1a1aa;
-  --muted-foreground: #fafafa;
+  --muted: #71717a;
+  --muted-foreground: #a1a1aa;
   --grid-color: rgba(255, 255, 255, 0.02);
 }
 

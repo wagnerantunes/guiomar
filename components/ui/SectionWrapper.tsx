@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { AntigravityParticles } from "./AntigravityParticles";
+import { ScrollIndicator } from "./ScrollIndicator";
 
 interface SectionWrapperProps {
     children: React.ReactNode;
@@ -10,6 +11,7 @@ interface SectionWrapperProps {
     delay?: number;
     stagger?: boolean;
     id?: string;
+    nextId?: string; // ID of the next section to scroll to
     content?: any; // New prop for CMS content
 }
 
@@ -19,6 +21,7 @@ export function SectionWrapper({
     delay = 0,
     stagger = false,
     id,
+    nextId,
     content
 }: SectionWrapperProps) {
     const ref = useRef(null);
@@ -95,6 +98,8 @@ export function SectionWrapper({
                     </motion.div>
                 )}
             </div>
+
+            {nextId && <ScrollIndicator targetId={nextId} />}
         </motion.section>
     );
 }

@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
+import { Resend } from 'resend'
 
 // Validation schema for user creation
 const createUserSchema = z.object({
@@ -133,6 +134,56 @@ export async function POST(request: NextRequest) {
                 createdAt: true,
             },
         })
+
+        // EMAIL INVITATION SYSTEM
+        try {
+            const site = await prisma.site.findFirst({
+                where: {
+                    OR: [
+                        { domain: "renovamente-guiomarmelo.com.br" },
+                        { subdomain: "renovamente" }
+                    ]
+                },
+                select: { resendApiKey: true }
+            })
+
+            if (site?.resendApiKey) {
+                const resend = new Resend(site.resendApiKey)
+                const loginUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br'}/login`
+
+                await resend.emails.send({
+                    from: 'RenovaMente CMS <onboarding@resend.dev>',
+                    to: [email],
+                    subject: '🎉 Bem-vindo ao Painel RenovaMente!',
+                    html: `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 12px;">
+                            <h2 style="color: #0F758D;">Olá, ${name}!</h2>
+                            <p>Sua conta no CMS RenovaMente foi criada com sucesso pelo administrador.</p>
+                            
+                            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                                <h3 style="margin-top: 0; font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Dados de Acesso:</h3>
+                                <p style="margin: 10px 0;"><strong>Link de Acesso:</strong> <a href="${loginUrl}" style="color: #0F758D;">Acessar Painel</a></p>
+                                <p style="margin: 10px 0;"><strong>E-mail:</strong> ${email}</p>
+                                <p style="margin: 10px 0;"><strong>Senha Temporária:</strong> <code style="background: #eee; padding: 2px 5px; border-radius: 4px;">${password}</code></p>
+                            </div>
+                            
+                            <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                                <strong>Importante:</strong> Recomendamos que você altere sua senha logo no primeiro acesso através da seção "Alterar Senha" no menu lateral do painel.
+                            </p>
+                            
+                            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;" />
+                            
+                            <p style="color: #999; font-size: 12px; text-align: center;">
+                                Este é um e-mail automático enviado pelo sistema RenovaMente CMS.
+                            </p>
+                        </div>
+                    `
+                })
+            }
+        } catch (emailError) {
+            console.error('Error sending invitation email:', emailError)
+            // Still return the user even if email fails
+        }
 
         return NextResponse.json(newUser, { status: 201 })
     } catch (error) {
