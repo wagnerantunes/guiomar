@@ -11,11 +11,12 @@ export function WhyUs({ getSetting }: WhyUsProps) {
     const content = getSetting("section_porque_content", SECTION_DEFAULTS.porque);
 
     return (
-        <section className="py-32 px-6 bg-zinc-50/50">
+        <section className="py-32 px-6 bg-background-dark relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/5 blur-[120px] rounded-full -z-0"></div>
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-24 space-y-6">
                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Diferenciais</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-[#09090b] tracking-tighter uppercase italic">
+                    <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase italic">
                         {content.title}
                     </h2>
                     <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
@@ -25,19 +26,19 @@ export function WhyUs({ getSetting }: WhyUsProps) {
                     {(content.items || SECTION_DEFAULTS.porque.items).map((item: any, i: number) => (
                         <div
                             key={i}
-                            className="bg-white p-10 rounded-[3rem] border border-zinc-100 shadow-sm hover:shadow-2xl hover:border-primary/20 transition-all duration-500 group relative overflow-hidden"
+                            className="bg-white/5 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:border-primary/20 transition-all duration-500 group relative overflow-hidden backdrop-blur-sm"
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
 
-                            <div className="size-16 bg-zinc-50 rounded-2xl flex items-center justify-center text-[#09090b] mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500 shadow-sm">
+                            <div className="size-16 bg-white/5 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-background-dark transition-all duration-500 shadow-sm border border-white/10">
                                 <span className="material-symbols-outlined text-3xl">verified</span>
                             </div>
 
-                            <h3 className="text-xl font-black text-[#09090b] mb-4 leading-tight">
+                            <h3 className="text-xl font-black text-white mb-4 leading-tight group-hover:text-primary transition-colors">
                                 {item.t}
                             </h3>
 
-                            <RichText content={item.d} className="text-zinc-500 text-sm font-medium leading-relaxed prose-p:text-sm" />
+                            <RichText content={item.d} className="text-zinc-400 text-sm font-medium leading-relaxed prose-p:text-sm" />
                         </div>
                     ))}
                 </div>
