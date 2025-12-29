@@ -17,9 +17,12 @@ export function Contact({ getSetting }: ContactProps) {
     });
 
     const footerSetting = getSetting("navigation_footer", {
-        phone: contatoContent.whatsapp || contatoContent.phone || "(11) 99441-6024",
-        email: contatoContent.email || "renova@renovamente.com.br"
+        phone: "(11) 99441-6024",
+        email: "renova@renovamente.com.br"
     });
+
+    const displayPhone = contatoContent.whatsapp || contatoContent.phone || footerSetting.phone || footerSetting.whatsapp;
+    const displayEmail = contatoContent.email || footerSetting.email;
 
     const formConfig = getSetting("form_contact", {
         fields: [
@@ -107,7 +110,7 @@ export function Contact({ getSetting }: ContactProps) {
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">Telefone</p>
-                                    <p className="text-xl font-bold font-manrope text-foreground">{footerSetting.phone}</p>
+                                    <p className="text-xl font-bold font-manrope text-foreground">{displayPhone}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-8 group/item">
@@ -116,7 +119,7 @@ export function Contact({ getSetting }: ContactProps) {
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">E-mail</p>
-                                    <p className="text-xl font-bold font-manrope text-foreground">{footerSetting.email}</p>
+                                    <p className="text-xl font-bold font-manrope text-foreground">{displayEmail}</p>
                                 </div>
                             </div>
                         </div>

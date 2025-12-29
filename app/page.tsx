@@ -223,23 +223,23 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             <Hero getSetting={getSetting} scrollTo={scrollTo} />
 
-            <SectionWrapper id="sobre">
+            <SectionWrapper id="sobre" content={getSetting("section_sobre_content", {})}>
               <AboutUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="challenge">
+            <SectionWrapper id="challenge" content={getSetting("section_challenge_content", {})}>
               <Challenge getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="servicos">
+            <SectionWrapper id="servicos" content={getSetting("section_servicos_content", {})}>
               <Services getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="metodologia">
+            <SectionWrapper id="metodologia" content={getSetting("section_metodologia_content", {})}>
               <Methodology getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="blog">
+            <SectionWrapper id="blog" content={getSetting("section_blog_content", {})}>
               <BlogPreview
                 getSetting={getSetting}
                 blogPosts={blogPosts}
@@ -248,23 +248,23 @@ function HomePageContent() {
               />
             </SectionWrapper>
 
-            <SectionWrapper>
+            <SectionWrapper id="whyus" content={getSetting("section_whyus_content", {})}>
               <WhyUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper>
+            <SectionWrapper id="founder" content={getSetting("section_founder_content", {})}>
               <Founder getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="testimonials">
+            <SectionWrapper id="testimonials" content={getSetting("section_testimonials_content", {})}>
               <Testimonials getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper>
+            <SectionWrapper id="faq" content={getSetting("section_faq_content", {})}>
               <FAQ getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="contato">
+            <SectionWrapper id="contato" content={getSetting("section_contato_content", {})}>
               <Contact getSetting={getSetting} />
             </SectionWrapper>
           </div>

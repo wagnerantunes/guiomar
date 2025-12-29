@@ -7,6 +7,8 @@ import { useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 
+import { AntigravityParticles } from "@/components/ui/AntigravityParticles";
+
 interface HeroProps {
     getSetting: (key: string, defaultValue: any) => any;
     scrollTo: (id: string) => void;
@@ -18,6 +20,10 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
     const { toast } = useToast();
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
+
+    // Handle Visibility
+    if (heroData?.isVisible === false) return null;
+
     const slides = (heroData.images || [heroData.image]).filter(Boolean);
 
     const mouseX = useMotionValue(0);
@@ -57,6 +63,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             email: formData.get("email"),
             company: formData.get("company"),
             phone: formData.get("phone"),
+            message: "CONTATO VIA FORMULÁRIO PRINCIPAL (HERO). CLIENTE INTERESSADO EM CONSULTORIA.",
             source: "Hero Section Lead Form",
             domain: window.location.hostname
         };
@@ -122,6 +129,9 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
             </div>
+
+            {/* Antigravity Particles Effect */}
+            {heroData.bgEffect === "particles" && <AntigravityParticles />}
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="text-foreground space-y-8 animate-fadeInLeft">

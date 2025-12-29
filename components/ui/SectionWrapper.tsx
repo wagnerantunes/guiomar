@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { AntigravityParticles } from "./AntigravityParticles";
 
 interface SectionWrapperProps {
     children: React.ReactNode;
@@ -9,6 +10,7 @@ interface SectionWrapperProps {
     delay?: number;
     stagger?: boolean;
     id?: string;
+    content?: any; // New prop for CMS content
 }
 
 export function SectionWrapper({
@@ -16,10 +18,14 @@ export function SectionWrapper({
     className = "",
     delay = 0,
     stagger = false,
-    id
+    id,
+    content
 }: SectionWrapperProps) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+    // Handle Visiblity
+    if (content?.isVisible === false) return null;
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -44,6 +50,8 @@ export function SectionWrapper({
         }
     };
 
+    const bgOpacity = (content?.bgOpacity ?? 100) / 100;
+
     return (
         <motion.section
             id={id}
@@ -51,19 +59,42 @@ export function SectionWrapper({
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className={`${className} relative overflow-hidden bg-background bg-grid`}
+            className={`${className} relative overflow-hidden bg-background`}
         >
-            {stagger ? (
-                React.Children.map(children, (child) => (
-                    <motion.div variants={itemVariants}>
-                        {child}
-                    </motion.div>
-                ))
-            ) : (
-                <motion.div variants={itemVariants}>
-                    {children}
-                </motion.div>
+            {/* Background Image */}
+            {content?.bgImage && (
+                <div
+                    className="absolute inset-0 z-0 pointer-events-none"
+                    style={{
+                        backgroundImage: `url(${content.bgImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        opacity: bgOpacity
+                    }}
+                />
             )}
+
+            {/* Antigravity Particles */}
+            {content?.bgEffect === "particles" && <AntigravityParticles />}
+
+            {/* Parallax Effect (Simplificado para este contexto) */}
+            {content?.bgEffect === "parallax" && (
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent z-0 animate-pulse pointer-events-none" />
+            )}
+
+            <div className="relative z-10 h-full w-full">
+                {stagger ? (
+                    React.Children.map(children, (child) => (
+                        <motion.div variants={itemVariants}>
+                            {child}
+                        </motion.div>
+                    ))
+                ) : (
+                    <motion.div variants={itemVariants}>
+                        {children}
+                    </motion.div>
+                )}
+            </div>
         </motion.section>
     );
 }

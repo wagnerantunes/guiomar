@@ -16,6 +16,9 @@ interface SettingsFormProps {
         logoLight: string | null;
         logoAdmin: string | null;
         ogImage: string | null;
+        emailTo?: string | null;
+        emailBcc?: string | null;
+        resendApiKey?: string | null;
     };
 }
 
@@ -34,6 +37,9 @@ export default function SettingsForm({ site }: SettingsFormProps) {
         logoLight: site.logoLight || "",
         logoAdmin: site.logoAdmin || "",
         ogImage: site.ogImage || "",
+        emailTo: site.emailTo || "",
+        emailBcc: site.emailBcc || "",
+        resendApiKey: site.resendApiKey || "",
     });
 
     const onSelectMedia = (url: string) => {
@@ -156,6 +162,55 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             />
+                        </div>
+                    </div>
+                </div>
+
+                {/* EMAIL NOTIFICATIONS SECTION */}
+                <div className="bg-[#09090b]/40 backdrop-blur-md rounded-[3rem] border border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                    <div className="p-8 border-b border-white/5 flex items-center gap-5 bg-white/5">
+                        <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                            <span className="material-symbols-outlined text-2xl">mail</span>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-black text-white uppercase tracking-widest">Notificações por E-mail</h3>
+                            <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Configuração de recebimento de leads e contatos.</p>
+                        </div>
+                    </div>
+                    <div className="p-10 space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">E-mail de Destino (TO)</label>
+                                <input
+                                    className="w-full bg-[#09090b]/50 border-white/5 border rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-2 focus:ring-[#13ec5b]/50 transition-all outline-none text-white shadow-inner"
+                                    value={formData.emailTo}
+                                    onChange={(e) => setFormData({ ...formData, emailTo: e.target.value })}
+                                    placeholder="renova@renovamente-guiomarmelo.com.br"
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">E-mail em Cópia Oculta (BCC)</label>
+                                <input
+                                    className="w-full bg-[#09090b]/50 border-white/5 border rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-2 focus:ring-[#13ec5b]/50 transition-all outline-none text-white shadow-inner"
+                                    value={formData.emailBcc}
+                                    onChange={(e) => setFormData({ ...formData, emailBcc: e.target.value })}
+                                    placeholder="wagnerantunes84@gmail.com"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-3 border-t border-white/5 pt-8">
+                            <div className="flex items-center justify-between">
+                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Resend API Key</label>
+                                <a href="https://resend.com" target="_blank" className="text-[8px] font-black text-[#13ec5b] uppercase hover:underline">Obter API Key</a>
+                            </div>
+                            <input
+                                type="password"
+                                className="w-full bg-[#09090b]/50 border-white/5 border rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-2 focus:ring-[#13ec5b]/50 transition-all outline-none text-white shadow-inner"
+                                value={formData.resendApiKey}
+                                onChange={(e) => setFormData({ ...formData, resendApiKey: e.target.value })}
+                                placeholder="re_************************"
+                            />
+                            <p className="text-[8px] text-gray-500 font-bold uppercase tracking-widest ml-3 mt-2 italic">⚠️ Necessário para o envio automático de notificações.</p>
                         </div>
                     </div>
                 </div>

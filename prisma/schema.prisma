@@ -95,6 +95,9 @@ model Site {
   logoAdmin   String?  // Logo for admin sidebar
   favicon     String?
   ogImage     String?
+  emailTo     String?  // Global notification destination
+  emailBcc     String?  // Global BCC (e.g. for backup)
+  resendApiKey String? // API Key for sending emails
   settings    Json?
   theme       Json?
   createdAt   DateTime @default(now())

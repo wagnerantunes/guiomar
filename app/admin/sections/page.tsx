@@ -210,9 +210,8 @@ export default function PageSections() {
                 </div>
             </div>
 
-            {/* LISTA DE SEÇÕES */}
             <div className="p-6 md:p-10 flex-1 overflow-y-auto custom-scrollbar">
-                <div className="max-w-4xl mx-auto space-y-6">
+                <div className="max-w-7xl mx-auto space-y-6">
                     {loading ? (
                         <>
                             {Array.from({ length: 5 }).map((_, i) => (
@@ -264,6 +263,18 @@ export default function PageSections() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-6">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleContentChange(sec.id, "isVisible", !(sec.content?.isVisible ?? true));
+                                            }}
+                                            className={`hidden md:inline-block text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full transition-all ${(sec.content?.isVisible ?? true)
+                                                    ? "bg-[#13ec5b]/10 text-[#13ec5b] border border-[#13ec5b]/20"
+                                                    : "bg-red-500/10 text-red-500 border border-red-500/20"
+                                                }`}
+                                        >
+                                            {(sec.content?.isVisible ?? true) ? "Visível" : "Escondido"}
+                                        </button>
                                         <span className="hidden md:inline-block text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 border border-green-100 dark:border-green-500/20">
                                             {sec.status}
                                         </span>
@@ -334,12 +345,12 @@ export default function PageSections() {
                                                                         <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
                                                                             {(sec.content?.images || []).filter(Boolean).map((img: string, idx: number) => (
                                                                                 <div key={idx} className="relative shrink-0 group/slide">
-                                                                                    <div className="bg-white dark:bg-[#18181b] rounded-3xl border border-gray-100 dark:border-white/5 p-10 space-y-10 group relative transition-all hover:bg-white/60 dark:hover:bg-[#1f1f23]">
+                                                                                    <div className="bg-white dark:bg-[#18181b] rounded-2xl border border-gray-100 dark:border-white/5 h-24 aspect-video overflow-hidden group relative transition-all hover:bg-white/60 dark:hover:bg-[#1f1f23]">
                                                                                         <img src={img} className="w-full h-full object-cover" alt={`Slide ${idx + 1}`} />
                                                                                     </div>
                                                                                     <button
                                                                                         onClick={() => removeImageFromSlider(sec.id, idx)}
-                                                                                        className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/slide:opacity-100 transition-all shadow-lg hover:scale-110 active:scale-95"
+                                                                                        className="absolute -top-2 -right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/slide:opacity-100 transition-all shadow-lg hover:scale-110 active:scale-95 z-10"
                                                                                         title="Remover imagem"
                                                                                     >
                                                                                         <span className="material-symbols-outlined text-sm">close</span>
@@ -351,10 +362,10 @@ export default function PageSections() {
                                                                                     setMediaPickerTarget({ secId: sec.id });
                                                                                     setShowMediaPicker(true);
                                                                                 }}
-                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
+                                                                                className="h-24 aspect-video rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer bg-gray-50/50 dark:bg-white/2 shrink-0"
                                                                             >
-                                                                                <span className="material-symbols-outlined text-2xl">photo_library</span>
-                                                                                <span className="text-[8px] font-bold">Mídia</span>
+                                                                                <span className="material-symbols-outlined text-xl">photo_library</span>
+                                                                                <span className="text-[8px] font-bold uppercase tracking-widest">Adicionar</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -383,11 +394,11 @@ export default function PageSections() {
                                                                         </div>
                                                                         <div className="flex gap-3 flex-wrap">
                                                                             {sec.content?.image && (
-                                                                                <div className="relative size-32 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 group">
+                                                                                <div className="relative h-24 aspect-video rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 group">
                                                                                     <img src={sec.content.image} alt="Guiomar" className="w-full h-full object-cover" />
                                                                                     <button
                                                                                         onClick={() => handleContentChange(sec.id, "image", "")}
-                                                                                        className="absolute top-2 right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                                                                                        className="absolute top-2 right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-10"
                                                                                         title="Remover imagem"
                                                                                     >
                                                                                         <span className="material-symbols-outlined text-sm">close</span>
@@ -399,10 +410,10 @@ export default function PageSections() {
                                                                                     setMediaPickerTarget({ secId: sec.id, fieldName: "image" });
                                                                                     setShowMediaPicker(true);
                                                                                 }}
-                                                                                className="size-32 rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer"
+                                                                                className="h-24 aspect-video rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all cursor-pointer bg-gray-50/50 dark:bg-white/2"
                                                                             >
-                                                                                <span className="material-symbols-outlined text-2xl">photo_library</span>
-                                                                                <span className="text-[8px] font-bold">Mídia</span>
+                                                                                <span className="material-symbols-outlined text-xl">photo_library</span>
+                                                                                <span className="text-[8px] font-bold uppercase tracking-widest">Trocar Foto</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -538,6 +549,24 @@ export default function PageSections() {
 
                                             {/* STYLING COLUMN */}
                                             <div className="lg:col-span-4 space-y-8">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <button
+                                                            onClick={() => handleContentChange(sec.id, "isVisible", !(sec.content?.isVisible ?? true))}
+                                                            className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest transition-all ${(sec.content?.isVisible ?? true)
+                                                                    ? "bg-[#13ec5b]/10 text-[#13ec5b] border border-[#13ec5b]/20"
+                                                                    : "bg-red-500/10 text-red-500 border border-red-500/20"
+                                                                }`}
+                                                        >
+                                                            {(sec.content?.isVisible ?? true) ? "Visível" : "Escondido"}
+                                                        </button>
+                                                        <div className="flex items-center gap-2 px-3 py-1 bg-[#13ec5b]/10 rounded-full border border-[#13ec5b]/20">
+                                                            <div className="size-1.5 bg-[#13ec5b] rounded-full animate-pulse" />
+                                                            <span className="text-[8px] font-black text-[#13ec5b] uppercase tracking-widest">Ativo</span>
+                                                        </div>
+                                                    </div>
+                                                    <span className={`material-symbols-outlined text-gray-400 transition-transform duration-500 ${expandedId === sec.id ? "rotate-180" : ""}`}>expand_more</span>
+                                                </div>
                                                 <div className="space-y-6">
                                                     <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
                                                         <span className="material-symbols-outlined text-[#13ec5b] text-sm">palette</span>
@@ -604,6 +633,66 @@ export default function PageSections() {
                                                         </div>
                                                     </div>
 
+                                                    {/* BACKGROUND SETTINGS */}
+                                                    <div className="pt-6 border-t border-gray-100 dark:border-white/5 space-y-6">
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="material-symbols-outlined text-[#13ec5b] text-sm">wallpaper</span>
+                                                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Background</h4>
+                                                        </div>
+
+                                                        <div className="space-y-4">
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Imagem de Fundo</label>
+                                                                <div className="flex gap-3 items-center">
+                                                                    {sec.content?.bgImage ? (
+                                                                        <div className="relative size-16 rounded-xl overflow-hidden border border-gray-100 dark:border-white/10 group">
+                                                                            <img src={sec.content.bgImage} className="w-full h-full object-cover" />
+                                                                            <button
+                                                                                onClick={() => handleContentChange(sec.id, "bgImage", "")}
+                                                                                className="absolute inset-0 bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
+                                                                            >
+                                                                                <span className="material-symbols-outlined text-sm">close</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div
+                                                                            onClick={() => {
+                                                                                setMediaPickerTarget({ secId: sec.id, fieldName: "bgImage" });
+                                                                                setShowMediaPicker(true);
+                                                                            }}
+                                                                            className="size-16 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 flex items-center justify-center text-gray-300 hover:text-[#13ec5b] transition-all cursor-pointer"
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-xl">add_photo_alternate</span>
+                                                                        </div>
+                                                                    )}
+                                                                    <div className="flex-1">
+                                                                        <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Efeito Alpha</p>
+                                                                        <input
+                                                                            type="range"
+                                                                            min="0" max="100"
+                                                                            value={sec.content?.bgOpacity ?? 100}
+                                                                            onChange={(e) => handleContentChange(sec.id, "bgOpacity", parseInt(e.target.value))}
+                                                                            className="w-full accent-[#13ec5b]"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2">Efeito Especial</label>
+                                                                <select
+                                                                    className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                    value={sec.content?.bgEffect || "none"}
+                                                                    onChange={(e) => handleContentChange(sec.id, "bgEffect", e.target.value)}
+                                                                >
+                                                                    <option value="none">Nenhum</option>
+                                                                    <option value="particles">Partículas Antigravity</option>
+                                                                    <option value="parallax">Parallax Suave</option>
+                                                                    <option value="glass">Glassmorphism Forte</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     {/* CALL TO ACTION */}
                                                     <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
                                                         <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Call to Action</h4>
