@@ -238,7 +238,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
 
             {/* Slider Dots */}
             {slides.length > 1 && (
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+                <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex gap-3 z-20">
                     {slides.map((_: any, i: number) => (
                         <button
                             key={i}

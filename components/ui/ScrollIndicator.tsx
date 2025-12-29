@@ -19,7 +19,7 @@ export function ScrollIndicator({ targetId = "sobre" }: { targetId?: string }) {
             onClick={scrollToTarget}
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 group z-20"
         >
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] group-hover:text-primary transition-colors duration-300">
+            <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] group-hover:text-primary transition-colors duration-300">
                 DESCUBRA
             </span>
             <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1 group-hover:border-primary/50 transition-colors duration-300">

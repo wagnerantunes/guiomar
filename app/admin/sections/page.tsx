@@ -611,6 +611,29 @@ export default function PageSections() {
                                                             <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Button Text</label>
                                                             <input className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.ctaText || "Solicitar Contato"} onChange={(e) => handleContentChange(sec.id, "ctaText", e.target.value)} />
                                                         </div>
+
+                                                        {sec.id === "contato" && (
+                                                            <div className="grid grid-cols-2 gap-4 pt-4">
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">WhatsApp</label>
+                                                                    <input
+                                                                        className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                        value={sec.content?.whatsapp || ""}
+                                                                        onChange={(e) => handleContentChange(sec.id, "whatsapp", e.target.value)}
+                                                                        placeholder="(11) 99999-9999"
+                                                                    />
+                                                                </div>
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">E-mail</label>
+                                                                    <input
+                                                                        className="w-full bg-gray-50 dark:bg-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                        value={sec.content?.email || ""}
+                                                                        onChange={(e) => handleContentChange(sec.id, "email", e.target.value)}
+                                                                        placeholder="email@empresa.com"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -631,7 +654,16 @@ export default function PageSections() {
                         ))
                     )}
 
-                    <button className="w-full py-12 border-4 border-dashed border-gray-200 dark:border-white/10 rounded-[3rem] flex flex-col items-center justify-center gap-4 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 hover:bg-[#13ec5b]/5 transition-all group mt-10">
+                    <button
+                        onClick={() => {
+                            toast({
+                                title: "Em Breve",
+                                description: "A funcionalidade de sessões customizadas estará disponível nas próximas atualizações.",
+                                type: "info"
+                            });
+                        }}
+                        className="w-full py-12 border-4 border-dashed border-gray-200 dark:border-white/10 rounded-[3rem] flex flex-col items-center justify-center gap-4 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 hover:bg-[#13ec5b]/5 transition-all group mt-10"
+                    >
                         <span className="material-symbols-outlined text-5xl group-hover:rotate-90 transition-transform duration-700">add_circle</span>
                         <span className="font-black text-xs uppercase tracking-widest opacity-60">Inserir Nova Sessão Customizada</span>
                     </button>

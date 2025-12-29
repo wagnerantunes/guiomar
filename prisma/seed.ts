@@ -160,27 +160,31 @@ async function main() {
         console.log('✅ Sample post created')
     }
 
-    // Seed section settings from SECTION_DEFAULTS
+    // Seed section settings from SECTION_DEFAULTS (only if not existing)
     const { SECTION_DEFAULTS } = require('../lib/sectionDefaults')
     for (const [id, content] of Object.entries(SECTION_DEFAULTS)) {
-        await prisma.siteSettings.upsert({
+        const existingSetting = await prisma.siteSettings.findUnique({
             where: {
                 siteId_key: {
                     siteId: renovamenteSite.id,
                     key: `section_${id}_content`
                 }
-            },
-            update: {
-                value: JSON.stringify(content)
-            },
-            create: {
-                siteId: renovamenteSite.id,
-                key: `section_${id}_content`,
-                value: JSON.stringify(content)
             }
         })
+
+        if (!existingSetting) {
+            await prisma.siteSettings.create({
+                data: {
+                    siteId: renovamenteSite.id,
+                    key: `section_${id}_content`,
+                    value: JSON.stringify(content)
+                }
+            })
+            console.log(`✅ Default content created for section: ${id}`)
+        } else {
+            console.log(`ℹ️ Section ${id} already has content, skipping seed to preserve changes.`)
+        }
     }
-    console.log('✅ Section content settings seeded')
 
     console.log('🎉 Database seeded successfully!')
 }

@@ -11,9 +11,14 @@ interface ContactProps {
 export function Contact({ getSetting }: ContactProps) {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
+    const contatoContent = getSetting("section_contato_content", {
+        whatsapp: "(11) 99441-6024",
+        email: "renova@renovamente-guiomarmelo.com.br"
+    });
+
     const footerSetting = getSetting("navigation_footer", {
-        phone: "(11) 99441-6024",
-        email: "renova@renovamente.com.br"
+        phone: contatoContent.whatsapp || contatoContent.phone || "(11) 99441-6024",
+        email: contatoContent.email || "renova@renovamente.com.br"
     });
 
     const formConfig = getSetting("form_contact", {
