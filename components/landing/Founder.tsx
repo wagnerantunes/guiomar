@@ -15,36 +15,36 @@ export function Founder({ getSetting }: FounderProps) {
     return (
         <section
             id="guiomar"
-            className="py-32 px-6 bg-background-dark overflow-hidden relative"
+            className="py-32 px-6 bg-background overflow-hidden relative"
         >
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                 <div className="order-2 lg:order-1 space-y-10">
                     <div className="space-y-4">
                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Liderança</span>
-                        <h2 className={`${content.titleSize || 'text-4xl'} md:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic`}>
+                        <h2 className={`${content.titleSize || 'text-4xl'} md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic`}>
                             {content.title}
                         </h2>
                     </div>
 
-                    <p className={`${content.subtitleSize || 'text-lg'} text-xl text-zinc-100 font-bold italic border-l-4 border-primary pl-6`}>
+                    <p className={`${content.subtitleSize || 'text-lg'} text-xl text-foreground/90 font-bold italic border-l-4 border-primary pl-6`}>
                         {content.subtitle}
                     </p>
 
                     <div className="relative">
                         <RichText
                             content={content.description}
-                            className={`text-zinc-400 leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}
+                            className={`text-muted-foreground leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}
                         />
                     </div>
 
                     <div className="flex gap-6 pt-4">
-                        <div className="p-8 bg-white/5 rounded-[2rem] border border-white/5 flex-1 hover:border-primary/20 transition-colors group">
-                            <span className="text-4xl font-black text-white block mb-2 group-hover:text-primary transition-colors">{content.yearsExp || "15+"}</span>
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Anos de<br />Experiência</span>
+                        <div className="p-8 bg-card-muted rounded-[2rem] border border-border flex-1 hover:border-primary/20 transition-colors group">
+                            <span className="text-4xl font-black text-foreground block mb-2 group-hover:text-primary transition-colors">{content.yearsExp || "15+"}</span>
+                            <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Anos de<br />Experiência</span>
                         </div>
-                        <div className="p-8 bg-white/5 rounded-[2rem] border border-white/5 flex-1 hover:border-primary/20 transition-colors group">
-                            <span className="text-4xl font-black text-white block mb-2 group-hover:text-primary transition-colors">{content.projectsCount || "500+"}</span>
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Projetos<br />Entregues</span>
+                        <div className="p-8 bg-card-muted rounded-[2rem] border border-border flex-1 hover:border-primary/20 transition-colors group">
+                            <span className="text-4xl font-black text-foreground block mb-2 group-hover:text-primary transition-colors">{content.projectsCount || "500+"}</span>
+                            <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Projetos<br />Entregues</span>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@ export function Founder({ getSetting }: FounderProps) {
                             className="rounded-[3.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                             alt="Guiomar Melo"
                         />
-                        <div className="absolute inset-0 border border-white/10 rounded-[3.5rem] z-20 pointer-events-none"></div>
+                        <div className="absolute inset-0 border border-border rounded-[3.5rem] z-20 pointer-events-none"></div>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@ export function Footer({
     };
 
     return (
-        <footer className="bg-background-dark border-t border-white/5 pt-32 pb-12 px-6 relative overflow-hidden">
+        <footer className="bg-background border-t border-border pt-32 pb-12 px-6 relative overflow-hidden transition-colors duration-500">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24 relative z-10">
@@ -86,15 +86,15 @@ export function Footer({
                         <img src={logo} alt="RenovaMente" className="h-12 object-contain" />
                     ) : (
                         <div className="flex items-center gap-3 group cursor-default">
-                            <div className="size-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-primary shadow-lg group-hover:bg-primary group-hover:text-background-dark transition-all duration-500">
+                            <div className="size-12 bg-foreground/5 border border-border rounded-2xl flex items-center justify-center text-primary shadow-lg group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
                                 <span className="material-symbols-outlined text-3xl">spa</span>
                             </div>
-                            <span className="text-xl font-black text-white tracking-tighter">
+                            <span className="text-xl font-black text-foreground tracking-tighter">
                                 RenovaMente
                             </span>
                         </div>
                     )}
-                    <p className="text-sm text-zinc-500 leading-relaxed font-medium">
+                    <p className="text-sm text-muted leading-relaxed font-medium">
                         {footerSettings.bio}
                     </p>
                     <div className="flex items-center gap-4">
@@ -104,7 +104,7 @@ export function Footer({
                                 href={val as string}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="size-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500 hover:bg-primary hover:text-background-dark hover:border-primary transition-all duration-300 hover:-translate-y-1"
+                                className="size-12 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-muted hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 hover:-translate-y-1"
                                 title={key}
                             >
                                 <SocialIcon name={key} />
@@ -115,7 +115,7 @@ export function Footer({
 
                 {/* QUICK LINKS */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-10">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-10 opacity-50">
                         Links Rápidos
                     </h4>
                     <ul className="space-y-6">
@@ -129,9 +129,9 @@ export function Footer({
                                             window.location.href = link.url;
                                         }
                                     }}
-                                    className="text-sm font-bold text-zinc-500 hover:text-primary transition-all flex items-center gap-2 group"
+                                    className="text-sm font-bold text-muted hover:text-primary transition-all flex items-center gap-2 group"
                                 >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-800 group-hover:bg-primary transition-colors"></span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-foreground/10 group-hover:bg-primary transition-colors"></span>
                                     {link.label}
                                 </button>
                             </li>
@@ -141,13 +141,13 @@ export function Footer({
 
                 {/* SERVICES */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-10">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-10 opacity-50">
                         Nossos Serviços
                     </h4>
                     <ul className="space-y-6">
                         {(footerSettings.services || []).map((service: string, i: number) => (
                             <li key={i}>
-                                <span className="text-sm font-bold text-zinc-500 hover:text-white cursor-pointer transition-all block">
+                                <span className="text-sm font-bold text-muted hover:text-foreground cursor-pointer transition-all block">
                                     {service}
                                 </span>
                             </li>
@@ -157,7 +157,7 @@ export function Footer({
 
                 {/* CONTACT INFO */}
                 <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white mb-10">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-10 opacity-50">
                         Contato
                     </h4>
                     <ul className="space-y-6">
@@ -166,9 +166,9 @@ export function Footer({
                                 href={`https://wa.me/${((footerSettings.phone || "5511994416024").replace(/\D/g, ""))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-4 group"
+                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-center gap-4 group"
                             >
-                                <div className="size-8 rounded-lg bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-background-dark transition-colors">
+                                <div className="size-8 rounded-lg bg-foreground/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     <Phone size={14} />
                                 </div>
                                 <span className="group-hover:translate-x-1 transition-transform">{footerSettings.phone || "(11) 99441-6024"}</span>
@@ -177,17 +177,17 @@ export function Footer({
                         <li>
                             <a
                                 href={`mailto:${footerSettings.email || "contato@renovamente.com.br"}`}
-                                className="text-sm font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-4 group"
+                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-center gap-4 group"
                             >
-                                <div className="size-8 rounded-lg bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-background-dark transition-colors">
+                                <div className="size-8 rounded-lg bg-foreground/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     <Mail size={14} />
                                 </div>
                                 <span className="group-hover:translate-x-1 transition-transform">{footerSettings.email || "contato@renovamente.com.br"}</span>
                             </a>
                         </li>
                         <li>
-                            <div className="text-sm font-bold text-zinc-500 flex items-start gap-4 group cursor-default">
-                                <div className="size-8 rounded-lg bg-white/5 flex items-center justify-center text-primary">
+                            <div className="text-sm font-bold text-muted flex items-start gap-4 group cursor-default">
+                                <div className="size-8 rounded-lg bg-foreground/5 flex items-center justify-center text-primary">
                                     <MapPin size={14} />
                                 </div>
                                 <span>{footerSettings.address || "São Paulo, SP"}</span>
@@ -197,17 +197,17 @@ export function Footer({
                 </div>
 
                 {/* NEWSLETTER */}
-                <div className="bg-zinc-900/50 p-10 rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
+                <div className="bg-card p-10 rounded-[2.5rem] border border-border relative overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                    <h4 className="text-xl font-black text-white mb-3 relative z-10">Receba novidades</h4>
-                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-8 relative z-10">
+                    <h4 className="text-xl font-black text-foreground mb-3 relative z-10">Receba novidades</h4>
+                    <p className="text-[10px] text-muted font-bold uppercase tracking-widest mb-8 relative z-10 opacity-50">
                         Insights exclusivos de bem-estar
                     </p>
                     <form className="space-y-4 relative z-10" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
                         <div className="space-y-1">
                             <input
-                                className="w-full bg-background-dark border border-white/10 rounded-2xl text-xs py-4 px-6 outline-none focus:border-primary/50 focus:bg-white/5 text-white font-medium placeholder:text-zinc-700 transition-all"
+                                className="w-full bg-background border border-border rounded-2xl text-xs py-4 px-6 outline-none focus:border-primary/50 focus:bg-foreground/5 text-foreground font-medium placeholder:text-muted/30 transition-all"
                                 placeholder="Seu nome"
                                 type="text"
                                 required
@@ -215,7 +215,7 @@ export function Footer({
                         </div>
                         <div className="space-y-1">
                             <input
-                                className="w-full bg-background-dark border border-white/10 rounded-2xl text-xs py-4 px-6 outline-none focus:border-primary/50 focus:bg-white/5 text-white font-medium placeholder:text-zinc-700 transition-all"
+                                className="w-full bg-background border border-border rounded-2xl text-xs py-4 px-6 outline-none focus:border-primary/50 focus:bg-foreground/5 text-foreground font-medium placeholder:text-muted/30 transition-all"
                                 placeholder="Seu melhor e-mail*"
                                 type="email"
                                 required
@@ -226,7 +226,7 @@ export function Footer({
                         <button
                             type="submit"
                             disabled={newsletterStatus === "loading" || !handleNewsletterSubmit}
-                            className="w-full bg-primary text-background-dark font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-white hover:text-background-dark transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-primary/10"
+                            className="w-full bg-primary text-primary-foreground font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-foreground hover:text-background transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-primary/10"
                         >
                             {newsletterStatus === "loading" ? "Processando..." :
                                 newsletterStatus === "success" ? "Inscrito!" :
@@ -237,11 +237,11 @@ export function Footer({
             </div>
 
             {/* COPYRIGHT */}
-            <div className="max-w-7xl mx-auto pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 opacity-40 hover:opacity-100 transition-opacity duration-500">
-                <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
+            <div className="max-w-7xl mx-auto pt-10 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 opacity-40 hover:opacity-100 transition-opacity duration-500">
+                <p className="text-[10px] text-muted font-black uppercase tracking-widest">
                     © {new Date().getFullYear()} RenovaMente. Todos os direitos reservados.
                 </p>
-                <div className="flex gap-8 text-[9px] font-black text-zinc-600 uppercase tracking-widest">
+                <div className="flex gap-8 text-[9px] font-black text-muted uppercase tracking-widest">
                     <a href="#" className="hover:text-primary transition-colors">Termos</a>
                     <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
                 </div>

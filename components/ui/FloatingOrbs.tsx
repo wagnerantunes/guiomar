@@ -18,7 +18,7 @@ export function FloatingOrbs() {
                     repeat: Infinity,
                     ease: "linear",
                 }}
-                className="absolute -top-[10%] -left-[5%] w-[40%] aspect-square bg-[#13ec5b]/5 rounded-full blur-[120px]"
+                className="absolute -top-[10%] -left-[5%] w-[40%] aspect-square bg-primary/5 rounded-full blur-[120px]"
             />
 
             <motion.div

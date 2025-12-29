@@ -118,13 +118,13 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                         />
                     </AnimatePresence>
                 ) : (
-                    <div className="w-full h-full bg-background-dark" />
+                    <div className="w-full h-full bg-background" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div className="text-white space-y-8 animate-fadeInLeft">
+                <div className="text-foreground space-y-8 animate-fadeInLeft">
                     {heroData.subtitle && (
                         <motion.p
                             initial={{ opacity: 0, x: -20 }}
@@ -146,7 +146,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     </motion.h1>
                     <RichText
                         content={heroData.description}
-                        className="text-base md:text-lg font-medium text-gray-300 max-w-xl prose-invert"
+                        className="text-base md:text-lg font-medium text-muted-foreground max-w-xl"
                     />
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -159,7 +159,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     >
                         <button
                             onClick={() => scrollTo("servicos")}
-                            className="bg-primary text-black px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest relative z-10"
+                            className="bg-primary text-primary-foreground px-10 py-5 rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest relative z-10"
                         >
                             {heroData.ctaText || "NOSSOS SERVIÇOS"}
                         </button>
@@ -170,63 +170,63 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
-                    className="bg-white/[0.03] backdrop-blur-2xl p-10 rounded-[3rem] shadow-2xl max-w-md ml-auto border border-white/10"
+                    className="bg-card backdrop-blur-2xl p-8 md:p-10 rounded-[3rem] shadow-2xl max-w-md ml-auto border border-border"
                 >
                     <div className="mb-8">
-                        <h3 className="text-2xl font-black text-white">
+                        <h3 className="text-2xl font-black text-foreground">
                             Transforme seu ambiente de trabalho
                         </h3>
-                        <p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em] mt-3">
+                        <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-3">
                             Consultoria técnica e humanizada
                         </p>
                     </div>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-2">
-                            <label className="text-[9px] font-black text-white/30 uppercase tracking-widest ml-1">Seu Nome</label>
+                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1 opacity-50">Seu Nome</label>
                             <input
                                 type="text"
                                 name="name"
                                 required
                                 placeholder="Seu nome"
-                                className="w-full px-5 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-white/20"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[9px] font-black text-white/30 uppercase tracking-widest ml-1">E-mail Corporativo</label>
+                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1 opacity-50">E-mail Corporativo</label>
                             <input
                                 type="email"
                                 name="email"
                                 required
                                 placeholder="seu@email.com"
-                                className="w-full px-5 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-white/20"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-[9px] font-black text-white/30 uppercase tracking-widest ml-1">Empresa</label>
+                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1 opacity-50">Empresa</label>
                                 <input
                                     type="text"
                                     name="company"
                                     required
                                     placeholder="Nome da empresa"
-                                    className="w-full px-5 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-white/20"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[9px] font-black text-white/30 uppercase tracking-widest ml-1">WhatsApp</label>
+                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1 opacity-50">WhatsApp</label>
                                 <input
                                     type="text"
                                     name="phone"
                                     required
                                     placeholder="(11) 99999-9999"
-                                    className="w-full px-5 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-white/20"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                                 />
                             </div>
                         </div>
                         <button
                             type="submit"
                             disabled={status === "loading"}
-                            className="w-full bg-primary text-black py-5 rounded-2xl font-black text-xs hover:bg-primary-light transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest mt-4 shadow-lg shadow-primary/10"
+                            className="w-full bg-primary text-primary-foreground py-5 rounded-2xl font-black text-xs hover:bg-foreground hover:text-background transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest mt-4 shadow-lg shadow-primary/10"
                         >
                             {status === "loading" ? "Enviando..." :
                                 status === "success" ? "Solicitação Enviada!" :

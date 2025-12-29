@@ -40,25 +40,25 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
             onMouseLeave={handleMouseLeave}
             animate={{ rotateX, rotateY }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={`bg-zinc-900/40 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/30 hover:shadow-[0_0_50px_-10px_rgba(19,236,91,0.15)] transition-all duration-500 group cursor-default relative overflow-hidden ${isLarge ? "md:col-span-2 md:row-span-2 min-h-[400px]" : "col-span-1 min-h-[300px]"
+            className={`bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border hover:border-primary/30 hover:shadow-[0_0_50px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group cursor-default relative overflow-hidden ${isLarge ? "md:col-span-2 md:row-span-2 min-h-[400px]" : "col-span-1 min-h-[300px]"
                 }`}
             style={{ transformStyle: "preserve-3d", perspective: 1000 }}
         >
             {/* Ambient Glow inside card */}
             <div className={`absolute top-0 right-0 rounded-full transition-opacity duration-500 pointer-events-none ${isLarge ? 'w-[400px] h-[400px] bg-primary/5 blur-[80px]' : 'w-48 h-48 bg-primary/5 blur-[50px]'} -mr-20 -mt-20 opacity-20 group-hover:opacity-60`}></div>
 
-            <div className="w-16 h-16 bg-zinc-950 rounded-2xl flex items-center justify-center text-primary mb-10 border border-primary/20 shadow-[0_4px_20px_-5px_rgba(19,236,91,0.2)] group-hover:scale-110 transition-transform duration-500 relative z-10" style={{ transform: "translateZ(30px)" }}>
+            <div className="w-16 h-16 bg-card-muted rounded-2xl flex items-center justify-center text-primary mb-10 border border-primary/20 shadow-[0_4px_20px_-5px_rgba(var(--primary-rgb),0.2)] group-hover:scale-110 transition-transform duration-500 relative z-10" style={{ transform: "translateZ(30px)" }}>
                 <span className="material-symbols-outlined text-3xl">
                     {isLarge ? "star" : "verified"}
                 </span>
             </div>
 
-            <h3 className={`font-black text-white leading-tight mb-6 uppercase tracking-tight ${isLarge ? "text-4xl" : "text-2xl"}`} style={{ transform: "translateZ(20px)" }}>
+            <h3 className={`font-black text-foreground leading-tight mb-6 uppercase tracking-tight ${isLarge ? "text-4xl" : "text-2xl"}`} style={{ transform: "translateZ(20px)" }}>
                 {s.t}
             </h3>
 
             <div style={{ transform: "translateZ(10px)" }}>
-                <RichText content={s.d} className={`${isLarge ? "text-lg" : "text-sm"} text-zinc-400 leading-relaxed font-medium prose-p:text-zinc-400 prose-strong:text-white`} />
+                <RichText content={s.d} className={`${isLarge ? "text-lg" : "text-sm"} text-muted-foreground leading-relaxed font-medium`} />
             </div>
 
             {isLarge && (
@@ -75,27 +75,24 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
 };
 
 export function Services({ getSetting }: ServicesProps) {
-    const services = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
-    const items = services.items || SECTION_DEFAULTS.servicos.items;
+    const data = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
+    const items = data.items || SECTION_DEFAULTS.servicos.items;
 
     return (
-        <section id="servicos" className="py-32 px-6 bg-background-dark relative overflow-hidden">
+        <section id="servicos" className="py-32 px-6 bg-background relative overflow-hidden transition-colors duration-500">
             {/* Ambient Background */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-indigo-500/5 blur-[120px] rounded-full opacity-20 pointer-events-none" />
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 border-b border-white/5 pb-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
                     <div className="max-w-3xl space-y-6">
-                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] inline-flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-primary"></span>
-                            Nossos Serviços
-                        </span>
-                        <h2 className="text-4xl md:text-7xl font-black text-white leading-none tracking-tighter uppercase italic drop-shadow-xl">
-                            {services.title}
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Soluções</span>
+                        <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
+                            {data.title}
                         </h2>
                     </div>
-                    <p className="text-xl text-zinc-400 font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2">
-                        {services.subtitle}
+                    <p className="text-xl text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2">
+                        {data.subtitle}
                     </p>
                 </div>
 

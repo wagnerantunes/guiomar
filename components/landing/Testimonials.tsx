@@ -23,68 +23,64 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
     const items = [...data.items, ...data.items]; // Duplicar para loop infinito
 
     return (
-        <section id="testimonials" className="py-32 bg-background-dark overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-[0.03]"></div>
-
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <section id="depoimentos" className="py-32 bg-background relative overflow-hidden transition-colors duration-500">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-24 space-y-6">
-                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Depoimentos</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase italic">
+                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Experiências</span>
+                    <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
                         {data.title}
                     </h2>
                 </div>
 
-                <div className="relative">
-                    {/* Gradient Overlays for Edge Fading */}
-                    <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-background-dark to-transparent z-20 pointer-events-none" />
-                    <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-background-dark to-transparent z-20 pointer-events-none" />
-
+                <div
+                    className="relative"
+                    style={{
+                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                        maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                    }}
+                >
                     <motion.div
                         className="flex gap-8"
                         animate={{
-                            x: [0, -100 * (data.items.length) + "%"]
+                            x: [0, -2000],
                         }}
                         transition={{
-                            duration: 40,
-                            repeat: Infinity,
-                            ease: "linear",
-                            repeatType: "loop"
+                            x: {
+                                repeat: Infinity,
+                                repeatType: "loop",
+                                duration: 30,
+                                ease: "linear",
+                            },
                         }}
-                        style={{ width: "fit-content" }}
                     >
-                        {items.map((item: any, idx: number) => (
+                        {items.map((t: any, i: number) => (
                             <div
-                                key={idx}
-                                className="w-[400px] shrink-0 bg-white/[0.03] backdrop-blur-md p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/30 transition-all duration-500 group relative"
+                                key={i}
+                                className="flex-shrink-0 w-[400px] bg-card backdrop-blur-xl p-10 rounded-[3rem] border border-border shadow-xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden"
                             >
-                                <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
 
-                                <div className="flex flex-col h-full justify-between gap-10">
-                                    <div className="relative">
-                                        <span className="material-symbols-outlined text-5xl text-primary opacity-20 absolute -top-2 -left-2 select-none">
-                                            format_quote
-                                        </span>
-                                        <p className="relative z-10 text-lg text-zinc-400 font-medium leading-relaxed italic">
-                                            "{item.quote}"
-                                        </p>
-                                    </div>
+                                <div className="flex gap-1 mb-8">
+                                    {[...Array(5)].map((_, i) => (
+                                        <span key={i} className="material-symbols-outlined text-primary text-lg fill-primary">star</span>
+                                    ))}
+                                </div>
 
-                                    <div className="flex items-center gap-5 border-t border-white/5 pt-8">
-                                        <div className="size-12 rounded-full overflow-hidden border border-white/10 group-hover:border-primary/50 transition-colors">
-                                            <img
-                                                src={item.image || `https://ui-avatars.com/api/?name=${item.name}&background=13ec5b&color=0d1b12`}
-                                                alt={item.name}
-                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <h4 className="font-black text-white text-sm uppercase tracking-wider">
-                                                {item.name}
-                                            </h4>
-                                            <p className="text-primary font-black text-[9px] uppercase tracking-[0.2em] mt-1">
-                                                {item.role}
-                                            </p>
-                                        </div>
+                                <div className="mb-10 min-h-[120px]">
+                                    <p className="text-lg text-foreground font-medium italic leading-relaxed">
+                                        "{t.quote}"
+                                    </p>
+                                </div>
+
+                                <div className="flex items-center gap-5 border-t border-border pt-8">
+                                    <img
+                                        src={t.image || `https://ui-avatars.com/api/?name=${t.name}&background=random&color=fff`}
+                                        className="size-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500 border border-border"
+                                        alt={t.name}
+                                    />
+                                    <div>
+                                        <p className="font-black text-foreground uppercase tracking-tight italic">{t.name}</p>
+                                        <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-1">{t.role}</p>
                                     </div>
                                 </div>
                             </div>

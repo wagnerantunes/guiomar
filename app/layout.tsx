@@ -72,6 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -79,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -107,11 +108,18 @@ export default function RootLayout({
         />
       </head>
       <body className={manrope.className}>
-        <ToastProvider>
-          <FloatingOrbs />
-          <CustomCursor />
-          {children}
-        </ToastProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ToastProvider>
+            <FloatingOrbs />
+            <CustomCursor />
+            {children}
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

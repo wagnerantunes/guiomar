@@ -11,7 +11,7 @@ export function AboutUs({ getSetting }: AboutUsProps) {
     const content = getSetting("section_sobre_content", SECTION_DEFAULTS.sobre);
 
     return (
-        <section id="sobre" className="py-32 px-6 bg-background-dark relative overflow-hidden">
+        <section id="sobre" className="py-32 px-6 bg-background relative overflow-hidden">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                 <div className="relative group">
                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 blur-3xl rounded-full"></div>
@@ -24,11 +24,11 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                         />
 
                         {/* Experience Badge */}
-                        <div className="absolute -bottom-8 -right-8 bg-black/90 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl z-20 border border-white/10 group-hover:scale-105 transition-transform duration-500">
+                        <div className="absolute -bottom-8 -right-8 bg-card backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl z-20 border border-border group-hover:scale-105 transition-transform duration-500">
                             <span className="text-5xl font-black block text-primary tracking-tighter leading-none mb-2">
                                 +{content.experience}
                             </span>
-                            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] leading-tight block">
+                            <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em] leading-tight block">
                                 ANOS DE<br />EXCELÊNCIA
                             </span>
                         </div>
@@ -40,19 +40,19 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                 <div className="space-y-10">
                     <div className="space-y-4">
                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Sobre Nós</span>
-                        <h2 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">
+                        <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
                             {content.title}
                         </h2>
                     </div>
 
                     {content.subtitle && (
-                        <p className="text-xl text-zinc-100 font-bold italic border-l-4 border-primary pl-6">
+                        <p className="text-xl text-foreground font-bold italic border-l-4 border-primary pl-6">
                             {content.subtitle}
                         </p>
                     )}
 
                     <div className="relative">
-                        <RichText content={content.description} className="text-zinc-400 leading-relaxed text-lg font-medium" />
+                        <RichText content={content.description} className="text-muted leading-relaxed text-lg font-medium" />
                     </div>
 
                     <div className="pt-6">
@@ -63,11 +63,11 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                             }}
                             className="group flex items-center gap-6"
                         >
-                            <div className="bg-white text-background-dark px-10 py-5 rounded-2xl font-black text-xs hover:bg-primary hover:text-background-dark transition-all uppercase tracking-widest shadow-xl shadow-black/10">
+                            <div className="bg-foreground text-background px-10 py-5 rounded-2xl font-black text-xs hover:bg-primary hover:text-primary-foreground transition-all uppercase tracking-widest shadow-xl shadow-black/10">
                                 {content.ctaText || "CONHEÇA NOSSOS SERVIÇOS"}
                             </div>
-                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all duration-500">
-                                <span className="material-symbols-outlined text-sm text-white group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all duration-500">
+                                <span className="material-symbols-outlined text-sm text-foreground group-hover:text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
                         </button>
                     </div>

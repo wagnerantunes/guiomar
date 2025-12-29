@@ -1,34 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FDF5E6;
+  /* Renda Antiga / Creme */
+  --foreground: #0F758D;
+  /* Deep Teal */
+  --card: #ffffff;
+  --card-foreground: #0F758D;
+  --card-muted: rgba(15, 117, 141, 0.05);
+  --border: rgba(15, 117, 141, 0.1);
+  --primary: #0F758D;
+  --primary-rgb: 15, 117, 141;
+  --primary-foreground: #FDF5E6;
+  --muted: #859EA2;
+  /* Apoio 1 */
+  --muted-foreground: #0F758D;
+  --grid-color: rgba(15, 117, 141, 0.05);
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: rgba(255, 255, 255, 0.03);
+  --card-foreground: #fafafa;
+  --card-muted: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.06);
+  --primary: #13ec5b;
+  /* Keep Neon Green for Tech-Luxury dark mode */
+  --primary-rgb: 19, 236, 91;
+  --primary-foreground: #09090b;
+  --muted: #a1a1aa;
+  --muted-foreground: #fafafa;
+  --grid-color: rgba(255, 255, 255, 0.02);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-background-dark: #09090b;
+  /* Fixed for components that explicitly use it */
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-
-  /* Modern Tech-Luxury Colors */
-  --color-primary: #13ec5b;
-  --color-primary-dark: #0ebf49;
-  --color-primary-light: #41f17a;
-
-  --color-zinc-50: #fafafa;
-  --color-zinc-100: #f4f4f5;
-  --color-zinc-200: #e4e4e7;
-  --color-zinc-400: #a1a1aa;
-  --color-zinc-800: #27272a;
-  --color-zinc-900: #18181b;
-  --color-zinc-950: #09090b;
-
-  --color-background-light: #ffffff;
-  --color-background-dark: #09090b;
-
-  --color-text-main: #09090b;
-  --color-text-muted: #71717a;
 
   --animate-shimmer: shimmer 2s linear infinite;
 
@@ -48,16 +67,8 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.02)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    /* Zinc 950 */
-    --foreground: #fafafa;
-    /* Zinc 50 */
-    --card-background: #18181b;
-    /* Zinc 900 */
-    --border-color: rgba(255, 255, 255, 0.06);
-  }
+.bg-grid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='var(--grid-color)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
 }
 
 html {

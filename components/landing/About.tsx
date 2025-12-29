@@ -1,6 +1,6 @@
 export function About() {
     return (
-        <section className="py-20 lg:py-28 bg-white relative" id="quem-somos">
+        <section className="py-20 lg:py-28 bg-background relative" id="quem-somos">
             <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
                     {/* Image Area */}
@@ -24,18 +24,18 @@ export function About() {
                     </div>
                     {/* Content Area */}
                     <div className="order-1 lg:order-2 space-y-6">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-xs font-bold text-text-muted uppercase tracking-wider">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card-muted text-xs font-bold text-muted uppercase tracking-wider">
                             <span className="w-2 h-2 rounded-full bg-primary"></span>
                             Sobre Nós
                         </div>
-                        <h2 className="text-3xl lg:text-4xl font-bold text-text-main leading-tight">
+                        <h2 className="text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                             Muito mais que uma consultoria comum
                         </h2>
                         <h3 className="text-xl text-primary font-medium">
                             A RenovaMente une ergonomia técnica e humanização para transformar
                             empresas
                         </h3>
-                        <div className="space-y-4 text-gray-600 leading-relaxed">
+                        <div className="space-y-4 text-muted-foreground leading-relaxed">
                             <p>
                                 A RenovaMente atua na transformação de ambientes corporativos a
                                 partir de uma abordagem integrada, que considera pessoas,
@@ -49,7 +49,7 @@ export function About() {
                         </div>
                         <div className="pt-4">
                             <a
-                                className="inline-flex items-center gap-2 font-bold text-text-main hover:text-primary transition-colors border-b-2 border-primary pb-1"
+                                className="inline-flex items-center gap-2 font-bold text-foreground hover:text-primary transition-colors border-b-2 border-primary pb-1"
                                 href="#servicos"
                             >
                                 CONHEÇA NOSSOS SERVIÇOS

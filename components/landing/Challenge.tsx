@@ -12,10 +12,10 @@ export function Challenge({ getSetting }: ChallengeProps) {
     const content = getSetting("section_desafio_content", SECTION_DEFAULTS.desafio);
 
     return (
-        <section id="desafio" className="py-32 px-6 bg-background-dark text-white overflow-hidden relative">
+        <section id="desafio" className="py-32 px-6 bg-background text-foreground overflow-hidden relative">
             {/* Background Effects */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] -z-0 opacity-50"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 blur-[150px] -z-0 opacity-30"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] -z-0 opacity-20 dark:opacity-50 transition-opacity"></div>
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 blur-[150px] -z-0 opacity-10 dark:opacity-30 transition-opacity"></div>
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
                 <div className="lg:col-span-7 space-y-10">
@@ -25,7 +25,7 @@ export function Challenge({ getSetting }: ChallengeProps) {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-black leading-tight tracking-tighter uppercase italic">
+                        <h2 className="text-4xl md:text-6xl font-black leading-tight tracking-tighter uppercase italic text-foreground">
                             {content.title}
                         </h2>
                     </motion.div>
@@ -40,7 +40,7 @@ export function Challenge({ getSetting }: ChallengeProps) {
                         <div className="absolute -left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
                         <RichText
                             content={content.description}
-                            className="text-xl text-zinc-400 font-medium leading-relaxed prose-invert italic"
+                            className="text-xl text-muted font-medium leading-relaxed italic"
                         />
                     </motion.div>
                 </div>
@@ -51,14 +51,14 @@ export function Challenge({ getSetting }: ChallengeProps) {
                         whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, type: "spring" }}
-                        className="bg-white/[0.03] border border-white/10 p-16 rounded-[4rem] text-center backdrop-blur-xl relative group overflow-hidden"
+                        className="bg-card border border-border p-16 rounded-[4rem] text-center backdrop-blur-xl relative group overflow-hidden shadow-2xl"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <span className="text-9xl font-black text-primary block drop-shadow-[0_0_30px_rgba(19,236,91,0.3)] animate-pulse-subtle">
+                        <span className="text-9xl font-black text-primary block drop-shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] animate-pulse-subtle">
                             {content.statValue}
                         </span>
                         <div className="w-12 h-1.5 bg-primary mx-auto my-8 rounded-full"></div>
-                        <span className="text-sm font-black text-white uppercase tracking-[0.4em] block">
+                        <span className="text-sm font-black text-foreground uppercase tracking-[0.4em] block">
                             {content.statLabel}
                         </span>
                     </motion.div>

@@ -44,8 +44,6 @@ export function SectionWrapper({
         }
     };
 
-    const isDark = id === "desafio" || id === "contato";
-
     return (
         <motion.section
             id={id}
@@ -53,7 +51,7 @@ export function SectionWrapper({
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className={`${className} relative overflow-hidden ${isDark ? "bg-grid-dark" : "bg-grid-white"}`}
+            className={`${className} relative overflow-hidden bg-background bg-grid`}
         >
             {stagger ? (
                 React.Children.map(children, (child) => (

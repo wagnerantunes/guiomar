@@ -18,23 +18,23 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
     });
 
     return (
-        <section id="blog" className="py-32 px-6 bg-background-dark overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] -z-0 opacity-50"></div>
+        <section id="blog" className="py-32 px-6 bg-background overflow-hidden relative transition-colors duration-500">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] -z-0 opacity-20 dark:opacity-50"></div>
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                     <div className="space-y-6 max-w-2xl">
                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Insights</span>
-                        <h2 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">
+                        <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
                             {content.title}
                         </h2>
-                        <p className="text-xl text-zinc-400 font-bold italic border-l-4 border-primary pl-6">
+                        <p className="text-xl text-muted font-bold italic border-l-4 border-primary pl-6">
                             {content.subtitle}
                         </p>
                     </div>
 
                     <button
-                        className="group flex items-center gap-3 text-xs font-black text-white uppercase tracking-widest hover:text-primary transition-colors mb-2"
+                        className="group flex items-center gap-3 text-xs font-black text-foreground uppercase tracking-widest hover:text-primary transition-colors mb-2"
                         onClick={() => scrollTo("blog")}
                     >
                         Ver todos os artigos
@@ -46,7 +46,7 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
                     {blogPosts.map((post) => (
                         <div
                             key={post.id}
-                            className="group cursor-pointer bg-white/5 rounded-[2.5rem] p-4 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 backdrop-blur-sm"
+                            className="group cursor-pointer bg-card rounded-[2.5rem] p-4 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-border shadow-xl backdrop-blur-sm"
                             onClick={() => setSelectedPost(post)}
                         >
                             <div className="aspect-[16/10] rounded-[2rem] overflow-hidden mb-8 relative">
@@ -56,23 +56,23 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     alt={post.title}
                                 />
-                                <div className="absolute top-4 right-4 bg-background-dark/90 backdrop-blur-md px-4 py-2 rounded-full z-20 border border-white/10">
-                                    <span className="text-[10px] font-black text-white uppercase tracking-wider">
+                                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-md px-4 py-2 rounded-full z-20 border border-border">
+                                    <span className="text-[10px] font-black text-foreground uppercase tracking-wider">
                                         {post.date}
                                     </span>
                                 </div>
                             </div>
 
                             <div className="space-y-6 px-4 pb-4">
-                                <h3 className="text-2xl font-black text-white group-hover:text-primary transition-colors leading-[1.1]">
+                                <h3 className="text-2xl font-black text-foreground group-hover:text-primary transition-colors leading-[1.1]">
                                     {post.title}
                                 </h3>
 
-                                <div className="flex items-center justify-between border-t border-white/10 pt-6">
-                                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
+                                <div className="flex items-center justify-between border-t border-border pt-6">
+                                    <span className="text-[10px] font-black text-muted uppercase tracking-widest">
                                         {post.cat || "Geral"}
                                     </span>
-                                    <div className="size-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-background-dark transition-colors border border-white/10">
+                                    <div className="size-8 rounded-full bg-foreground/5 flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-border">
                                         <span className="material-symbols-outlined text-[14px]">arrow_outward</span>
                                     </div>
                                 </div>
