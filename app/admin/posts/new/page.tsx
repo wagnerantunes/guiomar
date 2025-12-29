@@ -77,29 +77,29 @@ export default function NewPostPage() {
     }
 
     return (
-        <div className="p-6 md:p-10 space-y-10 max-w-6xl mx-auto w-full pb-20 bg-[#f8faf8] dark:bg-[#09090b]">
+        <div className="p-6 md:p-10 space-y-10 max-w-screen-2xl mx-auto w-full pb-20 bg-background">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-gray-100 dark:border-white/5 sticky top-0 z-30 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-background/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-border sticky top-0 z-30 shadow-sm">
                 <div className="flex items-center gap-6">
                     <Link
                         href="/admin/posts"
                         aria-label="Voltar para lista de posts"
-                        className="size-14 rounded-[1.5rem] bg-[#f8faf8] dark:bg-white/5 flex items-center justify-center text-gray-400 hover:text-[#13ec5b] hover:bg-[#13ec5b]/5 transition-all group shadow-sm border border-gray-100 dark:border-white/5"
+                        className="size-14 rounded-[1.5rem] bg-muted/5 flex items-center justify-center text-muted hover:text-primary hover:bg-primary/5 transition-all group shadow-sm border border-border"
                     >
                         <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Criação de Conteúdo</h1>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Escriba um novo artigo memorável.</p>
+                        <h1 className="text-2xl font-black text-foreground uppercase tracking-[0.2em]">Criação de Conteúdo</h1>
+                        <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mt-1">Escriba um novo artigo memorável.</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="bg-[#f8faf8] dark:bg-black/20 p-1.5 rounded-2xl flex items-center border border-gray-100 dark:border-white/5">
+                    <div className="bg-muted/5 p-1.5 rounded-2xl flex items-center border border-border">
                         <button
                             aria-label="Definir como rascunho"
                             aria-pressed={formData.status === 'DRAFT'}
                             onClick={() => setFormData(prev => ({ ...prev, status: 'DRAFT' }))}
-                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-white dark:bg-[#18181b] text-[#0d1b12] dark:text-white shadow-sm border border-gray-100 dark:border-white/10' : 'text-gray-400 hover:text-[#0d1b12]'}`}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'DRAFT' ? 'bg-card text-foreground shadow-sm border border-border' : 'text-muted hover:text-foreground'}`}
                         >
                             Rascunho
                         </button>
@@ -107,19 +107,19 @@ export default function NewPostPage() {
                             aria-label="Definir como publicado"
                             aria-pressed={formData.status === 'PUBLISHED'}
                             onClick={() => setFormData(prev => ({ ...prev, status: 'PUBLISHED' }))}
-                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'PUBLISHED' ? 'bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/20' : 'text-gray-400 hover:text-[#13ec5b]'}`}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.status === 'PUBLISHED' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'text-muted hover:text-primary'}`}
                         >
                             Publicado
                         </button>
                     </div>
-                    <div className="w-px h-10 bg-gray-100 dark:bg-white/5 mx-2" />
+                    <div className="w-px h-10 bg-border mx-2" />
                     <button
                         aria-label="Salvar post"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="px-8 py-4 bg-[#0d1b12] dark:bg-[#13ec5b] dark:text-[#0d1b12] text-white rounded-2xl text-[10px] font-black hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/5 uppercase tracking-[0.2em] disabled:opacity-50 flex items-center gap-2"
+                        className="px-8 py-4 bg-primary text-primary-foreground rounded-2xl text-[10px] font-black hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20 uppercase tracking-[0.2em] disabled:opacity-50 flex items-center gap-2"
                     >
-                        {loading && <span className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                        {loading && <span className="size-3 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />}
                         {loading ? 'Processando...' : 'Finalizar Artigo'}
                     </button>
                 </div>
@@ -129,16 +129,16 @@ export default function NewPostPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div className="lg:col-span-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {/* Main Settings */}
-                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
+                    <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden">
                         <div className="p-10 md:p-14 space-y-12">
                             <div className="space-y-4">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2 block">Título do Artigo <span className="text-red-500">*</span></label>
+                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em] ml-2 block">Título do Artigo <span className="text-destructive">*</span></label>
                                 <input
                                     aria-label="Título do post"
                                     type="text"
                                     value={formData.title}
                                     onChange={(e) => handleTitleChange(e.target.value)}
-                                    className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-[2.5rem] px-10 py-7 text-2xl font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none placeholder:text-gray-200 dark:placeholder:text-white/10 transition-all dark:text-white"
+                                    className="w-full bg-muted/5 border border-border rounded-[2.5rem] px-10 py-7 text-2xl font-black focus:ring-4 focus:ring-primary/10 outline-none placeholder:text-muted/20 transition-all text-foreground"
                                     placeholder="Comece com um título impactante..."
                                     required
                                 />
@@ -146,13 +146,13 @@ export default function NewPostPage() {
 
                             <div className="space-y-6">
                                 <div className="flex items-center justify-between px-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] block">Corpo do Conteúdo <span className="text-red-500">*</span></label>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em] block">Corpo do Conteúdo <span className="text-destructive">*</span></label>
                                     <div className="flex items-center gap-2">
-                                        <span className="size-2 rounded-full bg-[#13ec5b] animate-pulse" />
-                                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Salvamento Automático</span>
+                                        <span className="size-2 rounded-full bg-primary animate-pulse" />
+                                        <span className="text-[9px] font-bold text-muted uppercase tracking-widest">Salvamento Automático</span>
                                     </div>
                                 </div>
-                                <div className="border border-gray-100 dark:border-white/5 rounded-[3rem] overflow-hidden bg-[#f8faf8] dark:bg-black/20 p-2">
+                                <div className="border border-border rounded-[3rem] overflow-hidden bg-muted/5 p-2">
                                     <RichTextEditor
                                         content={formData.content}
                                         onChange={(content) => setFormData({ ...formData, content })}
@@ -165,19 +165,19 @@ export default function NewPostPage() {
 
                 <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150">
                     {/* Publishing Settings */}
-                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-10">
+                    <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-10">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3 mb-2">
-                                <div className="size-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                                <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
                                     <span className="material-symbols-outlined text-sm">category</span>
                                 </div>
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Classificação</label>
+                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Classificação</label>
                             </div>
                             <select
                                 aria-label="Selecionar categoria"
                                 value={formData.categoryId}
                                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none text-[#0d1b12] dark:text-white appearance-none cursor-pointer uppercase tracking-[0.2em]"
+                                className="w-full bg-muted/5 border border-border rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground appearance-none cursor-pointer uppercase tracking-[0.2em]"
                             >
                                 <option value="">Sem Categoria</option>
                                 {categories.map((cat) => (
@@ -188,18 +188,18 @@ export default function NewPostPage() {
 
                         <div className="space-y-4">
                             <div className="flex items-center gap-3 mb-2">
-                                <div className="size-8 rounded-lg bg-purple-50 dark:bg-purple-500/10 text-purple-500 flex items-center justify-center">
+                                <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
                                     <span className="material-symbols-outlined text-sm">link</span>
                                 </div>
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Identificador Único</label>
+                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Identificador Único</label>
                             </div>
-                            <div className="flex items-center gap-4 px-6 py-4 bg-[#f8faf8] dark:bg-black/20 rounded-2xl border border-gray-100 dark:border-white/5 focus-within:ring-4 focus-within:ring-[#13ec5b]/10 transition-all">
+                            <div className="flex items-center gap-4 px-6 py-4 bg-muted/5 rounded-2xl border border-border focus-within:ring-4 focus-within:ring-primary/10 transition-all">
                                 <input
                                     aria-label="URL do post (slug)"
                                     type="text"
                                     value={formData.slug}
                                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                                    className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-gray-500 dark:text-gray-400"
+                                    className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-muted"
                                     placeholder="identificador-url"
                                 />
                             </div>
@@ -207,22 +207,22 @@ export default function NewPostPage() {
 
                         <div className="space-y-4">
                             <div className="flex items-center gap-3 mb-2">
-                                <div className="size-8 rounded-lg bg-orange-50 dark:bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                                <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
                                     <span className="material-symbols-outlined text-sm">subject</span>
                                 </div>
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Resumo Executivo</label>
+                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Resumo Executivo</label>
                             </div>
                             <textarea
                                 aria-label="Resumo do post"
                                 value={formData.excerpt}
                                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                                 rows={6}
-                                className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-[2rem] p-8 text-[11px] font-bold focus:ring-4 focus:ring-[#13ec5b]/10 transition-all outline-none resize-none leading-relaxed dark:text-gray-300 placeholder:text-gray-200 dark:placeholder:text-white/5"
+                                className="w-full bg-muted/5 border border-border rounded-[2rem] p-8 text-[11px] font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none leading-relaxed text-muted placeholder:text-muted/20"
                                 placeholder="Uma síntese que despertará curiosidade no leitor..."
                             />
                         </div>
 
-                        <div className="pt-10 border-t border-gray-100 dark:border-white/5">
+                        <div className="pt-10 border-t border-border">
                             <SEOHealthCheck
                                 title={formData.title}
                                 content={formData.content}
@@ -234,27 +234,27 @@ export default function NewPostPage() {
                     </div>
 
                     {/* Featured Image */}
-                    <div className="bg-white dark:bg-[#18181b] rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden p-10 space-y-6">
+                    <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-6">
                         <div className="flex items-center gap-3">
-                            <div className="size-8 rounded-lg bg-green-50 dark:bg-green-500/10 text-[#13ec5b] flex items-center justify-center">
+                            <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
                                 <span className="material-symbols-outlined text-sm">image</span>
                             </div>
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Imagem de Destaque</label>
+                            <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Imagem de Destaque</label>
                         </div>
 
                         {formData.image ? (
-                            <div className="relative group aspect-video rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-black/20">
+                            <div className="relative group aspect-video rounded-3xl overflow-hidden border border-border bg-muted/5">
                                 <img src={formData.image} alt="Preview" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                     <button
                                         onClick={() => setShowMediaPicker(true)}
-                                        className="p-3 bg-white text-[#0d1b12] rounded-full hover:scale-110 transition-all"
+                                        className="p-3 bg-card text-foreground rounded-full hover:scale-110 transition-all"
                                     >
                                         <span className="material-symbols-outlined">sync</span>
                                     </button>
                                     <button
                                         onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                                        className="p-3 bg-white text-red-500 rounded-full hover:scale-110 transition-all"
+                                        className="p-3 bg-card text-destructive rounded-full hover:scale-110 transition-all"
                                     >
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
@@ -263,15 +263,15 @@ export default function NewPostPage() {
                         ) : (
                             <button
                                 onClick={() => setShowMediaPicker(true)}
-                                className="w-full aspect-video rounded-3xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-3 text-gray-300 hover:text-[#13ec5b] hover:border-[#13ec5b]/50 transition-all group"
+                                className="w-full aspect-video rounded-3xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 text-muted hover:text-primary hover:border-primary/50 transition-all group"
                             >
-                                <div className="size-12 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div className="size-12 rounded-2xl bg-muted/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <span className="material-symbols-outlined text-2xl">add_a_photo</span>
                                 </div>
                                 <span className="text-[10px] font-black uppercase tracking-widest">Selecionar Imagem</span>
                             </button>
                         )}
-                        <p className="text-[9px] text-gray-400 font-medium text-center px-4 uppercase tracking-tighter">
+                        <p className="text-[9px] text-muted font-medium text-center px-4 uppercase tracking-tighter">
                             Recomendado: 1200x630px para redes sociais.
                         </p>
                     </div>

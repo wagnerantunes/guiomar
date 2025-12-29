@@ -108,22 +108,22 @@ export default function NavigationPage() {
 
 
     return (
-        <div className="flex flex-col h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
+        <div className="flex flex-col h-full bg-background min-h-screen">
             {/* HEADER DA PÁGINA */}
-            <div className="px-6 py-8 md:px-10 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
+            <div className="px-6 py-8 md:px-10 border-b border-border bg-background/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">
+                        <h1 className="text-2xl font-black text-foreground uppercase tracking-[0.2em]">
                             Navegação Global
                         </h1>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">
+                        <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mt-1">
                             Ajuste a experiência de navegação do seu site.
                         </p>
                     </div>
                     <div className="flex items-center gap-4">
                         <button
                             aria-label="Ver o site em uma nova aba"
-                            className="hidden md:flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-gray-100 dark:border-white/5 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all uppercase tracking-widest bg-white dark:bg-transparent"
+                            className="hidden md:flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-border rounded-xl hover:bg-muted/5 transition-all uppercase tracking-widest bg-card"
                         >
                             <span className="material-symbols-outlined text-sm">visibility</span>
                             Ver Site
@@ -132,7 +132,7 @@ export default function NavigationPage() {
                             aria-label="Salvar todas as alterações de navegação"
                             onClick={saveNavigation}
                             disabled={saving}
-                            className="px-10 py-3.5 text-[10px] font-black bg-[#13ec5b] text-[#0d1b12] rounded-xl shadow-xl shadow-[#13ec5b]/20 hover:scale-105 transition-all uppercase tracking-widest disabled:opacity-50 active:scale-95"
+                            className="px-10 py-3.5 text-[10px] font-black bg-primary text-primary-foreground rounded-xl shadow-xl shadow-primary/20 hover:scale-105 transition-all uppercase tracking-widest disabled:opacity-50 active:scale-95"
                         >
                             {saving ? "Publicando..." : "Publicar Navegação"}
                         </button>
@@ -146,8 +146,8 @@ export default function NavigationPage() {
                         aria-selected={activeTab === "header"}
                         onClick={() => setActiveTab("header")}
                         className={`text-[10px] font-black uppercase tracking-[0.3em] pb-4 border-b-2 transition-all ${activeTab === "header"
-                            ? "border-[#13ec5b] text-[#13ec5b]"
-                            : "border-transparent text-gray-400 hover:text-[#13ec5b] translate-y-[-2px] hover:translate-y-0"
+                            ? "border-primary text-primary"
+                            : "border-transparent text-muted hover:text-primary translate-y-[-2px] hover:translate-y-0"
                             }`}
                     >
                         Menu Superior
@@ -157,8 +157,8 @@ export default function NavigationPage() {
                         aria-selected={activeTab === "footer"}
                         onClick={() => setActiveTab("footer")}
                         className={`text-[10px] font-black uppercase tracking-[0.3em] pb-4 border-b-2 transition-all ${activeTab === "footer"
-                            ? "border-[#13ec5b] text-[#13ec5b]"
-                            : "border-transparent text-gray-400 hover:text-[#13ec5b] translate-y-[-2px] hover:translate-y-0"
+                            ? "border-primary text-primary"
+                            : "border-transparent text-muted hover:text-primary translate-y-[-2px] hover:translate-y-0"
                             }`}
                     >
                         Rodapé Integrado
@@ -172,17 +172,17 @@ export default function NavigationPage() {
                     {activeTab === "header" ? (
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="lg:col-span-12 space-y-10">
-                                <div className="bg-white dark:bg-[#183221]/40 p-10 md:p-14 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm">
-                                    <div className="flex items-center justify-between mb-12 border-b border-gray-100 dark:border-white/5 pb-8">
+                                <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm">
+                                    <div className="flex items-center justify-between mb-12 border-b border-border pb-8">
                                         <div className="flex items-center gap-4">
-                                            <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                            <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                                 <span className="material-symbols-outlined">menu_open</span>
                                             </div>
-                                            <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Estrutura do Menu</h3>
+                                            <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Estrutura do Menu</h3>
                                         </div>
                                         <button
                                             aria-label="Adicionar novo link ao menu"
-                                            className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest hover:scale-105 transition-transform px-5 py-2.5 bg-[#13ec5b]/5 rounded-xl border border-[#13ec5b]/10"
+                                            className="text-[10px] font-black text-primary uppercase tracking-widest hover:scale-105 transition-transform px-5 py-2.5 bg-primary/5 rounded-xl border border-primary/10"
                                             onClick={() => setHeaderLinks(prev => [...prev, { label: "Novo Link", url: "#" }])}
                                         >
                                             + Adicionar Link
@@ -196,15 +196,15 @@ export default function NavigationPage() {
                                                 onDragStart={() => handleDragStart(i, "header")}
                                                 onDragOver={(e) => handleDragOver(e, i, "header")}
                                                 onDragEnd={handleDragEnd}
-                                                className={`flex items-center gap-6 p-6 bg-[#f8faf8] dark:bg-black/20 rounded-[2rem] border border-gray-100/50 dark:border-white/5 group hover:border-[#13ec5b]/40 transition-all ${draggedIndex === i && draggedType === "header" ? 'opacity-50 scale-98 shadow-inner border-[#13ec5b]/20' : ''}`}
+                                                className={`flex items-center gap-6 p-6 bg-muted/5 rounded-[1.5rem] border border-border group hover:border-primary/40 transition-all ${draggedIndex === i && draggedType === "header" ? 'opacity-50 scale-98 shadow-inner border-primary/20' : ''}`}
                                             >
-                                                <span className="material-symbols-outlined text-gray-200 dark:text-white/10 group-hover:text-[#13ec5b] transition-colors cursor-grab active:cursor-grabbing hover:scale-110">drag_indicator</span>
+                                                <span className="material-symbols-outlined text-muted/20 group-hover:text-primary transition-colors cursor-grab active:cursor-grabbing hover:scale-110">drag_indicator</span>
                                                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8">
                                                     <div className="space-y-2">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Label de Exibição</label>
+                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Label de Exibição</label>
                                                         <input
                                                             aria-label={`Rótulo do link ${i + 1}`}
-                                                            className="w-full bg-white dark:bg-[#0d1b12] border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-3.5 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none transition-all dark:text-white"
+                                                            className="w-full bg-background border border-border rounded-2xl px-6 py-3.5 text-xs font-black focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
                                                             value={item.label}
                                                             onChange={(e) => {
                                                                 const newLinks = [...headerLinks];
@@ -214,10 +214,10 @@ export default function NavigationPage() {
                                                         />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">URL de Destino</label>
+                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">URL de Destino</label>
                                                         <input
                                                             aria-label={`URL do link ${i + 1}`}
-                                                            className="w-full bg-white dark:bg-[#0d1b12] border border-gray-100 dark:border-white/5 rounded-2xl px-6 py-3.5 text-[10px] text-gray-400 font-mono focus:ring-4 focus:ring-[#13ec5b]/10 outline-none transition-all"
+                                                            className="w-full bg-background border border-border rounded-2xl px-6 py-3.5 text-[10px] text-muted font-mono focus:ring-4 focus:ring-primary/10 outline-none transition-all"
                                                             value={item.url}
                                                             onChange={(e) => {
                                                                 const newLinks = [...headerLinks];
@@ -230,7 +230,7 @@ export default function NavigationPage() {
                                                 <button
                                                     aria-label={`Remover link ${item.label}`}
                                                     onClick={() => setHeaderLinks(prev => prev.filter((_, idx) => idx !== i))}
-                                                    className="size-11 flex items-center justify-center rounded-2xl bg-white dark:bg-black/20 text-gray-300 hover:text-red-500 hover:shadow-lg transition-all active:scale-90"
+                                                    className="size-11 flex items-center justify-center rounded-2xl bg-background text-muted hover:text-destructive hover:shadow-lg transition-all active:scale-90 border border-border"
                                                 >
                                                     <span className="material-symbols-outlined text-xl">delete</span>
                                                 </button>
@@ -244,20 +244,20 @@ export default function NavigationPage() {
                     ) : (
                         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
                             {/* BRAND INFO COL */}
-                            <div className="bg-white dark:bg-[#183221]/40 p-10 md:p-14 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                            <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                                 <div className="space-y-10">
-                                    <div className="flex items-center gap-4 border-b border-gray-100 dark:border-white/5 pb-6">
-                                        <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                    <div className="flex items-center gap-4 border-b border-border pb-6">
+                                        <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                             <span className="material-symbols-outlined">info_i_outline</span>
                                         </div>
-                                        <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Identidade no Rodapé</h3>
+                                        <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Identidade no Rodapé</h3>
                                     </div>
                                     <div className="space-y-4">
-                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Biografia Institucional</label>
+                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Biografia Institucional</label>
                                         <textarea
                                             aria-label="Biografia curta do rodapé"
                                             rows={6}
-                                            className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-[2.5rem] p-8 text-xs font-bold focus:ring-4 focus:ring-[#13ec5b]/10 transition-all outline-none resize-none leading-relaxed dark:text-gray-300"
+                                            className="w-full bg-muted/5 border border-border rounded-[1.5rem] p-8 text-xs font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none leading-relaxed text-foreground"
                                             value={footerInfo.bio}
                                             onChange={(e) => setFooterInfo(prev => ({ ...prev, bio: e.target.value }))}
                                             placeholder="Descreva a empresa de forma concisa..."
@@ -265,11 +265,11 @@ export default function NavigationPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-10">
-                                    <div className="flex items-center gap-4 border-b border-gray-100 dark:border-white/5 pb-6">
-                                        <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                    <div className="flex items-center gap-4 border-b border-border pb-6">
+                                        <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                             <span className="material-symbols-outlined">share</span>
                                         </div>
-                                        <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Conexões Sociais</h3>
+                                        <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Conexões Sociais</h3>
                                     </div>
                                     <div className="grid grid-cols-1 gap-6">
                                         {[
@@ -278,12 +278,12 @@ export default function NavigationPage() {
                                             { id: "linkedin", name: "LinkedIn", icon: "group" }
                                         ].map(soc => (
                                             <div key={soc.id} className="group/item">
-                                                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">{soc.name}</label>
+                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1 mb-2 block">{soc.name}</label>
                                                 <div className="relative">
-                                                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-lg group-focus-within/item:text-[#13ec5b] transition-colors">{soc.icon}</span>
+                                                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted/30 text-lg group-focus-within/item:text-primary transition-colors">{soc.icon}</span>
                                                     <input
                                                         aria-label={`Link do ${soc.name}`}
-                                                        className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-3.5 text-[10px] font-mono focus:ring-4 focus:ring-[#13ec5b]/10 outline-none transition-all"
+                                                        className="w-full bg-muted/5 border border-border rounded-2xl pl-12 pr-6 py-3.5 text-[10px] font-mono focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
                                                         placeholder="URL completa do perfil..."
                                                         value={(footerInfo.socials as any)[soc.id]}
                                                         onChange={(e) => setFooterInfo(prev => ({
@@ -300,17 +300,17 @@ export default function NavigationPage() {
 
                             {/* FOOTER COLS */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                <div className="bg-white dark:bg-[#183221]/40 p-10 md:p-14 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-10">
-                                    <div className="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-6">
+                                <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm space-y-10">
+                                    <div className="flex items-center justify-between border-b border-border pb-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                            <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                                 <span className="material-symbols-outlined">bolt</span>
                                             </div>
-                                            <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Links Ágeis</h3>
+                                            <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Links Ágeis</h3>
                                         </div>
                                         <button
                                             aria-label="Adicionar link rápido ao rodapé"
-                                            className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest px-4 py-2 bg-[#13ec5b]/5 rounded-xl border border-[#13ec5b]/10"
+                                            className="text-[10px] font-black text-primary uppercase tracking-widest px-4 py-2 bg-primary/5 rounded-xl border border-primary/10"
                                             onClick={() => setFooterInfo(prev => ({ ...prev, quickLinks: [...prev.quickLinks, { label: "Novo Link", url: "#" }] }))}
                                         >+ Novo</button>
                                     </div>
@@ -322,12 +322,12 @@ export default function NavigationPage() {
                                                 onDragStart={() => handleDragStart(idx, "footer")}
                                                 onDragOver={(e) => handleDragOver(e, idx, "footer")}
                                                 onDragEnd={handleDragEnd}
-                                                className={`flex items-center gap-4 p-5 bg-[#f8faf8] dark:bg-black/20 rounded-[1.5rem] border border-gray-100/50 dark:border-white/5 group hover:border-[#13ec5b]/40 transition-all ${draggedIndex === idx && draggedType === "footer" ? 'opacity-50 scale-95 shadow-inner' : ''}`}
+                                                className={`flex items-center gap-4 p-5 bg-muted/5 rounded-[1.5rem] border border-border group hover:border-primary/40 transition-all ${draggedIndex === idx && draggedType === "footer" ? 'opacity-50 scale-95 shadow-inner' : ''}`}
                                             >
-                                                <span className="material-symbols-outlined text-gray-200 dark:text-white/10 group-hover:text-[#13ec5b] transition-colors cursor-grab active:cursor-grabbing">drag_indicator</span>
+                                                <span className="material-symbols-outlined text-muted/20 group-hover:text-primary transition-colors cursor-grab active:cursor-grabbing">drag_indicator</span>
                                                 <input
                                                     aria-label={`Rótulo do link rápido ${idx + 1}`}
-                                                    className="flex-1 bg-transparent border-none text-[11px] font-black p-0 focus:ring-0 text-[#0d1b12] dark:text-white uppercase tracking-[0.1em]"
+                                                    className="flex-1 bg-transparent border-none text-[11px] font-black p-0 focus:ring-0 text-foreground uppercase tracking-[0.1em]"
                                                     value={l.label}
                                                     onChange={(e) => {
                                                         const newLinks = [...footerInfo.quickLinks];
@@ -338,7 +338,7 @@ export default function NavigationPage() {
                                                 <button
                                                     aria-label={`Remover link rápido ${l.label}`}
                                                     onClick={() => setFooterInfo(prev => ({ ...prev, quickLinks: prev.quickLinks.filter((_, i) => i !== idx) }))}
-                                                    className="size-8 flex items-center justify-center text-gray-200 hover:text-red-500 transition-colors"
+                                                    className="size-8 flex items-center justify-center text-muted hover:text-destructive transition-colors"
                                                 >
                                                     <span className="material-symbols-outlined text-lg">close</span>
                                                 </button>
@@ -347,33 +347,33 @@ export default function NavigationPage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-white dark:bg-[#183221]/40 p-10 md:p-14 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm space-y-10">
-                                    <div className="flex items-center gap-4 border-b border-gray-100 dark:border-white/5 pb-6">
-                                        <div className="size-10 rounded-xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm space-y-10">
+                                    <div className="flex items-center gap-4 border-b border-border pb-6">
+                                        <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                             <span className="material-symbols-outlined">headset_mic</span>
                                         </div>
-                                        <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Canais Diretos</h3>
+                                        <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Canais Diretos</h3>
                                     </div>
                                     <div className="space-y-8">
                                         <div className="space-y-3">
-                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">E-mail de Suporte</label>
+                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">E-mail de Suporte</label>
                                             <div className="relative">
-                                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-lg">alternate_email</span>
+                                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted/30 text-lg">alternate_email</span>
                                                 <input
                                                     aria-label="E-mail de contato do rodapé"
-                                                    className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none transition-all dark:text-white"
+                                                    className="w-full bg-muted/5 border border-border rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
                                                     value={footerInfo.email}
                                                     onChange={(e) => setFooterInfo(prev => ({ ...prev, email: e.target.value }))}
                                                 />
                                             </div>
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Telefone / Central</label>
+                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Telefone / Central</label>
                                             <div className="relative">
-                                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-lg">call</span>
+                                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted/30 text-lg">call</span>
                                                 <input
                                                     aria-label="Telefone de contato do rodapé"
-                                                    className="w-full bg-[#f8faf8] dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 outline-none transition-all dark:text-white"
+                                                    className="w-full bg-muted/5 border border-border rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
                                                     value={footerInfo.phone}
                                                     onChange={(e) => setFooterInfo(prev => ({ ...prev, phone: e.target.value }))}
                                                 />

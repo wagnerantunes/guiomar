@@ -123,7 +123,7 @@ export default function Sidebar() {
                 <button
                     onClick={handleSignOut}
                     aria-label="Sair da conta"
-                    className="w-full flex items-center gap-3 px-4 py-3 text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-muted hover:text-destructive hover:bg-destructive/10 rounded-2xl font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-destructive/50"
                 >
                     <span className="material-symbols-outlined text-[22px]">logout</span>
                     <span className="text-[13px] tracking-tight">Sair</span>

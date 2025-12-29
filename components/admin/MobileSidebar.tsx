@@ -53,7 +53,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                             <img src={logo} alt="RenovaMente" className="h-8 object-contain" />
                         ) : (
                             <>
-                                <span className="material-symbols-outlined text-3xl text-[#13ec5b]">spa</span>
+                                <span className="material-symbols-outlined text-3xl text-primary">spa</span>
                                 <h2 className="text-lg font-bold tracking-tight">RenovaMente</h2>
                             </>
                         )}
@@ -75,7 +75,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                                 href={item.href}
                                 onClick={onClose}
                                 className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all font-bold ${isActive
-                                    ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                                    ? "bg-primary/10 text-primary"
                                     : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/5"
                                     }`}
                             >
@@ -84,7 +84,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                                 </span>
                                 <span className="text-sm uppercase tracking-widest text-[11px]">{item.label}</span>
                                 {item.badge && (
-                                    <span className="ml-auto bg-[#13ec5b] text-[#0d1b12] text-[10px] font-black px-2 py-0.5 rounded-full">
+                                    <span className="ml-auto bg-primary text-[#0d1b12] text-[10px] font-black px-2 py-0.5 rounded-full">
                                         {item.badge}
                                     </span>
                                 )}
@@ -98,7 +98,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                         href="/admin/settings"
                         onClick={onClose}
                         className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all font-bold ${pathname === "/admin/settings"
-                            ? "bg-[#13ec5b]/10 text-[#13ec5b]"
+                            ? "bg-primary/10 text-primary"
                             : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/5"
                             }`}
                     >

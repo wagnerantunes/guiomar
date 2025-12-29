@@ -40,7 +40,7 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
             onMouseLeave={handleMouseLeave}
             animate={{ rotateX, rotateY }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={`bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border hover:border-primary/30 hover:shadow-[0_0_50px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group cursor-default relative overflow-hidden ${isLarge ? "md:col-span-2 md:row-span-2 min-h-[400px]" : "col-span-1 min-h-[300px]"
+            className={`bg-card backdrop-blur-xl p-10 rounded-[2rem] border border-border hover:border-primary/30 hover:shadow-[0_0_50px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group cursor-default relative overflow-hidden ${isLarge ? "md:col-span-2 md:row-span-2 min-h-[400px]" : "col-span-1 min-h-[300px]"
                 }`}
             style={{ transformStyle: "preserve-3d", perspective: 1000 }}
         >
@@ -79,43 +79,39 @@ export function Services({ getSetting }: ServicesProps) {
     const items = data.items || SECTION_DEFAULTS.servicos.items;
 
     return (
-        <section id="servicos" className="py-32 px-6 bg-background relative overflow-hidden transition-colors duration-500">
-            {/* Ambient Background */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-indigo-500/5 blur-[120px] rounded-full opacity-20 pointer-events-none" />
-
-            <div className="max-w-7xl mx-auto relative z-10">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
-                    <div className="max-w-3xl space-y-6">
-                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Soluções</span>
-                        <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
-                            {data.title}
-                        </h2>
-                    </div>
-                    <p className="text-xl text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2">
-                        {data.subtitle}
-                    </p>
+        <>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
+                <div className="max-w-3xl space-y-6">
+                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Soluções</span>
+                    <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
+                        {data.title}
+                    </h2>
                 </div>
-
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: {
-                            opacity: 1,
-                            transition: {
-                                staggerChildren: 0.1
-                            }
-                        }
-                    }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
-                >
-                    {items.map((s: any, i: number) => (
-                        <ServiceCard key={i} s={s} isLarge={i === 0} />
-                    ))}
-                </motion.div>
+                <p className="text-xl text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2">
+                    {data.subtitle}
+                </p>
             </div>
-        </section>
+
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                        opacity: 1,
+                        transition: {
+                            staggerChildren: 0.1
+                        }
+                    }
+                }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            >
+                {items.map((s: any, i: number) => (
+                    <ServiceCard key={i} s={s} isLarge={i === 0} />
+                ))}
+            </motion.div>
+        </>
     );
 }
+

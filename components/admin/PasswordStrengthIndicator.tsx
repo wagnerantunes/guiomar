@@ -41,12 +41,12 @@ export default function PasswordStrengthIndicator({ password }: PasswordStrength
                     {[1, 2, 3].map((step) => (
                         <div
                             key={step}
-                            className={`h-full flex-1 transition-all duration-500 shadow-[0_0_10px_rgba(0,0,0,0)] ${strength >= step ? (strength === 3 ? 'bg-[#13ec5b] shadow-[0_0_10px_rgba(19,236,91,0.5)]' : color) : 'bg-transparent'
+                            className={`h-full flex-1 transition-all duration-500 shadow-[0_0_10px_rgba(0,0,0,0)] ${strength >= step ? (strength === 3 ? 'bg-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]' : color) : 'bg-transparent'
                                 }`}
                         />
                     ))}
                 </div>
-                <span className={`text-[9px] font-black uppercase tracking-widest ${strength === 1 ? 'text-red-500' : strength === 2 ? 'text-yellow-500' : 'text-[#13ec5b]'
+                <span className={`text-[9px] font-black uppercase tracking-widest ${strength === 1 ? 'text-red-500' : strength === 2 ? 'text-yellow-500' : 'text-primary'
                     }`}>
                     {label}
                 </span>
@@ -65,7 +65,7 @@ export default function PasswordStrengthIndicator({ password }: PasswordStrength
 function RequirementItem({ fulfilled, text }: { fulfilled: boolean | undefined, text: string }) {
     return (
         <div className="flex items-center gap-2">
-            <div className={`size-4 rounded-full flex items-center justify-center transition-colors border ${fulfilled ? 'bg-[#13ec5b]/20 border-[#13ec5b] text-[#13ec5b]' : 'bg-white/5 border-white/10 text-gray-500'
+            <div className={`size-4 rounded-full flex items-center justify-center transition-colors border ${fulfilled ? 'bg-primary/20 border-primary text-primary' : 'bg-card/5 border-border text-gray-500'
                 }`}>
                 <span className="material-symbols-outlined text-[10px] font-bold">
                     {fulfilled ? 'check' : 'close'}

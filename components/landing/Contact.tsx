@@ -81,130 +81,129 @@ export function Contact({ getSetting }: ContactProps) {
     };
 
     return (
-        <section id="contato" className="py-32 px-6 bg-background relative overflow-hidden transition-colors duration-500">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
-                <div className="lg:col-span-12 mb-16 text-center space-y-6">
-                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Contato</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
-                        Vamos conversar?
-                    </h2>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="lg:col-span-12 mb-16 text-center space-y-6">
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Contato</span>
+                <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
+                    Vamos conversar?
+                </h2>
+            </div>
 
-                <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    <div className="lg:col-span-5 bg-card text-foreground p-12 rounded-[3.5rem] border border-border space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between group backdrop-blur-xl">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-colors duration-700"></div>
+            <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-5 bg-card text-foreground p-12 rounded-[2.5rem] border border-border space-y-12 shadow-2xl relative overflow-hidden flex flex-col justify-between group backdrop-blur-xl">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-colors duration-700"></div>
 
-                        <span className="material-symbols-outlined absolute -bottom-10 -right-10 opacity-5 text-[200px] select-none text-foreground">
-                            contact_support
-                        </span>
+                    <span className="material-symbols-outlined absolute -bottom-10 -right-10 opacity-5 text-[200px] select-none text-foreground">
+                        contact_support
+                    </span>
 
-                        <div className="space-y-6 relative z-10">
-                            <h3 className="text-3xl font-black text-foreground leading-tight">Pronto para<br /><span className="text-primary italic">renovar</span> sua empresa?</h3>
-                            <p className="text-muted font-medium text-lg">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
-                        </div>
+                    <div className="space-y-6 relative z-10">
+                        <h3 className="text-3xl font-black text-foreground leading-tight">Pronto para<br /><span className="text-primary italic">renovar</span> sua empresa?</h3>
+                        <p className="text-muted font-medium text-lg">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
+                    </div>
 
-                        <div className="space-y-8 relative z-10">
-                            <div className="flex items-center gap-8 group/item">
-                                <div className="size-16 rounded-2xl bg-card-muted border border-border flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground transition-all duration-300 shadow-lg">
-                                    <span className="material-symbols-outlined text-2xl">call</span>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">Telefone</p>
-                                    <p className="text-xl font-bold font-manrope text-foreground">{displayPhone}</p>
-                                </div>
+                    <div className="space-y-8 relative z-10">
+                        <div className="flex items-center gap-8 group/item">
+                            <div className="size-16 rounded-2xl bg-muted/5 border border-border flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground transition-all duration-300 shadow-lg">
+                                <span className="material-symbols-outlined text-2xl">call</span>
                             </div>
-                            <div className="flex items-center gap-8 group/item">
-                                <div className="size-16 rounded-2xl bg-card-muted border border-border flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground transition-all duration-300 shadow-lg">
-                                    <span className="material-symbols-outlined text-2xl">mail</span>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">E-mail</p>
-                                    <p className="text-xl font-bold font-manrope text-foreground">{displayEmail}</p>
-                                </div>
+                            <div>
+                                <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">Telefone</p>
+                                <p className="text-xl font-bold font-manrope text-foreground">{displayPhone}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-8 group/item">
+                            <div className="size-16 rounded-2xl bg-muted/5 border border-border flex items-center justify-center text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground transition-all duration-300 shadow-lg">
+                                <span className="material-symbols-outlined text-2xl">mail</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 opacity-50">E-mail</p>
+                                <p className="text-xl font-bold font-manrope text-foreground">{displayEmail}</p>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="lg:col-span-7 bg-card p-8 md:p-14 rounded-[3.5rem] border border-border shadow-2xl relative overflow-hidden backdrop-blur-xl">
-                        {status === "success" ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center space-y-8 animate-fadeIn py-20">
-                                <div className="size-32 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 shadow-xl shadow-primary/20">
-                                    <span className="material-symbols-outlined text-6xl">check_circle</span>
-                                </div>
-                                <div className="space-y-4">
-                                    <h3 className="text-3xl font-black text-foreground">Mensagem Enviada!</h3>
-                                    <p className="text-muted font-medium max-w-sm mx-auto text-lg">{formConfig.successMessage}</p>
-                                </div>
-                                <button
-                                    onClick={() => setStatus("idle")}
-                                    className="text-foreground font-black text-xs uppercase tracking-widest hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary pb-1"
-                                >
-                                    Enviar outra mensagem
-                                </button>
+                <div className="lg:col-span-7 bg-card p-8 md:p-14 rounded-[2.5rem] border border-border shadow-2xl relative overflow-hidden backdrop-blur-xl">
+                    {status === "success" ? (
+                        <div className="h-full flex flex-col items-center justify-center text-center space-y-8 animate-fadeIn py-20">
+                            <div className="size-32 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 shadow-xl shadow-primary/20">
+                                <span className="material-symbols-outlined text-6xl">check_circle</span>
                             </div>
-                        ) : (
-                            <form className="grid grid-cols-1 gap-8" onSubmit={handleSubmit}>
-                                {formConfig.fields.map((field: any) => (
-                                    <div key={field.id} className="space-y-2 group">
-                                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-4 group-focus-within:text-primary transition-colors opacity-50">
-                                            {field.label} {field.required && <span className="text-primary">*</span>}
-                                        </label>
+                            <div className="space-y-4">
+                                <h3 className="text-3xl font-black text-foreground">Mensagem Enviada!</h3>
+                                <p className="text-muted font-medium max-w-sm mx-auto text-lg">{formConfig.successMessage}</p>
+                            </div>
+                            <button
+                                onClick={() => setStatus("idle")}
+                                className="text-foreground font-black text-xs uppercase tracking-widest hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary pb-1"
+                            >
+                                Enviar outra mensagem
+                            </button>
+                        </div>
+                    ) : (
+                        <form className="grid grid-cols-1 gap-8" onSubmit={handleSubmit}>
+                            {formConfig.fields.map((field: any) => (
+                                <div key={field.id} className="space-y-2 group">
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-4 group-focus-within:text-primary transition-colors opacity-50">
+                                        {field.label} {field.required && <span className="text-primary">*</span>}
+                                    </label>
 
-                                        {field.type === 'textarea' ? (
-                                            <textarea
-                                                name={field.label}
-                                                required={field.required}
-                                                rows={4}
-                                                placeholder={`Escreva seu ${field.label.toLowerCase()}...`}
-                                                className="w-full px-8 py-6 rounded-[2rem] bg-card-muted border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none resize-none transition-all placeholder:text-muted"
-                                            />
-                                        ) : field.type === 'select' ? (
-                                            <select
-                                                name={field.label}
-                                                required={field.required}
-                                                className="w-full px-8 py-6 rounded-[2rem] bg-foreground/5 border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none transition-all appearance-none"
-                                            >
-                                                <option value="">Selecione uma opção...</option>
-                                                {field.options?.map((opt: string) => (
-                                                    <option key={opt} value={opt}>{opt}</option>
-                                                ))}
-                                            </select>
-                                        ) : (
-                                            <input
-                                                type={field.type}
-                                                name={field.label}
-                                                required={field.required}
-                                                placeholder={`Seu ${field.label.toLowerCase()}...`}
-                                                className="w-full px-8 py-6 rounded-[2rem] bg-foreground/5 border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none transition-all placeholder:text-muted/30 font-manrope"
-                                            />
-                                        )}
-                                    </div>
-                                ))}
-
-                                <div className="pt-6">
-                                    <button
-                                        type="submit"
-                                        disabled={status === "loading"}
-                                        className="w-full bg-primary text-primary-foreground py-6 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-foreground hover:text-background transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-primary disabled:hover:text-primary-foreground"
-                                    >
-                                        {status === "loading" ? (
-                                            <span className="flex items-center justify-center gap-3">
-                                                <span className="size-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></span>
-                                                Enviando...
-                                            </span>
-                                        ) : "Enviar Mensagem"}
-                                    </button>
-                                    {status === "error" && (
-                                        <p className="text-red-500 text-[10px] font-black uppercase text-center mt-6 tracking-widest animate-pulse">
-                                            Erro ao enviar. Tente novamente ou use nossos contatos diretos.
-                                        </p>
+                                    {field.type === 'textarea' ? (
+                                        <textarea
+                                            name={field.label}
+                                            required={field.required}
+                                            rows={4}
+                                            placeholder={`Escreva seu ${field.label.toLowerCase()}...`}
+                                            className="w-full px-8 py-6 rounded-3xl bg-muted/5 border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none resize-none transition-all placeholder:text-muted"
+                                        />
+                                    ) : field.type === 'select' ? (
+                                        <select
+                                            name={field.label}
+                                            required={field.required}
+                                            className="w-full px-8 py-6 rounded-3xl bg-muted/5 border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none transition-all appearance-none"
+                                        >
+                                            <option value="">Selecione uma opção...</option>
+                                            {field.options?.map((opt: string) => (
+                                                <option key={opt} value={opt}>{opt}</option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type={field.type}
+                                            name={field.label}
+                                            required={field.required}
+                                            placeholder={`Seu ${field.label.toLowerCase()}...`}
+                                            className="w-full px-8 py-6 rounded-3xl bg-muted/5 border-2 border-transparent text-foreground text-base font-medium focus:border-primary/20 focus:bg-foreground/10 focus:shadow-xl outline-none transition-all placeholder:text-muted/30 font-manrope"
+                                        />
                                     )}
                                 </div>
-                            </form>
-                        )}
-                    </div>
+                            ))}
+
+                            <div className="pt-6">
+                                <button
+                                    type="submit"
+                                    disabled={status === "loading"}
+                                    className="w-full bg-primary text-primary-foreground py-6 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-foreground hover:text-background transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-primary disabled:hover:text-primary-foreground"
+                                >
+                                    {status === "loading" ? (
+                                        <span className="flex items-center justify-center gap-3">
+                                            <span className="size-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></span>
+                                            Enviando...
+                                        </span>
+                                    ) : "Enviar Mensagem"}
+                                </button>
+                                {status === "error" && (
+                                    <p className="text-red-500 text-[10px] font-black uppercase text-center mt-6 tracking-widest animate-pulse">
+                                        Erro ao enviar. Tente novamente ou use nossos contatos diretos.
+                                    </p>
+                                )}
+                            </div>
+                        </form>
+                    )}
                 </div>
             </div>
-        </section>
+        </div>
     );
 }
+

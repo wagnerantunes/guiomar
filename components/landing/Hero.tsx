@@ -63,7 +63,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             email: formData.get("email"),
             company: formData.get("company"),
             phone: formData.get("phone"),
-            message: "CONTATO VIA FORMULÁRIO PRINCIPAL (HERO). CLIENTE INTERESSADO EM CONSULTORIA.",
+            message: `CONTATO VIA HERO. Cliente: ${formData.get("name")} (@${formData.get("company")}). Interessado em consultoria profissional.`,
             source: "Hero Section Lead Form",
             domain: window.location.hostname
         };
@@ -180,7 +180,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
-                    className="bg-card backdrop-blur-2xl p-8 md:p-10 rounded-[3rem] shadow-2xl max-w-md ml-auto border border-border"
+                    className="bg-card/40 backdrop-blur-2xl p-8 md:p-10 rounded-[2rem] shadow-2xl max-w-md ml-auto border border-border"
                 >
                     <div className="mb-8">
                         <h3 className="text-2xl font-black text-foreground">
@@ -198,7 +198,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                 name="name"
                                 required
                                 placeholder="Seu nome"
-                                className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-muted/5 border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                             />
                         </div>
                         <div className="space-y-2">
@@ -208,7 +208,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                 name="email"
                                 required
                                 placeholder="seu@email.com"
-                                className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-muted/5 border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -219,7 +219,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                     name="company"
                                     required
                                     placeholder="Nome da empresa"
-                                    className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-muted/5 border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -229,7 +229,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                                     name="phone"
                                     required
                                     placeholder="(11) 99999-9999"
-                                    className="w-full px-5 py-3.5 rounded-2xl bg-card-muted border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
+                                    className="w-full px-5 py-3.5 rounded-2xl bg-muted/5 border border-border text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted"
                                 />
                             </div>
                         </div>

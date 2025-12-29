@@ -87,25 +87,25 @@ export default function NewsletterPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-full bg-[#f8faf8] dark:bg-[#0d1b12]">
+        <div className="flex flex-col min-h-screen bg-background">
             {/* HEADER */}
-            <div className="px-6 py-8 md:px-10 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-[#0d1b12]/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
+            <div className="px-6 py-8 md:px-10 border-b border-border bg-background/80 backdrop-blur-xl z-20 shrink-0 sticky top-0">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                     <div>
-                        <h1 className="text-2xl font-black text-[#0d1b12] dark:text-white uppercase tracking-[0.2em]">Newsletter</h1>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Gestão de campanhas, inscritos e engajamento.</p>
+                        <h1 className="text-2xl font-black text-foreground uppercase tracking-[0.2em]">Newsletter</h1>
+                        <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mt-1">Gestão de campanhas, inscritos e engajamento.</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <button
                             aria-label="Visualizar site ao vivo"
-                            className="flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-gray-100 dark:border-white/5 rounded-xl hover:bg-[#13ec5b]/5 hover:text-[#13ec5b] transition-all uppercase tracking-widest bg-white dark:bg-transparent shadow-sm"
+                            className="flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-border rounded-xl hover:bg-primary/5 hover:text-primary transition-all uppercase tracking-widest bg-card shadow-sm"
                         >
                             <span className="material-symbols-outlined text-sm">visibility</span>
                             Preview Site
                         </button>
                         <button
                             aria-label="Criar nova campanha"
-                            className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-[#13ec5b] text-[#0d1b12] rounded-xl shadow-xl shadow-[#13ec5b]/20 hover:scale-105 transition-all uppercase tracking-widest"
+                            className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-primary text-primary-foreground rounded-xl shadow-xl shadow-primary/20 hover:scale-105 transition-all uppercase tracking-widest"
                         >
                             <span className="material-symbols-outlined text-[18px]">add_circle</span>
                             Nova Campanha
@@ -114,24 +114,24 @@ export default function NewsletterPage() {
                 </div>
             </div>
 
-            <div className="p-6 md:p-10 space-y-12 max-w-7xl mx-auto w-full">
+            <div className="p-6 md:p-10 space-y-12 max-w-screen-2xl mx-auto w-full">
                 {/* STATS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {stats.map((stat) => (
-                        <div key={stat.label} className="bg-white dark:bg-[#183221]/40 p-8 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm flex items-center justify-between group hover:border-[#13ec5b]/30 transition-all">
+                        <div key={stat.label} className="bg-card p-8 rounded-[2rem] border border-border shadow-sm flex items-center justify-between group hover:border-primary/30 transition-all">
                             <div className="space-y-2">
-                                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
-                                <h3 className="text-3xl font-black text-[#0d1b12] dark:text-white tracking-tight">{stat.value}</h3>
+                                <p className="text-[9px] font-black text-muted uppercase tracking-widest">{stat.label}</p>
+                                <h3 className="text-3xl font-black text-foreground tracking-tight">{stat.value}</h3>
                                 <div className="flex items-center gap-2">
-                                    <span className="size-2 rounded-full bg-[#13ec5b] animate-pulse"></span>
-                                    <p className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest">
+                                    <span className="size-2 rounded-full bg-primary animate-pulse"></span>
+                                    <p className="text-[9px] font-black text-primary uppercase tracking-widest">
                                         {stat.change}
                                     </p>
                                 </div>
                             </div>
-                            <div className={`h-16 w-16 rounded-[1.5rem] flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 ${stat.color === "blue" ? "bg-blue-50/50 text-blue-500" :
-                                stat.color === "purple" ? "bg-purple-50/50 text-purple-500" :
-                                    "bg-orange-50/50 text-orange-500"
+                            <div className={`h-16 w-16 rounded-[1.5rem] flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 ${stat.color === "blue" ? "bg-blue-50/10 text-blue-500" :
+                                stat.color === "purple" ? "bg-purple-50/10 text-purple-500" :
+                                    "bg-orange-50/10 text-orange-500"
                                 }`}>
                                 <span className="material-symbols-outlined text-3xl">{stat.icon}</span>
                             </div>
@@ -142,19 +142,19 @@ export default function NewsletterPage() {
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
                     <div className="xl:col-span-8 space-y-12">
                         {/* COMPOSE */}
-                        <div className="bg-white dark:bg-[#183221]/40 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
-                            <div className="px-10 py-6 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-gray-50/30 dark:bg-white/5">
-                                <h3 className="text-[10px] font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Compor Nova Campanha</h3>
-                                <button className="text-[9px] text-[#13ec5b] font-black uppercase tracking-widest hover:underline">Templates</button>
+                        <div className="bg-card rounded-[2rem] border border-border shadow-sm overflow-hidden group hover:border-primary/30 transition-all">
+                            <div className="px-10 py-6 border-b border-border flex items-center justify-between bg-muted/5">
+                                <h3 className="text-[10px] font-black text-foreground uppercase tracking-widest">Compor Nova Campanha</h3>
+                                <button className="text-[9px] text-primary font-black uppercase tracking-widest hover:underline">Templates</button>
                             </div>
                             <div className="p-10 space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
-                                        <label htmlFor="comp-subject" className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Assunto do E-mail</label>
+                                        <label htmlFor="comp-subject" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Assunto do E-mail</label>
                                         <input
                                             id="comp-subject"
                                             aria-label="Assunto do E-mail"
-                                            className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white"
+                                            className="w-full bg-background border border-border rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground"
                                             placeholder="Ex: Dicas para uma mente clara..."
                                             type="text"
                                             value={newCampaign.subject}
@@ -162,27 +162,27 @@ export default function NewsletterPage() {
                                         />
                                     </div>
                                     <div className="space-y-3">
-                                        <label htmlFor="comp-segment" className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Segmento de Público</label>
+                                        <label htmlFor="comp-segment" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Segmento de Público</label>
                                         <div className="relative group/sel">
                                             <select
                                                 id="comp-segment"
                                                 aria-label="Segmento de Público"
-                                                className="w-full bg-gray-50/50 dark:bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/10 focus:bg-white dark:focus:bg-[#102216] transition-all outline-none text-[#0d1b12] dark:text-white appearance-none cursor-pointer"
+                                                className="w-full bg-background border border-border rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground appearance-none cursor-pointer"
                                             >
                                                 <option>Todos os Inscritos ({subscribers.length})</option>
                                                 <option>Novos Usuários (Últimos 30 dias)</option>
                                                 <option>Clientes VIP</option>
                                             </select>
-                                            <span className="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-focus-within/sel:text-[#13ec5b] transition-colors">expand_more</span>
+                                            <span className="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-muted pointer-events-none group-focus-within/sel:text-primary transition-colors">expand_more</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="comp-content" className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-3">Conteúdo da Campanha</label>
-                                    <div className="border border-gray-100 dark:border-white/5 rounded-[2.5rem] overflow-hidden bg-gray-50/30 dark:bg-white/5 group-focus-within:border-[#13ec5b]/30 transition-all">
-                                        <div className="flex items-center gap-2 p-4 border-b border-gray-100 dark:border-white/5 bg-white/50 dark:bg-white/5">
+                                    <label htmlFor="comp-content" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Conteúdo da Campanha</label>
+                                    <div className="border border-border rounded-[2rem] overflow-hidden bg-muted/5 group-focus-within:border-primary/30 transition-all">
+                                        <div className="flex items-center gap-2 p-4 border-b border-border bg-background/50">
                                             {["format_bold", "format_italic", "format_underlined", "format_align_left", "format_align_center", "format_align_right", "link", "image"].map((icon, i) => (
-                                                <button key={i} aria-label={`Ferramenta: ${icon.replace('format_', '')}`} className="size-10 rounded-xl hover:bg-[#13ec5b]/10 hover:text-[#13ec5b] text-gray-400 transition-all flex items-center justify-center">
+                                                <button key={i} aria-label={`Ferramenta: ${icon.replace('format_', '')}`} className="size-10 rounded-xl hover:bg-primary/10 hover:text-primary text-muted transition-all flex items-center justify-center">
                                                     <span className="material-symbols-outlined text-[20px]">{icon}</span>
                                                 </button>
                                             ))}
@@ -190,7 +190,7 @@ export default function NewsletterPage() {
                                         <textarea
                                             id="comp-content"
                                             aria-label="Conteúdo da Campanha"
-                                            className="w-full p-10 min-h-[400px] outline-none text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium bg-transparent border-none resize-none"
+                                            className="w-full p-10 min-h-[400px] outline-none text-sm text-foreground/80 dark:text-foreground/80 leading-relaxed font-medium bg-transparent border-none resize-none"
                                             placeholder="Comece a escrever sua mensagem..."
                                             value={newCampaign.content}
                                             onChange={(e) => setNewCampaign({ ...newCampaign, content: e.target.value })}
@@ -201,7 +201,7 @@ export default function NewsletterPage() {
                                     <button
                                         disabled={submitting}
                                         onClick={() => handleSendCampaign("Draft")}
-                                        className="px-8 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-[#0d1b12] dark:hover:text-white transition-colors"
+                                        className="px-8 py-3 text-[10px] font-black text-muted uppercase tracking-widest hover:text-foreground transition-colors"
                                     >
                                         Salvar Rascunho
                                     </button>
@@ -209,7 +209,7 @@ export default function NewsletterPage() {
                                         disabled={submitting}
                                         onClick={() => handleSendCampaign("Sent")}
                                         aria-label="Enviar campanha agora"
-                                        className="px-10 py-5 text-[10px] font-black bg-[#0d1b12] dark:bg-white dark:text-[#0d1b12] text-white rounded-2xl shadow-xl shadow-black/10 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-3 disabled:opacity-50"
+                                        className="px-10 py-5 text-[10px] font-black bg-foreground text-background dark:bg-foreground dark:text-background rounded-2xl shadow-xl shadow-black/10 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-3 disabled:opacity-50"
                                     >
                                         <span className="material-symbols-outlined text-[20px]">send</span>
                                         {submitting ? "Enviando..." : "Enviar Agora"}
@@ -219,13 +219,13 @@ export default function NewsletterPage() {
                         </div>
 
                         {/* RECENT CAMPAIGNS */}
-                        <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden">
-                            <div className="px-10 py-8 border-b border-gray-50 dark:border-white/5 bg-gray-50/30 dark:bg-white/5">
-                                <h3 className="text-[10px] font-black text-[#0d1b12] dark:text-white uppercase tracking-widest">Histórico de Campanhas</h3>
+                        <div className="bg-card rounded-[2.5rem] border border-border shadow-sm overflow-hidden">
+                            <div className="px-10 py-8 border-b border-border bg-muted/5">
+                                <h3 className="text-[10px] font-black text-foreground uppercase tracking-widest">Histórico de Campanhas</h3>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left" aria-label="Tabela de Campanhas Recentes">
-                                    <thead className="text-[9px] text-gray-400 uppercase font-black tracking-widest bg-gray-50/50 dark:bg-white/5">
+                                    <thead className="text-[9px] text-muted uppercase font-black tracking-widest bg-muted/10">
                                         <tr>
                                             <th className="px-10 py-6">Assunto</th>
                                             <th className="px-8 py-6">Status</th>
@@ -233,25 +233,25 @@ export default function NewsletterPage() {
                                             <th className="px-10 py-6 text-right">Ações</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-100 dark:divide-white/5">
+                                    <tbody className="divide-y divide-border">
                                         {campaigns.map((c) => (
-                                            <tr key={c.id} className="group hover:bg-[#f8faf8] dark:hover:bg-white/5 transition-colors">
+                                            <tr key={c.id} className="group hover:bg-muted/5 transition-colors">
                                                 <td className="px-10 py-8">
-                                                    <span className="text-sm font-black text-[#0d1b12] dark:text-white group-hover:text-[#13ec5b] transition-colors">{c.subject}</span>
+                                                    <span className="text-sm font-black text-foreground group-hover:text-primary transition-colors">{c.subject}</span>
                                                 </td>
                                                 <td className="px-8 py-8">
-                                                    <span className={`text-[9px] font-black px-3.5 py-1.5 rounded-full ${c.status === "Sent" ? "bg-[#13ec5b] text-[#0d1b12] shadow-[0_0_15px_rgba(19,236,91,0.2)]" :
-                                                        c.status === "Scheduled" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400" :
-                                                            "bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-gray-400"
+                                                    <span className={`text-[9px] font-black px-3.5 py-1.5 rounded-full ${c.status === "Sent" ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]" :
+                                                        c.status === "Scheduled" ? "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400" :
+                                                            "bg-muted text-muted-foreground"
                                                         } uppercase tracking-widest`}>
                                                         {c.status === "Sent" ? "Enviado" : c.status === "Scheduled" ? "Agendado" : "Rascunho"}
                                                     </span>
                                                 </td>
-                                                <td className="px-8 py-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">{c.sentAt ? new Date(c.sentAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short', year: 'numeric' }) : "-"}</td>
+                                                <td className="px-8 py-8 text-[10px] font-black text-muted uppercase tracking-widest">{c.sentAt ? new Date(c.sentAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short', year: 'numeric' }) : "-"}</td>
                                                 <td className="px-10 py-8 text-right">
                                                     <button
                                                         aria-label={`Ação para campanha: ${c.subject}`}
-                                                        className="text-[10px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline hover:scale-105 transition-all"
+                                                        className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline hover:scale-105 transition-all"
                                                     >
                                                         {c.status === "Sent" ? "Relatório" : c.status === "Scheduled" ? "Editar" : "Retomar"}
                                                     </button>
@@ -266,65 +266,65 @@ export default function NewsletterPage() {
 
                     <div className="xl:col-span-4 space-y-12">
                         {/* WEBSITE SECTION EDITOR */}
-                        <div className="bg-[#0d1b12] rounded-[3.5rem] border border-white/5 shadow-2xl relative overflow-hidden group">
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#13ec5b] to-[#13ec5b]/0"></div>
-                            <div className="px-10 py-10 border-b border-white/5 flex items-center gap-5">
-                                <div className="size-12 rounded-2xl bg-[#13ec5b]/20 text-[#13ec5b] flex items-center justify-center">
+                        <div className="bg-card rounded-[2.5rem] border border-border shadow-2xl relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-primary/0"></div>
+                            <div className="px-10 py-10 border-b border-border flex items-center gap-5">
+                                <div className="size-12 rounded-2xl bg-primary/20 text-primary flex items-center justify-center">
                                     <span className="material-symbols-outlined">web</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-black text-xs text-white uppercase tracking-widest">Interface de Captura</h3>
-                                    <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-1">Design do bloco de inscrição.</p>
+                                    <h3 className="font-black text-xs text-foreground uppercase tracking-widest">Interface de Captura</h3>
+                                    <p className="text-[9px] text-muted font-bold uppercase tracking-widest mt-1">Design do bloco de inscrição.</p>
                                 </div>
                             </div>
                             <div className="p-10 space-y-8">
                                 <div className="space-y-3">
-                                    <label htmlFor="ui-headline" className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-3">Título Chamativo</label>
-                                    <input id="ui-headline" aria-label="Título da Captura" className="w-full bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-white" type="text" defaultValue="Junte-se à nossa comunidade" />
+                                    <label htmlFor="ui-headline" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Título Chamativo</label>
+                                    <input id="ui-headline" aria-label="Título da Captura" className="w-full bg-background border border-border rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 outline-none text-foreground" type="text" defaultValue="Junte-se à nossa comunidade" />
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="ui-subheadline" className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-3">Texto de Apoio</label>
-                                    <textarea id="ui-subheadline" aria-label="Texto de Apoio da Captura" className="w-full bg-white/5 border-transparent rounded-[2rem] px-6 py-6 text-xs font-medium focus:ring-4 focus:ring-[#13ec5b]/20 outline-none resize-none leading-relaxed text-gray-400" rows={5} defaultValue="Receba dicas exclusivas de saúde mental, acesso antecipado a workshops e inspiração diária direto no seu e-mail." />
+                                    <label htmlFor="ui-subheadline" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Texto de Apoio</label>
+                                    <textarea id="ui-subheadline" aria-label="Texto de Apoio da Captura" className="w-full bg-background border border-border rounded-[2rem] px-6 py-6 text-xs font-medium focus:ring-4 focus:ring-primary/20 outline-none resize-none leading-relaxed text-muted" rows={5} defaultValue="Receba dicas exclusivas de saúde mental, acesso antecipado a workshops e inspiração diária direto no seu e-mail." />
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="ui-button" className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-3">Texto do Botão</label>
-                                    <input id="ui-button" aria-label="Texto do Botão da Captura" className="w-full bg-white/5 border-transparent rounded-[1.5rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-[#13ec5b]/20 outline-none text-white" type="text" defaultValue="Inscrever Agora" />
+                                    <label htmlFor="ui-button" className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Texto do Botão</label>
+                                    <input id="ui-button" aria-label="Texto do Botão da Captura" className="w-full bg-background border border-border rounded-2xl px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 outline-none text-foreground" type="text" defaultValue="Inscrever Agora" />
                                 </div>
-                                <button aria-label="Atualizar seção no site" className="w-full py-5 text-[10px] font-black text-[#0d1b12] bg-[#13ec5b] rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-[#13ec5b]/10 uppercase tracking-widest">
+                                <button aria-label="Atualizar seção no site" className="w-full py-5 text-[10px] font-black text-primary-foreground bg-primary rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/10 uppercase tracking-widest">
                                     Atualizar Visual
                                 </button>
                             </div>
                         </div>
 
                         {/* RECENT SUBSCRIBERS */}
-                        <div className="bg-white dark:bg-[#183221]/40 rounded-[3.5rem] border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
-                            <div className="px-10 py-10 border-b border-gray-50 dark:border-white/5 flex items-center justify-between bg-gray-50/30 dark:bg-white/5">
+                        <div className="bg-card rounded-[2.5rem] border border-border shadow-sm overflow-hidden group hover:border-primary/30 transition-all">
+                            <div className="px-10 py-10 border-b border-border flex items-center justify-between bg-muted/5">
                                 <div className="flex items-center gap-5">
-                                    <div className="size-12 rounded-2xl bg-[#13ec5b]/10 text-[#13ec5b] flex items-center justify-center">
+                                    <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                                         <span className="material-symbols-outlined">person_search</span>
                                     </div>
-                                    <h3 className="font-black text-xs text-[#0d1b12] dark:text-white uppercase tracking-widest">Inscritos Recentes</h3>
+                                    <h3 className="font-black text-xs text-foreground uppercase tracking-widest">Inscritos Recentes</h3>
                                 </div>
-                                <button aria-label="Exportar lista de inscritos em CSV" className="text-[9px] font-black text-[#13ec5b] uppercase tracking-widest hover:underline">Exportar CSV</button>
+                                <button aria-label="Exportar lista de inscritos em CSV" className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline">Exportar CSV</button>
                             </div>
-                            <ul className="divide-y divide-gray-100 dark:divide-white/5 max-h-[600px] overflow-y-auto custom-scrollbar" aria-label="Lista de Inscritos">
+                            <ul className="divide-y divide-border max-h-[600px] overflow-y-auto custom-scrollbar" aria-label="Lista de Inscritos">
                                 {subscribers.slice(0, 10).map((s) => (
-                                    <li key={s.id} className="px-10 py-8 flex items-center justify-between hover:bg-[#f8faf8] dark:hover:bg-white/5 transition-colors group/li">
+                                    <li key={s.id} className="px-10 py-8 flex items-center justify-between hover:bg-muted/5 transition-colors group/li">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-black text-[#0d1b12] dark:text-white group-hover/li:text-[#13ec5b] transition-colors">{s.email}</span>
-                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
+                                            <span className="text-sm font-black text-foreground group-hover/li:text-primary transition-colors">{s.email}</span>
+                                            <span className="text-[9px] text-muted font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
                                                 <span className="material-symbols-outlined text-[12px]">calendar_today</span>
                                                 {new Date(s.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short' })}
                                             </span>
                                         </div>
-                                        <div className="size-8 rounded-lg bg-gray-50 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/li:opacity-100 transition-opacity">
-                                            <span className="material-symbols-outlined text-sm text-gray-400">arrow_forward</span>
+                                        <div className="size-8 rounded-lg bg-muted/5 flex items-center justify-center opacity-0 group-hover/li:opacity-100 transition-opacity">
+                                            <span className="material-symbols-outlined text-sm text-muted">arrow_forward</span>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
-                            <div className="p-8 border-t border-gray-50 dark:border-white/5 text-center">
-                                <button className="text-[9px] font-black text-gray-400 uppercase tracking-widest hover:text-[#13ec5b] transition-colors">Ver todos os {subscribers.length} inscritos</button>
+                            <div className="p-8 border-t border-border text-center">
+                                <button className="text-[9px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors">Ver todos os {subscribers.length} inscritos</button>
                             </div>
                         </div>
                     </div>

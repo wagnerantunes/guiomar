@@ -100,8 +100,8 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
             type="button"
             title={title}
             className={`size-10 rounded-xl flex items-center justify-center transition-all ${isActive
-                ? 'bg-[#13ec5b] text-[#0d1b12] shadow-lg shadow-[#13ec5b]/20 scale-110 z-10'
-                : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#13ec5b]'
+                ? 'bg-primary text-[#0d1b12] shadow-lg shadow-primary/20 scale-110 z-10'
+                : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary'
                 }`}
         >
             {children}
@@ -224,8 +224,8 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
                     className="prose prose-lg max-w-none focus:outline-none dark:prose-invert 
                     prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
                     prose-headings:text-[#0d1b12] dark:prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
-                    prose-strong:text-[#0d1b12] dark:prose-strong:text-[#13ec5b]
-                    prose-blockquote:border-l-4 prose-blockquote:border-[#13ec5b] prose-blockquote:bg-gray-50/50 dark:prose-blockquote:bg-white/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic
+                    prose-strong:text-[#0d1b12] dark:prose-strong:text-primary
+                    prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-gray-50/50 dark:prose-blockquote:bg-white/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic
                     prose-img:rounded-[2rem] prose-img:shadow-2xl prose-img:mx-auto"
                 />
             </div>
@@ -234,7 +234,7 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
             <div className="px-8 py-3 bg-gray-50 dark:bg-[#183221]/30 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                        <div className="size-1.5 rounded-full bg-[#13ec5b] animate-pulse"></div>
+                        <div className="size-1.5 rounded-full bg-primary animate-pulse"></div>
                         Editor Ativo
                     </span>
                 </div>

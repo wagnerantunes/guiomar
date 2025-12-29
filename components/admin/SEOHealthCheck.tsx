@@ -55,7 +55,7 @@ export function SEOHealthCheck({ title, content, excerpt, image, slug }: SEOHeal
                 </div>
                 <div className="flex-1 h-2 bg-gray-50 dark:bg-white/5 rounded-full overflow-hidden">
                     <div
-                        className={`h-full rounded-full transition-all duration-1000 ${score > 70 ? 'bg-[#13ec5b]' : score > 40 ? 'bg-orange-400' : 'bg-red-500'}`}
+                        className={`h-full rounded-full transition-all duration-1000 ${score > 70 ? 'bg-primary' : score > 40 ? 'bg-orange-400' : 'bg-red-500'}`}
                         style={{ width: `${score}%` }}
                     />
                 </div>
@@ -68,10 +68,10 @@ export function SEOHealthCheck({ title, content, excerpt, image, slug }: SEOHeal
                         className="bg-white/[0.02] backdrop-blur-sm p-4 rounded-2xl border border-white/5 flex flex-col gap-2 transition-all hover:scale-[1.02] hover:bg-white/[0.05]"
                     >
                         <div className="flex items-center justify-between">
-                            <span className={`material-symbols-outlined text-sm ${check.status === 'success' ? 'text-[#13ec5b]' : check.status === 'warning' ? 'text-orange-400' : 'text-red-500'}`}>
+                            <span className={`material-symbols-outlined text-sm ${check.status === 'success' ? 'text-primary' : check.status === 'warning' ? 'text-orange-400' : 'text-red-500'}`}>
                                 {check.icon}
                             </span>
-                            <span className={`size-1.5 rounded-full ${check.status === 'success' ? 'bg-[#13ec5b]' : check.status === 'warning' ? 'bg-orange-400' : 'bg-red-500'}`}></span>
+                            <span className={`size-1.5 rounded-full ${check.status === 'success' ? 'bg-primary' : check.status === 'warning' ? 'bg-orange-400' : 'bg-red-500'}`}></span>
                         </div>
                         <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{check.label}</span>
                         <span className={`text-[10px] font-bold uppercase tracking-tighter ${check.status === 'success' ? 'text-white' : 'text-gray-500'}`}>

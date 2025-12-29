@@ -13,6 +13,7 @@ interface SectionWrapperProps {
     id?: string;
     nextId?: string; // ID of the next section to scroll to
     content?: any; // New prop for CMS content
+    variant?: "default" | "muted" | "card";
 }
 
 export function SectionWrapper({
@@ -22,12 +23,13 @@ export function SectionWrapper({
     stagger = false,
     id,
     nextId,
-    content
+    content,
+    variant = "default"
 }: SectionWrapperProps) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-    // Handle Visiblity
+    // Handle Visibility
     if (content?.isVisible === false) return null;
 
     const containerVariants = {
@@ -55,6 +57,12 @@ export function SectionWrapper({
 
     const bgOpacity = (content?.bgOpacity ?? 100) / 100;
 
+    const variantClasses = {
+        default: "bg-background",
+        muted: "bg-muted/5",
+        card: "bg-card"
+    };
+
     return (
         <motion.section
             id={id}
@@ -62,7 +70,7 @@ export function SectionWrapper({
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className={`${className} relative overflow-hidden bg-background`}
+            className={`py-32 px-6 ${variantClasses[variant]} ${className} relative overflow-hidden transition-colors duration-500`}
         >
             {/* Background Image */}
             {content?.bgImage && (
@@ -80,12 +88,17 @@ export function SectionWrapper({
             {/* Antigravity Particles */}
             {content?.bgEffect === "particles" && <AntigravityParticles />}
 
-            {/* Parallax Effect (Simplificado para este contexto) */}
+            {/* Parallax Effect / Gradient fallback */}
             {content?.bgEffect === "parallax" && (
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent z-0 animate-pulse pointer-events-none" />
             )}
 
-            <div className="relative z-10 h-full w-full">
+            {/* Ambient Background Glow for variants */}
+            {variant === "default" && (
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/2 blur-[120px] rounded-full opacity-20 pointer-events-none" />
+            )}
+
+            <div className="max-w-7xl mx-auto relative z-10 h-full w-full">
                 {stagger ? (
                     React.Children.map(children, (child) => (
                         <motion.div variants={itemVariants}>
@@ -103,3 +116,4 @@ export function SectionWrapper({
         </motion.section>
     );
 }
+

@@ -180,7 +180,7 @@ function HomePageContent() {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-primary/30">
+      <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/30">
         {siteSettings[0]?.siteId && <AnalyticsTracker siteId={siteSettings[0].siteId} />}
         <Header
           getSetting={getSetting}
@@ -206,15 +206,15 @@ function HomePageContent() {
                 <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
                   {selectedPost.cat}
                 </span>
-                <h1 className="text-4xl md:text-5xl font-black text-[#0d1b12] leading-tight">
+                <h1 className="text-4xl md:text-5xl font-black text-foreground leading-tight">
                   {selectedPost.title}
                 </h1>
-                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <p className="text-muted font-bold uppercase tracking-widest text-xs">
                   {selectedPost.date}
                 </p>
                 <RichText
                   content={selectedPost.content || ""}
-                  className="prose-lg text-gray-600 leading-relaxed font-medium"
+                  className="prose-lg text-muted leading-relaxed font-medium"
                 />
               </div>
             </div>
@@ -223,23 +223,23 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             <Hero getSetting={getSetting} scrollTo={scrollTo} />
 
-            <SectionWrapper id="sobre" nextId="challenge" content={getSetting("section_sobre_content", {})}>
+            <SectionWrapper id="sobre" nextId="challenge" variant="muted" content={getSetting("section_sobre_content", {})}>
               <AboutUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="challenge" nextId="servicos" content={getSetting("section_challenge_content", {})}>
+            <SectionWrapper id="challenge" nextId="servicos" variant="default" content={getSetting("section_challenge_content", {})}>
               <Challenge getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="servicos" nextId="metodologia" content={getSetting("section_servicos_content", {})}>
+            <SectionWrapper id="servicos" nextId="metodologia" variant="muted" content={getSetting("section_servicos_content", {})}>
               <Services getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="metodologia" nextId="blog" content={getSetting("section_metodologia_content", {})}>
+            <SectionWrapper id="metodologia" nextId="blog" variant="default" content={getSetting("section_metodologia_content", {})}>
               <Methodology getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="blog" nextId="whyus" content={getSetting("section_blog_content", {})}>
+            <SectionWrapper id="blog" nextId="whyus" variant="muted" content={getSetting("section_blog_content", {})}>
               <BlogPreview
                 getSetting={getSetting}
                 blogPosts={blogPosts}
@@ -248,26 +248,27 @@ function HomePageContent() {
               />
             </SectionWrapper>
 
-            <SectionWrapper id="whyus" nextId="founder" content={getSetting("section_whyus_content", {})}>
+            <SectionWrapper id="whyus" nextId="founder" variant="default" content={getSetting("section_whyus_content", {})}>
               <WhyUs getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="founder" nextId="testimonials" content={getSetting("section_founder_content", {})}>
+            <SectionWrapper id="founder" nextId="testimonials" variant="muted" content={getSetting("section_founder_content", {})}>
               <Founder getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="testimonials" nextId="faq" content={getSetting("section_testimonials_content", {})}>
+            <SectionWrapper id="testimonials" nextId="faq" variant="default" content={getSetting("section_testimonials_content", {})}>
               <Testimonials getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="faq" nextId="contato" content={getSetting("section_faq_content", {})}>
+            <SectionWrapper id="faq" nextId="contato" variant="muted" content={getSetting("section_faq_content", {})}>
               <FAQ getSetting={getSetting} />
             </SectionWrapper>
 
-            <SectionWrapper id="contato" content={getSetting("section_contato_content", {})}>
+            <SectionWrapper id="contato" variant="default" content={getSetting("section_contato_content", {})}>
               <Contact getSetting={getSetting} />
             </SectionWrapper>
           </div>
+
         )}
 
         <Footer

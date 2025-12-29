@@ -29,7 +29,8 @@ export function ScrollIndicator({ targetId = "sobre" }: { targetId?: string }) {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="w-1 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(19,236,91,0.5)]"
+                    className="w-1 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
+
                 />
             </div>
         </motion.button>

@@ -23,71 +23,70 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
     const items = [...data.items, ...data.items]; // Duplicar para loop infinito
 
     return (
-        <section id="depoimentos" className="py-32 bg-background relative overflow-hidden transition-colors duration-500">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-24 space-y-6">
-                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Experiências</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
-                        {data.title}
-                    </h2>
-                </div>
+        <div className="px-6">
+            <div className="text-center mb-24 space-y-6">
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Experiências</span>
+                <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
+                    {data.title}
+                </h2>
+            </div>
 
-                <div
-                    className="relative"
-                    style={{
-                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-                        maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+            <div
+                className="relative"
+                style={{
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                }}
+            >
+                <motion.div
+                    className="flex gap-8"
+                    animate={{
+                        x: [0, -2000],
+                    }}
+                    transition={{
+                        x: {
+                            repeat: Infinity,
+                            repeatType: "loop",
+                            duration: 30,
+                            ease: "linear",
+                        },
                     }}
                 >
-                    <motion.div
-                        className="flex gap-8"
-                        animate={{
-                            x: [0, -2000],
-                        }}
-                        transition={{
-                            x: {
-                                repeat: Infinity,
-                                repeatType: "loop",
-                                duration: 30,
-                                ease: "linear",
-                            },
-                        }}
-                    >
-                        {items.map((t: any, i: number) => (
-                            <div
-                                key={i}
-                                className="flex-shrink-0 w-[400px] bg-card backdrop-blur-xl p-10 rounded-[3rem] border border-border shadow-xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden"
-                            >
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
+                    {items.map((t: any, i: number) => (
+                        <div
+                            key={i}
+                            className="flex-shrink-0 w-[400px] bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border shadow-xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
 
-                                <div className="flex gap-1 mb-8">
-                                    {[...Array(5)].map((_, i) => (
-                                        <span key={i} className="material-symbols-outlined text-primary text-lg fill-primary">star</span>
-                                    ))}
-                                </div>
+                            <div className="flex gap-1 mb-8">
+                                {[...Array(5)].map((_, i) => (
+                                    <span key={i} className="material-symbols-outlined text-primary text-lg fill-primary">star</span>
+                                ))}
+                            </div>
 
-                                <div className="mb-10 min-h-[120px]">
-                                    <p className="text-lg text-foreground font-medium italic leading-relaxed">
-                                        "{t.quote}"
-                                    </p>
-                                </div>
+                            <div className="mb-10 min-h-[120px]">
+                                <p className="text-lg text-foreground font-medium italic leading-relaxed">
+                                    "{t.quote}"
+                                </p>
+                            </div>
 
-                                <div className="flex items-center gap-5 border-t border-border pt-8">
-                                    <img
-                                        src={t.image || `https://ui-avatars.com/api/?name=${t.name}&background=random&color=fff`}
-                                        className="size-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500 border border-border"
-                                        alt={t.name}
-                                    />
-                                    <div>
-                                        <p className="font-black text-foreground uppercase tracking-tight italic">{t.name}</p>
-                                        <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-1">{t.role}</p>
-                                    </div>
+                            <div className="flex items-center gap-5 border-t border-border pt-8">
+                                <img
+                                    src={t.image || `https://ui-avatars.com/api/?name=${t.name}&background=random&color=fff`}
+                                    className="size-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500 border border-border"
+                                    alt={t.name}
+                                />
+                                <div>
+                                    <p className="font-black text-foreground uppercase tracking-tight italic">{t.name}</p>
+                                    <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-1">{t.role}</p>
                                 </div>
                             </div>
-                        ))}
-                    </motion.div>
-                </div>
+                        </div>
+                    ))}
+                </motion.div>
             </div>
-        </section>
+        </div>
     );
 }
+

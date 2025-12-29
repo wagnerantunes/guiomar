@@ -94,10 +94,10 @@ export default function AdminHeader() {
                                 <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-background"></span>
                             </button>
 
-                            <div className="flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-white/5">
+                            <div className="flex items-center gap-3 pl-4 border-l border-border">
                                 <div className="text-right hidden lg:block">
-                                    <p className="text-[11px] font-black text-[#0d1b12] dark:text-white leading-none">Guiomar Melo</p>
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Administradora</p>
+                                    <p className="text-[11px] font-black text-foreground leading-none">Guiomar Melo</p>
+                                    <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Administradora</p>
                                 </div>
                                 <div className="size-10 rounded-xl border-2 border-white dark:border-white/10 shadow-lg overflow-hidden shrink-0">
                                     <img

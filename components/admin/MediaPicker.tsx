@@ -101,12 +101,12 @@ export function MediaPicker({
             onClick={onClose}
         >
             <div
-                className="bg-white dark:bg-[#183221] rounded-[2.5rem] max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-300"
+                className="bg-card rounded-[2.5rem] max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-300"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="p-8 border-b border-gray-100 dark:border-white/5 flex items-center justify-between shrink-0">
                     <div>
-                        <h3 className="text-xl font-black text-[#0d1b12] dark:text-white uppercase tracking-tight">
+                        <h3 className="text-xl font-black text-foreground uppercase tracking-tight">
                             {title}
                         </h3>
                         <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">
@@ -117,10 +117,10 @@ export function MediaPicker({
                         <button
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploading}
-                            className="bg-[#13ec5b] text-[#0d1b12] px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-[#13ec5b]/20 disabled:opacity-50 flex items-center gap-2"
+                            className="bg-primary text-primary-foreground px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center gap-2"
                         >
                             {uploading ? (
-                                <div className="size-3 border-2 border-[#0d1b12] border-t-transparent rounded-full animate-spin" />
+                                <div className="size-3 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                             ) : (
                                 <span className="material-symbols-outlined text-sm">cloud_upload</span>
                             )}
@@ -163,7 +163,7 @@ export function MediaPicker({
                                 <div
                                     key={media.id}
                                     onClick={() => onSelect(media.url)}
-                                    className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 hover:border-[#13ec5b] cursor-pointer transition-all group hover:scale-105 shadow-sm"
+                                    className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 hover:border-primary cursor-pointer transition-all group hover:scale-105 shadow-sm"
                                 >
                                     <img
                                         src={media.url}
@@ -172,7 +172,7 @@ export function MediaPicker({
                                         loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
-                                        <div className="size-10 rounded-full bg-[#13ec5b] text-[#0d1b12] flex items-center justify-center opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all shadow-xl">
+                                        <div className="size-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all shadow-xl">
                                             <span className="material-symbols-outlined">check</span>
                                         </div>
                                     </div>
