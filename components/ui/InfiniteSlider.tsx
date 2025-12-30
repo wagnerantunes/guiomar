@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 
 interface InfiniteSliderProps {
@@ -30,12 +30,27 @@ export function InfiniteSlider({
     }
 
     // Duplicate items for seamless infinite loop
-    const duplicatedItems = [...items, ...items, ...items]; // Triple for smoother experience
+    const duplicatedItems = [...items, ...items, ...items];
 
-    // Calculate animation distance based on number of items and card width
+    // Calculate animation distance
     const cardWidthNum = parseInt(cardWidth);
     const gapNum = gap.includes("rem") ? parseInt(gap) * 16 : parseInt(gap);
     const totalWidth = items.length * (cardWidthNum + gapNum);
+
+    // Start animation on mount
+    useEffect(() => {
+        controls.start({
+            x: [0, -totalWidth],
+            transition: {
+                x: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: speed,
+                    ease: "linear",
+                },
+            },
+        });
+    }, [controls, totalWidth, speed]);
 
     const handlePause = () => {
         setIsPaused(true);
@@ -58,7 +73,6 @@ export function InfiniteSlider({
     };
 
     const handlePrev = () => {
-        // Shift one card to the right
         controls.start({
             x: `+=${cardWidthNum + gapNum}`,
             transition: { duration: 0.5, ease: "easeOut" }
@@ -66,7 +80,6 @@ export function InfiniteSlider({
     };
 
     const handleNext = () => {
-        // Shift one card to the left
         controls.start({
             x: `-=${cardWidthNum + gapNum}`,
             transition: { duration: 0.5, ease: "easeOut" }
@@ -119,14 +132,6 @@ export function InfiniteSlider({
                     className="flex"
                     style={{ gap }}
                     animate={controls}
-                    initial={{
-                        x: 0
-                    }}
-                    onAnimationComplete={() => {
-                        if (!isPaused) {
-                            handlePlay();
-                        }
-                    }}
                 >
                     {duplicatedItems.map((item, i) => (
                         <div
@@ -145,7 +150,7 @@ export function InfiniteSlider({
     );
 }
 
-// Default card component if no custom renderer is provided
+// Default card component
 function DefaultCard({ item }: { item: any }) {
     return (
         <div className="bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border shadow-xl hover:shadow-2xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden">
