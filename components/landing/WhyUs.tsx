@@ -10,7 +10,8 @@ interface WhyUsProps {
 
 export function WhyUs({ getSetting }: WhyUsProps) {
     const content = getSetting("section_porque_content", SECTION_DEFAULTS.porque);
-    const items = content.items || SECTION_DEFAULTS.porque.items;
+    let items = content.items || SECTION_DEFAULTS.porque.items;
+    if (!Array.isArray(items)) items = [];
     const layout = content.layout || "grid";
 
     // Custom card renderer for slider mode

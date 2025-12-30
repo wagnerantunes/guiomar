@@ -104,7 +104,8 @@ const ServiceCardSlider = ({ s }: { s: any }) => (
 
 export function Services({ getSetting }: ServicesProps) {
     const data = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
-    const items = data.items || SECTION_DEFAULTS.servicos.items;
+    let items = data.items || SECTION_DEFAULTS.servicos.items;
+    if (!Array.isArray(items)) items = [];
     const layout = data.layout || "grid";
 
     return (

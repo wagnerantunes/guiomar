@@ -11,7 +11,8 @@ interface MethodologyProps {
 
 export function Methodology({ getSetting }: MethodologyProps) {
     const content = getSetting("section_metodologia_content", SECTION_DEFAULTS.metodologia);
-    const steps = content.steps || SECTION_DEFAULTS.metodologia.steps;
+    let steps = content.steps || SECTION_DEFAULTS.metodologia.steps;
+    if (!Array.isArray(steps)) steps = [];
     const layout = content.layout || "grid";
 
     // Custom card renderer for slider mode
