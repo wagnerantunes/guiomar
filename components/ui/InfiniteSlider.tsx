@@ -18,7 +18,8 @@ export function InfiniteSlider({
     cardWidth = "400px",
     gap = "2rem"
 }: InfiniteSliderProps) {
-    const [isPaused, setIsPaused] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isManuallyPaused, setIsManuallyPaused] = useState(false);
     const controls = useAnimation();
 
     // Verify items is an array
@@ -38,8 +39,7 @@ export function InfiniteSlider({
     const gapNum = gap.includes("rem") ? parseInt(gap) * 16 : parseInt(gap);
     const totalWidth = items.length * (cardWidthNum + gapNum);
 
-    // Start animation on mount
-    useEffect(() => {
+    const startAnimation = () => {
         controls.start({
             x: [0, -totalWidth],
             transition: {
@@ -51,29 +51,23 @@ export function InfiniteSlider({
                 },
             },
         });
-    }, [controls, totalWidth, speed]);
-
-    const handlePause = () => {
-        setIsPaused(true);
-        controls.stop();
     };
 
-    const handlePlay = () => {
-        setIsPaused(false);
-        controls.start({
-            x: [0, -totalWidth],
-            transition: {
-                x: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: speed,
-                    ease: "linear",
-                },
-            },
-        });
+    // Start animation on mount
+    useEffect(() => {
+        if (!isManuallyPaused && !isHovered) {
+            startAnimation();
+        } else {
+            controls.stop();
+        }
+    }, [controls, totalWidth, speed, isManuallyPaused, isHovered]);
+
+    const togglePause = () => {
+        setIsManuallyPaused(!isManuallyPaused);
     };
 
     const handlePrev = () => {
+        setIsManuallyPaused(true);
         controls.start({
             x: `+=${cardWidthNum + gapNum}`,
             transition: { duration: 0.5, ease: "easeOut" }
@@ -81,6 +75,7 @@ export function InfiniteSlider({
     };
 
     const handleNext = () => {
+        setIsManuallyPaused(true);
         controls.start({
             x: `-=${cardWidthNum + gapNum}`,
             transition: { duration: 0.5, ease: "easeOut" }
@@ -110,20 +105,20 @@ export function InfiniteSlider({
             {/* Play/Pause Control */}
             <div className="absolute bottom-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
-                    onClick={isPaused ? handlePlay : handlePause}
+                    onClick={togglePause}
                     className="size-10 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-xl flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
-                    aria-label={isPaused ? "Play" : "Pause"}
+                    aria-label={isManuallyPaused ? "Play" : "Pause"}
                 >
                     <span className="material-symbols-outlined text-lg">
-                        {isPaused ? "play_arrow" : "pause"}
+                        {isManuallyPaused ? "play_arrow" : "pause"}
                     </span>
                 </button>
             </div>
 
             <div
                 className="relative overflow-hidden py-12 -my-12"
-                onMouseEnter={handlePause}
-                onMouseLeave={handlePlay}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
             >
                 <motion.div
                     className="flex py-8"
