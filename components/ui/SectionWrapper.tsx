@@ -148,8 +148,6 @@ export function SectionWrapper({
                     </motion.div>
                 )}
             </div>
-
-            {nextId && <ScrollIndicator targetId={nextId} />}
         </motion.section>
     );
 }

@@ -304,8 +304,6 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                     ))}
                 </div>
             )}
-
-            {nextId && <ScrollIndicator targetId={nextId} />}
         </section>
     );
 }
