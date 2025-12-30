@@ -21,7 +21,8 @@ export function InfiniteSlider({
     const [isPaused, setIsPaused] = useState(false);
     const controls = useAnimation();
 
-    if (!items || items.length === 0) {
+    // Verify items is an array
+    if (!Array.isArray(items) || items.length === 0) {
         return (
             <div className="text-center py-20 text-muted">
                 <p>Nenhum item para exibir</p>
