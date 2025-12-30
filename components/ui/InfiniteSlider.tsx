@@ -29,10 +29,16 @@ export function InfiniteSlider({
     // Duplicate items for seamless infinite loop
     const duplicatedItems = [...items, ...items];
 
+    // Calculate animation distance based on number of items and card width
+    // Parse cardWidth (e.g., "400px" -> 400) and gap (e.g., "2rem" -> 32px assuming 1rem = 16px)
+    const cardWidthNum = parseInt(cardWidth);
+    const gapNum = gap.includes("rem") ? parseInt(gap) * 16 : parseInt(gap);
+    const totalWidth = items.length * (cardWidthNum + gapNum);
+
     return (
         <div className="px-6">
             <div
-                className="relative"
+                className="relative overflow-hidden"
                 style={{
                     WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
                     maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
@@ -42,7 +48,7 @@ export function InfiniteSlider({
                     className="flex"
                     style={{ gap }}
                     animate={{
-                        x: [0, -2000],
+                        x: [0, -totalWidth],
                     }}
                     transition={{
                         x: {
