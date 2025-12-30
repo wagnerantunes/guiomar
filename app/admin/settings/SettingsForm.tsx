@@ -343,7 +343,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                         {/* LOGO DARK */}
                         <div className="space-y-4">
                             <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3 block">
-                                Logo Dark (Fundo Escuro)
+                                Logo Versão Escura / Colorida (Para fundos CLAROS)
                             </label>
                             <div className="relative">
                                 <div
@@ -374,13 +374,13 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                                     )}
                                 </div>
                             </div>
-                            <p className="text-[8px] text-muted text-center md:text-left">SVG ou PNG (Footer)</p>
+                            <p className="text-[8px] text-muted text-center md:text-left">SVG ou PNG (Usado no Tema Claro)</p>
                         </div>
 
                         {/* LOGO LIGHT */}
                         <div className="space-y-4">
                             <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3 block">
-                                Logo Light (Fundo Claro)
+                                Logo Versão Clara / Branca (Para fundos ESCUROS)
                             </label>
                             <div className="relative">
                                 <div

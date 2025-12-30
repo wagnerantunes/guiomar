@@ -43,12 +43,10 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
     ];
 
     // Logo Logic
-    // Default to logoLight (for transparent darker hero) if not scrolled
-    // If scrolled: Check theme. Light theme -> logoDark. Dark theme -> logoLight.
-    // Fallback to 'logo' if specific ones are missing.
-    const effectiveLogo = scrolled
-        ? (theme === 'dark' ? (logoLight || logo) : (logoDark || logo))
-        : (logoLight || logo);
+    // Strictly follow theme since Hero background matches the theme.
+    // logoLight = white/light version (for dark backgrounds)
+    // logoDark = dark/blue version (for light backgrounds)
+    const effectiveLogo = theme === 'dark' ? (logoLight || logo) : (logoDark || logo);
 
     // Dimensions
     const width = settings?.logoWidthNavbar ? `${settings.logoWidthNavbar}px` : "auto";
