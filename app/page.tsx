@@ -229,7 +229,21 @@ function HomePageContent() {
               const defaultOrderArr = [
                 "hero", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "contato"
               ];
-              const rawOrder = getSetting("landing_section_order", defaultOrderArr);
+              let rawOrder = getSetting("landing_section_order", defaultOrderArr);
+
+              // Helper to parse if string
+              if (typeof rawOrder === 'string') {
+                try {
+                  rawOrder = JSON.parse(rawOrder);
+                } catch (e) {
+                  rawOrder = defaultOrderArr;
+                }
+              }
+
+              // Helper to ensure array
+              if (!Array.isArray(rawOrder)) {
+                rawOrder = defaultOrderArr;
+              }
 
               // Ensure we use the correct IDs even if old ones are stored in the database
               const orderArr = rawOrder.map((id: string) => {
