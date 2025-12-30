@@ -1,4 +1,30 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700;900&family=Lato:wght@400;700;900&display=swap');
+
+:root {
+  --font-title: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body.font-theme-tech {
+  --font-title: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body.font-theme-modern {
+  --font-title: 'Poppins', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+body.font-theme-formal {
+  --font-title: 'Roboto', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+}
+
+body.font-theme-elegant {
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Lato', sans-serif;
+}
 
 :root {
   --background: #FDFBF7;
@@ -10,7 +36,9 @@
   --card-muted: rgba(10, 77, 93, 0.04);
   --border: rgba(10, 77, 93, 0.1);
   --primary: #0F758D;
-  --primary-rgb: 15, 117, 141;
+  --primary-rgb: 15,
+    117,
+    141;
   --primary-foreground: #FDFBF7;
   --muted: #6B8E96;
   --muted-foreground: #4A6D75;
@@ -45,7 +73,7 @@
   --color-background-dark: #09090b;
   /* Fixed for components that explicitly use it */
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
 
   --animate-shimmer: shimmer 2s linear infinite;
@@ -78,7 +106,16 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-title);
 }
 
 /* Typography / Rich Text Styles */

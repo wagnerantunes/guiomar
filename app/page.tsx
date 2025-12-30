@@ -13,6 +13,7 @@ import { WhyUs } from "@/components/landing/WhyUs";
 import { Founder } from "@/components/landing/Founder";
 import { FAQ } from "@/components/landing/FAQ";
 import { Contact } from "@/components/landing/Contact";
+import { Newsletter } from "@/components/landing/Newsletter"; // Added import
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
@@ -227,7 +228,7 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             {(() => {
               const defaultOrderArr = [
-                "hero", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "contato"
+                "hero", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "newsletter", "contato" // Added "newsletter"
               ];
               let rawOrder = getSetting("landing_section_order", defaultOrderArr);
 
@@ -326,6 +327,8 @@ function HomePageContent() {
                         <FAQ getSetting={getSetting} />
                       </SectionWrapper>
                     );
+                  case "newsletter":
+                    return <Newsletter key={id} getSetting={getSetting} />;
                   case "contato":
                     return (
                       <SectionWrapper key={id} id="contato" variant="default" content={getSetting("section_contato_content", SECTION_DEFAULTS.contato)}>
@@ -333,6 +336,17 @@ function HomePageContent() {
                       </SectionWrapper>
                     );
                   default:
+                    // Support for custom sections
+                    if (id.startsWith("custom_")) {
+                      const customContent = getSetting(`section_${id}_content`, { title: "Nova Seção", subtitle: "Texto da seção...", isVisible: true });
+                      return (
+                        <SectionWrapper key={id} id={id} nextId={nextId} variant={index % 2 === 0 ? "default" : "muted"} content={customContent}>
+                          <div className="max-w-4xl mx-auto py-10">
+                            <RichText content={customContent.body || "<p>Conteúdo da seção customizada...</p>"} className="prose-lg text-muted-foreground" />
+                          </div>
+                        </SectionWrapper>
+                      );
+                    }
                     return null;
                 }
               });

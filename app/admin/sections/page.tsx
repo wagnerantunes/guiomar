@@ -47,7 +47,8 @@ function SortableSection({
     setMediaPickerTarget,
     activeDevice,
     setActiveDevice,
-    saving
+    saving,
+    handleNameChange
 }: any) {
     const {
         attributes,
@@ -312,7 +313,16 @@ function SortableSection({
                                                                 <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
                                                             </div>
                                                             <div className="space-y-3">
-                                                                <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                <div className="flex gap-3">
+                                                                    <div className="w-20">
+                                                                        <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Icon</label>
+                                                                        <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none text-center" placeholder="icon" value={item.icon || "verified"} onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)} />
+                                                                    </div>
+                                                                    <div className="flex-1">
+                                                                        <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Título</label>
+                                                                        <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                    </div>
+                                                                </div>
                                                                 <RichTextEditor
                                                                     content={item.d}
                                                                     onChange={(val) => handleArrayChange(sec.id, "items", idx, "d", val)}
@@ -396,6 +406,33 @@ function SortableSection({
                                                             />
                                                         </div>
                                                     ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {sec.id === "newsletter" && (
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Texto do Botão</label>
+                                                    <input className="w-full bg-muted/5 border-border border border-border rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.buttonText || ""} onChange={(e) => handleContentChange(sec.id, "buttonText", e.target.value)} />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Placeholder</label>
+                                                    <input className="w-full bg-muted/5 border-border border border-border rounded-xl px-4 py-3 text-xs font-bold transition-all outline-none" value={sec.content?.placeholder || ""} onChange={(e) => handleContentChange(sec.id, "placeholder", e.target.value)} />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {sec.id.startsWith("custom_") && (
+                                            <div className="space-y-4">
+                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Nome da Sessão (Admin)</label>
+                                                <input className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none font-sans" value={sec.name} onChange={(e) => handleNameChange(sec.id, e.target.value)} />
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Conteúdo Rico</label>
+                                                    <RichTextEditor
+                                                        content={sec.content?.body || ""}
+                                                        onChange={(val) => handleContentChange(sec.id, "body", val)}
+                                                        minHeight="200px"
+                                                    />
                                                 </div>
                                             </div>
                                         )}
@@ -601,7 +638,8 @@ export default function PageSections() {
         { id: "guiomar", name: "08. Sobre Guiomar", icon: "person", desc: "Perfil da fundadora e citação.", status: "Ativa" },
         { id: "testimonials", name: "09. Testemunhos", icon: "chat", desc: "Slider de depoimentos de clientes.", status: "Ativa" },
         { id: "faq", name: "10. FAQ (Perguntas)", icon: "quiz", desc: "Acordeões de dúvidas frequentes.", status: "Ativa" },
-        { id: "contato", name: "11. Contato Final", icon: "contact_support", desc: "Rodapé de contato e formulário detalhado.", status: "Ativa" },
+        { id: "newsletter", name: "11. Newsletter", icon: "mail", desc: "Captura de e-mails discreta e elegante.", status: "Ativa" },
+        { id: "contato", name: "12. Contato Final", icon: "contact_support", desc: "Rodapé de contato e informações de contato.", status: "Ativa" },
     ]);
 
     const [loading, setLoading] = useState(true);
@@ -679,6 +717,10 @@ export default function PageSections() {
         fetchSettings();
     }, []);
 
+    const handleNameChange = (id: string, name: string) => {
+        setSections(prev => prev.map(s => s.id === id ? { ...s, name } : s));
+    };
+
     const handleContentChange = (id: string, field: string, value: any) => {
         setSections(prev => prev.map(sec =>
             sec.id === id ? { ...sec, content: { ...sec.content, [field]: value } } : sec
@@ -754,6 +796,46 @@ export default function PageSections() {
         } catch (error) {
             console.error("Error saving section:", error);
             toast({ title: "Falha na Rede", description: "Não foi possível conectar ao servidor.", type: "error" });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleAddSection = () => {
+        const newId = `custom_${Date.now()}`;
+        const newSec = {
+            id: newId,
+            name: `Sessão Customizada`,
+            icon: "dashboard_customize",
+            desc: "Seção de conteúdo livre.",
+            status: "Ativa",
+            content: { title: "Nova Seção", subtitle: "Subtítulo da seção", body: "<p>Seu texto aqui...</p>", isVisible: true }
+        };
+        setSections([...sections, newSec]);
+        toast({ title: "Sessão Adicionada", description: "Uma nova sessão customizada foi criada no final da lista.", type: "success" });
+    };
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            // Save all section contents
+            for (const sec of sections) {
+                await fetch("/api/settings", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        key: `section_${sec.id}_content`,
+                        value: JSON.stringify(sec.content || {})
+                    }),
+                });
+            }
+            // Save the current order
+            await saveOrder(sections.map(s => s.id));
+
+            toast({ title: "Sincronização Completa", description: "Todas as seções e a ordem foram salvas.", type: "success" });
+        } catch (error) {
+            console.error("Error saving all sections:", error);
+            toast({ title: "Falha na Rede", description: "Não foi possível conectar ao servidor ou salvar todas as alterações.", type: "error" });
         } finally {
             setSaving(false);
         }
@@ -839,7 +921,7 @@ export default function PageSections() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-black text-foreground uppercase tracking-[0.2em]">
-                            Home Page Sections
+                            Seções da Landing Page
                         </h1>
                         <p className="text-[10px] text-muted font-black uppercase tracking-widest mt-1">
                             Organize e edite o conteúdo de cada bloco da sua Landing Page.
@@ -847,21 +929,11 @@ export default function PageSections() {
                     </div>
                     <div className="flex items-center gap-3">
                         <button
-                            aria-label="Visualizar site ao vivo"
-                            className="flex items-center gap-2 px-6 py-3 text-[10px] font-black border border-border rounded-xl hover:bg-primary/5 hover:text-primary transition-all uppercase tracking-widest bg-card"
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="flex items-center gap-2 px-10 py-4 bg-primary text-primary-foreground rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 active:scale-95 disabled:opacity-50 uppercase tracking-[0.1em]"
                         >
-                            <span className="material-symbols-outlined text-sm">visibility</span>
-                            Preview site
-                        </button>
-                        <button
-                            aria-label="Salvar alterações de estrutura"
-                            onClick={() => {
-                                sections.forEach(sec => saveSection(sec));
-                                toast({ title: "Sincronização Completa", description: "Todas as seções foram salvas.", type: "success" });
-                            }}
-                            className="flex items-center gap-2 px-8 py-3 text-[10px] font-black bg-primary text-primary-foreground rounded-xl shadow-xl shadow-primary/10 hover:scale-105 transition-all uppercase tracking-widest"
-                        >
-                            Salvar Estrutura
+                            {saving ? "Salvando..." : "Salvar Alterações"}
                         </button>
                     </div>
                 </div>
@@ -916,6 +988,7 @@ export default function PageSections() {
                                         activeDevice={activeDevice}
                                         setActiveDevice={setActiveDevice}
                                         saving={saving}
+                                        handleNameChange={handleNameChange}
                                     />
                                 ))}
                             </SortableContext>
@@ -925,13 +998,7 @@ export default function PageSections() {
 
 
                     <button
-                        onClick={() => {
-                            toast({
-                                title: "Em Breve",
-                                description: "A funcionalidade de sessões customizadas estará disponível nas próximas atualizações.",
-                                type: "info"
-                            });
-                        }}
+                        onClick={handleAddSection}
                         className="w-full py-12 border-4 border-dashed border-gray-200 dark:border-white/10 rounded-[3rem] flex flex-col items-center justify-center gap-4 text-gray-300 hover:text-[var(--primary)] hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/5 transition-all group mt-10"
                     >
                         <span className="material-symbols-outlined text-5xl group-hover:rotate-90 transition-transform duration-700">add_circle</span>
@@ -948,6 +1015,6 @@ export default function PageSections() {
                 }}
                 onSelect={(url) => selectFromMediaLibrary(url)}
             />
-        </div>
+        </div >
     );
 }

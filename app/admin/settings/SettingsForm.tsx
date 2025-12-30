@@ -506,6 +506,41 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                         </div>
                     </div>
 
+                    {/* FONT THEME SECTION */}
+                    <div className="pt-8 border-t border-border space-y-6">
+                        <div className="flex items-center gap-5 pl-2 border-l-2 border-primary mb-4">
+                            <span className="material-symbols-outlined text-primary">format_size</span>
+                            <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest">Temas de Tipografia Global</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                                { id: 'tech', name: 'Tech Luxury', title: 'Manrope', body: 'Inter', desc: 'Moderno e tecnológico' },
+                                { id: 'modern', name: 'Clean Modern', title: 'Poppins', body: 'Montserrat', desc: 'Amigável e contemporâneo' },
+                                { id: 'formal', name: 'Corporate', title: 'Roboto', body: 'Open Sans', desc: 'Sério e profissional' },
+                                { id: 'elegant', name: 'Premium Elegant', title: 'Playfair Display', body: 'Lato', desc: 'Sofisticado e clássico' },
+                            ].map((font) => (
+                                <div
+                                    key={font.id}
+                                    onClick={() => setFormData({ ...formData, settings: { ...formData.settings, fontTheme: font.id } })}
+                                    className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all hover:bg-muted/5 ${formData.settings?.fontTheme === font.id ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10' : 'border-border'}`}
+                                >
+                                    <div className="flex items-center justify-between mb-4">
+                                        <span className="text-[9px] font-black text-primary uppercase tracking-widest">{font.name}</span>
+                                        {formData.settings?.fontTheme === font.id && <span className="material-symbols-outlined text-primary text-sm">check_circle</span>}
+                                    </div>
+                                    <div className="space-y-1 mb-4">
+                                        <p className="text-xl font-black text-foreground">{font.title}</p>
+                                        <p className="text-xs font-medium text-muted">{font.body}</p>
+                                    </div>
+                                    <p className="text-[8px] font-bold text-muted uppercase tracking-[0.1em]">{font.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-[8px] text-muted font-bold uppercase tracking-widest ml-4 italic">
+                            💡 Isso mudará as fontes padrão de todo o site. Você ainda pode sobrescrever fontes em seções específicas.
+                        </p>
+                    </div>
+
                     {/* SYSTEM STATUS */}
                     <div className="bg-primary/20 rounded-[3.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-border relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>

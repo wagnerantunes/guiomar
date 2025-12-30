@@ -104,7 +104,7 @@ export function Footer({
 
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
 
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24 relative z-10">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24 relative z-10">
                 {/* BIO COLUMN */}
                 <div className="space-y-10 lg:col-span-1">
                     {mounted && effectiveLogo ? (
@@ -229,45 +229,6 @@ export function Footer({
                             </div>
                         </li>
                     </ul>
-                </div>
-
-                {/* NEWSLETTER */}
-                <div className="bg-card/50 backdrop-blur-xl p-10 rounded-[3rem] border border-border relative overflow-hidden group shadow-2xl">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-
-                    <h4 className="text-xl font-black text-foreground mb-2 relative z-10 italic uppercase tracking-tight">Receba novidades</h4>
-                    <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mb-8 relative z-10">
-                        Insights exclusivos de bem-estar
-                    </p>
-                    <form className="space-y-4 relative z-10" onSubmit={(e) => handleNewsletterSubmit ? handleNewsletterSubmit(e) : e.preventDefault()}>
-                        <div className="space-y-1">
-                            <input
-                                className="w-full bg-background/50 border border-border rounded-2xl text-[11px] py-4 px-6 outline-none focus:border-primary/50 focus:bg-background text-foreground font-bold placeholder:text-muted/40 transition-all uppercase tracking-widest"
-                                placeholder="Seu nome"
-                                type="text"
-                                required
-                            />
-                        </div>
-                        <div className="space-y-1">
-                            <input
-                                className="w-full bg-background/50 border border-border rounded-2xl text-[11px] py-4 px-6 outline-none focus:border-primary/50 focus:bg-background text-foreground font-bold placeholder:text-muted/40 transition-all uppercase tracking-widest"
-                                placeholder="Seu melhor e-mail*"
-                                type="email"
-                                required
-                                value={newsletterEmail}
-                                onChange={(e) => setNewsletterEmail && setNewsletterEmail(e.target.value)}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={newsletterStatus === "loading" || !handleNewsletterSubmit}
-                            className="w-full bg-primary text-primary-foreground font-black py-5 rounded-2xl text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-primary/20"
-                        >
-                            {newsletterStatus === "loading" ? "Processando..." :
-                                newsletterStatus === "success" ? "Inscrito!" :
-                                    newsletterStatus === "error" ? "Tente novamente" : "Inscrever-se"}
-                        </button>
-                    </form>
                 </div>
             </div>
 

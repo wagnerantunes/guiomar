@@ -39,15 +39,15 @@ export const SECTION_DEFAULTS = {
         subtitle: "Soluções completas para sua empresa",
         layout: "grid",
         items: [
-            { t: "Ergonomia Legal", d: "Avaliações e laudos ergonômicos conforme NR-1 e NR-17, com foco em prevenção de riscos, conformidade legal e melhoria das condições de trabalho." },
-            { t: "Riscos Psicossociais", d: "Análise de Riscos Psicossociais (ARP) integrada ao PGR, apoiando empresas no cumprimento da NR-1 e na promoção da saúde organizacional." },
-            { t: "Clima Organizacional", d: "Diagnósticos e ações estratégicas para compreender percepções internas, fortalecer relações e melhorar o ambiente de trabalho." },
-            { t: "Cultura Organizacional", d: "Desenvolvimento de práticas e valores que sustentam o crescimento da empresa e o engajamento das equipes." },
-            { t: "Recrutamento com Propósito", d: "Processos seletivos alinhados à cultura da empresa, considerando competências técnicas e comportamentais." },
-            { t: "Onboarding Humanizado", d: "Integração estruturada de novos colaboradores, fortalecendo pertencimento, clareza de papéis e engajamento desde o início." },
-            { t: "Palestras Corporativas", d: "Momentos de conscientização sobre ergonomia, saúde emocional e bem-estar no trabalho, promovendo mudanças de hábitos, prevenção de riscos psicossociais e fortalecimento da cultura organizacional." },
-            { t: "Treinamentos", d: "Capacitações práticas para colaboradores e gestores, voltadas à prevenção de riscos ergonômicos e psicossociais e ao desenvolvimento de equipes mais saudáveis e engajadas." },
-            { t: "Consultoria Personalizada", d: "Atendimento sob medida que integra ergonomia, riscos psicossociais e bem-estar corporativo, com foco em soluções práticas, prevenção de afastamentos e melhores resultados." }
+            { t: "Ergonomia Legal", d: "Avaliações e laudos ergonômicos conforme NR-1 e NR-17, com foco em prevenção de riscos, conformidade legal e melhoria das condições de trabalho.", icon: "balance" },
+            { t: "Riscos Psicossociais", d: "Análise de Riscos Psicossociais (ARP) integrada ao PGR, apoiando empresas no cumprimento da NR-1 e na promoção da saúde organizacional.", icon: "psychology" },
+            { t: "Clima Organizacional", d: "Diagnósticos e ações estratégicas para compreender percepções internas, fortalecer relações e melhorar o ambiente de trabalho.", icon: "mood" },
+            { t: "Cultura Organizacional", d: "Desenvolvimento de práticas e valores que sustentam o crescimento da empresa e o engajamento das equipes.", icon: "diversity_3" },
+            { t: "Recrutamento com Propósito", d: "Processos seletivos alinhados à cultura da empresa, considerando competências técnicas e comportamentais.", icon: "person_search" },
+            { t: "Onboarding Humanizado", d: "Integração estruturada de novos colaboradores, fortalecendo pertencimento, clareza de papéis e engajamento desde o início.", icon: "handshake" },
+            { t: "Palestras Corporativas", d: "Momentos de conscientização sobre ergonomia, saúde emocional e bem-estar no trabalho, promovendo mudanças de hábitos, prevenção de riscos psicossociais e fortalecimento da cultura organizacional.", icon: "record_voice_over" },
+            { t: "Treinamentos", d: "Capacitações práticas para colaboradores e gestores, voltadas à prevenção de riscos ergonômicos e psicossociais e ao desenvolvimento de equipes mais saudáveis e engajadas.", icon: "model_training" },
+            { t: "Consultoria Personalizada", d: "Atendimento sob medida que integra ergonomia, riscos psicossociais e bem-estar corporativo, com foco em soluções práticas, prevenção de afastamentos e melhores resultados.", icon: "support_agent" }
         ]
     },
     metodologia: {
@@ -104,5 +104,13 @@ export const SECTION_DEFAULTS = {
         whatsapp: "(11) 99441-6024",
         email: "renova@renovamente-guiomarmelo.com.br",
         formTitle: "Solicite uma avaliação inicial"
+    },
+    newsletter: {
+        title: "Fique por dentro",
+        subtitle: "Receba conteúdos exclusivos sobre ergonomia, saúde e bem-estar no trabalho.",
+        placeholder: "Seu melhor e-mail",
+        buttonText: "INSCREVER AGORA",
+        successMessage: "Obrigado por se inscrever!",
+        isVisible: true
     }
 };

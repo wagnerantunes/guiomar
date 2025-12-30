@@ -74,11 +74,27 @@ import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let fontTheme = "tech";
+  try {
+    const site = await prisma.site.findFirst({
+      where: {
+        OR: [
+          { domain: "renovamente-guiomarmelo.com.br" },
+          { subdomain: "renovamente" }
+        ]
+      },
+      select: { settings: true }
+    });
+    fontTheme = (site?.settings as any)?.fontTheme || "tech";
+  } catch (error) {
+    console.error("Layout: Error fetching site settings", error);
+  }
+
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
@@ -107,7 +123,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={manrope.className}>
+      <body className={`${manrope.className} font-theme-${fontTheme}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
