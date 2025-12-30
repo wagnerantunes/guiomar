@@ -61,7 +61,7 @@ export function Founder({ getSetting }: FounderProps) {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
                     <img
                         src={content.image}
-                        className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                        className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover transition-all duration-700"
                         alt="Guiomar Melo"
                     />
                     <div className="absolute inset-0 border border-border rounded-[2.5rem] z-20 pointer-events-none"></div>
