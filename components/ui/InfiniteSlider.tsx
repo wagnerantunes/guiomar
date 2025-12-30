@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 
 interface InfiniteSliderProps {
     items: any[];
@@ -18,6 +18,9 @@ export function InfiniteSlider({
     cardWidth = "400px",
     gap = "2rem"
 }: InfiniteSliderProps) {
+    const [isPaused, setIsPaused] = useState(false);
+    const controls = useAnimation();
+
     if (!items || items.length === 0) {
         return (
             <div className="text-center py-20 text-muted">
@@ -27,36 +30,102 @@ export function InfiniteSlider({
     }
 
     // Duplicate items for seamless infinite loop
-    const duplicatedItems = [...items, ...items];
+    const duplicatedItems = [...items, ...items, ...items]; // Triple for smoother experience
 
     // Calculate animation distance based on number of items and card width
-    // Parse cardWidth (e.g., "400px" -> 400) and gap (e.g., "2rem" -> 32px assuming 1rem = 16px)
     const cardWidthNum = parseInt(cardWidth);
     const gapNum = gap.includes("rem") ? parseInt(gap) * 16 : parseInt(gap);
     const totalWidth = items.length * (cardWidthNum + gapNum);
 
+    const handlePause = () => {
+        setIsPaused(true);
+        controls.stop();
+    };
+
+    const handlePlay = () => {
+        setIsPaused(false);
+        controls.start({
+            x: [0, -totalWidth],
+            transition: {
+                x: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: speed,
+                    ease: "linear",
+                },
+            },
+        });
+    };
+
+    const handlePrev = () => {
+        // Shift one card to the right
+        controls.start({
+            x: `+=${cardWidthNum + gapNum}`,
+            transition: { duration: 0.5, ease: "easeOut" }
+        });
+    };
+
+    const handleNext = () => {
+        // Shift one card to the left
+        controls.start({
+            x: `-=${cardWidthNum + gapNum}`,
+            transition: { duration: 0.5, ease: "easeOut" }
+        });
+    };
+
     return (
-        <div className="px-6">
+        <div className="relative w-full -mx-6 px-6 group">
+            {/* Navigation Controls */}
+            <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 flex justify-between items-center z-20 pointer-events-none">
+                <button
+                    onClick={handlePrev}
+                    className="size-12 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-xl flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 opacity-0 group-hover:opacity-100 pointer-events-auto"
+                    aria-label="Anterior"
+                >
+                    <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button
+                    onClick={handleNext}
+                    className="size-12 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-xl flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 opacity-0 group-hover:opacity-100 pointer-events-auto"
+                    aria-label="Próximo"
+                >
+                    <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+
+            {/* Play/Pause Control */}
+            <div className="absolute bottom-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                    onClick={isPaused ? handlePlay : handlePause}
+                    className="size-10 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-xl flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
+                    aria-label={isPaused ? "Play" : "Pause"}
+                >
+                    <span className="material-symbols-outlined text-lg">
+                        {isPaused ? "play_arrow" : "pause"}
+                    </span>
+                </button>
+            </div>
+
             <div
                 className="relative overflow-hidden"
                 style={{
-                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-                    maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+                    maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
                 }}
+                onMouseEnter={handlePause}
+                onMouseLeave={handlePlay}
             >
                 <motion.div
                     className="flex"
                     style={{ gap }}
-                    animate={{
-                        x: [0, -totalWidth],
+                    animate={controls}
+                    initial={{
+                        x: 0
                     }}
-                    transition={{
-                        x: {
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: speed,
-                            ease: "linear",
-                        },
+                    onAnimationComplete={() => {
+                        if (!isPaused) {
+                            handlePlay();
+                        }
                     }}
                 >
                     {duplicatedItems.map((item, i) => (
@@ -65,7 +134,7 @@ export function InfiniteSlider({
                             className="flex-shrink-0"
                             style={{ width: cardWidth }}
                         >
-                            {renderCard ? renderCard(item, i) : (
+                            {renderCard ? renderCard(item, i % items.length) : (
                                 <DefaultCard item={item} />
                             )}
                         </div>
