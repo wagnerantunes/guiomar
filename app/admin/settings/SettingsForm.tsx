@@ -541,5 +541,6 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                     subtitle="Dica: Formatos SVG são melhores para logos"
                 />
             </div>
-            );
+        </div>
+    );
 }
