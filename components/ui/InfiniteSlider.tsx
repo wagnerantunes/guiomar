@@ -121,12 +121,12 @@ export function InfiniteSlider({
             </div>
 
             <div
-                className="relative overflow-hidden"
+                className="relative overflow-hidden py-12 -my-12"
                 onMouseEnter={handlePause}
                 onMouseLeave={handlePlay}
             >
                 <motion.div
-                    className="flex"
+                    className="flex py-8"
                     style={{ gap }}
                     animate={controls}
                 >
