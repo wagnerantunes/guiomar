@@ -21,6 +21,28 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
 
+    const getFontSize = (val: any, fallback: number) => {
+        if (!val) return fallback;
+        if (typeof val === 'number') return val;
+        if (typeof val === 'string' && val.startsWith('text-')) {
+            const mapping: any = {
+                'text-sm': 14, 'text-base': 16, 'text-lg': 18, 'text-xl': 20,
+                'text-2xl': 24, 'text-3xl': 30, 'text-4xl': 36, 'text-5xl': 48,
+                'text-6xl': 60, 'text-7xl': 72
+            };
+            return mapping[val] || fallback;
+        }
+        const num = parseInt(val);
+        return isNaN(num) ? fallback : num;
+    };
+
+    const titleSize = getFontSize(heroData.titleSize, 56);
+    const titleSizeMobile = getFontSize(heroData.titleSizeMobile, 32);
+    const subtitleSize = getFontSize(heroData.subtitleSize, 20);
+    const subtitleSizeMobile = getFontSize(heroData.subtitleSizeMobile, 16);
+    const bodySize = getFontSize(heroData.bodySize, 18);
+    const bodySizeMobile = getFontSize(heroData.bodySizeMobile, 14);
+
     // Handle Visibility
     if (heroData?.isVisible === false) return null;
 
@@ -108,31 +130,22 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
         <section
             id="hero"
             className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden min-h-[600px] flex items-center"
-            style={{
-                "--hero-title-size": `${heroData.titleSizeMobile || 32}px`,
-                "--hero-subtitle-size": `${heroData.subtitleSizeMobile || 16}px`,
-                "--hero-body-size": `${heroData.bodySizeMobile || 14}px`,
-                "@media (min-width: 768px)": {
-                    "--hero-title-size": `${heroData.titleSize || 56}px`,
-                    "--hero-subtitle-size": `${heroData.subtitleSize || 20}px`,
-                    "--hero-body-size": `${heroData.bodySize || 18}px`,
-                }
-            } as any}
         >
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 #hero {
-                    --hero-title-size: ${heroData.titleSizeMobile || 32}px;
-                    --hero-subtitle-size: ${heroData.subtitleSizeMobile || 16}px;
-                    --hero-body-size: ${heroData.bodySizeMobile || 14}px;
+                    --hero-title-size: ${titleSizeMobile}px;
+                    --hero-subtitle-size: ${subtitleSizeMobile}px;
+                    --hero-body-size: ${bodySizeMobile}px;
                 }
                 @media (min-width: 768px) {
                     #hero {
-                        --hero-title-size: ${heroData.titleSize || 56}px;
-                        --hero-subtitle-size: ${heroData.subtitleSize || 20}px;
-                        --hero-body-size: ${heroData.bodySize || 18}px;
+                        --hero-title-size: ${titleSize}px;
+                        --hero-subtitle-size: ${subtitleSize}px;
+                        --hero-body-size: ${bodySize}px;
                     }
                 }
-            `}</style>
+            ` }} />
             {/* BACKGROUND SLIDER */}
             <div className="absolute inset-0 z-0">
                 {slides.length > 0 ? (

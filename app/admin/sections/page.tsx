@@ -76,6 +76,21 @@ export default function PageSections() {
         ));
     };
 
+    const getNumberValue = (val: any) => {
+        if (!val) return "";
+        if (typeof val === 'number') return val;
+        if (typeof val === 'string' && val.startsWith('text-')) {
+            const mapping: any = {
+                'text-sm': 14, 'text-base': 16, 'text-lg': 18, 'text-xl': 20,
+                'text-2xl': 24, 'text-3xl': 30, 'text-4xl': 36, 'text-5xl': 48,
+                'text-6xl': 60, 'text-7xl': 72
+            };
+            return mapping[val] || "";
+        }
+        const num = parseInt(val);
+        return isNaN(num) ? "" : num;
+    };
+
     const handleArrayChange = (id: string, listKey: string, index: number, field: string, value: any) => {
         setSections(prev => prev.map(sec => {
             if (sec.id === id) {
@@ -613,8 +628,8 @@ export default function PageSections() {
                                                                     <input
                                                                         type="number"
                                                                         className="flex-1 bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                                        value={activeDevice === "desktop" ? (sec.content?.[field] || "") : (sec.content?.[`${field}Mobile`] || "")}
-                                                                        onChange={(e) => handleContentChange(sec.id, activeDevice === "desktop" ? field : `${field}Mobile`, parseInt(e.target.value))}
+                                                                        value={getNumberValue(activeDevice === "desktop" ? (sec.content?.[field]) : (sec.content?.[`${field}Mobile`]))}
+                                                                        onChange={(e) => handleContentChange(sec.id, activeDevice === "desktop" ? field : `${field}Mobile`, e.target.value === "" ? "" : parseInt(e.target.value))}
                                                                         placeholder={activeDevice === "desktop" ? "Desktop (px)" : "Mobile (px)"}
                                                                     />
                                                                     <span className="text-[10px] font-black text-muted">PX</span>
