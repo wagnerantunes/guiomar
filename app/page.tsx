@@ -186,7 +186,10 @@ function HomePageContent() {
           getSetting={getSetting}
           scrollTo={scrollTo}
           setSelectedPost={setSelectedPost}
-          logo={siteData?.logoLight || siteData?.logo}
+          logo={siteData?.logo}
+          logoLight={siteData?.logoLight}
+          logoDark={siteData?.logoDark}
+          settings={siteData?.settings}
         />
 
         {selectedPost ? (
@@ -278,7 +281,10 @@ function HomePageContent() {
           newsletterEmail={newsletterEmail}
           setNewsletterEmail={setNewsletterEmail}
           newsletterStatus={newsletterStatus}
-          logo={siteData?.logoDark || siteData?.logo}
+          logo={siteData?.logo}
+          logoLight={siteData?.logoLight}
+          logoDark={siteData?.logoDark}
+          settings={siteData?.settings}
         />
       </div>
     </ToastProvider>

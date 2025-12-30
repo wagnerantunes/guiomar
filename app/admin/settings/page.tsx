@@ -21,6 +21,7 @@ export default async function SettingsPage() {
                     logoLight: true,
                     logoAdmin: true,
                     ogImage: true,
+                    settings: true,
                 }
             }
         },

@@ -12,6 +12,7 @@ import {
     MapPin,
     ArrowRight
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useToast } from "@/components/ui/ToastProvider";
 
 interface FooterProps {
@@ -22,6 +23,9 @@ interface FooterProps {
     setNewsletterEmail?: (email: string) => void;
     newsletterStatus?: string;
     logo?: string | null;
+    logoLight?: string | null;
+    logoDark?: string | null;
+    settings?: any;
 }
 
 export function Footer({
@@ -31,9 +35,18 @@ export function Footer({
     newsletterEmail = "",
     setNewsletterEmail,
     newsletterStatus = "idle",
-    logo
+    logo,
+    logoLight,
+    logoDark,
+    settings
 }: FooterProps) {
     const { toast } = useToast();
+    const { theme } = useTheme();
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const defaultFooterData = {
         bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
@@ -75,6 +88,14 @@ export function Footer({
         }
     };
 
+    // Logo Logic
+    // If Dark Theme (Dark BG) -> logoLight. If Light Theme (Light BG) -> logoDark.
+    const effectiveLogo = theme === 'dark' ? (logoLight || logo) : (logoDark || logo);
+
+    // Dimensions
+    const width = settings?.logoWidthFooter ? `${settings.logoWidthFooter}px` : "auto";
+    const height = settings?.logoHeightFooter ? `${settings.logoHeightFooter}px` : "48px";
+
     return (
         <footer className="bg-background border-t border-border pt-32 pb-12 px-6 relative overflow-hidden transition-colors duration-500">
             {/* Ambient Background Effects */}
@@ -86,8 +107,17 @@ export function Footer({
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24 relative z-10">
                 {/* BIO COLUMN */}
                 <div className="space-y-10 lg:col-span-1">
-                    {logo ? (
-                        <img src={logo} alt="RenovaMente" className="h-12 object-contain" />
+                    {mounted && effectiveLogo ? (
+                        <img
+                            src={effectiveLogo}
+                            alt="RenovaMente"
+                            className="object-contain"
+                            style={{
+                                width: width,
+                                height: height,
+                                maxWidth: 'none'
+                            }}
+                        />
                     ) : (
                         <div className="flex items-center gap-3 group cursor-default">
                             <div className="size-12 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center text-primary shadow-lg shadow-primary/5 group-hover:scale-110 transition-transform duration-500">

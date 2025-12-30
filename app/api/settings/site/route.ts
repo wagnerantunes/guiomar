@@ -15,6 +15,7 @@ export async function GET() {
                 logoLight: true,
                 logoAdmin: true,
                 favicon: true,
+                settings: true,
             }
         });
 
@@ -37,7 +38,7 @@ export async function PATCH(req: Request) {
         }
 
         const body = await req.json();
-        const { name, domain, description, favicon, logo, logoDark, logoLight, logoAdmin, ogImage, emailTo, emailBcc, resendApiKey } = body;
+        const { name, domain, description, favicon, logo, logoDark, logoLight, logoAdmin, ogImage, emailTo, emailBcc, resendApiKey, settings } = body;
 
         // Get user's site
         const siteUser = await prisma.siteUser.findFirst({
@@ -64,6 +65,7 @@ export async function PATCH(req: Request) {
                 emailTo: emailTo || null,
                 emailBcc: emailBcc || null,
                 resendApiKey: resendApiKey || null,
+                settings: settings || undefined,
             },
         });
 

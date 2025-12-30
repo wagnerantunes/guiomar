@@ -109,9 +109,9 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
     )
 
     return (
-        <div className="flex flex-col rounded-[2rem] overflow-hidden bg-white dark:bg-[#102216]">
+        <div className="flex flex-col rounded-[2rem] overflow-hidden bg-card border border-border">
             {/* Toolbar */}
-            <div className="bg-gray-50/50 dark:bg-[#183221]/50 border-b border-gray-100 dark:border-white/5 p-4 flex flex-wrap gap-2 items-center backdrop-blur-sm">
+            <div className="bg-muted/5 border-b border-border p-4 flex flex-wrap gap-2 items-center backdrop-blur-sm">
                 <div className="flex items-center gap-1">
                     <ToolbarButton
                         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -129,7 +129,7 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
                     </ToolbarButton>
                 </div>
 
-                <div className="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <div className="flex items-center gap-1">
                     <ToolbarButton
@@ -148,7 +148,7 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
                     </ToolbarButton>
                 </div>
 
-                <div className="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <div className="flex items-center gap-1">
                     <ToolbarButton
@@ -167,12 +167,12 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
                     </ToolbarButton>
                 </div>
 
-                <div className="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2" />
+                <div className="w-px h-6 bg-border mx-2" />
 
                 <div className="flex items-center gap-1">
                     <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Upload Imagem">
                         {isUploading ? (
-                            <div className="size-4 border-2 border-[#0d1b12] border-t-transparent rounded-full animate-spin" />
+                            <div className="size-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         ) : (
                             <ImageIcon size={18} strokeWidth={2.5} />
                         )}
@@ -216,29 +216,29 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
 
             {/* Editor Content Area */}
             <div
-                className="p-8 md:p-12 cursor-text bg-white dark:bg-[#102216]"
+                className="p-8 md:p-12 cursor-text bg-card"
                 style={{ minHeight }}
             >
                 <EditorContent
                     editor={editor}
                     className="prose prose-lg max-w-none focus:outline-none dark:prose-invert 
-                    prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
-                    prose-headings:text-[#0d1b12] dark:prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
-                    prose-strong:text-[#0d1b12] dark:prose-strong:text-primary
-                    prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-gray-50/50 dark:prose-blockquote:bg-white/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic
+                    prose-p:text-muted-foreground prose-p:leading-relaxed
+                    prose-headings:text-foreground prose-headings:font-black prose-headings:tracking-tight
+                    prose-strong:text-primary
+                    prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic
                     prose-img:rounded-[2rem] prose-img:shadow-2xl prose-img:mx-auto"
                 />
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="px-8 py-3 bg-gray-50 dark:bg-[#183221]/30 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
+            <div className="px-8 py-3 bg-muted/5 border-t border-border flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-2">
                         <div className="size-1.5 rounded-full bg-primary animate-pulse"></div>
                         Editor Ativo
                     </span>
                 </div>
-                <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                <div className="text-[9px] font-black text-muted uppercase tracking-widest">
                     {editor.getText().length} Caracteres
                 </div>
             </div>

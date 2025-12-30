@@ -19,6 +19,7 @@ interface SettingsFormProps {
         emailTo?: string | null;
         emailBcc?: string | null;
         resendApiKey?: string | null;
+        settings?: any;
     };
 }
 
@@ -40,6 +41,7 @@ export default function SettingsForm({ site }: SettingsFormProps) {
         emailTo: site.emailTo || "",
         emailBcc: site.emailBcc || "",
         resendApiKey: site.resendApiKey || "",
+        settings: site.settings || {},
     });
 
     const onSelectMedia = (url: string) => {
@@ -449,42 +451,95 @@ export default function SettingsForm({ site }: SettingsFormProps) {
                             <p className="text-[8px] text-muted text-center md:text-left">SVG ou PNG (Sidebar)</p>
                         </div>
                     </div>
+
+                    {/* LOGO DIMENSIONS */}
+                    <div className="pt-8 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-4">
+                            <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest pl-2 border-l-2 border-primary">Dimensões Navbar</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-bold text-muted uppercase tracking-widest ml-2">Largura (px)</label>
+                                    <input
+                                        type="number"
+                                        className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-black focus:ring-2 focus:ring-primary/50 transition-all outline-none text-foreground shadow-inner"
+                                        value={formData.settings?.logoWidthNavbar || ""}
+                                        onChange={(e) => setFormData({ ...formData, settings: { ...formData.settings, logoWidthNavbar: e.target.value } })}
+                                        placeholder="Auto"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-bold text-muted uppercase tracking-widest ml-2">Altura (px)</label>
+                                    <input
+                                        type="number"
+                                        className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-black focus:ring-2 focus:ring-primary/50 transition-all outline-none text-foreground shadow-inner"
+                                        value={formData.settings?.logoHeightNavbar || ""}
+                                        onChange={(e) => setFormData({ ...formData, settings: { ...formData.settings, logoHeightNavbar: e.target.value } })}
+                                        placeholder="40"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest pl-2 border-l-2 border-primary">Dimensões Rodapé</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-bold text-muted uppercase tracking-widest ml-2">Largura (px)</label>
+                                    <input
+                                        type="number"
+                                        className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-black focus:ring-2 focus:ring-primary/50 transition-all outline-none text-foreground shadow-inner"
+                                        value={formData.settings?.logoWidthFooter || ""}
+                                        onChange={(e) => setFormData({ ...formData, settings: { ...formData.settings, logoWidthFooter: e.target.value } })}
+                                        placeholder="Auto"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-bold text-muted uppercase tracking-widest ml-2">Altura (px)</label>
+                                    <input
+                                        type="number"
+                                        className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-black focus:ring-2 focus:ring-primary/50 transition-all outline-none text-foreground shadow-inner"
+                                        value={formData.settings?.logoHeightFooter || ""}
+                                        onChange={(e) => setFormData({ ...formData, settings: { ...formData.settings, logoHeightFooter: e.target.value } })}
+                                        placeholder="48"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* SYSTEM STATUS */}
+                    <div className="bg-primary/20 rounded-[3.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-border relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+                        <div className="flex items-center gap-8 relative z-10">
+                            <div className="size-20 rounded-[2rem] bg-primary/20 flex items-center justify-center text-primary shadow-[0_0_40px_rgba(var(--primary),0.1)]">
+                                <span className="material-symbols-outlined text-4xl">verified_user</span>
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-black text-foreground tracking-tight uppercase tracking-widest">
+                                    RenovaMente Engine v2.5
+                                </h4>
+                                <p className="text-muted text-[10px] font-black uppercase tracking-widest mt-2">
+                                    Núcleo de gestão e proteção de dados operacional.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="relative z-10">
+                            <span className="px-6 py-3 bg-muted/10 border border-border rounded-2xl text-[9px] font-black text-muted uppercase tracking-widest">
+                                Última Sincronização: Hoje às 09:30
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
-                {/* SYSTEM STATUS */}
-                <div className="bg-primary/20 rounded-[3.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-border relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
-                    <div className="flex items-center gap-8 relative z-10">
-                        <div className="size-20 rounded-[2rem] bg-primary/20 flex items-center justify-center text-primary shadow-[0_0_40px_rgba(var(--primary),0.1)]">
-                            <span className="material-symbols-outlined text-4xl">verified_user</span>
-                        </div>
-                        <div>
-                            <h4 className="text-2xl font-black text-foreground tracking-tight uppercase tracking-widest">
-                                RenovaMente Engine v2.5
-                            </h4>
-                            <p className="text-muted text-[10px] font-black uppercase tracking-widest mt-2">
-                                Núcleo de gestão e proteção de dados operacional.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="relative z-10">
-                        <span className="px-6 py-3 bg-muted/10 border border-border rounded-2xl text-[9px] font-black text-muted uppercase tracking-widest">
-                            Última Sincronização: Hoje às 09:30
-                        </span>
-                    </div>
-                </div>
+                <MediaPicker
+                    isOpen={showMediaPicker}
+                    onClose={() => {
+                        setShowMediaPicker(false);
+                        setMediaTarget(null);
+                    }}
+                    onSelect={onSelectMedia}
+                    title="SelecioneAsset"
+                    subtitle="Dica: Formatos SVG são melhores para logos"
+                />
             </div>
-
-            <MediaPicker
-                isOpen={showMediaPicker}
-                onClose={() => {
-                    setShowMediaPicker(false);
-                    setMediaTarget(null);
-                }}
-                onSelect={onSelectMedia}
-                title="SelecioneAsset"
-                subtitle="Dica: Formatos SVG são melhores para logos"
-            />
-        </div>
-    );
+            );
 }
