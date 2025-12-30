@@ -20,7 +20,10 @@ export function Challenge({ getSetting }: ChallengeProps) {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h2 className="text-4xl md:text-6xl font-black leading-tight tracking-tighter uppercase italic text-foreground">
+                    <h2
+                        className="font-black leading-tight tracking-tighter uppercase italic text-foreground"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
+                    >
                         {content.title}
                     </h2>
                 </motion.div>
@@ -31,11 +34,12 @@ export function Challenge({ getSetting }: ChallengeProps) {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="relative"
+                    style={{ fontSize: "var(--section-body-size)" } as any}
                 >
                     <div className="absolute -left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
                     <RichText
                         content={content.description}
-                        className="text-xl text-muted font-medium leading-relaxed italic"
+                        className="text-muted font-medium leading-relaxed italic"
                     />
                 </motion.div>
             </div>

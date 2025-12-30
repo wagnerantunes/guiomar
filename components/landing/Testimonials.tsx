@@ -26,7 +26,10 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
         <div className="px-6">
             <div className="text-center mb-24 space-y-6">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Experiências</span>
-                <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
+                <h2
+                    className="font-black text-foreground tracking-tighter uppercase italic"
+                    style={{ fontSize: "var(--section-title-size)" } as any}
+                >
                     {data.title}
                 </h2>
             </div>

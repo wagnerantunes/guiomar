@@ -29,6 +29,28 @@ export function SectionWrapper({
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+    const getFontSize = (val: any, fallback: number) => {
+        if (!val) return fallback;
+        if (typeof val === 'number') return val;
+        if (typeof val === 'string' && val.startsWith('text-')) {
+            const mapping: any = {
+                'text-sm': 14, 'text-base': 16, 'text-lg': 18, 'text-xl': 20,
+                'text-2xl': 24, 'text-3xl': 30, 'text-4xl': 36, 'text-5xl': 48,
+                'text-6xl': 60, 'text-7xl': 72
+            };
+            return mapping[val] || fallback;
+        }
+        const num = parseInt(val);
+        return isNaN(num) ? fallback : num;
+    };
+
+    const titleSize = getFontSize(content?.titleSize, 48);
+    const titleSizeMobile = getFontSize(content?.titleSizeMobile, 32);
+    const subtitleSize = getFontSize(content?.subtitleSize, 20);
+    const subtitleSizeMobile = getFontSize(content?.subtitleSizeMobile, 16);
+    const bodySize = getFontSize(content?.bodySize, 18);
+    const bodySizeMobile = getFontSize(content?.bodySizeMobile, 14);
+
     // Handle Visibility
     if (content?.isVisible === false) return null;
 
@@ -72,6 +94,21 @@ export function SectionWrapper({
             animate={isInView ? "visible" : "hidden"}
             className={`py-32 px-6 ${variantClasses[variant]} ${className} relative overflow-hidden transition-colors duration-500`}
         >
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                #${id} {
+                    --section-title-size: ${titleSizeMobile}px;
+                    --section-subtitle-size: ${subtitleSizeMobile}px;
+                    --section-body-size: ${bodySizeMobile}px;
+                }
+                @media (min-width: 768px) {
+                    #${id} {
+                        --section-title-size: ${titleSize}px;
+                        --section-subtitle-size: ${subtitleSize}px;
+                        --section-body-size: ${bodySize}px;
+                    }
+                }
+            ` }} />
             {/* Background Image */}
             {content?.bgImage && (
                 <div

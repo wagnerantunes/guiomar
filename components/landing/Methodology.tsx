@@ -15,10 +15,16 @@ export function Methodology({ getSetting }: MethodologyProps) {
         <>
             <div className="text-center mb-32 space-y-8">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] border border-primary/20 px-4 py-2 rounded-full bg-primary/5 shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]">Como trabalhamos</span>
-                <h2 className="text-4xl md:text-7xl font-black text-foreground leading-tight tracking-tighter uppercase italic drop-shadow-lg">
+                <h2
+                    className="font-black text-foreground leading-tight tracking-tighter uppercase italic drop-shadow-lg"
+                    style={{ fontSize: "var(--section-title-size)" } as any}
+                >
                     {content.title}
                 </h2>
-                <p className="text-xl text-muted font-medium max-w-2xl mx-auto leading-relaxed">
+                <p
+                    className="text-muted font-medium max-w-2xl mx-auto leading-relaxed"
+                    style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                >
                     {content.subtitle}
                 </p>
             </div>

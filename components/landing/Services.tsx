@@ -83,11 +83,17 @@ export function Services({ getSetting }: ServicesProps) {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
                 <div className="max-w-3xl space-y-6">
                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Soluções</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
+                    <h2
+                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
+                    >
                         {data.title}
                     </h2>
                 </div>
-                <p className="text-xl text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2">
+                <p
+                    className="text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2"
+                    style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                >
                     {data.subtitle}
                 </p>
             </div>

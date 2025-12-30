@@ -39,19 +39,28 @@ export function AboutUs({ getSetting }: AboutUsProps) {
             <div className="space-y-10">
                 <div className="space-y-4">
                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Sobre Nós</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
+                    <h2
+                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
+                    >
                         {content.title}
                     </h2>
                 </div>
 
                 {content.subtitle && (
-                    <p className="text-xl text-foreground font-bold italic border-l-4 border-primary pl-6">
+                    <p
+                        className="text-xl text-foreground font-bold italic border-l-4 border-primary pl-6"
+                        style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                    >
                         {content.subtitle}
                     </p>
                 )}
 
-                <div className="relative">
-                    <RichText content={content.description} className="text-muted leading-relaxed text-lg font-medium" />
+                <div className="relative" style={{ fontSize: "var(--section-body-size)" } as any}>
+                    <RichText
+                        content={content.description}
+                        className="text-muted leading-relaxed font-medium"
+                    />
                 </div>
 
                 <div className="pt-6">

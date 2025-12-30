@@ -13,23 +13,34 @@ export function Founder({ getSetting }: FounderProps) {
     const content = getSetting("section_guiomar_content", SECTION_DEFAULTS.guiomar);
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+        <div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center"
+        >
             <div className="order-2 lg:order-1 space-y-10">
                 <div className="space-y-4">
                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Liderança</span>
-                    <h2 className={`${content.titleSize || 'text-4xl'} md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic`}>
+                    <h2
+                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
+                    >
                         {content.title}
                     </h2>
                 </div>
 
-                <p className={`${content.subtitleSize || 'text-lg'} text-xl text-foreground/90 font-bold italic border-l-4 border-primary pl-6`}>
+                <p
+                    className="text-foreground/90 font-bold italic border-l-4 border-primary pl-6"
+                    style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                >
                     {content.subtitle}
                 </p>
 
-                <div className="relative">
+                <div
+                    className="relative"
+                    style={{ fontSize: "var(--section-body-size)" } as any}
+                >
                     <RichText
                         content={content.description}
-                        className={`text-muted-foreground leading-relaxed ${content.bodySize || 'text-lg'} font-medium`}
+                        className="text-muted-foreground leading-relaxed font-medium"
                     />
                 </div>
 

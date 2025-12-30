@@ -134,15 +134,15 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
             <style dangerouslySetInnerHTML={{
                 __html: `
                 #hero {
-                    --hero-title-size: ${titleSizeMobile}px;
-                    --hero-subtitle-size: ${subtitleSizeMobile}px;
-                    --hero-body-size: ${bodySizeMobile}px;
+                    --section-title-size: ${titleSizeMobile}px;
+                    --section-subtitle-size: ${subtitleSizeMobile}px;
+                    --section-body-size: ${bodySizeMobile}px;
                 }
                 @media (min-width: 768px) {
                     #hero {
-                        --hero-title-size: ${titleSize}px;
-                        --hero-subtitle-size: ${subtitleSize}px;
-                        --hero-body-size: ${bodySize}px;
+                        --section-title-size: ${titleSize}px;
+                        --section-subtitle-size: ${subtitleSize}px;
+                        --section-body-size: ${bodySize}px;
                     }
                 }
             ` }} />
@@ -172,36 +172,34 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="text-foreground space-y-8 animate-fadeInLeft">
-                    {heroData.subtitle && (
-                        <motion.p
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="font-bold text-primary italic max-w-xl"
-                            style={{
-                                fontSize: "var(--hero-subtitle-size)",
-                            } as any}
-                        >
-                            {heroData.subtitle}
-                        </motion.p>
-                    )}
+                    <motion.p
+                        key={currentSlide + "subtitle"}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        className="bg-primary/20 text-primary px-6 py-2 rounded-full inline-block font-black text-[10px] uppercase tracking-[0.4em] border border-primary/30 shadow-[0_0_30px_rgba(var(--primary-rgb),0.2)] mb-8"
+                        style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                    >
+                        {slides[currentSlide].subtitle}
+                    </motion.p>
                     <motion.h1
+                        key={currentSlide + "title"}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="font-black leading-[1.1]"
-                        style={{
-                            fontSize: "var(--hero-title-size)",
-                        } as any}
+                        transition={{ duration: 1, delay: 0.3 }}
+                        className="font-black text-white leading-[0.95] tracking-[-0.04em] uppercase italic drop-shadow-2xl"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
                     >
-                        {heroData.title}
+                        {slides[currentSlide].title}
                     </motion.h1>
+
                     <div
-                        style={{ fontSize: "var(--hero-body-size)" } as any}
+                        className="mt-10"
+                        style={{ fontSize: "var(--section-body-size)" } as any}
                     >
                         <RichText
-                            content={heroData.description}
-                            className="font-medium text-muted-foreground max-w-xl"
+                            content={slides[currentSlide].body}
+                            className="text-white/80 leading-relaxed font-medium italic max-w-xl mx-auto md:mx-0 drop-shadow-md pb-6"
                         />
                     </div>
                     <motion.div
