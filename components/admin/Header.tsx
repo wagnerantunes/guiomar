@@ -41,7 +41,7 @@ export default function AdminHeader() {
                             <span className="material-symbols-outlined">menu</span>
                         </button>
 
-                        <Link href="/" className="flex items-center gap-3 text-foreground cursor-pointer group">
+                        <Link href="/" className="flex lg:hidden items-center gap-3 text-foreground cursor-pointer group">
                             {logo ? (
                                 <img src={logo} alt="RenovaMente" className="h-8 object-contain" />
                             ) : (
