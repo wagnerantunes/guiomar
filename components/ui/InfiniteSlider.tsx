@@ -88,7 +88,7 @@ export function InfiniteSlider({
     };
 
     return (
-        <div className="relative w-full -mx-6 px-6 group">
+        <div className="relative group w-screen ml-[calc(50%-50vw)]">
             {/* Navigation Controls */}
             <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 flex justify-between items-center z-20 pointer-events-none">
                 <button
@@ -122,10 +122,6 @@ export function InfiniteSlider({
 
             <div
                 className="relative overflow-hidden"
-                style={{
-                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-                    maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
-                }}
                 onMouseEnter={handlePause}
                 onMouseLeave={handlePlay}
             >
