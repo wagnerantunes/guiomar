@@ -108,7 +108,31 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
         <section
             id="hero"
             className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden min-h-[600px] flex items-center"
+            style={{
+                "--hero-title-size": `${heroData.titleSizeMobile || 32}px`,
+                "--hero-subtitle-size": `${heroData.subtitleSizeMobile || 16}px`,
+                "--hero-body-size": `${heroData.bodySizeMobile || 14}px`,
+                "@media (min-width: 768px)": {
+                    "--hero-title-size": `${heroData.titleSize || 56}px`,
+                    "--hero-subtitle-size": `${heroData.subtitleSize || 20}px`,
+                    "--hero-body-size": `${heroData.bodySize || 18}px`,
+                }
+            } as any}
         >
+            <style jsx>{`
+                #hero {
+                    --hero-title-size: ${heroData.titleSizeMobile || 32}px;
+                    --hero-subtitle-size: ${heroData.subtitleSizeMobile || 16}px;
+                    --hero-body-size: ${heroData.bodySizeMobile || 14}px;
+                }
+                @media (min-width: 768px) {
+                    #hero {
+                        --hero-title-size: ${heroData.titleSize || 56}px;
+                        --hero-subtitle-size: ${heroData.subtitleSize || 20}px;
+                        --hero-body-size: ${heroData.bodySize || 18}px;
+                    }
+                }
+            `}</style>
             {/* BACKGROUND SLIDER */}
             <div className="absolute inset-0 z-0">
                 {slides.length > 0 ? (
@@ -140,7 +164,10 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-lg md:text-xl font-bold text-primary italic max-w-xl"
+                            className="font-bold text-primary italic max-w-xl"
+                            style={{
+                                fontSize: "var(--hero-subtitle-size)",
+                            } as any}
                         >
                             {heroData.subtitle}
                         </motion.p>
@@ -149,15 +176,21 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-4xl md:text-6xl font-black leading-[1.1]"
-                        style={{ fontSize: heroData.titleSize ? `${heroData.titleSize}px` : undefined }}
+                        className="font-black leading-[1.1]"
+                        style={{
+                            fontSize: "var(--hero-title-size)",
+                        } as any}
                     >
                         {heroData.title}
                     </motion.h1>
-                    <RichText
-                        content={heroData.description}
-                        className="text-base md:text-lg font-medium text-muted-foreground max-w-xl"
-                    />
+                    <div
+                        style={{ fontSize: "var(--hero-body-size)" } as any}
+                    >
+                        <RichText
+                            content={heroData.description}
+                            className="font-medium text-muted-foreground max-w-xl"
+                        />
+                    </div>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

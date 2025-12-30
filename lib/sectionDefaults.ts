@@ -11,6 +11,11 @@ export const SECTION_DEFAULTS = {
         fontFamily: "Manrope",
         textColor: "#0d1b12",
         titleSize: 56,
+        titleSizeMobile: 32,
+        subtitleSize: 20,
+        subtitleSizeMobile: 16,
+        bodySize: 18,
+        bodySizeMobile: 14,
         ctaText: "NOSSOS SERVIÇOS",
         ctaUrl: "#servicos"
     },

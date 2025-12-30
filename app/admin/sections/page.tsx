@@ -36,6 +36,7 @@ export default function PageSections() {
     const [saving, setSaving] = useState(false);
     const [showMediaPicker, setShowMediaPicker] = useState(false);
     const [mediaPickerTarget, setMediaPickerTarget] = useState<{ secId: string, fieldName?: string } | null>(null);
+    const [activeDevice, setActiveDevice] = useState<"desktop" | "mobile">("desktop");
     const { toast } = useToast();
 
     useEffect(() => {
@@ -585,52 +586,41 @@ export default function PageSections() {
                                                             <input type="color" className="w-full h-10 rounded-xl bg-muted/5 border-border border border-none cursor-pointer" value={sec.content?.textColor || "#0d1b12"} onChange={(e) => handleContentChange(sec.id, "textColor", e.target.value)} />
                                                         </div>
                                                     </div>
-                                                    <div className="space-y-4">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Tamanho do Título</label>
-                                                            <select
-                                                                className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                                value={sec.content?.titleSize || "text-4xl"}
-                                                                onChange={(e) => handleContentChange(sec.id, "titleSize", e.target.value)}
-                                                            >
-                                                                <option value="text-xl">XL (20px)</option>
-                                                                <option value="text-2xl">2XL (24px)</option>
-                                                                <option value="text-3xl">3XL (30px)</option>
-                                                                <option value="text-4xl">4XL (36px) - Padrão</option>
-                                                                <option value="text-5xl">5XL (48px)</option>
-                                                                <option value="text-6xl">6XL (60px)</option>
-                                                                <option value="text-7xl">7XL (72px)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Tamanho do Subtítulo</label>
-                                                            <select
-                                                                className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                                value={sec.content?.subtitleSize || "text-xl"}
-                                                                onChange={(e) => handleContentChange(sec.id, "subtitleSize", e.target.value)}
-                                                            >
-                                                                <option value="text-sm">SM (14px)</option>
-                                                                <option value="text-base">Base (16px)</option>
-                                                                <option value="text-lg">LG (18px)</option>
-                                                                <option value="text-xl">XL (20px) - Padrão</option>
-                                                                <option value="text-2xl">2XL (24px)</option>
-                                                                <option value="text-3xl">3XL (30px)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Tamanho do Texto</label>
-                                                            <select
-                                                                className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                                value={sec.content?.bodySize || "text-base"}
-                                                                onChange={(e) => handleContentChange(sec.id, "bodySize", e.target.value)}
-                                                            >
-                                                                <option value="text-xs">XS (12px)</option>
-                                                                <option value="text-sm">SM (14px)</option>
-                                                                <option value="text-base">Base (16px) - Padrão</option>
-                                                                <option value="text-lg">LG (18px)</option>
-                                                                <option value="text-xl">XL (20px)</option>
-                                                            </select>
-                                                        </div>
+                                                    <div className="space-y-6">
+                                                        {["titleSize", "subtitleSize", "bodySize"].map((field) => (
+                                                            <div key={field} className="space-y-3">
+                                                                <div className="flex items-center justify-between">
+                                                                    <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">
+                                                                        {field === "titleSize" ? "Tamanho do Título" : field === "subtitleSize" ? "Tamanho do Subtítulo" : "Tamanho do Texto"}
+                                                                    </label>
+                                                                    <div className="flex bg-muted/20 p-0.5 rounded-lg border border-border/50">
+                                                                        <button
+                                                                            onClick={() => setActiveDevice("desktop")}
+                                                                            className={`px-2 py-1 rounded-md transition-all ${activeDevice === "desktop" ? "bg-background shadow-sm text-primary" : "text-muted hover:text-foreground"}`}
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-sm">desktop_windows</span>
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => setActiveDevice("mobile")}
+                                                                            className={`px-2 py-1 rounded-md transition-all ${activeDevice === "mobile" ? "bg-background shadow-sm text-primary" : "text-muted hover:text-foreground"}`}
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-sm">smartphone</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="flex items-center gap-3">
+                                                                    <input
+                                                                        type="number"
+                                                                        className="flex-1 bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
+                                                                        value={activeDevice === "desktop" ? (sec.content?.[field] || "") : (sec.content?.[`${field}Mobile`] || "")}
+                                                                        onChange={(e) => handleContentChange(sec.id, activeDevice === "desktop" ? field : `${field}Mobile`, parseInt(e.target.value))}
+                                                                        placeholder={activeDevice === "desktop" ? "Desktop (px)" : "Mobile (px)"}
+                                                                    />
+                                                                    <span className="text-[10px] font-black text-muted">PX</span>
+                                                                </div>
+                                                            </div>
+                                                        ))}
                                                     </div>
 
                                                     {/* BACKGROUND SETTINGS */}
