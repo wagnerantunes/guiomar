@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700;900&family=Lato:wght@400;700;900&display=swap');
+@import "tailwindcss";
 
 :root {
   --font-title: 'Manrope', sans-serif;
@@ -36,9 +36,7 @@ body.font-theme-elegant {
   --card-muted: rgba(10, 77, 93, 0.04);
   --border: rgba(10, 77, 93, 0.1);
   --primary: #0F758D;
-  --primary-rgb: 15,
-    117,
-    141;
+  --primary-rgb: 15, 117, 141;
   --primary-foreground: #FDFBF7;
   --muted: #6B8E96;
   --muted-foreground: #4A6D75;
