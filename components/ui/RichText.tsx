@@ -6,13 +6,14 @@ import { cn } from "@/lib/utils";
 interface RichTextProps {
     content: string;
     className?: string;
+    style?: React.CSSProperties;
 }
 
 /**
  * Component to safely render HTML content from the CMS Tiptap editor.
  * Applies the .prose styles defined in globals.css.
  */
-export function RichText({ content, className }: RichTextProps) {
+export function RichText({ content, className, style }: RichTextProps) {
     if (!content) return null;
 
     return (
@@ -26,6 +27,7 @@ export function RichText({ content, className }: RichTextProps) {
                 "prose-img:rounded-[2rem] prose-img:shadow-2xl prose-img:mx-auto",
                 className
             )}
+            style={style}
             dangerouslySetInnerHTML={{ __html: content }}
         />
     );

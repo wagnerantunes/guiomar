@@ -14,9 +14,20 @@ export function WhyUs({ getSetting }: WhyUsProps) {
         <div className="max-w-7xl mx-auto">
             <div className="text-center mb-24 space-y-6">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Diferenciais</span>
-                <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
+                <h2
+                    className="font-black text-foreground tracking-tighter uppercase italic"
+                    style={{ fontSize: "var(--section-title-size)" } as any}
+                >
                     {content.title}
                 </h2>
+                {content.subtitle && (
+                    <p
+                        className="text-muted font-bold uppercase tracking-widest max-w-2xl mx-auto"
+                        style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                    >
+                        {content.subtitle}
+                    </p>
+                )}
                 <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
             </div>
 
@@ -36,7 +47,11 @@ export function WhyUs({ getSetting }: WhyUsProps) {
                             {item.t}
                         </h3>
 
-                        <RichText content={item.d} className="text-muted text-sm font-medium leading-relaxed prose-p:text-sm" />
+                        <RichText
+                            content={item.d}
+                            className="text-muted font-medium leading-relaxed"
+                            style={{ fontSize: "var(--section-body-size)" } as any}
+                        />
                     </div>
                 ))}
             </div>

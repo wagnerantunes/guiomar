@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from "react";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface ContactProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -11,10 +12,7 @@ interface ContactProps {
 export function Contact({ getSetting }: ContactProps) {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-    const contatoContent = getSetting("section_contato_content", {
-        whatsapp: "(11) 99441-6024",
-        email: "renova@renovamente-guiomarmelo.com.br"
-    });
+    const contatoContent = getSetting("section_contato_content", SECTION_DEFAULTS.contato);
 
     const footerSetting = getSetting("navigation_footer", {
         phone: "(11) 99441-6024",
@@ -84,9 +82,20 @@ export function Contact({ getSetting }: ContactProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
             <div className="lg:col-span-12 mb-16 text-center space-y-6">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Contato</span>
-                <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase italic">
-                    Vamos conversar?
+                <h2
+                    className="font-black text-foreground tracking-tighter uppercase italic"
+                    style={{ fontSize: "var(--section-title-size)" } as any}
+                >
+                    {contatoContent.title}
                 </h2>
+                {contatoContent.subtitle && (
+                    <p
+                        className="text-muted font-bold uppercase tracking-widest max-w-2xl mx-auto"
+                        style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                    >
+                        {contatoContent.subtitle}
+                    </p>
+                )}
             </div>
 
             <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -99,7 +108,12 @@ export function Contact({ getSetting }: ContactProps) {
 
                     <div className="space-y-6 relative z-10">
                         <h3 className="text-3xl font-black text-foreground leading-tight">Pronto para<br /><span className="text-primary italic">renovar</span> sua empresa?</h3>
-                        <p className="text-muted font-medium text-lg">Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.</p>
+                        <p
+                            className="text-muted font-medium"
+                            style={{ fontSize: "var(--section-body-size)" } as any}
+                        >
+                            Nossa equipe de especialistas está pronta para desenhar a melhor solução para o seu cenário.
+                        </p>
                     </div>
 
                     <div className="space-y-8 relative z-10">

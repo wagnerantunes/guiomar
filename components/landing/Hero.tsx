@@ -12,9 +12,10 @@ import { AntigravityParticles } from "@/components/ui/AntigravityParticles";
 interface HeroProps {
     getSetting: (key: string, defaultValue: any) => any;
     scrollTo: (id: string) => void;
+    nextId?: string;
 }
 
-export function Hero({ getSetting, scrollTo }: HeroProps) {
+export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [currentSlide, setCurrentSlide] = useState(0);
     const { toast } = useToast();
@@ -304,7 +305,7 @@ export function Hero({ getSetting, scrollTo }: HeroProps) {
                 </div>
             )}
 
-            <ScrollIndicator targetId="sobre" />
+            {nextId && <ScrollIndicator targetId={nextId} />}
         </section>
     );
 }

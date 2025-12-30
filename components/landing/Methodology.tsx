@@ -52,7 +52,11 @@ export function Methodology({ getSetting }: MethodologyProps) {
                                     <h4 className="text-3xl font-black text-foreground mb-6 uppercase tracking-tight">
                                         {m.t}
                                     </h4>
-                                    <RichText content={m.d} className="text-base text-muted font-medium leading-relaxed prose-p:text-base prose-strong:text-foreground" />
+                                    <RichText
+                                        content={m.d}
+                                        className="text-muted font-medium leading-relaxed"
+                                        style={{ fontSize: "var(--section-body-size)" } as any}
+                                    />
                                 </motion.div>
                             )}
                         </div>
@@ -78,7 +82,11 @@ export function Methodology({ getSetting }: MethodologyProps) {
                                     <h4 className="text-3xl font-black text-foreground mb-6 uppercase tracking-tight">
                                         {m.t}
                                     </h4>
-                                    <RichText content={m.d} className="text-base text-muted font-medium leading-relaxed prose-p:text-base prose-strong:text-foreground" />
+                                    <RichText
+                                        content={m.d}
+                                        className="text-muted font-medium leading-relaxed"
+                                        style={{ fontSize: "var(--section-body-size)" } as any}
+                                    />
                                 </motion.div>
                             )}
                         </div>

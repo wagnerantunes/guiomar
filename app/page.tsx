@@ -19,6 +19,7 @@ import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 interface BlogPost {
   id: string;
@@ -224,52 +225,104 @@ function HomePageContent() {
           </article>
         ) : (
           <div className="overflow-x-hidden">
-            <Hero getSetting={getSetting} scrollTo={scrollTo} />
+            {(() => {
+              const defaultOrderArr = [
+                "hero", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "contato"
+              ];
+              const rawOrder = getSetting("landing_section_order", defaultOrderArr);
 
-            <SectionWrapper id="sobre" nextId="challenge" variant="muted" content={getSetting("section_sobre_content", {})}>
-              <AboutUs getSetting={getSetting} />
-            </SectionWrapper>
+              // Ensure we use the correct IDs even if old ones are stored in the database
+              const orderArr = rawOrder.map((id: string) => {
+                if (id === "challenge") return "desafio";
+                if (id === "whyus") return "porque";
+                if (id === "founder") return "guiomar";
+                return id;
+              });
 
-            <SectionWrapper id="challenge" nextId="servicos" variant="default" content={getSetting("section_challenge_content", {})}>
-              <Challenge getSetting={getSetting} />
-            </SectionWrapper>
+              // Filter only visible sections for proper nextId calculation
+              const visibleSections = orderArr.filter((id: string) => {
+                const defaults = (SECTION_DEFAULTS as any)[id] || {};
+                // Special check for hero which might not be in SECTION_DEFAULTS or has different key structure
+                if (id === "hero") return getSetting("section_hero_content", { ...SECTION_DEFAULTS.hero, isVisible: true }).isVisible !== false;
+                return getSetting(`section_${id}_content`, { ...defaults, isVisible: true }).isVisible !== false;
+              });
 
-            <SectionWrapper id="servicos" nextId="metodologia" variant="muted" content={getSetting("section_servicos_content", {})}>
-              <Services getSetting={getSetting} />
-            </SectionWrapper>
+              return visibleSections.map((id: string, index: number) => {
+                const nextId = visibleSections[index + 1];
 
-            <SectionWrapper id="metodologia" nextId="blog" variant="default" content={getSetting("section_metodologia_content", {})}>
-              <Methodology getSetting={getSetting} />
-            </SectionWrapper>
-
-            <SectionWrapper id="blog" nextId="whyus" variant="muted" content={getSetting("section_blog_content", {})}>
-              <BlogPreview
-                getSetting={getSetting}
-                blogPosts={blogPosts}
-                setSelectedPost={setSelectedPost}
-                scrollTo={scrollTo}
-              />
-            </SectionWrapper>
-
-            <SectionWrapper id="whyus" nextId="founder" variant="default" content={getSetting("section_whyus_content", {})}>
-              <WhyUs getSetting={getSetting} />
-            </SectionWrapper>
-
-            <SectionWrapper id="founder" nextId="testimonials" variant="muted" content={getSetting("section_founder_content", {})}>
-              <Founder getSetting={getSetting} />
-            </SectionWrapper>
-
-            <SectionWrapper id="testimonials" nextId="faq" variant="default" content={getSetting("section_testimonials_content", {})}>
-              <Testimonials getSetting={getSetting} />
-            </SectionWrapper>
-
-            <SectionWrapper id="faq" nextId="contato" variant="muted" content={getSetting("section_faq_content", {})}>
-              <FAQ getSetting={getSetting} />
-            </SectionWrapper>
-
-            <SectionWrapper id="contato" variant="default" content={getSetting("section_contato_content", {})}>
-              <Contact getSetting={getSetting} />
-            </SectionWrapper>
+                switch (id) {
+                  case "hero":
+                    return <Hero key={id} getSetting={getSetting} scrollTo={scrollTo} nextId={nextId} />;
+                  case "sobre":
+                    return (
+                      <SectionWrapper key={id} id="sobre" nextId={nextId} variant="muted" content={getSetting("section_sobre_content", SECTION_DEFAULTS.sobre)}>
+                        <AboutUs getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "desafio":
+                    return (
+                      <SectionWrapper key={id} id="desafio" nextId={nextId} variant="default" content={getSetting("section_desafio_content", SECTION_DEFAULTS.desafio)}>
+                        <Challenge getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "servicos":
+                    return (
+                      <SectionWrapper key={id} id="servicos" nextId={nextId} variant="muted" content={getSetting("section_servicos_content", SECTION_DEFAULTS.servicos)}>
+                        <Services getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "metodologia":
+                    return (
+                      <SectionWrapper key={id} id="metodologia" nextId={nextId} variant="default" content={getSetting("section_metodologia_content", SECTION_DEFAULTS.metodologia)}>
+                        <Methodology getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "blog":
+                    return (
+                      <SectionWrapper key={id} id="blog" nextId={nextId} variant="muted" content={getSetting("section_blog_content", { isVisible: true })}>
+                        <BlogPreview
+                          getSetting={getSetting}
+                          blogPosts={blogPosts}
+                          setSelectedPost={setSelectedPost}
+                          scrollTo={scrollTo}
+                        />
+                      </SectionWrapper>
+                    );
+                  case "porque":
+                    return (
+                      <SectionWrapper key={id} id="porque" nextId={nextId} variant="default" content={getSetting("section_porque_content", SECTION_DEFAULTS.porque)}>
+                        <WhyUs getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "guiomar":
+                    return (
+                      <SectionWrapper key={id} id="guiomar" nextId={nextId} variant="muted" content={getSetting("section_guiomar_content", SECTION_DEFAULTS.guiomar)}>
+                        <Founder getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "testimonials":
+                    return (
+                      <SectionWrapper key={id} id="testimonials" nextId={nextId} variant="default" content={getSetting("section_testimonials_content", SECTION_DEFAULTS.testimonials)}>
+                        <Testimonials getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "faq":
+                    return (
+                      <SectionWrapper key={id} id="faq" nextId={nextId} variant="muted" content={getSetting("section_faq_content", SECTION_DEFAULTS.faq)}>
+                        <FAQ getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  case "contato":
+                    return (
+                      <SectionWrapper key={id} id="contato" variant="default" content={getSetting("section_contato_content", SECTION_DEFAULTS.contato)}>
+                        <Contact getSetting={getSetting} />
+                      </SectionWrapper>
+                    );
+                  default:
+                    return null;
+                }
+              });
+            })()}
           </div>
 
         )}

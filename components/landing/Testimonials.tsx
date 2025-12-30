@@ -69,7 +69,10 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                             </div>
 
                             <div className="mb-10 min-h-[120px]">
-                                <p className="text-lg text-foreground font-medium italic leading-relaxed">
+                                <p
+                                    className="text-foreground font-medium italic leading-relaxed"
+                                    style={{ fontSize: "var(--section-body-size)" } as any}
+                                >
                                     "{t.quote}"
                                 </p>
                             </div>

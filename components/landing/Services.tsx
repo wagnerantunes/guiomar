@@ -58,7 +58,11 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
             </h3>
 
             <div style={{ transform: "translateZ(10px)" }}>
-                <RichText content={s.d} className={`${isLarge ? "text-lg" : "text-sm"} text-muted-foreground leading-relaxed font-medium`} />
+                <RichText
+                    content={s.d}
+                    className="text-muted-foreground leading-relaxed font-medium"
+                    style={{ fontSize: "var(--section-body-size)" } as any}
+                />
             </div>
 
             {isLarge && (

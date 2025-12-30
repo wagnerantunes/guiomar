@@ -22,10 +22,16 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
             <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                 <div className="space-y-6 max-w-2xl">
                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Insights</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
+                    <h2
+                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic"
+                        style={{ fontSize: "var(--section-title-size)" } as any}
+                    >
                         {content.title}
                     </h2>
-                    <p className="text-xl text-muted font-bold italic border-l-4 border-primary pl-6">
+                    <p
+                        className="text-muted font-bold italic border-l-4 border-primary pl-6"
+                        style={{ fontSize: "var(--section-subtitle-size)" } as any}
+                    >
                         {content.subtitle}
                     </p>
                 </div>

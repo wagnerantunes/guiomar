@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import { RichText } from "@/components/ui/RichText";
 
 interface FAQProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -16,7 +17,10 @@ export function FAQ({ getSetting }: FAQProps) {
     return (
         <div className="max-w-3xl mx-auto relative z-10">
             <div className="text-center mb-20 space-y-4">
-                <h2 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+                <h2
+                    className="font-black text-foreground tracking-tight"
+                    style={{ fontSize: "var(--section-title-size)" } as any}
+                >
                     {content.title}
                 </h2>
                 <div className="w-12 h-1 bg-primary mx-auto rounded-full"></div>
@@ -55,8 +59,12 @@ export function FAQ({ getSetting }: FAQProps) {
                                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                     className="overflow-hidden"
                                 >
-                                    <div className="px-10 py-8 text-base text-muted font-medium leading-relaxed">
-                                        {f.r}
+                                    <div className="px-10 py-8 leading-relaxed">
+                                        <RichText
+                                            content={f.r}
+                                            className="text-muted font-medium"
+                                            style={{ fontSize: "var(--section-body-size)" } as any}
+                                        />
                                     </div>
                                 </motion.div>
                             )}
