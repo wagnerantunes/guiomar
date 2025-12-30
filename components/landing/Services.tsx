@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { RichText } from "@/components/ui/RichText";
+import { InfiniteSlider } from "@/components/ui/InfiniteSlider";
 
 interface ServicesProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -78,9 +79,33 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
     );
 };
 
+// Simplified card for slider mode (no 3D tilt)
+const ServiceCardSlider = ({ s }: { s: any }) => (
+    <div className="bg-card backdrop-blur-xl p-10 rounded-[2rem] border border-border hover:border-primary/30 hover:shadow-[0_0_50px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group cursor-default relative overflow-hidden h-full">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[50px] rounded-full -mr-20 -mt-20 opacity-20 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none"></div>
+
+        <div className="w-16 h-16 bg-card-muted rounded-2xl flex items-center justify-center text-primary mb-10 border border-primary/20 shadow-[0_4px_20px_-5px_rgba(var(--primary-rgb),0.2)] group-hover:scale-110 transition-transform duration-500 relative z-10">
+            <span className="material-symbols-outlined text-3xl">verified</span>
+        </div>
+
+        <h3 className="text-2xl font-black text-foreground leading-tight mb-6 uppercase tracking-tight">
+            {s.t}
+        </h3>
+
+        <RichText
+            content={s.d}
+            className="text-muted-foreground leading-relaxed font-medium"
+            style={{ fontSize: "var(--section-body-size)" } as any}
+        />
+
+        <div className="absolute bottom-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+    </div>
+);
+
 export function Services({ getSetting }: ServicesProps) {
     const data = getSetting("section_servicos_content", SECTION_DEFAULTS.servicos);
     const items = data.items || SECTION_DEFAULTS.servicos.items;
+    const layout = data.layout || "grid";
 
     return (
         <>
@@ -102,25 +127,34 @@ export function Services({ getSetting }: ServicesProps) {
                 </p>
             </div>
 
-            <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={{
-                    hidden: { opacity: 0 },
-                    visible: {
-                        opacity: 1,
-                        transition: {
-                            staggerChildren: 0.1
+            {layout === "slider" ? (
+                <InfiniteSlider
+                    items={items}
+                    renderCard={(item, i) => <ServiceCardSlider key={i} s={item} />}
+                    speed={35}
+                    cardWidth="400px"
+                />
+            ) : (
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: {
+                                staggerChildren: 0.1
+                            }
                         }
-                    }
-                }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            >
-                {items.map((s: any, i: number) => (
-                    <ServiceCard key={i} s={s} isLarge={i === 0} />
-                ))}
-            </motion.div>
+                    }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
+                >
+                    {items.map((s: any, i: number) => (
+                        <ServiceCard key={i} s={s} isLarge={i === 0} />
+                    ))}
+                </motion.div>
+            )}
         </>
     );
 }

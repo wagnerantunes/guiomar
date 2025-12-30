@@ -143,6 +143,27 @@ function SortableSection({
                                             />
                                         </div>
 
+                                        {/* LAYOUT SELECTOR for sections with multiple cards */}
+                                        {(sec.id === "metodologia" || sec.id === "servicos" || sec.id === "porque") && (
+                                            <div className="space-y-2">
+                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Layout</label>
+                                                <select
+                                                    value={sec.content?.layout || "grid"}
+                                                    onChange={(e) => handleContentChange(sec.id, "layout", e.target.value)}
+                                                    className="w-full bg-muted/10 border-border rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 focus:bg-background transition-all outline-none text-foreground cursor-pointer"
+                                                >
+                                                    <option value="grid">📊 Grid (Cards em Grade)</option>
+                                                    <option value="slider">🎠 Slider Infinito (Carrossel)</option>
+                                                </select>
+                                                <p className="text-[8px] text-muted ml-3 mt-1">
+                                                    {sec.content?.layout === "slider"
+                                                        ? "Carrossel horizontal com animação infinita - ideal para reduzir altura da seção"
+                                                        : "Grade de cards estática - layout padrão com todos os items visíveis"
+                                                    }
+                                                </p>
+                                            </div>
+                                        )}
+
                                         {sec.id === "hero" && (
                                             <>
                                                 <div className="space-y-2">

@@ -37,6 +37,7 @@ export const SECTION_DEFAULTS = {
     servicos: {
         title: "Nossos Serviços",
         subtitle: "Soluções completas para sua empresa",
+        layout: "grid",
         items: [
             { t: "Ergonomia Legal", d: "Avaliações e laudos ergonômicos conforme NR-1 e NR-17, com foco em prevenção de riscos, conformidade legal e melhoria das condições de trabalho." },
             { t: "Riscos Psicossociais", d: "Análise de Riscos Psicossociais (ARP) integrada ao PGR, apoiando empresas no cumprimento da NR-1 e na promoção da saúde organizacional." },
@@ -52,6 +53,7 @@ export const SECTION_DEFAULTS = {
     metodologia: {
         title: "Metodologia RenovaMente",
         subtitle: "Uma abordagem integrada, técnica e humana para transformar ambientes corporativos.",
+        layout: "grid",
         steps: [
             { t: "Diagnóstico Integrado", d: "Análise do ambiente de trabalho, práticas de gestão, exigências legais e percepções internas, considerando fatores ergonômicos, organizacionais e psicossociais." },
             { t: "Inventário de Riscos", d: "Identificação e avaliação dos riscos ergonômicos e psicossociais, com base nas exigências da NR-1 e NR-17, servindo de base técnica para a definição das ações preventivas." },
@@ -64,6 +66,7 @@ export const SECTION_DEFAULTS = {
     porque: {
         title: "Por que a RenovaMente?",
         subtitle: "Nossa essência traduzida em valor para sua empresa",
+        layout: "grid",
         items: [
             { t: "Evolução Constante", d: "Não entregamos apenas relatórios. Entregamos transformação real." },
             { t: "Integração Total", d: "Técnica e Humano. Razão e Emoção. Legalidade e Propósito." },
