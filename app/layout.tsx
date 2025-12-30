@@ -110,7 +110,7 @@ export default function RootLayout({
       <body className={manrope.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
