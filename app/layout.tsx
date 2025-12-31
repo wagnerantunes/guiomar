@@ -72,7 +72,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 
 export default async function RootLayout({
   children,
@@ -126,7 +125,6 @@ export default async function RootLayout({
       <body className={`${jakarta.className} font-theme-${fontTheme}`}>
         <Providers>
           <FloatingOrbs />
-          <CustomCursor />
           {children}
         </Providers>
       </body>
