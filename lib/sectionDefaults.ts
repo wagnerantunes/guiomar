@@ -68,12 +68,12 @@ export const SECTION_DEFAULTS = {
         subtitle: "Nossa essência traduzida em valor para sua empresa",
         layout: "grid",
         items: [
-            { t: "Evolução Constante", d: "Não entregamos apenas relatórios. Entregamos transformação real." },
-            { t: "Integração Total", d: "Técnica e Humano. Razão e Emoção. Legalidade e Propósito." },
-            { t: "+30 Anos de Experiência", d: "Uma bagagem sólida aplicada aos desafios modernos das empresas." },
-            { t: "Segurança Jurídica", d: "Compliance total com as normas NR-17 e NR-1." },
-            { t: "Metodologia Própria", d: "Desenvolvida para gerar autonomia e consciência na equipe." },
-            { t: "Foco em PMEs", d: "Soluções ágeis e acessíveis para pequenas e médias empresas." }
+            { t: "Evolução Constante", d: "Não entregamos apenas relatórios. Entregamos transformação real.", icon: "trending_up" },
+            { t: "Integração Total", d: "Técnica e Humano. Razão e Emoção. Legalidade e Propósito.", icon: "extension" },
+            { t: "+30 Anos de Experiência", d: "Uma bagagem sólida aplicada aos desafios modernos das empresas.", icon: "history" },
+            { t: "Segurança Jurídica", d: "Compliance total com as normas NR-17 e NR-1.", icon: "gavel" },
+            { t: "Metodologia Própria", d: "Desenvolvida para gerar autonomia e consciência na equipe.", icon: "psychology" },
+            { t: "Foco em PMEs", d: "Soluções ágeis e acessíveis para pequenas e médias empresas.", icon: "storefront" }
         ]
     },
     guiomar: {
@@ -103,7 +103,8 @@ export const SECTION_DEFAULTS = {
         subtitle: "Se sua empresa busca conformidade legal, prevenção de riscos e ambientes de trabalho mais saudáveis, a RenovaMente pode ajudar.",
         whatsapp: "(11) 99441-6024",
         email: "renova@renovamente-guiomarmelo.com.br",
-        formTitle: "Solicite uma avaliação inicial"
+        formTitle: "Solicite uma avaliação inicial",
+        image: "https://images.unsplash.com/photo-1573496130141-209d200cebd8?q=80&w=2069&auto=format&fit=crop"
     },
     newsletter: {
         title: "Fique por dentro",
@@ -112,5 +113,18 @@ export const SECTION_DEFAULTS = {
         buttonText: "INSCREVER AGORA",
         successMessage: "Obrigado por se inscrever!",
         isVisible: true
+    },
+    clientes: {
+        title: "Empresas que confiam na RenovaMente",
+        subtitle: "Parcerias de sucesso em bem-estar corporativo",
+        isVisible: true,
+        items: [
+            { id: "1", name: "Empresa 1", logo: "" },
+            { id: "2", name: "Empresa 2", logo: "" },
+            { id: "3", name: "Empresa 3", logo: "" },
+            { id: "4", name: "Empresa 4", logo: "" },
+            { id: "5", name: "Empresa 5", logo: "" },
+            { id: "6", name: "Empresa 6", logo: "" },
+        ]
     }
 };

@@ -54,15 +54,14 @@ const ServiceCard = ({ s, isLarge = false }: { s: any, isLarge?: boolean }) => {
                 </span>
             </div>
 
-            <h3 className={`font-black text-foreground leading-tight mb-6 uppercase tracking-tight ${isLarge ? "text-4xl" : "text-xl"}`} style={{ transform: "translateZ(20px)" }}>
+            <h3 className={`type-h3 text-foreground mb-6 ${isLarge ? "text-3xl md:text-4xl" : ""}`} style={{ transform: "translateZ(20px)" }}>
                 {s.t}
             </h3>
 
             <div style={{ transform: "translateZ(10px)" }}>
                 <RichText
                     content={s.d}
-                    className="text-muted-foreground/80 leading-relaxed font-medium"
-                    style={{ fontSize: "var(--section-body-size)" } as any}
+                    className="type-body text-muted-foreground/80"
                 />
             </div>
 
@@ -87,14 +86,13 @@ const ServiceCardSlider = ({ s }: { s: any }) => (
             <span className="material-symbols-outlined text-3xl">{s.icon || "verified"}</span>
         </div>
 
-        <h3 className="text-xl font-black text-foreground leading-tight mb-6 uppercase tracking-tight">
+        <h3 className="type-h3 text-foreground mb-6">
             {s.t}
         </h3>
 
         <RichText
             content={s.d}
-            className="text-muted-foreground/80 leading-relaxed font-medium"
-            style={{ fontSize: "var(--section-body-size)" } as any}
+            className="type-body text-muted-foreground/80"
         />
 
         <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-primary/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-1000"></div>
@@ -111,18 +109,12 @@ export function Services({ getSetting }: ServicesProps) {
         <>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
                 <div className="max-w-3xl space-y-6">
-                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Soluções</span>
-                    <h2
-                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic"
-                        style={{ fontSize: "var(--section-title-size)" } as any}
-                    >
+                    <span className="type-badge text-primary">Soluções</span>
+                    <h2 className="type-h2 text-foreground">
                         {data.title}
                     </h2>
                 </div>
-                <p
-                    className="text-muted-foreground font-medium italic max-w-sm border-l-2 border-primary pl-8 py-2"
-                    style={{ fontSize: "var(--section-subtitle-size)" } as any}
-                >
+                <p className="type-body font-bold italic max-w-sm border-l-2 border-primary pl-8 py-2">
                     {data.subtitle}
                 </p>
             </div>
@@ -148,10 +140,10 @@ export function Services({ getSetting }: ServicesProps) {
                             }
                         }
                     }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
                     {items.map((s: any, i: number) => (
-                        <ServiceCard key={i} s={s} isLarge={i === 0} />
+                        <ServiceCard key={i} s={s} isLarge={false} />
                     ))}
                 </motion.div>
             )}

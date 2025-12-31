@@ -5,6 +5,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import MobileSidebar from "./MobileSidebar";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import { NotificationBell } from "./NotificationBell";
 
 export default function AdminHeader() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -86,13 +87,7 @@ export default function AdminHeader() {
                                 Site Ao Vivo
                             </Link>
 
-                            <button
-                                aria-label="Notificações"
-                                className="relative p-2.5 text-muted hover:text-primary hover:bg-primary/5 rounded-xl transition-all active:scale-95"
-                            >
-                                <span className="material-symbols-outlined">notifications</span>
-                                <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-background"></span>
-                            </button>
+                            <NotificationBell />
 
                             <div className="flex items-center gap-3 pl-4 border-l border-border">
                                 <div className="text-right hidden lg:block">

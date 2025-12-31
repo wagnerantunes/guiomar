@@ -16,7 +16,7 @@ import {
     ImageIcon,
     Link as LinkIcon
 } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { MediaPicker } from './MediaPicker'
 
 interface RichTextEditorProps {
@@ -30,6 +30,7 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
     const [isUploading, setIsUploading] = useState(false)
     const [showMediaPicker, setShowMediaPicker] = useState(false)
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Image,
@@ -42,6 +43,13 @@ export default function RichTextEditor({ content, onChange, minHeight = "500px" 
             onChange(editor.getHTML())
         },
     })
+
+    // Sync content updates (e.g. from async fetch)
+    useEffect(() => {
+        if (editor && content && editor.getHTML() !== content) {
+            editor.commands.setContent(content)
+        }
+    }, [content, editor])
 
     if (!editor) {
         return (

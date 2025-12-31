@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/admin/Skeleton";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { SectionStyler } from "@/components/admin/SectionStyler";
 import {
     DndContext,
     closestCenter,
@@ -126,7 +127,7 @@ function SortableSection({
             {expandedId === sec.id && (
                 <div className="px-10 pb-12 pt-4 border-t border-border animate-in fade-in slide-in-from-top-4 duration-500">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                        <div className="lg:col-span-8 space-y-8">
+                        <div className="lg:col-span-12 space-y-8">
                             <div className="space-y-4">
                                 {/* CONTENT EDITOR */}
                                 <div className="space-y-4">
@@ -288,6 +289,8 @@ function SortableSection({
                                             </>
                                         )}
 
+
+
                                         {sec.id !== "hero" && (
                                             <div className="space-y-2">
                                                 <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Descrição</label>
@@ -297,6 +300,16 @@ function SortableSection({
                                                 />
                                             </div>
                                         )}
+
+                                        {/* SECTION STYLER INTEGRATION */}
+                                        <SectionStyler
+                                            content={sec.content || {}}
+                                            onChange={(field, value) => handleContentChange(sec.id, field, value)}
+                                            onMediaClick={(field) => {
+                                                setMediaPickerTarget({ secId: sec.id, fieldName: field });
+                                                setShowMediaPicker(true);
+                                            }}
+                                        />
 
                                         {/* REPEATERS */}
                                         {sec.id === "servicos" && (
@@ -422,6 +435,58 @@ function SortableSection({
                                                 </div>
                                             </div>
                                         )}
+                                        {sec.id === "clientes" && (
+                                            <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                <div className="flex items-center justify-between">
+                                                    <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Logos de Clientes</h4>
+                                                    <button onClick={() => addItemToArray(sec.id, "items", { id: Date.now().toString(), name: "Novo Cliente", logo: "" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Logo</button>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="space-y-2 col-span-2">
+                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Subtítulo</label>
+                                                        <input
+                                                            className="w-full bg-muted/10 border-border rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 focus:bg-background transition-all outline-none text-foreground"
+                                                            value={sec.content?.subtitle || ""}
+                                                            onChange={(e) => handleContentChange(sec.id, "subtitle", e.target.value)}
+                                                        />
+                                                    </div>
+                                                    {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                        <div key={idx} className="p-4 bg-muted/5 border-border border rounded-2xl flex flex-col gap-3 group/item relative">
+                                                            <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-2 right-2 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-sm">close</span></button>
+                                                            <div className="flex gap-4 items-center">
+                                                                <div
+                                                                    onClick={() => {
+                                                                        setMediaPickerTarget({ secId: sec.id, fieldName: `items.${idx}.logo` });
+                                                                        setShowMediaPicker(true);
+                                                                    }}
+                                                                    className="size-16 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 flex items-center justify-center text-gray-300 hover:text-[var(--primary)] transition-all cursor-pointer bg-card shrink-0 overflow-hidden"
+                                                                >
+                                                                    {item.logo ? (
+                                                                        <img src={item.logo} className="w-full h-full object-contain" />
+                                                                    ) : (
+                                                                        <span className="material-symbols-outlined text-xl">add_photo_alternate</span>
+                                                                    )}
+                                                                </div>
+                                                                <div className="flex-1">
+                                                                    <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block">Nome/Empresa</label>
+                                                                    <input className="w-full bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-black outline-none" placeholder="Nome" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
+                                                                    <div className="flex items-center gap-2 mt-2">
+                                                                        <span className="material-symbols-outlined text-muted text-sm">{item.icon || "star"}</span>
+                                                                        <input
+                                                                            className="flex-1 bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-mono text-muted outline-none"
+                                                                            placeholder="Ícone (ex: star, home)"
+                                                                            value={item.icon || ""}
+                                                                            onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)}
+                                                                        />
+                                                                        <a href="https://fonts.google.com/icons" target="_blank" className="text-[8px] text-primary hover:underline">Lista</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                         {sec.id.startsWith("custom_") && (
                                             <div className="space-y-4">
                                                 <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Nome da Sessão (Admin)</label>
@@ -437,185 +502,16 @@ function SortableSection({
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* STYLING COLUMN */}
-                        <div className="lg:col-span-4 space-y-8">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={() => handleContentChange(sec.id, "isVisible", !(sec.content?.isVisible ?? true))}
-                                        className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest transition-all ${(sec.content?.isVisible ?? true)
-                                            ? "bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20"
-                                            : "bg-red-500/10 text-red-500 border border-red-500/20"
-                                            }`}
-                                    >
-                                        {(sec.content?.isVisible ?? true) ? "Visível" : "Escondido"}
-                                    </button>
-                                    <div className="flex items-center gap-2 px-3 py-1 bg-[var(--primary)]/10 rounded-full border border-[var(--primary)]/20">
-                                        <div className="size-1.5 bg-[var(--primary)] rounded-full animate-pulse" />
-                                        <span className="text-[8px] font-black text-[var(--primary)] uppercase tracking-widest">Ativo</span>
+                                    <div className="mt-12 flex justify-end border-t border-border pt-6">
+                                        <button
+                                            onClick={() => saveSection(sec)}
+                                            disabled={saving}
+                                            className="px-10 py-4 text-[10px] font-black bg-primary text-primary-foreground shadow-primary/20 rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                                        >
+                                            {saving ? "Salvando..." : "Aplicar Alterações"}
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-white/5">
-                                    <span className="material-symbols-outlined text-[var(--primary)] text-sm">palette</span>
-                                    <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Styling</h4>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Font</label>
-                                        <select className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.fontFamily || "Manrope"} onChange={(e) => handleContentChange(sec.id, "fontFamily", e.target.value)}>
-                                            <option value="Manrope">Manrope</option>
-                                            <option value="Inter">Inter</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Color</label>
-                                        <input type="color" className="w-full h-10 rounded-xl bg-muted/5 border-border border border-none cursor-pointer" value={sec.content?.textColor || "#0d1b12"} onChange={(e) => handleContentChange(sec.id, "textColor", e.target.value)} />
-                                    </div>
-                                </div>
-                                <div className="space-y-6">
-                                    {["titleSize", "subtitleSize", "bodySize"].map((field: any) => (
-                                        <div key={field} className="space-y-3">
-                                            <div className="flex items-center justify-between">
-                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">
-                                                    {field === "titleSize" ? "Tamanho do Título" : field === "subtitleSize" ? "Tamanho do Subtítulo" : "Tamanho do Texto"}
-                                                </label>
-                                                <div className="flex bg-muted/20 p-0.5 rounded-lg border border-border/50">
-                                                    <button
-                                                        onClick={() => setActiveDevice("desktop")}
-                                                        className={`px-2 py-1 rounded-md transition-all ${activeDevice === "desktop" ? "bg-background shadow-sm text-primary" : "text-muted hover:text-foreground"}`}
-                                                    >
-                                                        <span className="material-symbols-outlined text-sm">desktop_windows</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setActiveDevice("mobile")}
-                                                        className={`px-2 py-1 rounded-md transition-all ${activeDevice === "mobile" ? "bg-background shadow-sm text-primary" : "text-muted hover:text-foreground"}`}
-                                                    >
-                                                        <span className="material-symbols-outlined text-sm">smartphone</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center gap-3">
-                                                <input
-                                                    type="number"
-                                                    className="flex-1 bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                    value={getNumberValue(activeDevice === "desktop" ? (sec.content?.[field]) : (sec.content?.[`${field}Mobile`]))}
-                                                    onChange={(e) => handleContentChange(sec.id, activeDevice === "desktop" ? field : `${field}Mobile`, e.target.value === "" ? "" : parseInt(e.target.value))}
-                                                    placeholder={activeDevice === "desktop" ? "Desktop (px)" : "Mobile (px)"}
-                                                />
-                                                <span className="text-[10px] font-black text-muted">PX</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* BACKGROUND SETTINGS */}
-                                <div className="pt-6 border-t border-gray-100 dark:border-white/5 space-y-6">
-                                    <div className="flex items-center gap-3">
-                                        <span className="material-symbols-outlined text-[var(--primary)] text-sm">wallpaper</span>
-                                        <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Background</h4>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Imagem de Fundo</label>
-                                            <div className="flex gap-3 items-center">
-                                                {sec.content?.bgImage ? (
-                                                    <div className="relative size-16 rounded-xl overflow-hidden border border-gray-100 dark:border-white/10 group">
-                                                        <img src={sec.content.bgImage} className="w-full h-full object-cover" />
-                                                        <button
-                                                            onClick={() => handleContentChange(sec.id, "bgImage", "")}
-                                                            className="absolute inset-0 bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
-                                                        >
-                                                            <span className="material-symbols-outlined text-sm">close</span>
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                        onClick={() => {
-                                                            setMediaPickerTarget({ secId: sec.id, fieldName: "bgImage" });
-                                                            setShowMediaPicker(true);
-                                                        }}
-                                                        className="size-16 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 flex items-center justify-center text-gray-300 hover:text-[var(--primary)] transition-all cursor-pointer"
-                                                    >
-                                                        <span className="material-symbols-outlined text-xl">add_photo_alternate</span>
-                                                    </div>
-                                                )}
-                                                <div className="flex-1">
-                                                    <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-1">Efeito Alpha</p>
-                                                    <input
-                                                        type="range"
-                                                        min="0" max="100"
-                                                        value={sec.content?.bgOpacity ?? 100}
-                                                        onChange={(e) => handleContentChange(sec.id, "bgOpacity", parseInt(e.target.value))}
-                                                        className="w-full accent-[var(--primary)]"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2">Efeito Especial</label>
-                                            <select
-                                                className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                value={sec.content?.bgEffect || "none"}
-                                                onChange={(e) => handleContentChange(sec.id, "bgEffect", e.target.value)}
-                                            >
-                                                <option value="none">Nenhum</option>
-                                                <option value="particles">Partículas Antigravity</option>
-                                                <option value="parallax">Parallax Suave</option>
-                                                <option value="glass">Glassmorphism Forte</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* CALL TO ACTION */}
-                                <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
-                                    <h4 className="text-[9px] font-black text-muted uppercase tracking-widest">Call to Action</h4>
-                                    <div className="space-y-2">
-                                        <label className="text-[8px] font-black text-muted uppercase tracking-widest">Button Text</label>
-                                        <input className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none" value={sec.content?.ctaText || "Solicitar Contato"} onChange={(e) => handleContentChange(sec.id, "ctaText", e.target.value)} />
-                                    </div>
-
-                                    {sec.id === "contato" && (
-                                        <div className="grid grid-cols-2 gap-4 pt-4">
-                                            <div className="space-y-2">
-                                                <label className="text-[8px] font-black text-muted uppercase tracking-widest">WhatsApp</label>
-                                                <input
-                                                    className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                    value={sec.content?.whatsapp || ""}
-                                                    onChange={(e) => handleContentChange(sec.id, "whatsapp", e.target.value)}
-                                                    placeholder="(11) 99999-9999"
-                                                />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-[8px] font-black text-muted uppercase tracking-widest">E-mail</label>
-                                                <input
-                                                    className="w-full bg-muted/5 border-border border rounded-xl px-4 py-3 text-xs font-bold outline-none"
-                                                    value={sec.content?.email || ""}
-                                                    onChange={(e) => handleContentChange(sec.id, "email", e.target.value)}
-                                                    placeholder="email@empresa.com"
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="mt-12 flex justify-end">
-                                <button
-                                    onClick={() => saveSection(sec)}
-                                    disabled={saving}
-                                    className="px-10 py-4 text-[10px] font-black bg-primary text-primary-foreground shadow-primary/20 rounded-2xl shadow-xl hover:scale-105 transition-all uppercase tracking-widest active:scale-95 disabled:opacity-50"
-                                >
-                                    {saving ? "Salvando..." : "Aplicar Alterações"}
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -629,17 +525,18 @@ export default function PageSections() {
     const [expandedId, setExpandedId] = useState<string | null>("hero");
     const [sections, setSections] = useState<Section[]>([
         { id: "hero", name: "01. Hero Banner", icon: "rocket_launch", desc: "Sessão principal com slider e conteúdo introdutório.", status: "Ativa" },
-        { id: "sobre", name: "02. Sobre Nós", icon: "history_edu", desc: "História e o diferencial da RenovaMente.", status: "Ativa" },
-        { id: "desafio", name: "03. O Desafio", icon: "warning", desc: "Box escuro com estatística de produtividade.", status: "Ativa" },
-        { id: "servicos", name: "04. Nossos Serviços", icon: "category", desc: "Grade/Carousel com os serviços principais.", status: "Ativa" },
-        { id: "metodologia", name: "05. Metodologia", icon: "account_tree", desc: "Linha do tempo dos processos.", status: "Ativa" },
-        { id: "blog", name: "06. Blog Preview", icon: "rss_feed", desc: "Chamada para os últimos artigos do blog.", status: "Ativa" },
-        { id: "porque", name: "07. Por que RenovaMente?", icon: "star", desc: "Cards com os diferenciais competitivos.", status: "Ativa" },
-        { id: "guiomar", name: "08. Sobre Guiomar", icon: "person", desc: "Perfil da fundadora e citação.", status: "Ativa" },
-        { id: "testimonials", name: "09. Testemunhos", icon: "chat", desc: "Slider de depoimentos de clientes.", status: "Ativa" },
-        { id: "faq", name: "10. FAQ (Perguntas)", icon: "quiz", desc: "Acordeões de dúvidas frequentes.", status: "Ativa" },
-        { id: "newsletter", name: "11. Newsletter", icon: "mail", desc: "Captura de e-mails discreta e elegante.", status: "Ativa" },
-        { id: "contato", name: "12. Contato Final", icon: "contact_support", desc: "Rodapé de contato e informações de contato.", status: "Ativa" },
+        { id: "clientes", name: "02. Nossos Clientes", icon: "handshake", desc: "Logo slider com empresas que confiam.", status: "Ativa" },
+        { id: "sobre", name: "03. Sobre Nós", icon: "history_edu", desc: "História e o diferencial da RenovaMente.", status: "Ativa" },
+        { id: "desafio", name: "04. O Desafio", icon: "warning", desc: "Box escuro com estatística de produtividade.", status: "Ativa" },
+        { id: "servicos", name: "05. Nossos Serviços", icon: "category", desc: "Grade/Carousel com os serviços principais.", status: "Ativa" },
+        { id: "metodologia", name: "06. Metodologia", icon: "account_tree", desc: "Linha do tempo dos processos.", status: "Ativa" },
+        { id: "blog", name: "07. Blog Preview", icon: "rss_feed", desc: "Chamada para os últimos artigos do blog.", status: "Ativa" },
+        { id: "porque", name: "08. Por que RenovaMente?", icon: "star", desc: "Cards com os diferenciais competitivos.", status: "Ativa" },
+        { id: "guiomar", name: "09. Sobre Guiomar", icon: "person", desc: "Perfil da fundadora e citação.", status: "Ativa" },
+        { id: "testimonials", name: "10. Testemunhos", icon: "chat", desc: "Slider de depoimentos de clientes.", status: "Ativa" },
+        { id: "faq", name: "11. FAQ (Perguntas)", icon: "quiz", desc: "Acordeões de dúvidas frequentes.", status: "Ativa" },
+        { id: "newsletter", name: "12. Newsletter", icon: "mail", desc: "Captura de e-mails discreta e elegante.", status: "Ativa" },
+        { id: "contato", name: "13. Contato Final", icon: "contact_support", desc: "Rodapé de contato e informações de contato.", status: "Ativa" },
     ]);
 
     const [loading, setLoading] = useState(true);
@@ -746,7 +643,18 @@ export default function PageSections() {
         setSections(prev => prev.map(sec => {
             if (sec.id === id) {
                 const list = [...(sec.content?.[listKey] || [])];
-                list[index] = { ...list[index], [field]: value };
+
+                // Special handling for nested fields (e.g., items.0.logo)
+                if (field.includes('.')) {
+                    const parts = field.split('.');
+                    if (parts[0] === 'items' && parts[1] === index.toString()) {
+                        const subField = parts[2];
+                        list[index] = { ...list[index], [subField]: value };
+                    }
+                } else {
+                    list[index] = { ...list[index], [field]: value };
+                }
+
                 return { ...sec, content: { ...sec.content, [listKey]: list } };
             }
             return sec;
@@ -895,6 +803,21 @@ export default function PageSections() {
                 if (sec.id === mediaPickerTarget.secId) {
                     // If fieldName is provided, it's a single image upload
                     if (mediaPickerTarget.fieldName) {
+                        // Check for nested fields like items.0.logo
+                        if (mediaPickerTarget.fieldName.includes('.')) {
+                            const parts = mediaPickerTarget.fieldName.split('.');
+                            if (parts[0] === 'items' && parts.length === 3) {
+                                const listKey = parts[0];
+                                const itemIndex = parseInt(parts[1]);
+                                const subField = parts[2];
+                                const list = [...(sec.content?.[listKey] || [])];
+                                if (list[itemIndex]) {
+                                    list[itemIndex] = { ...list[itemIndex], [subField]: url };
+                                }
+                                return { ...sec, content: { ...sec.content, [listKey]: list } };
+                            }
+                        }
+                        // Default single field update
                         return { ...sec, content: { ...sec.content, [mediaPickerTarget.fieldName]: url } };
                     }
                     // Otherwise it's a slider (images array)

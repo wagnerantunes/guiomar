@@ -2,28 +2,38 @@
 @import "tailwindcss";
 
 :root {
-  --font-title: 'Manrope', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-title: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
 body.font-theme-tech {
-  --font-title: 'Manrope', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-title: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
-body.font-theme-modern {
-  --font-title: 'Poppins', sans-serif;
-  --font-body: 'Montserrat', sans-serif;
-}
+/* ... existing themes ... */
 
-body.font-theme-formal {
-  --font-title: 'Roboto', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
-}
+/* STANDARDIZED TYPOGRAPHY */
+@layer utilities {
+  .type-h1 {
+    @apply font-black uppercase italic tracking-tighter leading-[0.95] text-4xl md:text-5xl lg:text-7xl;
+  }
 
-body.font-theme-elegant {
-  --font-title: 'Playfair Display', serif;
-  --font-body: 'Lato', sans-serif;
+  .type-h2 {
+    @apply font-black uppercase italic tracking-tight leading-[1.1] text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .type-h3 {
+    @apply font-bold uppercase tracking-wide text-xl md:text-2xl;
+  }
+
+  .type-badge {
+    @apply font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs;
+  }
+
+  .type-body {
+    @apply font-medium leading-relaxed text-base md:text-lg text-muted-foreground;
+  }
 }
 
 :root {
@@ -68,6 +78,7 @@ body.font-theme-elegant {
   --color-primary-foreground: var(--primary-foreground);
   --color-border: var(--border);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-background-dark: #09090b;
   /* Fixed for components that explicitly use it */
 

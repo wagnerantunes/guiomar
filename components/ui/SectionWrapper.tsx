@@ -4,6 +4,8 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { AntigravityParticles } from "./AntigravityParticles";
 import { ScrollIndicator } from "./ScrollIndicator";
+import { AuroraBackground } from "./AuroraBackground";
+import { AnimatedGrid } from "./AnimatedGrid";
 
 interface SectionWrapperProps {
     children: React.ReactNode;
@@ -85,6 +87,22 @@ export function SectionWrapper({
         card: "bg-card"
     };
 
+    // Dynamic Style Overrides
+    const styleVars = {
+        ...(content?.bgColor && { '--background': content.bgColor }),
+        ...(content?.primaryColor && { '--primary': content.primaryColor }),
+        ...(content?.primaryColor && { '--color-primary': content.primaryColor }),
+        // Granular Text Colors
+        ...(content?.titleColor && { '--section-title-color': content.titleColor }),
+        ...(content?.subtitleColor && { '--section-subtitle-color': content.subtitleColor }),
+        ...(content?.bodyColor && { '--section-body-color': content.bodyColor }),
+        // Fallback for generic text color
+        ...(content?.textColor && { '--foreground': content.textColor }),
+
+        ...(content?.paddingTop && { paddingTop: `${content.paddingTop}px` }),
+        ...(content?.paddingBottom && { paddingBottom: `${content.paddingBottom}px` }),
+    } as React.CSSProperties;
+
     return (
         <motion.section
             id={id}
@@ -92,19 +110,31 @@ export function SectionWrapper({
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className={`py-32 px-6 ${variantClasses[variant]} ${className} relative overflow-hidden transition-colors duration-500`}
+            className={`py-32 px-6 ${!content?.bgColor ? variantClasses[variant] : ''} ${className} relative overflow-hidden transition-colors duration-500`}
+            style={styleVars}
         >
             <style dangerouslySetInnerHTML={{
                 __html: `
                 #${id} {
-                    --section-title-size: ${titleSizeMobile}px;
-                    --section-subtitle-size: ${subtitleSizeMobile}px;
+                    --section-title-size: ${titleSizeMobile * (content?.fontScale || 1)}px;
+                    --section-subtitle-size: ${subtitleSizeMobile * (content?.fontScale || 1)}px;
                     --section-body-size: ${bodySizeMobile}px;
                 }
+                /* Apply Specific Colors if they are set */
+                #${id} .type-h1, #${id} .type-h2, #${id} .type-h3, #${id} h1, #${id} h2, #${id} h3 {
+                    ${content?.titleColor ? 'color: var(--section-title-color) !important;' : ''}
+                }
+                #${id} .type-badge, #${id} .subtitle {
+                    ${content?.subtitleColor ? 'color: var(--section-subtitle-color) !important;' : ''}
+                }
+                 #${id} .type-body, #${id} p, #${id} .prose {
+                    ${content?.bodyColor ? 'color: var(--section-body-color) !important;' : ''}
+                }
+
                 @media (min-width: 768px) {
                     #${id} {
-                        --section-title-size: ${titleSize}px;
-                        --section-subtitle-size: ${subtitleSize}px;
+                        --section-title-size: ${titleSize * (content?.fontScale || 1)}px;
+                        --section-subtitle-size: ${subtitleSize * (content?.fontScale || 1)}px;
                         --section-body-size: ${bodySize}px;
                     }
                 }
@@ -122,8 +152,10 @@ export function SectionWrapper({
                 />
             )}
 
-            {/* Antigravity Particles */}
+            {/* Background Effects */}
             {content?.bgEffect === "particles" && <AntigravityParticles />}
+            {content?.bgEffect === "aurora" && <AuroraBackground />}
+            {content?.bgEffect === "grid" && <AnimatedGrid />}
 
             {/* Parallax Effect / Gradient fallback */}
             {content?.bgEffect === "parallax" && (
@@ -135,7 +167,7 @@ export function SectionWrapper({
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/2 blur-[120px] rounded-full opacity-20 pointer-events-none" />
             )}
 
-            <div className="max-w-7xl mx-auto relative z-10 h-full w-full">
+            <div className={`${content?.fullWidth ? "w-full px-6" : "max-w-7xl mx-auto"} ${content?.fullHeight ? "min-h-[80vh] flex flex-col justify-center" : "h-full"} relative z-10 w-full`}>
                 {stagger ? (
                     React.Children.map(children, (child) => (
                         <motion.div variants={itemVariants}>

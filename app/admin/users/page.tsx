@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import PasswordStrengthIndicator from '@/components/admin/PasswordStrengthIndicator'
 
 interface User {
@@ -14,6 +15,7 @@ interface User {
 
 export default function UsersPage() {
     const router = useRouter()
+    const { data: session } = useSession()
     const [users, setUsers] = useState<User[]>([])
     const [loading, setLoading] = useState(true)
     const [showCreateForm, setShowCreateForm] = useState(false)
@@ -120,19 +122,6 @@ export default function UsersPage() {
         })
         setShowCreateForm(true)
         window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-
-    const getRoleBadgeColor = (role: string) => {
-        switch (role) {
-            case 'ADMIN':
-                return 'bg-purple-100 text-purple-800 border-purple-200'
-            case 'EDITOR':
-                return 'bg-blue-100 text-blue-800 border-blue-200'
-            case 'VIEWER':
-                return 'bg-gray-100 text-gray-800 border-gray-200'
-            default:
-                return 'bg-gray-100 text-gray-800 border-gray-200'
-        }
     }
 
     if (loading) {
@@ -328,7 +317,7 @@ export default function UsersPage() {
                                         {new Date(user.createdAt).toLocaleDateString('pt-BR')}
                                     </td>
                                     <td className="px-10 py-6 whitespace-nowrap text-right">
-                                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex justify-end gap-2">
                                             <button
                                                 onClick={() => startEdit(user)}
                                                 className="size-10 flex items-center justify-center text-foreground bg-muted/10 hover:bg-primary hover:text-primary-foreground rounded-xl transition-all shadow-lg hover:shadow-primary/20"
@@ -338,8 +327,12 @@ export default function UsersPage() {
                                             </button>
                                             <button
                                                 onClick={() => setShowDeleteConfirm(user.id)}
-                                                className="size-10 flex items-center justify-center text-muted bg-muted/10 hover:bg-destructive hover:text-destructive-foreground rounded-xl transition-all shadow-lg hover:shadow-destructive/20"
-                                                title="Excluir"
+                                                disabled={user.email === session?.user?.email}
+                                                className={`size-10 flex items-center justify-center rounded-xl transition-all shadow-lg ${user.email === session?.user?.email
+                                                    ? "text-muted/50 bg-muted/5 cursor-not-allowed"
+                                                    : "text-muted bg-muted/10 hover:bg-destructive hover:text-destructive-foreground hover:shadow-destructive/20"
+                                                    }`}
+                                                title={user.email === session?.user?.email ? "Você não pode excluir a si mesmo" : "Excluir"}
                                             >
                                                 <span className="material-symbols-outlined text-[18px]">delete</span>
                                             </button>

@@ -14,6 +14,7 @@ import { Founder } from "@/components/landing/Founder";
 import { FAQ } from "@/components/landing/FAQ";
 import { Contact } from "@/components/landing/Contact";
 import { Newsletter } from "@/components/landing/Newsletter"; // Added import
+import { Clients } from "@/components/landing/Clients";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
@@ -228,7 +229,7 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             {(() => {
               const defaultOrderArr = [
-                "hero", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "newsletter", "contato" // Added "newsletter"
+                "hero", "clientes", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "newsletter", "contato" // Added "newsletter"
               ];
               let rawOrder = getSetting("landing_section_order", defaultOrderArr);
 
@@ -268,6 +269,8 @@ function HomePageContent() {
                 switch (id) {
                   case "hero":
                     return <Hero key={id} getSetting={getSetting} scrollTo={scrollTo} nextId={nextId} />;
+                  case "clientes":
+                    return <Clients key={id} getSetting={getSetting} />;
                   case "sobre":
                     return (
                       <SectionWrapper key={id} id="sobre" nextId={nextId} variant="muted" content={getSetting("section_sobre_content", SECTION_DEFAULTS.sobre)}>

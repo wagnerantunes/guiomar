@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Skeleton, SkeletonGrid } from "@/components/admin/Skeleton";
+import React from "react";
+import Link from "next/link";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 interface DashboardStats {
     visitors: number;
     leads: number;
-    whatsapp: number;
-    time: string;
+    posts: number;
+    conversion: string;
 }
 
-interface Activity {
+interface ActivityItem {
     type: string;
     description: string;
     time: string;
@@ -18,233 +19,216 @@ interface Activity {
     color: string;
 }
 
-interface ChartItem {
+interface ChartData {
     day: string;
     count: number;
 }
 
-export default function DashboardContent({ session }: { session: any }) {
-    const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState<DashboardStats | null>(null);
-    const [chartData, setChartData] = useState<ChartItem[]>([]);
-    const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
+interface DashboardContentProps {
+    session: any;
+}
 
-    useEffect(() => {
-        async function fetchDashboardData() {
+export default function DashboardContent({ session }: DashboardContentProps) {
+    const [stats, setStats] = React.useState<DashboardStats | null>(null);
+    const [recentActivity, setRecentActivity] = React.useState<ActivityItem[]>([]);
+    const [chartData, setChartData] = React.useState<ChartData[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchDashboardData = async () => {
             try {
-                const response = await fetch("/api/admin/dashboard");
-                const data = await response.json();
-                setStats(data.stats);
-                setChartData(data.chart);
-                setRecentActivity(data.activity);
+                const res = await fetch('/api/admin/dashboard');
+                if (res.ok) {
+                    const data = await res.json();
+                    setStats(data.stats);
+                    setRecentActivity(data.activity);
+                    setChartData(data.chart || []);
+                }
             } catch (error) {
-                console.error("Error fetching dashboard data:", error);
+                console.error("Failed to fetch dashboard data", error);
             } finally {
                 setLoading(false);
             }
-        }
+        };
+
         fetchDashboardData();
     }, []);
 
-    const maxViews = Math.max(...chartData.map(d => d.count), 1);
 
     if (loading) {
         return (
-            <div className="p-6 md:p-10 space-y-10 max-w-screen-2xl mx-auto w-full">
-                <div className="space-y-4">
-                    <Skeleton className="h-10 w-48 bg-white/5" />
-                    <Skeleton className="h-4 w-96 bg-white/5" />
+            <div className="flex-1 p-10 space-y-8 animate-pulse">
+                <div className="h-10 bg-muted/10 rounded-xl w-1/3" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-40 bg-muted/10 rounded-3xl" />
+                    ))}
                 </div>
-                <SkeletonGrid count={4} />
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 bg-card/60 backdrop-blur-sm rounded-[2rem] p-8 border border-border shadow-sm space-y-8">
-                        <div className="flex justify-between">
-                            <Skeleton className="h-6 w-48 bg-white/5" />
-                            <Skeleton className="h-10 w-32 bg-white/5" />
-                        </div>
-                        <div className="h-[300px] flex items-end gap-4 p-4">
-                            {Array.from({ length: 7 }).map((_, i) => (
-                                <Skeleton key={i} className="flex-1 rounded-t-xl bg-white/5" style={{ height: `${20 + Math.random() * 60}%` }} />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="bg-card/60 backdrop-blur-sm rounded-[2rem] p-8 border border-border shadow-sm space-y-6">
-                        <Skeleton className="h-6 w-32 bg-white/5" />
-                        <div className="space-y-6">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                                <div key={i} className="flex gap-4">
-                                    <Skeleton className="size-10 rounded-xl bg-white/5" />
-                                    <div className="flex-1 space-y-2">
-                                        <Skeleton className="h-4 w-full bg-white/5" />
-                                        <Skeleton className="h-3 w-2/3 bg-white/5" />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                <div className="h-80 bg-muted/10 rounded-3xl" />
             </div>
         );
     }
 
     const statCards = [
-        { label: 'Visitantes Únicos', value: stats?.visitors.toLocaleString(), change: '+14%', icon: 'visibility', color: 'primary' },
-        { label: 'Leads (Contatos)', value: stats?.leads.toString(), change: '+5%', icon: 'person_add', color: 'blue' },
-        { label: 'Cliques WhatsApp', value: stats?.whatsapp.toString(), change: '+22%', icon: 'chat', color: 'green' },
-        { label: 'Tempo no Site', value: stats?.time, change: '-2%', icon: 'timer', color: 'purple' },
+        {
+            label: 'Visitantes Únicos',
+            value: stats?.visitors.toLocaleString(),
+            change: 'Real-time',
+            icon: 'visibility',
+            bgClass: 'bg-primary/10',
+            textClass: 'text-primary'
+        },
+        {
+            label: 'Leads (Contatos)',
+            value: stats?.leads.toString(),
+            change: 'Total',
+            icon: 'person_add',
+            bgClass: 'bg-blue-500/10',
+            textClass: 'text-blue-500'
+        },
+        {
+            label: 'Posts Publicados',
+            value: stats?.posts.toString(),
+            change: 'Conteúdo',
+            icon: 'article',
+            bgClass: 'bg-green-500/10',
+            textClass: 'text-green-500'
+        },
+        {
+            label: 'Taxa Conversão',
+            value: stats?.conversion,
+            change: 'Eficiência',
+            icon: 'trending_up',
+            bgClass: 'bg-purple-500/10',
+            textClass: 'text-purple-500'
+        },
     ];
 
     return (
-        <div className="p-6 md:p-10 space-y-12 max-w-screen-2xl mx-auto w-full pb-20">
-            {/* HEADER */}
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h1 className="text-4xl font-black text-foreground tracking-tight uppercase tracking-widest drop-shadow-sm">Dashboard</h1>
-                <p className="text-muted font-medium mt-2 max-w-2xl">
-                    Bem-vindo de volta, <span className="text-foreground font-bold">{session?.user?.name || 'Admin'}</span>. Aqui está o desempenho da RenovaMente.
-                </p>
+        <div className="flex-1 flex flex-col h-full bg-background relative overflow-hidden">
+            {/* Ambient Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full opacity-30" />
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full opacity-20" />
             </div>
 
-            {/* STATS GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statCards.map((s, i) => (
-                    <div
-                        key={i}
-                        className="bg-card/40 backdrop-blur-xl p-8 rounded-[2rem] border border-border shadow-lg shadow-black/5 hover:border-primary/30 hover:shadow-primary/5 transition-all group duration-500 relative overflow-hidden"
-                        style={{ animationDelay: `${i * 100}ms` }}
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="size-14 rounded-2xl bg-muted/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm border border-border group-hover:border-primary">
-                                    <span className="material-symbols-outlined text-[28px]">{s.icon}</span>
+            <AdminPageHeader
+                title="Dashboard"
+                subtitle="Visão Geral do Sistema"
+                icon="dashboard"
+            >
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/5 border border-border rounded-lg shadow-sm">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Sistema Operante</span>
+                </div>
+            </AdminPageHeader>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8 z-10">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    {statCards.map((stat, i) => (
+                        <div key={i} className="group p-6 bg-card rounded-xl border border-border hover:border-primary/20 transition-all hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden">
+                            <div className="flex justify-between items-start mb-4 relative z-10">
+                                <div className={`p-3 rounded-lg ${stat.bgClass} ${stat.textClass}`}>
+                                    <span className="material-symbols-outlined text-2xl">{stat.icon}</span>
                                 </div>
-                                <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider border ${s.change?.startsWith('+') ? 'bg-primary/20 text-primary border-primary/20' : 'bg-destructive/10 text-destructive border-destructive/20'}`}>
-                                    {s.change}
+                                <span className="text-[10px] font-black uppercase tracking-widest text-muted/60 bg-muted/10 px-2 py-1 rounded-md group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                                    {stat.change}
                                 </span>
                             </div>
-                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] group-hover:text-foreground/80 transition-colors">{s.label}</p>
-                            <h3 className="text-3xl font-black text-foreground mt-2 tracking-tighter">{s.value}</h3>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* CHART ACESSOS */}
-                <div className="lg:col-span-2 bg-card/40 backdrop-blur-xl rounded-[2.5rem] border border-border shadow-sm p-10 flex flex-col hover:border-primary/20 transition-all duration-500 relative">
-                    <div className="flex items-center justify-between mb-10 relative z-10">
-                        <div>
-                            <h3 className="text-xl font-black text-foreground uppercase tracking-widest flex items-center gap-2">
-                                <span className="size-2 rounded-full bg-primary animate-pulse" />
-                                Performance Semanal
-                            </h3>
-                            <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-2 ml-4">Visitas únicas por dia</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <select
-                                aria-label="Filtrar período"
-                                className="bg-background border border-border rounded-2xl text-[10px] font-black uppercase tracking-widest px-6 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary/50 outline-none cursor-pointer hover:bg-muted/10 text-foreground transition-all shadow-lg"
-                            >
-                                <option>Últimos 7 dias</option>
-                                <option>Últimos 30 dias</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="flex-1 min-h-[300px] flex items-end justify-between gap-4 px-4 pb-4" role="img" aria-label="Gráfico de performance semanal">
-                        {chartData.map((d, i) => (
-                            <div key={i} className="flex-1 flex flex-col items-center gap-4 group">
-                                <div
-                                    className="w-full bg-primary/5 rounded-2xl group-hover:bg-primary group-hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] transition-all duration-500 cursor-pointer relative"
-                                    style={{ height: `${(d.count / maxViews) * 100}%` }}
-                                >
-                                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-popover text-popover-foreground text-[10px] font-black px-4 py-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100 whitespace-nowrap z-10 shadow-xl border border-primary/20">
-                                        {d.count} VISITAS
-                                    </div>
-                                </div>
-                                <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">
-                                    {d.day}
-                                </span>
+                            <div className="relative z-10">
+                                <h3 className="text-3xl font-black text-foreground tracking-tight mb-1 group-hover:scale-105 origin-left transition-transform">{stat.value}</h3>
+                                <p className="text-xs font-bold text-muted uppercase tracking-wider">{stat.label}</p>
                             </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* LEAD TRENDS / SPARKLINE */}
-                <div className="bg-primary rounded-[2.5rem] p-10 flex flex-col justify-between text-primary-foreground shadow-[0_20px_50px_rgba(var(--primary-rgb),0.15)] relative overflow-hidden group border border-primary">
-                    <div className="relative z-10">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-50">Lead Acquisition</h4>
-                        <div className="flex items-baseline gap-3 mt-4">
-                            <span className="text-5xl font-black tracking-tighter">+{stats?.leads || 0}</span>
-                            <span className="text-[9px] font-black bg-black/10 px-3 py-1 rounded-full uppercase tracking-widest">Meta de Dezembro</span>
-                        </div>
-                    </div>
-
-                    <div className="h-32 flex items-end gap-1.5 mb-2 relative z-10 px-2" aria-hidden="true">
-                        {Array.from({ length: 12 }).map((_, i) => (
-                            <div
-                                key={i}
-                                className="flex-1 bg-black/10 rounded-full group-hover:bg-black/20 transition-all duration-700 hover:scale-y-110 origin-bottom"
-                                style={{ height: `${30 + Math.sin(i * 0.8) * 30 + Math.random() * 20}%` }}
-                            />
-                        ))}
-                    </div>
-
-                    <div className="relative z-10 flex justify-between items-center bg-black/5 p-4 rounded-3xl backdrop-blur-md">
-                        <div>
-                            <p className="text-[9px] font-black opacity-50 uppercase tracking-widest">Eficiência Total</p>
-                            <p className="text-xl font-black">94.2%</p>
-                        </div>
-                        <div className="size-12 rounded-2xl bg-black/20 flex items-center justify-center text-black shadow-xl">
-                            <span className="material-symbols-outlined text-[24px]">trending_up</span>
-                        </div>
-                    </div>
-
-                    {/* Decorative element */}
-                    <div className="absolute -right-20 -top-20 size-64 bg-black/5 rounded-full blur-[100px] group-hover:scale-110 transition-transform duration-1000" />
-                </div>
-            </div>
-
-            {/* COMBINED RECENT ACTIVITY */}
-            <div className="bg-card/40 backdrop-blur-xl rounded-[2.5rem] border border-border shadow-sm p-10 hover:border-primary/20 transition-all duration-500">
-                <div className="flex items-center justify-between mb-10">
-                    <div>
-                        <h3 className="text-xl font-black text-foreground uppercase tracking-widest flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary">history</span>
-                            Atividade Recente
-                        </h3>
-                        <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-2 ml-8">Últimas interações no sistema</p>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                    {recentActivity.slice(0, 8).map((act, i) => (
-                        <div key={i} className="flex gap-6 group cursor-pointer hover:translate-x-2 transition-all p-4 rounded-3xl hover:bg-muted/5 border border-transparent hover:border-border">
-                            <div className={`size-14 rounded-2xl bg-muted/10 flex items-center justify-center shrink-0 transition-colors group-hover:bg-primary/20 ${act.color}`}>
-                                <span className="material-symbols-outlined text-[24px] text-muted group-hover:text-primary transition-colors">{act.icon}</span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between mb-1">
-                                    <h4 className="text-sm font-black text-foreground group-hover:text-primary transition-colors line-clamp-1 uppercase tracking-tight">{act.type}</h4>
-                                    <span className="text-[10px] font-black text-muted shrink-0 ml-4 uppercase tracking-widest">
-                                        {new Date(act.time).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
-                                    </span>
-                                </div>
-                                <p className="text-xs font-medium text-muted line-clamp-1 leading-relaxed">{act.description}</p>
+                            <div className="absolute right-0 bottom-0 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 pointer-events-none">
+                                <span className={`material-symbols-outlined text-9xl ${stat.textClass} -mr-4 -mb-4`}>{stat.icon}</span>
                             </div>
                         </div>
                     ))}
-
-                    {recentActivity.length === 0 && (
-                        <div className="md:col-span-2 py-20 text-center space-y-4 border border-dashed border-border rounded-3xl">
-                            <span className="material-symbols-outlined text-6xl text-muted/20">history</span>
-                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Nenhum registro de atividade encontrado</p>
-                        </div>
-                    )}
                 </div>
-                {recentActivity.length > 0 && (
-                    <button className="w-full mt-10 py-6 text-[10px] font-black text-muted hover:text-primary transition-all uppercase tracking-[0.3em] border-t border-border group">
-                        <span className="inline-block group-hover:scale-110 transition-transform">Ver histórico completo</span>
-                    </button>
-                )}
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Chart Section */}
+                    <div className="lg:col-span-2 bg-card rounded-xl border border-border p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 className="text-sm font-bold text-foreground uppercase tracking-widest mb-1">Tráfego Semanal</h3>
+                                <p className="text-xs text-muted">Visualizações únicas nos últimos 7 dias</p>
+                            </div>
+                            <button className="p-2 hover:bg-muted/10 rounded-lg transition-colors">
+                                <span className="material-symbols-outlined text-muted">more_horiz</span>
+                            </button>
+                        </div>
+
+                        <div className="h-[300px] flex items-end gap-2 sm:gap-4 relative">
+                            {/* Grid Lines */}
+                            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className="w-full h-px bg-border border-dashed border-t border-muted" />
+                                ))}
+                            </div>
+
+                            {chartData.length > 0 ? chartData.map((item, i) => {
+                                const maxCount = Math.max(...chartData.map(d => d.count), 1);
+                                const height = item.count > 0 ? (item.count / maxCount) * 100 : 0;
+                                return (
+                                    <div key={i} className="flex-1 flex flex-col items-center group relative z-10 h-full justify-end">
+                                        <div
+                                            className="w-full bg-primary/20 rounded-t-lg group-hover:bg-primary/40 transition-all relative overflow-hidden group-hover:scale-y-110 origin-bottom duration-300"
+                                            style={{ height: `${height}%` }}
+                                        >
+                                            <div className="absolute top-0 left-0 right-0 h-1 bg-primary opacity-50" />
+                                        </div>
+                                        <div className="mt-4 text-[10px] font-bold text-muted uppercase tracking-wider group-hover:text-primary transition-colors">
+                                            {item.day}
+                                        </div>
+
+                                        {/* Tooltip */}
+                                        <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-all bg-foreground text-background text-[10px] font-bold py-2 px-3 rounded-lg uppercase tracking-widest shadow-xl transform translate-y-2 group-hover:translate-y-0 pointer-events-none border border-border">
+                                            {item.count} Visitas
+                                        </div>
+                                    </div>
+                                );
+                            }) : (
+                                <div className="absolute inset-0 flex items-center justify-center text-muted text-xs font-bold uppercase tracking-widest">
+                                    Sem dados para o período
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Recent Activity Feed */}
+                    <div className="bg-card rounded-xl border border-border p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                        <div className="flex items-center justify-between mb-8 shrink-0">
+                            <h3 className="text-sm font-bold text-foreground uppercase tracking-widest">Atividade Recente</h3>
+                            <Link href="/admin/leads" className="text-[10px] font-bold text-primary hover:text-primary/80 uppercase tracking-widest flex items-center gap-1">
+                                Ver tudo <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                            </Link>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto custom-scrollbar -mr-4 pr-4 space-y-4">
+                            {recentActivity.map((act, i) => (
+                                <div key={i} className="flex gap-4 group cursor-pointer hover:bg-muted/5 p-3 -mx-3 rounded-lg transition-colors border border-transparent hover:border-border/50">
+                                    <div className={`size-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${act.color}`}>
+                                        <span className="material-symbols-outlined text-[20px]">{act.icon}</span>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between mb-0.5">
+                                            <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1 uppercase tracking-tight">{act.type}</h4>
+                                            <span className="text-[9px] font-bold text-muted shrink-0 ml-2 uppercase tracking-widest opacity-70">
+                                                {new Date(act.time).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                                            </span>
+                                        </div>
+                                        <p className="text-[11px] font-medium text-muted line-clamp-1">{act.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

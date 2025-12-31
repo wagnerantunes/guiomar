@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"] });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 import prisma from "@/lib/prisma";
 
@@ -69,10 +70,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-import { ToastProvider } from "@/components/ui/ToastProvider";
+import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
 export default async function RootLayout({
   children,
@@ -123,19 +123,12 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className={`${manrope.className} font-theme-${fontTheme}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ToastProvider>
-            <FloatingOrbs />
-            <CustomCursor />
-            {children}
-          </ToastProvider>
-        </ThemeProvider>
+      <body className={`${jakarta.className} font-theme-${fontTheme}`}>
+        <Providers>
+          <FloatingOrbs />
+          <CustomCursor />
+          {children}
+        </Providers>
       </body>
     </html>
   );

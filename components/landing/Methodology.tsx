@@ -3,45 +3,115 @@
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { RichText } from "@/components/ui/RichText";
 import { InfiniteSlider } from "@/components/ui/InfiniteSlider";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useRef } from "react";
 
 interface MethodologyProps {
     getSetting: (key: string, defaultValue: any) => any;
+}
+
+function TiltCard({ step, index }: { step: any, index: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
+    const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
+
+    const rotateX = useTransform(mouseY, [-0.5, 0.5], ["15deg", "-15deg"]);
+    const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+
+        const width = rect.width;
+        const height = rect.height;
+
+        const mouseXFromCenter = e.clientX - rect.left - width / 2;
+        const mouseYFromCenter = e.clientY - rect.top - height / 2;
+
+        const xPct = mouseXFromCenter / width;
+        const yPct = mouseYFromCenter / height;
+
+        x.set(xPct);
+        y.set(yPct);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
+    return (
+        <motion.div
+            ref={ref}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="relative h-full perspective-1000"
+            whileHover={{ scale: 1.05, zIndex: 10 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="bg-card/80 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-border group relative overflow-hidden shadow-2xl h-full flex flex-col justify-between"
+                style={{ transform: "translateZ(0)" }}
+            >
+                {/* Dynamic Gradient Border Effect via inset shadow or overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2.5rem] pointer-events-none mix-blend-overlay"></div>
+
+                {/* Floating Bg Blob */}
+                <motion.div
+                    className="absolute -right-20 -top-20 w-64 h-64 bg-primary/20 rounded-full blur-[80px] pointer-events-none opacity-50"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                />
+
+                {/* Content Layer with Depth */}
+                <div style={{ transform: "translateZ(50px)" }} className="relative z-10">
+                    <div className="flex justify-between items-start mb-8">
+                        <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-primary to-foreground/20 opacity-40 select-none">
+                            {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <div className="size-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100">
+                            <span className="material-symbols-outlined text-primary">arrow_forward</span>
+                        </div>
+                    </div>
+
+                    <h4 className="text-3xl font-black text-foreground mb-6 uppercase tracking-tight leading-[0.9]">
+                        {step.t}
+                    </h4>
+                </div>
+
+                <div style={{ transform: "translateZ(30px)" }} className="relative z-10 mt-auto">
+                    <RichText
+                        content={step.d}
+                        className="text-muted font-medium leading-relaxed text-sm"
+                    />
+                </div>
+            </div>
+        </motion.div>
+    );
 }
 
 export function Methodology({ getSetting }: MethodologyProps) {
     const content = getSetting("section_metodologia_content", SECTION_DEFAULTS.metodologia);
     let steps = content.steps || SECTION_DEFAULTS.metodologia.steps;
     if (!Array.isArray(steps)) steps = [];
-    const layout = content.layout || "grid";
-
-    // Custom card renderer for slider mode
-    const renderMethodologyCard = (step: any, index: number) => (
-        <div className="bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border hover:border-primary/30 hover:shadow-[0_0_40px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group relative overflow-hidden shadow-2xl h-full">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
-
-            {/* Step number badge */}
-            <div className="absolute top-6 left-6 size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black text-lg border border-primary/30">
-                {String(index + 1).padStart(2, '0')}
-            </div>
-
-            <h4 className="text-2xl font-black text-foreground mb-6 uppercase tracking-tight mt-16">
-                {step.t}
-            </h4>
-            <RichText
-                content={step.d}
-                className="text-muted font-medium leading-relaxed"
-                style={{ fontSize: "var(--section-body-size)" } as any}
-            />
-        </div>
-    );
+    const layout = content.layout || "grid"; // We will prefer slider if user asked
 
     return (
-        <>
-            <div className="text-center mb-32 space-y-8">
-                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] border border-primary/20 px-4 py-2 rounded-full bg-primary/5 shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]">Como trabalhamos</span>
+        <div className="py-12">
+            <div className="text-center mb-24 space-y-8 relative z-10 px-6">
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] border border-primary/20 px-4 py-2 rounded-full bg-primary/5 shadow-lg shadow-primary/5">
+                    Como trabalhamos
+                </span>
                 <h2
-                    className="font-black text-foreground leading-tight tracking-tighter uppercase italic drop-shadow-lg"
+                    className="font-black text-foreground leading-tight tracking-tighter uppercase italic drop-shadow-lg max-w-4xl mx-auto"
                     style={{ fontSize: "var(--section-title-size)" } as any}
                 >
                     {content.title}
@@ -54,80 +124,15 @@ export function Methodology({ getSetting }: MethodologyProps) {
                 </p>
             </div>
 
-            {layout === "slider" ? (
+            <div className="py-10">
                 <InfiniteSlider
                     items={steps}
-                    renderCard={renderMethodologyCard}
-                    speed={40}
-                    cardWidth="450px"
+                    renderCard={(step, index) => <TiltCard step={step} index={index} />}
+                    speed={50}
+                    cardWidth="420px"
+                    gap="2rem"
                 />
-            ) : (
-                <div className="relative space-y-24">
-                    {/* Timeline Line */}
-                    <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent -translate-x-1/2"></div>
-
-                    {steps.map((m: any, i: number) => (
-                        <div
-                            key={i}
-                            className={`flex flex-col lg:flex-row items-center gap-16 ${i % 2 !== 0 ? "lg:flex-row-reverse" : ""
-                                }`}
-                        >
-                            <div className="flex-1 w-full lg:text-right">
-                                {i % 2 === 0 && (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -50 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.8 }}
-                                        className="bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border hover:border-primary/30 hover:shadow-[0_0_40px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group relative overflow-hidden shadow-2xl"
-                                    >
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[60px] rounded-full -mr-16 -mt-16 pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
-                                        <h4 className="text-3xl font-black text-foreground mb-6 uppercase tracking-tight">
-                                            {m.t}
-                                        </h4>
-                                        <RichText
-                                            content={m.d}
-                                            className="text-muted font-medium leading-relaxed"
-                                            style={{ fontSize: "var(--section-body-size)" } as any}
-                                        />
-                                    </motion.div>
-                                )}
-                            </div>
-
-                            {/* Center Number/Orb */}
-                            <div className="relative z-20 shrink-0">
-                                <div className="absolute inset-0 bg-primary blur-2xl opacity-20 rounded-full animate-pulse"></div>
-                                <div className="size-20 rounded-2xl bg-background text-primary flex items-center justify-center font-black text-2xl border border-primary/30 shadow-[0_0_30px_rgba(var(--primary-rgb),0.2)] relative z-10 rotate-45 group hover:rotate-0 transition-all duration-500">
-                                    <span className="-rotate-45 group-hover:rotate-0 transition-all duration-500">0{i + 1}</span>
-                                </div>
-                            </div>
-
-                            <div className="flex-1 w-full lg:text-left">
-                                {i % 2 !== 0 && (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: 50 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.8 }}
-                                        className="bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border hover:border-primary/30 hover:shadow-[0_0_40px_-10px_rgba(var(--primary-rgb),0.15)] transition-all duration-500 group relative overflow-hidden shadow-2xl"
-                                    >
-                                        <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 blur-[60px] rounded-full -ml-16 -mt-16 pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
-                                        <h4 className="text-3xl font-black text-foreground mb-6 uppercase tracking-tight">
-                                            {m.t}
-                                        </h4>
-                                        <RichText
-                                            content={m.d}
-                                            className="text-muted font-medium leading-relaxed"
-                                            style={{ fontSize: "var(--section-body-size)" } as any}
-                                        />
-                                    </motion.div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </>
+            </div>
+        </div>
     );
 }
-

@@ -14,69 +14,84 @@ export async function GET() {
 
     const siteId = siteUser.siteId;
 
-    const [totalViews, recentPosts, recentLeads, weeklyAnalytics, leadsCount] = await Promise.all([
-        prisma.post.aggregate({
-            where: { siteId },
-            _sum: { views: true }
+    const [totalVisitors, totalLeads, totalPosts, weeklyAnalytics, recentLeads, recentPosts] = await Promise.all([
+        prisma.analytics.count({
+            where: { siteId, type: 'view' }
         }),
-        prisma.post.findMany({
-            where: { siteId },
-            orderBy: { createdAt: 'desc' },
-            take: 5,
-            include: { category: true }
+        prisma.lead.count({ where: { siteId } }),
+        prisma.post.count({ where: { siteId } }),
+        prisma.analytics.groupBy({
+            by: ['date'],
+            where: {
+                siteId,
+                type: 'view',
+                date: {
+                    gte: new Date(new Date().setDate(new Date().getDate() - 7)) // Last 7 days
+                }
+            },
+            _count: { _all: true }
         }),
         prisma.lead.findMany({
             where: { siteId },
             orderBy: { createdAt: 'desc' },
             take: 5
         }),
-        prisma.analytics.groupBy({
-            by: ['date'],
-            where: {
-                siteId,
-                date: {
-                    gte: new Date(new Date().setDate(new Date().getDate() - 7))
-                }
-            },
-            _count: { _all: true }
-        }),
-        prisma.lead.count({ where: { siteId } })
+        prisma.post.findMany({
+            where: { siteId },
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            include: { category: true }
+        })
     ]);
 
-    // Process chart
+    // Process Chart (Real Data)
     const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
     const chart = Array.from({ length: 7 }).map((_, i) => {
         const d = new Date();
         d.setDate(d.getDate() - (6 - i));
+        // Normalize date to YYYY-MM-DD for comparison
         const dateStr = d.toISOString().split('T')[0];
-        const count = weeklyAnalytics.find((a: any) => a.date.toISOString().split('T')[0] === dateStr)?._count._all || 0;
-        return { day: days[d.getDay()], count };
+
+        // Find matching analytics entry (Need to ensure date matching logic is correct with Prisma return)
+        // Prisma groupBy date usually returns Date object. We compare ISO strings.
+        const match = weeklyAnalytics.find((a: any) => {
+            const aDate = new Date(a.date).toISOString().split('T')[0];
+            return aDate === dateStr;
+        });
+
+        return {
+            day: days[d.getDay()],
+            count: match?._count._all || 0
+        };
     });
 
-    // Combined activity
+    // Calculate Real Conversion
+    const conversionRate = totalVisitors > 0 ? ((totalLeads / totalVisitors) * 100).toFixed(1) + '%' : '0%';
+
+    // Combined Activity Feed
     const activity = [
         ...recentLeads.map(l => ({
             type: 'Novo Lead',
-            description: `${l.name} enviou uma mensagem`,
+            description: `${l.name} - ${l.company || 'Pessoa Física'}`,
             time: l.createdAt,
-            icon: 'mail',
-            color: 'text-blue-500'
+            icon: 'person_add',
+            color: 'bg-blue-500/10 text-blue-500' // Frontend class
         })),
         ...recentPosts.map(p => ({
-            type: 'Blog Publicado',
+            type: 'Post Publicado',
             description: p.title,
             time: p.createdAt,
             icon: 'article',
-            color: 'text-[#13ec5b]'
+            color: 'bg-green-500/10 text-green-500' // Frontend class
         }))
-    ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+    ].sort((a: any, b: any) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 10);
 
     return NextResponse.json({
         stats: {
-            visitors: totalViews._sum.views || 0,
-            leads: leadsCount,
-            whatsapp: 423, // Hardcoded for demo as requested earlier
-            time: '3m 42s'
+            visitors: totalVisitors,
+            leads: totalLeads,
+            posts: totalPosts, // Replaces WhatsApp
+            conversion: conversionRate // Replaces Time
         },
         chart,
         activity
