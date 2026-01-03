@@ -167,26 +167,22 @@ export function Contact({ getSetting }: ContactProps) {
                             </h3>
 
                             {formConfig.fields.map((field: any) => (
-                                <div key={field.id} className="space-y-2 group">
-                                    <label className="text-xs font-bold text-foreground/70 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-                                        {field.label} {field.required && <span className="text-primary">*</span>}
-                                    </label>
-
+                                <div key={field.id} className="group">
                                     {field.type === 'textarea' ? (
                                         <textarea
                                             name={field.label}
                                             required={field.required}
                                             rows={5}
-                                            className="w-full px-6 py-4 rounded-2xl bg-muted/30 border-2 border-border/50 text-foreground text-base focus:border-primary focus:bg-background focus:shadow-lg outline-none resize-none transition-all placeholder:text-muted-foreground/40"
-                                            placeholder="Digite sua mensagem aqui..."
+                                            className="w-full px-6 py-4 rounded-2xl bg-muted/50 border-2 border-border/50 text-foreground text-base focus:border-primary focus:bg-background focus:shadow-lg outline-none resize-none transition-all placeholder:text-muted-foreground/50"
+                                            placeholder={field.label + (field.required ? ' *' : '')}
                                         />
                                     ) : (
                                         <input
                                             type={field.type}
                                             name={field.label}
                                             required={field.required}
-                                            className="w-full px-6 py-4 rounded-2xl bg-muted/30 border-2 border-border/50 text-foreground text-base focus:border-primary focus:bg-background focus:shadow-lg outline-none transition-all placeholder:text-muted-foreground/40"
-                                            placeholder="..."
+                                            className="w-full px-6 py-4 rounded-2xl bg-muted/50 border-2 border-border/50 text-foreground text-base focus:border-primary focus:bg-background focus:shadow-lg outline-none transition-all placeholder:text-muted-foreground/50"
+                                            placeholder={field.label + (field.required ? ' *' : '')}
                                         />
                                     )}
                                 </div>
