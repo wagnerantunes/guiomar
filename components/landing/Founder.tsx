@@ -76,7 +76,7 @@ export function Founder({ getSetting }: FounderProps) {
                         Liderança
                     </span>
                     <h2
-                        className="font-black text-foreground leading-[1.1] tracking-tighter uppercase italic drop-shadow-sm"
+                        className="font-black text-foreground leading-[1.1] tracking-tight italic drop-shadow-sm"
                         style={{ fontSize: "var(--section-title-size)" } as any}
                     >
                         {content.title}
