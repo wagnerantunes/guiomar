@@ -237,6 +237,18 @@ export default async function RootLayout({
           </noscript>
         )}
 
+        {/* FACEBOOK PIXEL NOSCRIPT */}
+        {integrations.fbPixelId && (
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: "none" }}
+              src={`https://www.facebook.com/tr?id=${integrations.fbPixelId}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+        )}
+
         {/* CUSTOM BODY START SCRIPTS (e.g. GTM NoScript) */}
         {integrations.customBodyStart && (
           <div dangerouslySetInnerHTML={{ __html: integrations.customBodyStart }} />
