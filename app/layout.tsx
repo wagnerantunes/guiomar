@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
       where: {
         OR: [
           { domain: "renovamente-guiomarmelo.com.br" },
+          { domain: "www.renovamente-guiomarmelo.com.br" }, // Added www support
           { subdomain: "renovamente" }
         ]
       },
@@ -23,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
         description: true,
         favicon: true,
       }
-    });
+    }) || await prisma.site.findFirst(); // Fallback to first site if domain fails
 
     const title = site?.name || "RenovaMente - Consultoria em Bem-Estar Corporativo";
     const description = site?.description || "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.";
@@ -86,9 +87,18 @@ export default async function RootLayout({
       where: {
         OR: [
           { domain: "renovamente-guiomarmelo.com.br" },
+          { domain: "www.renovamente-guiomarmelo.com.br" },
           { subdomain: "renovamente" }
         ]
       },
+      include: {
+        siteSettings: {
+          where: {
+            key: "integrations_config"
+          }
+        }
+      }
+    }) || await prisma.site.findFirst({
       include: {
         siteSettings: {
           where: {
@@ -115,6 +125,21 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
+
+        {/* GOOGLE TAG MANAGER (HEAD) */}
+        {integrations.gtmId && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${integrations.gtmId}');
+              `
+            }}
+          />
+        )}
 
         {/* GOOGLE ANALYTICS */}
         {integrations.gaId && (
@@ -153,9 +178,27 @@ export default async function RootLayout({
           />
         )}
 
+        {/* TIKTOK PIXEL */}
+        {integrations.tiktokPixelId && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                !function (w, d, t) {
+                  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+                  ttq.load('${integrations.tiktokPixelId}');
+                  ttq.page();
+                }(window, document, 'ttq');
+              `
+            }}
+          />
+        )}
+
         {/* CUSTOM HEAD SCRIPTS */}
         {integrations.customHead && (
-          <script dangerouslySetInnerHTML={{ __html: integrations.customHead }} />
+          <div
+            style={{ display: 'none' }}
+            dangerouslySetInnerHTML={{ __html: integrations.customHead }}
+          />
         )}
 
         <script
@@ -180,6 +223,18 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${manrope.className} font-theme-${fontTheme} font-sans`}>
+        {/* GTM NOSCRIPT */}
+        {integrations.gtmId && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${integrations.gtmId}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
+
         {/* CUSTOM BODY START SCRIPTS (e.g. GTM NoScript) */}
         {integrations.customBodyStart && (
           <div dangerouslySetInnerHTML={{ __html: integrations.customBodyStart }} />
