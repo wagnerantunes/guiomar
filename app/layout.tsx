@@ -112,7 +112,17 @@ export default async function RootLayout({
 
     const integrSetting = site?.siteSettings.find(s => s.key === "integrations_config");
     if (integrSetting) {
-      integrations = JSON.parse(integrSetting.value as string);
+      const val = integrSetting.value;
+      if (typeof val === 'string') {
+        try {
+          integrations = JSON.parse(val);
+        } catch (e) {
+          console.error("Layout: Error parsing integrations_config string", e);
+        }
+      } else if (val && typeof val === 'object') {
+        integrations = val;
+      }
+      console.log("Layout: Loaded integrations for", site?.domain || "default", integrations);
     }
   } catch (error) {
     console.error("Layout: Error fetching site settings", error);
