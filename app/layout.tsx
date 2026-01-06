@@ -79,6 +79,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let fontTheme = "tech";
+  let integrations: any = {};
+
   try {
     const site = await prisma.site.findFirst({
       where: {
@@ -87,9 +89,21 @@ export default async function RootLayout({
           { subdomain: "renovamente" }
         ]
       },
-      select: { settings: true }
+      include: {
+        siteSettings: {
+          where: {
+            key: "integrations_config"
+          }
+        }
+      }
     });
+
     fontTheme = (site?.settings as any)?.fontTheme || "tech";
+
+    const integrSetting = site?.siteSettings.find(s => s.key === "integrations_config");
+    if (integrSetting) {
+      integrations = JSON.parse(integrSetting.value as string);
+    }
   } catch (error) {
     console.error("Layout: Error fetching site settings", error);
   }
@@ -101,6 +115,49 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
+
+        {/* GOOGLE ANALYTICS */}
+        {integrations.gaId && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${integrations.gaId}`}></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${integrations.gaId}');
+                `
+              }}
+            />
+          </>
+        )}
+
+        {/* FACEBOOK PIXEL */}
+        {integrations.fbPixelId && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${integrations.fbPixelId}');
+                fbq('track', 'PageView');
+              `
+            }}
+          />
+        )}
+
+        {/* CUSTOM HEAD SCRIPTS */}
+        {integrations.customHead && (
+          <script dangerouslySetInnerHTML={{ __html: integrations.customHead }} />
+        )}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -122,11 +179,21 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className={`${jakarta.className} font-theme-${fontTheme}`}>
+      <body className={`${manrope.className} font-theme-${fontTheme} font-sans`}>
+        {/* CUSTOM BODY START SCRIPTS (e.g. GTM NoScript) */}
+        {integrations.customBodyStart && (
+          <div dangerouslySetInnerHTML={{ __html: integrations.customBodyStart }} />
+        )}
+
         <Providers>
           <FloatingOrbs />
           {children}
         </Providers>
+
+        {/* CUSTOM BODY END SCRIPTS */}
+        {integrations.customBodyEnd && (
+          <div dangerouslySetInnerHTML={{ __html: integrations.customBodyEnd }} />
+        )}
       </body>
     </html>
   );

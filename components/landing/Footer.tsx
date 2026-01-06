@@ -70,7 +70,7 @@ export function Footer({
             linkedin: "https://www.linkedin.com/company/renovamente",
         },
         phone: "(11) 99441-6024",
-        email: "contato@renovamente.com.br",
+        email: "renova@renovamente-guiomarmelo.com.br",
         address: "São Paulo, SP"
     };
 
@@ -201,31 +201,31 @@ export function Footer({
                                 href={`https://wa.me/${((footerSettings.phone || "5511994416024").replace(/\D/g, ""))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-center gap-4 group"
+                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-start gap-4 group"
                             >
-                                <div className="size-8 rounded-lg bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                                    <Phone size={14} />
+                                <div className="size-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all shrink-0">
+                                    <Phone size={18} />
                                 </div>
-                                <span className="group-hover:translate-x-1 transition-transform">{footerSettings.phone || "(11) 99441-6024"}</span>
+                                <span className="group-hover:translate-x-1 transition-transform pt-3.5">{footerSettings.phone || "(11) 99441-6024"}</span>
                             </a>
                         </li>
                         <li>
                             <a
-                                href={`mailto:${footerSettings.email || "contato@renovamente.com.br"}`}
-                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-center gap-4 group"
+                                href={`mailto:${footerSettings.email || "renova@renovamente-guiomarmelo.com.br"}`}
+                                className="text-sm font-bold text-muted hover:text-foreground transition-all flex items-start gap-4 group"
                             >
-                                <div className="size-8 rounded-lg bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                                    <Mail size={14} />
+                                <div className="size-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all shrink-0">
+                                    <Mail size={18} />
                                 </div>
-                                <span className="group-hover:translate-x-1 transition-transform">{footerSettings.email || "contato@renovamente.com.br"}</span>
+                                <span className="group-hover:translate-x-1 transition-transform pt-3.5 break-all">{footerSettings.email || "renova@renovamente-guiomarmelo.com.br"}</span>
                             </a>
                         </li>
                         <li>
                             <div className="text-sm font-bold text-muted flex items-start gap-4 group cursor-default">
-                                <div className="size-8 rounded-lg bg-card border border-border flex items-center justify-center text-primary">
-                                    <MapPin size={14} />
+                                <div className="size-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary shrink-0">
+                                    <MapPin size={18} />
                                 </div>
-                                <span>{footerSettings.address || "São Paulo, SP"}</span>
+                                <span className="pt-3.5">{footerSettings.address || "São Paulo, SP"}</span>
                             </div>
                         </li>
                     </ul>

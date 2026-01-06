@@ -13,6 +13,7 @@ export const menuItems = [
     { id: "newsletter", label: "Newsletter", icon: "campaign", href: "/admin/newsletter" },
     { id: "blog", label: "Blog Posts", icon: "article", href: "/admin/posts" },
     { id: "forms", label: "Forms Editor", icon: "check_box", href: "/admin/forms" },
+    { id: "integrations", label: "Integrações", icon: "api", href: "/admin/integrations" },
     { id: "media", label: "Media Library", icon: "image", href: "/admin/media" },
     { id: "users", label: "Usuários", icon: "group", href: "/admin/users" },
 ];

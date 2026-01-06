@@ -33,6 +33,38 @@ interface Section {
     content?: any;
 }
 
+// Sub-component for individual sortable items (FAQ, Services, etc)
+const SortableRepeaterItem = ({ idx, id, children, listKey }: any) => {
+    const {
+        attributes: itemAttr,
+        listeners: itemList,
+        setNodeRef: setItemRef,
+        transform: itemTrans,
+        transition: itemTransition,
+        isDragging: itemDragging
+    } = useSortable({ id: id });
+
+    const itemStyle = {
+        transform: CSS.Transform.toString(itemTrans),
+        transition: itemTransition,
+        zIndex: itemDragging ? 100 : 1,
+        opacity: itemDragging ? 0.5 : 1
+    };
+
+    return (
+        <div ref={setItemRef} style={itemStyle} className="relative group/reorder">
+            <div
+                {...itemAttr}
+                {...itemList}
+                className="absolute left-3 top-6 cursor-grab text-muted/20 hover:text-primary transition-colors z-20"
+            >
+                <span className="material-symbols-outlined text-lg">drag_indicator</span>
+            </div>
+            {children}
+        </div>
+    );
+};
+
 function SortableSection({
     sec,
     expandedId,
@@ -49,7 +81,8 @@ function SortableSection({
     activeDevice,
     setActiveDevice,
     saving,
-    handleNameChange
+    handleNameChange,
+    reorderArrayItem
 }: any) {
     const {
         attributes,
@@ -57,11 +90,14 @@ function SortableSection({
         setNodeRef,
         transform,
         transition,
+        isDragging
     } = useSortable({ id: sec.id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        zIndex: isDragging ? 50 : 0,
+        opacity: isDragging ? 0.3 : 1
     };
 
     return (
@@ -318,33 +354,37 @@ function SortableSection({
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Service Cards</h4>
                                                     <button onClick={() => addItemToArray(sec.id, "items", { t: "Novo Serviço", d: "<p>Descrição do serviço...</p>", icon: "verified" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Card</button>
                                                 </div>
-                                                <div className="grid grid-cols-1 gap-3">
-                                                    {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                        <div key={idx} className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/item">
-                                                            <div className="flex items-center justify-between">
-                                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest">Card #{idx + 1}</label>
-                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
-                                                            </div>
-                                                            <div className="space-y-3">
-                                                                <div className="flex gap-3">
-                                                                    <div className="w-20">
-                                                                        <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Icon</label>
-                                                                        <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none text-center" placeholder="icon" value={item.icon || "verified"} onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)} />
+                                                <SortableContext items={(sec.content?.items || []).map((_: any, i: number) => `${sec.id}-items-${i}`)} strategy={verticalListSortingStrategy}>
+                                                    <div className="grid grid-cols-1 gap-3">
+                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                            <SortableRepeaterItem key={idx} idx={idx} id={`${sec.id}-items-${idx}`} listKey="items">
+                                                                <div className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/item pl-12">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest">Card #{idx + 1}</label>
+                                                                        <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
                                                                     </div>
-                                                                    <div className="flex-1">
-                                                                        <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Título</label>
-                                                                        <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                    <div className="space-y-3">
+                                                                        <div className="flex gap-3">
+                                                                            <div className="w-20">
+                                                                                <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Icon</label>
+                                                                                <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none text-center" placeholder="icon" value={item.icon || "verified"} onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)} />
+                                                                            </div>
+                                                                            <div className="flex-1">
+                                                                                <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block ml-2">Título</label>
+                                                                                <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título" value={item.t} onChange={(e) => handleArrayChange(sec.id, "items", idx, "t", e.target.value)} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <RichTextEditor
+                                                                            content={item.d}
+                                                                            onChange={(val) => handleArrayChange(sec.id, "items", idx, "d", val)}
+                                                                            minHeight="100px"
+                                                                        />
                                                                     </div>
                                                                 </div>
-                                                                <RichTextEditor
-                                                                    content={item.d}
-                                                                    onChange={(val) => handleArrayChange(sec.id, "items", idx, "d", val)}
-                                                                    minHeight="100px"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                            </SortableRepeaterItem>
+                                                        ))}
+                                                    </div>
+                                                </SortableContext>
                                             </div>
                                         )}
 
@@ -354,21 +394,25 @@ function SortableSection({
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Client Testimonials</h4>
                                                     <button onClick={() => addItemToArray(sec.id, "items", { name: "Novo Cliente", role: "Cargo/Empresa", quote: "<p>O depoimento aqui...</p>", image: "" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Review</button>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                        <div key={idx} className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/testi relative">
-                                                            <div className="flex items-center justify-between">
-                                                                <input className="bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Nome do Cliente" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
-                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
-                                                            </div>
-                                                            <RichTextEditor
-                                                                content={item.quote}
-                                                                onChange={(val) => handleArrayChange(sec.id, "items", idx, "quote", val)}
-                                                                minHeight="100px"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <SortableContext items={(sec.content?.items || []).map((_: any, i: number) => `${sec.id}-items-${i}`)} strategy={verticalListSortingStrategy}>
+                                                    <div className="space-y-3">
+                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                            <SortableRepeaterItem key={idx} idx={idx} id={`${sec.id}-items-${idx}`} listKey="items">
+                                                                <div className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/testi relative pl-12">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <input className="bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Nome do Cliente" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
+                                                                        <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                    </div>
+                                                                    <RichTextEditor
+                                                                        content={item.quote}
+                                                                        onChange={(val) => handleArrayChange(sec.id, "items", idx, "quote", val)}
+                                                                        minHeight="100px"
+                                                                    />
+                                                                </div>
+                                                            </SortableRepeaterItem>
+                                                        ))}
+                                                    </div>
+                                                </SortableContext>
                                             </div>
                                         )}
 
@@ -378,24 +422,28 @@ function SortableSection({
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Methodology Steps</h4>
                                                     <button onClick={() => addItemToArray(sec.id, "steps", { t: "Novo Passo", d: "<p>Descreva o passo...</p>" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Step</button>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    {(sec.content?.steps || []).map((step: any, idx: number) => (
-                                                        <div key={idx} className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/step">
-                                                            <div className="flex items-center justify-between">
-                                                                <label className="text-[9px] font-black text-muted uppercase tracking-widest">Passo #{idx + 1}</label>
-                                                                <button onClick={() => removeItemFromArray(sec.id, "steps", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
-                                                            </div>
-                                                            <div className="space-y-3">
-                                                                <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título do Passo" value={step.t} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "t", e.target.value)} />
-                                                                <RichTextEditor
-                                                                    content={step.d}
-                                                                    onChange={(val) => handleArrayChange(sec.id, "steps", idx, "d", val)}
-                                                                    minHeight="80px"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <SortableContext items={(sec.content?.steps || []).map((_: any, i: number) => `${sec.id}-steps-${i}`)} strategy={verticalListSortingStrategy}>
+                                                    <div className="space-y-3">
+                                                        {(sec.content?.steps || []).map((step: any, idx: number) => (
+                                                            <SortableRepeaterItem key={idx} idx={idx} id={`${sec.id}-steps-${idx}`} listKey="steps">
+                                                                <div className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/step pl-12">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest">Passo #{idx + 1}</label>
+                                                                        <button onClick={() => removeItemFromArray(sec.id, "steps", idx)} className="text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">delete</span></button>
+                                                                    </div>
+                                                                    <div className="space-y-3">
+                                                                        <input className="w-full bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none" placeholder="Título do Passo" value={step.t} onChange={(e) => handleArrayChange(sec.id, "steps", idx, "t", e.target.value)} />
+                                                                        <RichTextEditor
+                                                                            content={step.d}
+                                                                            onChange={(val) => handleArrayChange(sec.id, "steps", idx, "d", val)}
+                                                                            minHeight="80px"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </SortableRepeaterItem>
+                                                        ))}
+                                                    </div>
+                                                </SortableContext>
                                             </div>
                                         )}
 
@@ -405,21 +453,25 @@ function SortableSection({
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">FAQ Items</h4>
                                                     <button onClick={() => addItemToArray(sec.id, "items", { q: "Nova Pergunta", r: "<p>Resposta detalhada aqui...</p>" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Q&A</button>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                        <div key={idx} className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/faq relative">
-                                                            <div className="flex items-center justify-between">
-                                                                <input className="bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Pergunta" value={item.q} onChange={(e) => handleArrayChange(sec.id, "items", idx, "q", e.target.value)} />
-                                                                <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
-                                                            </div>
-                                                            <RichTextEditor
-                                                                content={item.r}
-                                                                onChange={(val) => handleArrayChange(sec.id, "items", idx, "r", val)}
-                                                                minHeight="100px"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <SortableContext items={(sec.content?.items || []).map((_: any, i: number) => `${sec.id}-items-${i}`)} strategy={verticalListSortingStrategy}>
+                                                    <div className="space-y-3">
+                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                            <SortableRepeaterItem key={idx} idx={idx} id={`${sec.id}-items-${idx}`} listKey="items">
+                                                                <div className="p-6 bg-muted/5 border-border border rounded-[2rem] flex flex-col gap-4 group/faq relative pl-12">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <input className="bg-card border-border border border-none rounded-xl px-4 py-2 text-xs font-black outline-none flex-1" placeholder="Pergunta" value={item.q} onChange={(e) => handleArrayChange(sec.id, "items", idx, "q", e.target.value)} />
+                                                                        <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="ml-4 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-lg">close</span></button>
+                                                                    </div>
+                                                                    <RichTextEditor
+                                                                        content={item.r}
+                                                                        onChange={(val) => handleArrayChange(sec.id, "items", idx, "r", val)}
+                                                                        minHeight="100px"
+                                                                    />
+                                                                </div>
+                                                            </SortableRepeaterItem>
+                                                        ))}
+                                                    </div>
+                                                </SortableContext>
                                             </div>
                                         )}
 
@@ -441,50 +493,54 @@ function SortableSection({
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Logos de Clientes</h4>
                                                     <button onClick={() => addItemToArray(sec.id, "items", { id: Date.now().toString(), name: "Novo Cliente", logo: "" })} className="text-[10px] font-black text-[var(--primary)] uppercase">+ Add Logo</button>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="space-y-2 col-span-2">
-                                                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Subtítulo</label>
-                                                        <input
-                                                            className="w-full bg-muted/10 border-border rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 focus:bg-background transition-all outline-none text-foreground"
-                                                            value={sec.content?.subtitle || ""}
-                                                            onChange={(e) => handleContentChange(sec.id, "subtitle", e.target.value)}
-                                                        />
-                                                    </div>
-                                                    {(sec.content?.items || []).map((item: any, idx: number) => (
-                                                        <div key={idx} className="p-4 bg-muted/5 border-border border rounded-2xl flex flex-col gap-3 group/item relative">
-                                                            <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-2 right-2 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-sm">close</span></button>
-                                                            <div className="flex gap-4 items-center">
-                                                                <div
-                                                                    onClick={() => {
-                                                                        setMediaPickerTarget({ secId: sec.id, fieldName: `items.${idx}.logo` });
-                                                                        setShowMediaPicker(true);
-                                                                    }}
-                                                                    className="size-16 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 flex items-center justify-center text-gray-300 hover:text-[var(--primary)] transition-all cursor-pointer bg-card shrink-0 overflow-hidden"
-                                                                >
-                                                                    {item.logo ? (
-                                                                        <img src={item.logo} className="w-full h-full object-contain" />
-                                                                    ) : (
-                                                                        <span className="material-symbols-outlined text-xl">add_photo_alternate</span>
-                                                                    )}
-                                                                </div>
-                                                                <div className="flex-1">
-                                                                    <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block">Nome/Empresa</label>
-                                                                    <input className="w-full bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-black outline-none" placeholder="Nome" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
-                                                                    <div className="flex items-center gap-2 mt-2">
-                                                                        <span className="material-symbols-outlined text-muted text-sm">{item.icon || "star"}</span>
-                                                                        <input
-                                                                            className="flex-1 bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-mono text-muted outline-none"
-                                                                            placeholder="Ícone (ex: star, home)"
-                                                                            value={item.icon || ""}
-                                                                            onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)}
-                                                                        />
-                                                                        <a href="https://fonts.google.com/icons" target="_blank" className="text-[8px] text-primary hover:underline">Lista</a>
+                                                <div className="space-y-2 col-span-2">
+                                                    <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-3">Subtítulo</label>
+                                                    <input
+                                                        className="w-full bg-muted/10 border-border rounded-[1.2rem] px-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/20 focus:bg-background transition-all outline-none text-foreground"
+                                                        value={sec.content?.subtitle || ""}
+                                                        onChange={(e) => handleContentChange(sec.id, "subtitle", e.target.value)}
+                                                    />
+                                                </div>
+                                                <SortableContext items={(sec.content?.items || []).map((_: any, i: number) => `${sec.id}-items-${i}`)} strategy={verticalListSortingStrategy}>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        {(sec.content?.items || []).map((item: any, idx: number) => (
+                                                            <SortableRepeaterItem key={idx} idx={idx} id={`${sec.id}-items-${idx}`} listKey="items">
+                                                                <div className="p-4 bg-muted/5 border-border border rounded-2xl flex flex-col gap-3 group/item relative pl-10">
+                                                                    <button onClick={() => removeItemFromArray(sec.id, "items", idx)} className="absolute top-2 right-2 text-gray-300 hover:text-red-500 transition-all"><span className="material-symbols-outlined text-sm">close</span></button>
+                                                                    <div className="flex gap-4 items-center">
+                                                                        <div
+                                                                            onClick={() => {
+                                                                                setMediaPickerTarget({ secId: sec.id, fieldName: `items.${idx}.logo` });
+                                                                                setShowMediaPicker(true);
+                                                                            }}
+                                                                            className="size-16 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 flex items-center justify-center text-gray-300 hover:text-[var(--primary)] transition-all cursor-pointer bg-card shrink-0 overflow-hidden"
+                                                                        >
+                                                                            {item.logo ? (
+                                                                                <img src={item.logo} className="w-full h-full object-contain" />
+                                                                            ) : (
+                                                                                <span className="material-symbols-outlined text-xl">add_photo_alternate</span>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="flex-1">
+                                                                            <label className="text-[8px] font-black text-muted uppercase tracking-widest mb-1 block">Nome/Empresa</label>
+                                                                            <input className="w-full bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-black outline-none" placeholder="Nome" value={item.name} onChange={(e) => handleArrayChange(sec.id, "items", idx, "name", e.target.value)} />
+                                                                            <div className="flex items-center gap-2 mt-2">
+                                                                                <span className="material-symbols-outlined text-muted text-sm">{item.icon || "star"}</span>
+                                                                                <input
+                                                                                    className="flex-1 bg-card border-none rounded-lg px-3 py-1.5 text-[10px] font-mono text-muted outline-none"
+                                                                                    placeholder="Ícone (ex: star, home)"
+                                                                                    value={item.icon || ""}
+                                                                                    onChange={(e) => handleArrayChange(sec.id, "items", idx, "icon", e.target.value)}
+                                                                                />
+                                                                                <a href="https://fonts.google.com/icons" target="_blank" className="text-[8px] text-primary hover:underline">Lista</a>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                            </SortableRepeaterItem>
+                                                        ))}
+                                                    </div>
+                                                </SortableContext>
                                             </div>
                                         )}
                                         {sec.id.startsWith("custom_") && (
@@ -681,6 +737,17 @@ export default function PageSections() {
         }));
     };
 
+    const reorderArrayItem = (id: string, listKey: string, oldIndex: number, newIndex: number) => {
+        setSections(prev => prev.map(sec => {
+            if (sec.id === id) {
+                const list = [...(sec.content?.[listKey] || [])];
+                const reorderedList = arrayMove(list, oldIndex, newIndex);
+                return { ...sec, content: { ...sec.content, [listKey]: reorderedList } };
+            }
+            return sec;
+        }));
+    };
+
     const saveSection = async (sec: Section) => {
         setSaving(true);
         try {
@@ -751,18 +818,28 @@ export default function PageSections() {
 
     const handleDragEnd = async (event: any) => {
         const { active, over } = event;
+        if (!over) return;
 
-        if (active.id !== over.id) {
-            setSections((items) => {
-                const oldIndex = items.findIndex((i) => i.id === active.id);
-                const newIndex = items.findIndex((i) => i.id === over.id);
-                const newItems = arrayMove(items, oldIndex, newIndex);
+        // If it's a section reorganization
+        if (sections.find(s => s.id === active.id)) {
+            if (active.id !== over.id) {
+                setSections((items) => {
+                    const oldIndex = items.findIndex((i) => i.id === active.id);
+                    const newIndex = items.findIndex((i) => i.id === over.id);
+                    const newItems = arrayMove(items, oldIndex, newIndex);
+                    saveOrder(newItems.map(i => i.id));
+                    return newItems;
+                });
+            }
+        }
+        // If it's an item reorganization within a section
+        else if (typeof active.id === 'string' && active.id.includes('-')) {
+            const [secId, listKey, idxStr] = active.id.split('-');
+            const [, , overIdxStr] = over.id.split('-');
 
-                // Trigger save of the order
-                saveOrder(newItems.map(i => i.id));
-
-                return newItems;
-            });
+            if (idxStr !== overIdxStr) {
+                reorderArrayItem(secId, listKey, parseInt(idxStr), parseInt(overIdxStr));
+            }
         }
     };
 
@@ -912,6 +989,7 @@ export default function PageSections() {
                                         setActiveDevice={setActiveDevice}
                                         saving={saving}
                                         handleNameChange={handleNameChange}
+                                        reorderArrayItem={reorderArrayItem}
                                     />
                                 ))}
                             </SortableContext>

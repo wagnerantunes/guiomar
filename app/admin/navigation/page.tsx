@@ -19,6 +19,7 @@ export default function NavigationPage() {
         bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
         email: "renova@renovamente.com.br",
         phone: "(11) 99441-6024",
+        address: "São Paulo, SP",
         socials: {
             instagram: "",
             facebook: "",
@@ -29,6 +30,13 @@ export default function NavigationPage() {
             { label: "Serviços", url: "#servicos" },
             { label: "Metodologia", url: "#metodologia" },
             { label: "Blog", url: "#blog" },
+        ],
+        services: [
+            "Ergonomia Legal",
+            "Clima Organizacional",
+            "Cultura Organizacional",
+            "Bem-Estar Corporativo",
+            "Recrutamento",
         ]
     });
 
@@ -348,6 +356,48 @@ export default function NavigationPage() {
                                 </div>
 
                                 <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm space-y-10">
+                                    <div className="flex items-center justify-between border-b border-border pb-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                                                <span className="material-symbols-outlined">design_services</span>
+                                            </div>
+                                            <h3 className="text-[11px] font-black text-muted uppercase tracking-[0.2em]">Serviços no Rodapé</h3>
+                                        </div>
+                                        <button
+                                            aria-label="Adicionar serviço ao rodapé"
+                                            className="text-[10px] font-black text-primary uppercase tracking-widest px-4 py-2 bg-primary/5 rounded-xl border border-primary/10"
+                                            onClick={() => setFooterInfo(prev => ({ ...prev, services: [...(prev.services || []), "Novo Serviço"] }))}
+                                        >+ Novo</button>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {(footerInfo.services || []).map((s, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="flex items-center gap-4 p-5 bg-muted/5 rounded-[1.5rem] border border-border group hover:border-primary/40 transition-all"
+                                            >
+                                                <input
+                                                    aria-label={`Nome do serviço ${idx + 1}`}
+                                                    className="flex-1 bg-transparent border-none text-[11px] font-black p-0 focus:ring-0 text-foreground uppercase tracking-[0.1em]"
+                                                    value={s}
+                                                    onChange={(e) => {
+                                                        const newServices = [...(footerInfo.services || [])];
+                                                        newServices[idx] = e.target.value;
+                                                        setFooterInfo(prev => ({ ...prev, services: newServices }));
+                                                    }}
+                                                />
+                                                <button
+                                                    aria-label={`Remover serviço ${s}`}
+                                                    onClick={() => setFooterInfo(prev => ({ ...prev, services: (prev.services || []).filter((_, i) => i !== idx) }))}
+                                                    className="size-8 flex items-center justify-center text-muted hover:text-destructive transition-colors"
+                                                >
+                                                    <span className="material-symbols-outlined text-lg">close</span>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="bg-card p-10 md:p-14 rounded-[2.5rem] border border-border shadow-sm space-y-10">
                                     <div className="flex items-center gap-4 border-b border-border pb-6">
                                         <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                                             <span className="material-symbols-outlined">headset_mic</span>
@@ -376,6 +426,19 @@ export default function NavigationPage() {
                                                     className="w-full bg-muted/5 border border-border rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
                                                     value={footerInfo.phone}
                                                     onChange={(e) => setFooterInfo(prev => ({ ...prev, phone: e.target.value }))}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Endereço / Localização</label>
+                                            <div className="relative">
+                                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted/30 text-lg">location_on</span>
+                                                <input
+                                                    aria-label="Endereço de contato do rodapé"
+                                                    className="w-full bg-muted/5 border border-border rounded-2xl pl-12 pr-6 py-4 text-xs font-black focus:ring-4 focus:ring-primary/10 outline-none transition-all text-foreground"
+                                                    value={(footerInfo as any).address || ""}
+                                                    onChange={(e) => setFooterInfo(prev => ({ ...prev, address: e.target.value }))}
+                                                    placeholder="Ex: São Paulo, SP"
                                                 />
                                             </div>
                                         </div>

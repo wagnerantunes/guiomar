@@ -29,7 +29,7 @@ export default function FormsPage() {
             { id: "3", label: "Tipo de Interesse", type: "select", required: true, options: ["Suporte", "Vendas", "Parcerias"] },
             { id: "4", label: "Mensagem", type: "textarea", required: true },
         ],
-        notificationEmail: "contato@renovamente.com.br",
+        notificationEmail: "renova@renovamente-guiomarmelo.com.br",
         successMessage: "Obrigado por entrar em contato! Nossa equipe responderá em breve.",
         active: true,
     });

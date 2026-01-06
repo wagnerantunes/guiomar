@@ -126,5 +126,36 @@ export const SECTION_DEFAULTS = {
             { id: "5", name: "Empresa 5", logo: "" },
             { id: "6", name: "Empresa 6", logo: "" },
         ]
+    },
+    navigation_header: [
+        { label: "SOBRE", url: "#sobre" },
+        { label: "SERVIÇOS", url: "#servicos" },
+        { label: "METODOLOGIA", url: "#metodologia" },
+        { label: "BLOG", url: "#blog" },
+        { label: "CONTATO", url: "#contato" },
+    ],
+    navigation_footer: {
+        bio: "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana para transformar ambientes de trabalho.",
+        email: "renova@renovamente-guiomarmelo.com.br",
+        phone: "(11) 99441-6024",
+        address: "São Paulo, SP",
+        socials: {
+            instagram: "https://www.instagram.com/renovamente.guiomarmelo/",
+            facebook: "https://www.facebook.com/renovamente.guiomarmelo",
+            linkedin: "https://www.linkedin.com/company/renovamente",
+        },
+        quickLinks: [
+            { label: "Sobre Nós", url: "#sobre" },
+            { label: "Nossos Serviços", url: "#servicos" },
+            { label: "Metodologia", url: "#metodologia" },
+            { label: "Blog", url: "/blog" },
+        ],
+        services: [
+            "Ergonomia Legal",
+            "Clima Organizacional",
+            "Cultura Organizacional",
+            "Bem-Estar Corporativo",
+            "Recrutamento",
+        ]
     }
 };
