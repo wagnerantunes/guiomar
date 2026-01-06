@@ -7,6 +7,9 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 import prisma from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br';
 
