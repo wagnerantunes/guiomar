@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
       where: {
         OR: [
           { domain: "renovamente-guiomarmelo.com.br" },
-          { domain: "www.renovamente-guiomarmelo.com.br" }, // Added www support
+          { domain: "www.renovamente-guiomarmelo.com.br" },
           { subdomain: "renovamente" }
         ]
       },
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
         description: true,
         favicon: true,
       }
-    }) || await prisma.site.findFirst(); // Fallback to first site if domain fails
+    }) || await prisma.site.findFirst();
 
     const title = site?.name || "RenovaMente - Consultoria em Bem-Estar Corporativo";
     const description = site?.description || "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.";
@@ -195,10 +195,7 @@ export default async function RootLayout({
 
         {/* CUSTOM HEAD SCRIPTS */}
         {integrations.customHead && (
-          <div
-            style={{ display: 'none' }}
-            dangerouslySetInnerHTML={{ __html: integrations.customHead }}
-          />
+          <script dangerouslySetInnerHTML={{ __html: integrations.customHead.replace(/<\/?script>/g, '') }} />
         )}
 
         <script

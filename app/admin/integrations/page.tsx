@@ -120,12 +120,12 @@ export default function IntegrationsPage() {
 
                         <div className="space-y-4">
                             <div className="group">
-                                <label className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ml-1 mb-2 block">ID do Google Analytics (G-XXXXX)</label>
+                                <label className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ml-1 mb-2 block">ID do Google Ads ou Analytics (AW-XXX ou G-XXX)</label>
                                 <input
                                     className="w-full bg-background border border-border rounded-xl px-5 py-3.5 text-xs font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                                     value={config.gaId}
                                     onChange={(e) => setConfig({ ...config, gaId: e.target.value })}
-                                    placeholder="G-MEASUREMENT_ID"
+                                    placeholder="AW-11061964223 ou G-XXXXX"
                                 />
                             </div>
                             <div className="group">
@@ -180,7 +180,7 @@ export default function IntegrationsPage() {
                             </div>
                             <div>
                                 <h3 className="font-black text-lg uppercase tracking-tight text-foreground">Scripts Customizados</h3>
-                                <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Cole aqui outros códigos de terceiros (Bing, Hotjar, etc)</p>
+                                <p className="text-[10px] text-muted font-bold uppercase tracking-widest text-amber-500">Atenção: Insira apenas o CONTEÚDO (código js) sem as tags &lt;script&gt;</p>
                             </div>
                         </div>
                     </div>
