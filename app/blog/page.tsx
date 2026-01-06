@@ -67,7 +67,7 @@ export default async function BlogPage() {
     const recentPosts = posts.slice(1);
 
     return (
-        <div className="bg-[#09090b] font-sans min-h-screen flex flex-col relative selection:bg-[#13ec5b] selection:text-black">
+        <div className="bg-background font-sans min-h-screen flex flex-col relative selection:bg-primary/30 selection:text-primary-foreground">
             <Header />
 
             {/* Ambient Background */}

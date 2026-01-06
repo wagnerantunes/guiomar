@@ -86,7 +86,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     };
 
     return (
-        <div className="bg-[#09090b] font-sans min-h-screen flex flex-col relative selection:bg-[#13ec5b] selection:text-black">
+        <div className="bg-background font-sans min-h-screen flex flex-col relative selection:bg-primary/30 selection:text-primary-foreground">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
