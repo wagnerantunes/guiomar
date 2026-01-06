@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function About() {
     return (
         <section className="py-20 lg:py-28 bg-background relative" id="quem-somos">
@@ -6,10 +8,12 @@ export function About() {
                     {/* Image Area */}
                     <div className="relative order-2 lg:order-1">
                         <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-xl">
-                            <img
-                                className="w-full h-full object-cover"
+                            <Image
+                                className="object-cover"
                                 alt="Team meeting in a modern office discussing strategy"
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6lHeN9xCF7i1sfx7NuJmaHZHfFnNusCQJ9GZAkDAS5Ur7F-xC2XSp6JTdsbR8hVTqSE9ZTBTp8nROAZeESPhKa5RaSd3PHbfpLHRjgoV37zkO9gX2X8IK7C4cxQONxoueCmHHtYYnH7G3RKB2cgG5y2Podn4IxVeX-MRj912nNwxqIK1ljfmRtSlsoFyYpAr326rPes9IGgc8Z3pK_XZxilGVyd5J8XoXyz87AhvQtr52gB_u4aMVl_gb6NRm8nCJbTNPpzPrpQyM"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 600px"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div className="absolute bottom-6 left-6 right-6 text-white">

@@ -6,6 +6,7 @@ import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { RichText } from "@/components/ui/RichText";
 import { useInView, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface FounderProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -126,11 +127,13 @@ export function Founder({ getSetting }: FounderProps) {
                     <div className="absolute inset-0 border border-primary/5 rounded-[3rem] translate-x-14 translate-y-14 md:translate-x-20 md:translate-y-20 -z-20 hidden md:block group-hover:translate-x-12 group-hover:translate-y-12 transition-transform duration-1000 opacity-50"></div>
 
                     {/* Image Decor Frame */}
-                    <div className="relative rounded-[3rem] p-3 border border-border bg-card/10 backdrop-blur-sm">
-                        <img
+                    <div className="relative rounded-[3rem] p-3 border border-border bg-card/10 backdrop-blur-sm overflow-hidden aspect-[4/5]">
+                        <Image
                             src={content.image}
-                            className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover transition-all duration-700 grayscale-[20%] group-hover:grayscale-0 group-hover:scale-[1.02]"
+                            fill
+                            className="rounded-[2.5rem] shadow-2xl relative z-10 object-cover transition-all duration-700 grayscale-[20%] group-hover:grayscale-0 group-hover:scale-[1.02]"
                             alt="Guiomar Melo"
+                            sizes="(max-width: 1024px) 100vw, 500px"
                         />
                     </div>
                 </div>

@@ -8,7 +8,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 import prisma from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600; // Cache for 1 hour
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br';
@@ -76,6 +76,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
+import Script from "next/script";
 
 export default async function RootLayout({
   children,
@@ -138,10 +139,14 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
 
         {/* GOOGLE TAG MANAGER (HEAD) */}
         {integrations.gtmId && integrations.gtmId.startsWith('GTM-') && (
-          <script
+          <Script
+            id="gtm-script"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -154,17 +159,28 @@ export default async function RootLayout({
           />
         )}
 
-        {/* GOOGLE ANALYTICS */}
-        {integrations.gaId && (
+        {/* GOOGLE ANALYTICS & ADS */}
+        {(integrations.gaId || integrations.googleAdsId) && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${integrations.gaId}`}></script>
-            <script
+            <Script
+              id="google-tag"
+              strategy="afterInteractive"
+              src={
+                integrations.googleTagGateway
+                  ? `/gtag/js?id=${integrations.gaId || integrations.googleAdsId}`
+                  : `https://www.googletagmanager.com/gtag/js?id=${integrations.gaId || integrations.googleAdsId}`
+              }
+            />
+            <Script
+              id="google-analytics"
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', '${integrations.gaId}');
+                  ${integrations.gaId ? `gtag('config', '${integrations.gaId}');` : ''}
+                  ${integrations.googleAdsId ? `gtag('config', '${integrations.googleAdsId}');` : ''}
                 `
               }}
             />
@@ -173,7 +189,9 @@ export default async function RootLayout({
 
         {/* FACEBOOK PIXEL */}
         {integrations.fbPixelId && (
-          <script
+          <Script
+            id="fb-pixel"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 !function(f,b,e,v,n,t,s)
@@ -193,7 +211,9 @@ export default async function RootLayout({
 
         {/* TIKTOK PIXEL */}
         {integrations.tiktokPixelId && (
-          <script
+          <Script
+            id="tiktok-pixel"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 !function (w, d, t) {
@@ -208,8 +228,9 @@ export default async function RootLayout({
 
         {/* CUSTOM HEAD SCRIPTS */}
         {integrations.customHead && (
-          <script
+          <Script
             id="custom-head-scripts"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: integrations.customHead.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, '$1')
             }}

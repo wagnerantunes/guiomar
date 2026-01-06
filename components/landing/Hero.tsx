@@ -6,6 +6,7 @@ import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
+import Image from "next/image";
 
 import { AntigravityParticles } from "@/components/ui/AntigravityParticles";
 
@@ -131,13 +132,20 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
             <div className="absolute inset-0 z-0">
                 {bgImage ? (
                     <AnimatePresence mode="popLayout">
-                        <motion.img
+                        <motion.div
                             key={currentSlide}
-                            src={bgImage}
-                            // ...
-                            className="w-full h-full object-cover"
-                            alt={`Hero Slide ${currentSlide + 1}`}
-                        />
+                            className="relative w-full h-full"
+                        >
+                            <Image
+                                src={bgImage}
+                                fill
+                                className="object-cover"
+                                alt={`Hero Slide ${currentSlide + 1}`}
+                                priority={currentSlide === 0}
+                                sizes="100vw"
+                                quality={90}
+                            />
+                        </motion.div>
                     </AnimatePresence>
                 ) : (
                     <div className="w-full h-full bg-background" />

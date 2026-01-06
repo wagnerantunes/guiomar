@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useToast } from "@/components/ui/ToastProvider";
+import Image from "next/image";
 
 interface FooterProps {
     getSetting?: (key: string, defaultValue: any) => any;
@@ -108,16 +109,21 @@ export function Footer({
                 {/* BIO COLUMN */}
                 <div className="space-y-10 lg:col-span-1">
                     {mounted && effectiveLogo ? (
-                        <img
-                            src={effectiveLogo}
-                            alt="RenovaMente"
-                            className="object-contain"
+                        <div
+                            className="relative"
                             style={{
                                 width: width,
                                 height: height,
-                                maxWidth: 'none'
                             }}
-                        />
+                        >
+                            <Image
+                                src={effectiveLogo}
+                                alt="RenovaMente"
+                                fill
+                                className="object-contain"
+                                sizes="200px"
+                            />
+                        </div>
                     ) : (
                         <div className="flex items-center gap-3 group cursor-default">
                             <div className="size-12 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center text-primary shadow-lg shadow-primary/5 group-hover:scale-110 transition-transform duration-500">

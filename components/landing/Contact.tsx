@@ -4,6 +4,7 @@
 
 import React, { useState } from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import Image from "next/image";
 
 interface ContactProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -98,10 +99,12 @@ export function Contact({ getSetting }: ContactProps) {
                     {/* Top Image Section */}
                     <div className="h-[250px] relative overflow-hidden">
                         <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10" />
-                        <img
+                        <Image
                             src={contatoContent.image}
                             alt="Equipe reunida"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            sizes="(max-width: 1024px) 100vw, 600px"
                         />
                         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-card to-transparent z-20" />
                     </div>
