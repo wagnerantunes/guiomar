@@ -1,27 +1,5 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Header } from "@/components/landing/Header";
-import { Hero } from "@/components/landing/Hero";
-import { AboutUs } from "@/components/landing/AboutUs";
-import { Challenge } from "@/components/landing/Challenge";
-import { Services } from "@/components/landing/Services";
-import { Methodology } from "@/components/landing/Methodology";
-import { BlogPreview } from "@/components/landing/BlogPreview";
-import { WhyUs } from "@/components/landing/WhyUs";
-import { Founder } from "@/components/landing/Founder";
-import { FAQ } from "@/components/landing/FAQ";
-import { Contact } from "@/components/landing/Contact";
-import { Newsletter } from "@/components/landing/Newsletter"; // Added import
-import { Clients } from "@/components/landing/Clients";
-import { Testimonials } from "@/components/landing/Testimonials";
-import { Footer } from "@/components/landing/Footer";
-import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
-import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
-import { RichText } from "@/components/ui/RichText";
-import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
+import React from "react";
+import { prisma } from "@/lib/prisma";
 
 interface BlogPost {
   id: string;
@@ -37,6 +15,31 @@ interface HomePageProps {
   siteData: any;
   blogPosts: BlogPost[];
 }
+
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Header } from "@/components/landing/Header";
+import { Hero } from "@/components/landing/Hero";
+import { AboutUs } from "@/components/landing/AboutUs";
+import { Challenge } from "@/components/landing/Challenge";
+import { Services } from "@/components/landing/Services";
+import { Methodology } from "@/components/landing/Methodology";
+import { BlogPreview } from "@/components/landing/BlogPreview";
+import { WhyUs } from "@/components/landing/WhyUs";
+import { Founder } from "@/components/landing/Founder";
+import { FAQ } from "@/components/landing/FAQ";
+import { Contact } from "@/components/landing/Contact";
+import { Newsletter } from "@/components/landing/Newsletter";
+import { Clients } from "@/components/landing/Clients";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { Footer } from "@/components/landing/Footer";
+import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
+import { useToast } from "@/components/ui/ToastProvider";
+import { RichText } from "@/components/ui/RichText";
+import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
 function HomePageContent({ siteSettings: initialSiteSettings, siteData: initialSiteData, blogPosts: initialBlogPosts }: HomePageProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
@@ -389,12 +392,21 @@ export default async function HomePage() {
   }));
 
   return (
+    <HomePageContent
+      siteSettings={siteSettings}
+      siteData={siteData}
+      blogPosts={blogPosts}
+    />
+  );
+}
+
+// Wrap with ToastProvider at the root
+import { ToastProvider } from "@/components/ui/ToastProvider";
+
+export default function Page() {
+  return (
     <ToastProvider>
-      <HomePageContent
-        siteSettings={siteSettings}
-        siteData={siteData}
-        blogPosts={blogPosts}
-      />
+      <HomePage />
     </ToastProvider>
   );
 }
