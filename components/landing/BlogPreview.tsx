@@ -4,7 +4,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 interface BlogProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -67,14 +66,11 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
                         className="lg:col-span-8 group cursor-pointer relative rounded-[3rem] overflow-hidden min-h-[450px] lg:min-h-[600px] shadow-2xl border border-border/50"
                         onClick={() => setSelectedPost(blogPosts[0])}
                     >
-                        <div className="absolute inset-0 z-10 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                        <Image
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10" />
+                        <img
                             src={blogPosts[0].img}
                             alt={blogPosts[0].title}
-                            fill
-                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                            sizes="(max-width: 1024px) 100vw, 800px"
-                            quality={85}
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-20" />
 
@@ -107,12 +103,10 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
                             onClick={() => setSelectedPost(post)}
                         >
                             <div className="w-full md:w-1/3 lg:w-full aspect-[16/10] rounded-[2rem] overflow-hidden relative shadow-lg border border-border/50">
-                                <Image
+                                <img
                                     src={post.img}
                                     alt={post.title}
-                                    fill
-                                    className="object-cover transition-transform group-hover:scale-110 duration-700"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
+                                    className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>

@@ -1,24 +1,6 @@
-import React from "react";
-import { prisma } from "@/lib/prisma";
-
-interface BlogPost {
-  id: string;
-  title: string;
-  cat: string;
-  img: string;
-  date: string;
-  content?: string;
-}
-
-interface HomePageProps {
-  siteSettings: any[];
-  siteData: any;
-  blogPosts: BlogPost[];
-}
-
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Header } from "@/components/landing/Header";
 import { Hero } from "@/components/landing/Hero";
@@ -31,21 +13,30 @@ import { WhyUs } from "@/components/landing/WhyUs";
 import { Founder } from "@/components/landing/Founder";
 import { FAQ } from "@/components/landing/FAQ";
 import { Contact } from "@/components/landing/Contact";
-import { Newsletter } from "@/components/landing/Newsletter";
+import { Newsletter } from "@/components/landing/Newsletter"; // Added import
 import { Clients } from "@/components/landing/Clients";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Footer } from "@/components/landing/Footer";
 import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
-import { useToast } from "@/components/ui/ToastProvider";
+import { ToastProvider, useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 
-function HomePageContent({ siteSettings: initialSiteSettings, siteData: initialSiteData, blogPosts: initialBlogPosts }: HomePageProps) {
+interface BlogPost {
+  id: string;
+  title: string;
+  cat: string;
+  img: string;
+  date: string;
+  content?: string;
+}
+
+function HomePageContent() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [siteSettings] = useState<any[]>(initialSiteSettings);
-  const [siteData] = useState<any>(initialSiteData);
-  const [blogPosts] = useState<BlogPost[]>(initialBlogPosts);
+  const [siteSettings, setSiteSettings] = useState<any[]>([]);
+  const [siteData, setSiteData] = useState<any>(null);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const { toast } = useToast();
@@ -65,7 +56,53 @@ function HomePageContent({ siteSettings: initialSiteSettings, siteData: initialS
   };
 
   useEffect(() => {
-    // Check if we need to refresh data or handle initial mount logic
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          setSiteSettings(data);
+        }
+      } catch (error) {
+        console.error("Error fetching site settings:", error);
+      }
+    };
+
+    const fetchSiteData = async () => {
+      try {
+        const res = await fetch("/api/settings/site");
+        if (res.ok) {
+          const data = await res.json();
+          setSiteData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching site data:", error);
+      }
+    };
+
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("/api/posts");
+        if (res.ok) {
+          const data = await res.json();
+          const transformed = data.map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            cat: p.category?.name || "GERAL",
+            img: p.image || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+            date: new Date(p.createdAt).toLocaleDateString("pt-BR", { day: 'numeric', month: 'short', year: 'numeric' }),
+            content: p.content
+          }));
+          setBlogPosts(transformed);
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchSettings();
+    fetchSiteData();
+    fetchPosts();
   }, []);
 
   const getSetting = (key: string, defaultValue: any) => {
@@ -338,75 +375,10 @@ function HomePageContent({ siteSettings: initialSiteSettings, siteData: initialS
   );
 }
 
-export default async function HomePage() {
-  const domain = "renovamente-guiomarmelo.com.br";
-
-  // Fetch Site Data
-  const site = await prisma.site.findUnique({
-    where: { domain },
-    select: {
-      id: true,
-      name: true,
-      logo: true,
-      logoDark: true,
-      logoLight: true,
-      logoAdmin: true,
-      favicon: true,
-      settings: true,
-      siteSettings: true,
-    }
-  });
-
-  const siteData = {
-    id: site?.id,
-    name: site?.name,
-    logo: site?.logo,
-    logoDark: site?.logoDark,
-    logoLight: site?.logoLight,
-    logoAdmin: site?.logoAdmin,
-    favicon: site?.favicon,
-    settings: site?.settings,
-  };
-
-  const siteSettings = site?.siteSettings || [];
-
-  // Fetch Posts
-  const rawPosts = await prisma.post.findMany({
-    where: {
-      siteId: site?.id,
-      status: 'PUBLISHED'
-    },
-    include: {
-      category: true,
-    },
-    orderBy: { createdAt: 'desc' }
-  });
-
-  const blogPosts = rawPosts.map((p: any) => ({
-    id: p.id,
-    title: p.title,
-    cat: p.category?.name || "GERAL",
-    img: p.image || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
-    date: new Date(p.createdAt).toLocaleDateString("pt-BR", { day: 'numeric', month: 'short', year: 'numeric' }),
-    content: p.content
-  }));
-
-  return (
-    <HomePageContent
-      siteSettings={siteSettings}
-      siteData={siteData}
-      blogPosts={blogPosts}
-    />
-  );
-}
-
-// Wrap with ToastProvider at the root
-import { ToastProvider } from "@/components/ui/ToastProvider";
-
-export default function Page() {
+export default function HomePage() {
   return (
     <ToastProvider>
-      <HomePage />
+      <HomePageContent />
     </ToastProvider>
   );
 }

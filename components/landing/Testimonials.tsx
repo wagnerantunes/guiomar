@@ -4,7 +4,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 interface TestimonialsProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -79,15 +78,11 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                             </div>
 
                             <div className="flex items-center gap-5 border-t border-border pt-8">
-                                <div className="relative size-14 shrink-0">
-                                    <Image
-                                        src={t.image || `https://ui-avatars.com/api/?name=${t.name}&background=random&color=fff`}
-                                        fill
-                                        className="rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500 border border-border"
-                                        alt={t.name}
-                                        sizes="56px"
-                                    />
-                                </div>
+                                <img
+                                    src={t.image || `https://ui-avatars.com/api/?name=${t.name}&background=random&color=fff`}
+                                    className="size-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500 border border-border"
+                                    alt={t.name}
+                                />
                                 <div>
                                     <p className="font-black text-foreground uppercase tracking-tight italic">{t.name}</p>
                                     <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mt-1">{t.role}</p>

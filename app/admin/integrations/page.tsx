@@ -6,8 +6,6 @@ import { useToast } from "@/components/admin/Toast";
 interface IntegrationConfig {
     gtmId: string;
     gaId: string;
-    googleAdsId: string;
-    googleTagGateway: boolean;
     fbPixelId: string;
     tiktokPixelId: string;
     customHead: string;
@@ -22,8 +20,6 @@ export default function IntegrationsPage() {
     const [config, setConfig] = useState<IntegrationConfig>({
         gtmId: "",
         gaId: "",
-        googleAdsId: "",
-        googleTagGateway: false,
         fbPixelId: "",
         tiktokPixelId: "",
         customHead: "",
@@ -124,21 +120,12 @@ export default function IntegrationsPage() {
 
                         <div className="space-y-4">
                             <div className="group">
-                                <label className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ml-1 mb-2 block">ID do Google Analytics (G-XXX)</label>
+                                <label className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ml-1 mb-2 block">ID do Google Ads ou Analytics (AW-XXX ou G-XXX)</label>
                                 <input
                                     className="w-full bg-background border border-border rounded-xl px-5 py-3.5 text-xs font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                                     value={config.gaId}
                                     onChange={(e) => setConfig({ ...config, gaId: e.target.value })}
-                                    placeholder="G-XXXXX"
-                                />
-                            </div>
-                            <div className="group">
-                                <label className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ml-1 mb-2 block">ID do Google Ads (AW-XXX)</label>
-                                <input
-                                    className="w-full bg-background border border-border rounded-xl px-5 py-3.5 text-xs font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none"
-                                    value={config.googleAdsId}
-                                    onChange={(e) => setConfig({ ...config, googleAdsId: e.target.value })}
-                                    placeholder="AW-11061964223"
+                                    placeholder="AW-11061964223 ou G-XXXXX"
                                 />
                             </div>
                             <div className="group">
@@ -149,22 +136,6 @@ export default function IntegrationsPage() {
                                     onChange={(e) => setConfig({ ...config, gtmId: e.target.value })}
                                     placeholder="GTM-XXXXXXX"
                                 />
-                            </div>
-
-                            <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-2xl border border-primary/10 mt-2">
-                                <div className="flex items-center h-5">
-                                    <input
-                                        id="googleTagGateway"
-                                        type="checkbox"
-                                        className="size-4 rounded border-border text-primary focus:ring-primary/20 bg-background"
-                                        checked={config.googleTagGateway}
-                                        onChange={(e) => setConfig({ ...config, googleTagGateway: e.target.checked })}
-                                    />
-                                </div>
-                                <div className="ml-1 text-xs">
-                                    <label htmlFor="googleTagGateway" className="font-black text-[9px] uppercase tracking-widest text-foreground block mb-0.5">Google Tag Gateway</label>
-                                    <p className="text-[10px] text-muted font-bold uppercase tracking-tight">Ativar carregamento via domínio próprio (Cloudflare)</p>
-                                </div>
                             </div>
                         </div>
                     </div>

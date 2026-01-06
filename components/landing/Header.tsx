@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import Image from "next/image";
 
 interface HeaderProps {
     getSetting?: (key: string, defaultValue: any) => any;
@@ -111,22 +110,16 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
                         }}
                     >
                         {mounted && effectiveLogo ? (
-                            <div
-                                className="relative transition-all"
+                            <img
+                                src={effectiveLogo}
+                                alt="RenovaMente"
+                                className="object-contain transition-all"
                                 style={{
                                     width: width,
                                     height: height,
+                                    maxWidth: 'none'
                                 }}
-                            >
-                                <Image
-                                    src={effectiveLogo}
-                                    alt="RenovaMente"
-                                    fill
-                                    className="object-contain"
-                                    sizes="200px"
-                                    priority
-                                />
-                            </div>
+                            />
                         ) : (
                             <div className="flex items-center gap-2">
                                 <div className="size-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-lg">

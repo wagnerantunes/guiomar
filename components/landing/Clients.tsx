@@ -3,7 +3,6 @@
 import React from "react";
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { InfiniteSlider } from "@/components/ui/InfiniteSlider";
-import Image from "next/image";
 
 interface ClientsProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -40,15 +39,11 @@ export function Clients({ getSetting }: ClientsProps) {
                     renderCard={(item: any, i: number) => (
                         <div key={i} className="px-8 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-700 opacity-40 hover:opacity-100 group">
                             {item.logo ? (
-                                <div className="relative h-12 w-32 transition-transform group-hover:scale-110">
-                                    <Image
-                                        src={item.logo}
-                                        alt={item.name}
-                                        fill
-                                        className="object-contain"
-                                        sizes="128px"
-                                    />
-                                </div>
+                                <img
+                                    src={item.logo}
+                                    alt={item.name}
+                                    className="max-h-12 w-auto object-contain transition-transform group-hover:scale-110"
+                                />
                             ) : (
                                 <div className="h-12 flex items-center justify-center font-black text-muted/30 tracking-widest text-lg group-hover:text-primary/50">
                                     {item.name || `LOGO ${i + 1}`}

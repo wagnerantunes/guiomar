@@ -3,7 +3,6 @@
 import { SECTION_DEFAULTS } from "@/lib/sectionDefaults";
 import { RichText } from "@/components/ui/RichText";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 interface AboutUsProps {
     getSetting: (key: string, defaultValue: any) => any;
@@ -29,14 +28,12 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                     <motion.div
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.5 }}
-                        className="relative aspect-[4/5] overflow-hidden rounded-[3rem]"
+                        className="relative"
                     >
-                        <Image
+                        <img
                             src={content.image}
-                            fill
-                            className="object-cover shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+                            className="rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full aspect-[4/5] object-cover"
                             alt="Sobre"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
                         />
 
                         {/* Experience Badge - Premium Floating Style */}
