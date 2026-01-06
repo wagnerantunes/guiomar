@@ -127,7 +127,7 @@ export default async function RootLayout({
         />
 
         {/* GOOGLE TAG MANAGER (HEAD) */}
-        {integrations.gtmId && (
+        {integrations.gtmId && integrations.gtmId.startsWith('GTM-') && (
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -195,7 +195,12 @@ export default async function RootLayout({
 
         {/* CUSTOM HEAD SCRIPTS */}
         {integrations.customHead && (
-          <script dangerouslySetInnerHTML={{ __html: integrations.customHead.replace(/<\/?script>/g, '') }} />
+          <script
+            id="custom-head-scripts"
+            dangerouslySetInnerHTML={{
+              __html: `document.head.insertAdjacentHTML('beforeend', ${JSON.stringify(integrations.customHead)});`
+            }}
+          />
         )}
 
         <script
@@ -221,7 +226,7 @@ export default async function RootLayout({
       </head>
       <body className={`${manrope.className} font-theme-${fontTheme} font-sans`}>
         {/* GTM NOSCRIPT */}
-        {integrations.gtmId && (
+        {integrations.gtmId && integrations.gtmId.startsWith('GTM-') && (
           <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=${integrations.gtmId}`}
