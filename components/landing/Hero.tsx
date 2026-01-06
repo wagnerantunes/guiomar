@@ -136,7 +136,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                             src={bgImage}
                             // ...
                             className="w-full h-full object-cover"
-                            alt={`Hero Slide ${currentSlide + 1}`}
+                            alt="Ambiente corporativo moderno com foco em bem-estar e ergonomia no trabalho"
                         />
                     </AnimatePresence>
                 ) : (

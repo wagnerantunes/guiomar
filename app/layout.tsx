@@ -29,7 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     }) || await prisma.site.findFirst();
 
-    const title = site?.name || "RenovaMente - Consultoria em Bem-Estar Corporativo";
+    const title = site?.name
+      ? `${site.name} | Consultoria em Bem-Estar Corporativo e Ergonomia`
+      : "RenovaMente | Consultoria em Bem-Estar Corporativo e Ergonomia";
     const description = site?.description || "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.";
     const ogImage = `${baseUrl}/og-image.jpg`;
 
@@ -38,6 +40,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       icons: {
         icon: site?.favicon || "/favicon.ico",
+      },
+      alternates: {
+        canonical: baseUrl,
       },
       openGraph: {
         title,

@@ -33,7 +33,7 @@ export function AboutUs({ getSetting }: AboutUsProps) {
                         <img
                             src={content.image}
                             className="rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full aspect-[4/5] object-cover"
-                            alt="Sobre"
+                            alt="Equipe RenovaMente em reunião estratégica sobre bem-estar corporativo"
                         />
 
                         {/* Experience Badge - Premium Floating Style */}

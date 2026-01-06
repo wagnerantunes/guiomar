@@ -56,19 +56,33 @@ export default async function BlogPostPage({ params }: PageProps) {
         },
     });
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br';
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": post.title,
-        "image": post.image || "https://renovamente-guiomarmelo.com.br/og-image.jpg",
-        "datePublished": post.publishedAt?.toISOString(),
+        "image": post.image || `${baseUrl}/og-image.jpg`,
+        "datePublished": post.publishedAt?.toISOString() || post.createdAt.toISOString(),
         "dateModified": post.updatedAt.toISOString(),
-        "author": [{
+        "author": {
             "@type": "Person",
             "name": post.author.name,
-            "url": "https://renovamente-guiomarmelo.com.br"
-        }],
+            "url": baseUrl
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "RenovaMente",
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${baseUrl}/logo.png`
+            }
+        },
         "description": post.excerpt || post.title,
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `${baseUrl}/blog/${post.slug}`
+        }
     };
 
     return (
