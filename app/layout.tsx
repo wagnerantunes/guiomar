@@ -198,7 +198,7 @@ export default async function RootLayout({
           <script
             id="custom-head-scripts"
             dangerouslySetInnerHTML={{
-              __html: `document.head.insertAdjacentHTML('beforeend', ${JSON.stringify(integrations.customHead)});`
+              __html: integrations.customHead.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, '$1')
             }}
           />
         )}
