@@ -40,8 +40,8 @@ export default function DashboardContent({ session }: DashboardContentProps) {
                 const res = await fetch('/api/admin/dashboard');
                 if (res.ok) {
                     const data = await res.json();
-                    setStats(data.stats);
-                    setRecentActivity(data.activity);
+                    setStats(data.stats || null);
+                    setRecentActivity(data.activity || []);
                     setChartData(data.chart || []);
                 }
             } catch (error) {
@@ -172,8 +172,8 @@ export default function DashboardContent({ session }: DashboardContentProps) {
                             </div>
 
                             {chartData.length > 0 ? chartData.map((item, i) => {
-                                const maxCount = Math.max(...chartData.map(d => d.count), 1);
-                                const height = item.count > 0 ? (item.count / maxCount) * 100 : 0;
+                                const maxCount = Math.max(...chartData.map(d => Number(d.count) || 0), 1);
+                                const height = Number(item.count) > 0 ? (Number(item.count) / maxCount) * 100 : 0;
                                 return (
                                     <div key={i} className="flex-1 flex flex-col items-center group relative z-10 h-full justify-end">
                                         <div
@@ -210,22 +210,27 @@ export default function DashboardContent({ session }: DashboardContentProps) {
                         </div>
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar -mr-4 pr-4 space-y-4">
-                            {recentActivity.map((act, i) => (
+                            {Array.isArray(recentActivity) && recentActivity.length > 0 ? recentActivity.map((act, i) => (
                                 <div key={i} className="flex gap-4 group cursor-pointer hover:bg-muted/5 p-3 -mx-3 rounded-lg transition-colors border border-transparent hover:border-border/50">
-                                    <div className={`size-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${act.color}`}>
-                                        <span className="material-symbols-outlined text-[20px]">{act.icon}</span>
+                                    <div className={`size-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${act.color || 'bg-muted/10'}`}>
+                                        <span className="material-symbols-outlined text-[20px]">{act.icon || 'star'}</span>
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-0.5">
                                             <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1 uppercase tracking-tight">{act.type}</h4>
                                             <span className="text-[9px] font-bold text-muted shrink-0 ml-2 uppercase tracking-widest opacity-70">
-                                                {new Date(act.time).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                                                {act.time ? new Date(act.time).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '---'}
                                             </span>
                                         </div>
                                         <p className="text-[11px] font-medium text-muted line-clamp-1">{act.description}</p>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="h-full flex flex-col items-center justify-center text-center py-10 opacity-50">
+                                    <span className="material-symbols-outlined text-4xl mb-2">history</span>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest">Nenhuma atividade recente</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
