@@ -72,7 +72,7 @@ export default function DashboardContent({ session }: DashboardContentProps) {
     const statCards = [
         {
             label: 'Visitantes Únicos',
-            value: stats?.visitors.toLocaleString(),
+            value: (stats?.visitors ?? 0).toLocaleString(),
             change: 'Real-time',
             icon: 'visibility',
             bgClass: 'bg-primary/10',
@@ -80,7 +80,7 @@ export default function DashboardContent({ session }: DashboardContentProps) {
         },
         {
             label: 'Leads (Contatos)',
-            value: stats?.leads.toString(),
+            value: (stats?.leads ?? 0).toString(),
             change: 'Total',
             icon: 'person_add',
             bgClass: 'bg-blue-500/10',
@@ -88,7 +88,7 @@ export default function DashboardContent({ session }: DashboardContentProps) {
         },
         {
             label: 'Posts Publicados',
-            value: stats?.posts.toString(),
+            value: (stats?.posts ?? 0).toString(),
             change: 'Conteúdo',
             icon: 'article',
             bgClass: 'bg-green-500/10',
@@ -96,7 +96,7 @@ export default function DashboardContent({ session }: DashboardContentProps) {
         },
         {
             label: 'Taxa Conversão',
-            value: stats?.conversion,
+            value: stats?.conversion ?? "0%",
             change: 'Eficiência',
             icon: 'trending_up',
             bgClass: 'bg-purple-500/10',
