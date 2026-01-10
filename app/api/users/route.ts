@@ -36,13 +36,15 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
         }
 
-        // Check if user is admin
+        // Check if user is admin or super admin
+        const isSuperAdmin = session.user.email === 'wagnerantunes84@gmail.com' || session.user.email === 'maycon.santos.ms@gmail.com'
+
         const currentUser = await prisma.user.findUnique({
             where: { email: session.user.email! },
             select: { role: true },
         })
 
-        if (currentUser?.role !== 'ADMIN') {
+        if (!isSuperAdmin && currentUser?.role !== 'ADMIN') {
             return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
         }
 
@@ -80,13 +82,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
         }
 
-        // Check if user is admin
+        // Check if user is admin or super admin
+        const isSuperAdmin = session.user.email === 'wagnerantunes84@gmail.com' || session.user.email === 'maycon.santos.ms@gmail.com'
+
         const currentUser = await prisma.user.findUnique({
             where: { email: session.user.email! },
             select: { role: true },
         })
 
-        if (currentUser?.role !== 'ADMIN') {
+        if (!isSuperAdmin && currentUser?.role !== 'ADMIN') {
             return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
         }
 
@@ -102,6 +106,14 @@ export async function POST(request: NextRequest) {
         }
 
         const { name, email, password, role } = validationResult.data
+
+        // RESTRICTION: Only wagnerantunes84@gmail.com can create an ADMIN user
+        if (role === 'ADMIN' && session.user.email !== 'wagnerantunes84@gmail.com') {
+            return NextResponse.json(
+                { error: 'Apenas Wagner Antunes pode autorizar novos administradores.' },
+                { status: 403 }
+            )
+        }
 
         // Check if user already exists
         const existingUser = await prisma.user.findUnique({
@@ -204,13 +216,15 @@ export async function PATCH(request: NextRequest) {
             return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
         }
 
-        // Check if user is admin
+        // Check if user is admin or super admin
+        const isSuperAdmin = session.user.email === 'wagnerantunes84@gmail.com' || session.user.email === 'maycon.santos.ms@gmail.com'
+
         const currentUser = await prisma.user.findUnique({
             where: { email: session.user.email! },
             select: { id: true, role: true },
         })
 
-        if (currentUser?.role !== 'ADMIN') {
+        if (!isSuperAdmin && currentUser?.role !== 'ADMIN') {
             return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
         }
 
@@ -239,6 +253,14 @@ export async function PATCH(request: NextRequest) {
         }
 
         const data: any = { ...validationResult.data }
+
+        // RESTRICTION: Only wagnerantunes84@gmail.com can promote someone to ADMIN
+        if (data.role === 'ADMIN' && session.user.email !== 'wagnerantunes84@gmail.com') {
+            return NextResponse.json(
+                { error: 'Apenas Wagner Antunes pode autorizar novos administradores.' },
+                { status: 403 }
+            )
+        }
 
         // Hash password if provided
         if (data.password) {
@@ -276,13 +298,15 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
         }
 
-        // Check if user is admin
+        // Check if user is admin or super admin
+        const isSuperAdmin = session.user.email === 'wagnerantunes84@gmail.com' || session.user.email === 'maycon.santos.ms@gmail.com'
+
         const currentUser = await prisma.user.findUnique({
             where: { email: session.user.email! },
             select: { id: true, role: true },
         })
 
-        if (currentUser?.role !== 'ADMIN') {
+        if (!isSuperAdmin && currentUser?.role !== 'ADMIN') {
             return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
         }
 

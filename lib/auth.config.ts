@@ -30,8 +30,24 @@ export const authConfig = {
 
             // Protect admin routes
             if (isAdminRoute) {
-                if (isLoggedIn) return true
-                return false // Redirect to login
+                if (!isLoggedIn) return false
+
+                const user = auth?.user as any
+                const email = user?.email
+                const role = user?.role
+
+                // Super Admins (Always have access)
+                const isSuperAdmin = email === 'wagnerantunes84@gmail.com' || email === 'maycon.santos.ms@gmail.com'
+
+                // Regular Admins (Must have ADMIN role)
+                const isAdmin = role === 'ADMIN'
+
+                // If not super admin nor regular admin, deny access
+                if (!isSuperAdmin && !isAdmin) {
+                    return false
+                }
+
+                return true
             }
 
             // Redirect logged in users away from login page
