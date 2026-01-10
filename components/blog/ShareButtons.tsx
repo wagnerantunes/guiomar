@@ -45,7 +45,7 @@ export function ShareButtons({ title }: { title: string }) {
 
     return (
         <div className="flex flex-row md:flex-col gap-4 items-center bg-card border border-border p-4 rounded-2xl sticky top-32 shadow-sm">
-            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground writing-mode-vertical md:rotate-180 hidden md:block">
+            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground writing-mode-vertical hidden md:block">
                 Compartilhar
             </span>
             {links.map((link) => (
