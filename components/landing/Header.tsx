@@ -44,7 +44,7 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
         { label: "CLIENTES", url: "#clientes" },
         { label: "SERVIÇOS", url: "#servicos" },
         { label: "METODOLOGIA", url: "#metodologia" },
-        { label: "BLOG", url: "#blog" },
+        { label: "BLOG", url: "/blog" },
         { label: "CONTATO", url: "#contato" },
     ]);
 
