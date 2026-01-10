@@ -34,6 +34,7 @@ export default function EditPostPage({ params }: PageProps) {
         categoryId: '',
         status: 'DRAFT' as 'DRAFT' | 'PUBLISHED'
     })
+    const [imagePosition, setImagePosition] = useState('center')
 
     useEffect(() => {
         async function fetchData() {
@@ -54,15 +55,25 @@ export default function EditPostPage({ params }: PageProps) {
                 }
 
                 if (postData && !postData.error) {
+                    let loadedContent = postData.content || '';
+                    let loadedPosition = 'center';
+
+                    const metaMatch = loadedContent.match(/<!-- image_position:(.*?) -->/);
+                    if (metaMatch) {
+                        loadedPosition = metaMatch[1];
+                        loadedContent = loadedContent.replace(/<!-- image_position:.*? -->/g, '');
+                    }
+
                     setFormData({
                         title: postData.title || '',
                         slug: postData.slug || '',
-                        content: postData.content || '',
+                        content: loadedContent,
                         excerpt: postData.excerpt || '',
                         image: postData.image || '',
                         categoryId: postData.categoryId || '',
                         status: postData.status || 'DRAFT'
                     })
+                    setImagePosition(loadedPosition);
                 }
             } catch (error) {
                 console.error("Error fetching data:", error)
@@ -89,7 +100,10 @@ export default function EditPostPage({ params }: PageProps) {
             const response = await fetch(`/api/posts/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({
+                    ...formData,
+                    content: formData.content + `<!-- image_position:${imagePosition} -->`
+                })
             })
 
             if (response.ok) {
@@ -326,6 +340,13 @@ export default function EditPostPage({ params }: PageProps) {
                         <p className="text-[9px] text-muted font-medium text-center px-4 uppercase tracking-tighter">
                             Recomendado: 1200x630px para redes sociais.
                         </p>
+
+                        {formData.image && (
+                            <ImagePositionSelector
+                                value={imagePosition}
+                                onChange={setImagePosition}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
@@ -340,4 +361,34 @@ export default function EditPostPage({ params }: PageProps) {
             />
         </div>
     )
+}
+
+function ImagePositionSelector({ value, onChange }: { value: string, onChange: (val: string) => void }) {
+    const positions = [
+        { id: 'center', label: 'Centro (Padrão)', icon: 'center_focus_strong' },
+        { id: 'top', label: 'Topo (Rosto)', icon: 'vertical_align_top' },
+        { id: 'bottom', label: 'Base', icon: 'vertical_align_bottom' },
+    ];
+
+    return (
+        <div className="space-y-3 pt-4 border-t border-border">
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Recorte / Alinhamento</label>
+            <div className="grid grid-cols-3 gap-2">
+                {positions.map((pos) => (
+                    <button
+                        key={pos.id}
+                        type="button"
+                        onClick={() => onChange(pos.id)}
+                        className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all ${value === pos.id
+                            ? 'bg-primary/10 border-primary text-primary shadow-sm'
+                            : 'bg-muted/5 border-border text-muted hover:border-primary/50'
+                            }`}
+                    >
+                        <span className="material-symbols-outlined text-lg">{pos.icon}</span>
+                        <span className="text-[8px] font-black uppercase tracking-widest">{pos.label}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
 }

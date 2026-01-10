@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import {
     BlogHero,
@@ -10,7 +9,6 @@ import {
     CategoriesWidget,
     TagsWidget,
 } from "@/components/blog";
-import { AnalyticsTracker } from "@/components/landing/AnalyticsTracker";
 
 import type { Metadata } from "next";
 
@@ -24,17 +22,24 @@ export async function generateMetadata(): Promise<Metadata> {
             title: "Blog | RenovaMente",
             description: "Explore nossos artigos sobre bem-estar corporativo.",
             type: "website",
+            url: "https://renovamente-guiomarmelo.com.br/blog",
         }
     };
 }
 
 export default async function BlogPage() {
     const site = await prisma.site.findFirst({
-        where: { domain: "renovamente-guiomarmelo.com.br" },
+        where: {
+            OR: [
+                { domain: "renovamente-guiomarmelo.com.br" },
+                { domain: "www.renovamente-guiomarmelo.com.br" },
+                { subdomain: "renovamente" }
+            ]
+        },
     });
 
     if (!site) {
-        return <div>Site não configurado</div>;
+        return <div className="min-h-screen flex items-center justify-center bg-black text-white">Site não configurado</div>;
     }
 
     // Fetch posts
@@ -65,14 +70,44 @@ export default async function BlogPage() {
     // Derived data
     const featuredPost = posts[0];
     const recentPosts = posts.slice(1);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://renovamente-guiomarmelo.com.br';
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Blog RenovaMente",
+        "description": "Lista de artigos sobre bem-estar, saúde mental e produtividade corporativa.",
+        "url": `${baseUrl}/blog`,
+        "publisher": {
+            "@type": "Organization",
+            "name": "RenovaMente",
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${baseUrl}/logo.png`
+            }
+        },
+        "hasPart": posts.map(post => ({
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "url": `${baseUrl}/blog/${post.slug}`,
+            "datePublished": post.publishedAt?.toISOString(),
+            "author": {
+                "@type": "Person",
+                "name": post.author.name
+            }
+        }))
+    };
 
     return (
-        <div className="bg-background font-sans min-h-screen flex flex-col relative selection:bg-primary/30 selection:text-primary-foreground">
-            <Header />
+        <div className="bg-background font-sans min-h-screen flex flex-col relative selection:bg-primary/30 selection:text-primary-foreground text-foreground">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
 
             {/* Ambient Background */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#13ec5b]/5 to-transparent blur-3xl opacity-30" />
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-primary/5 to-transparent blur-3xl opacity-30" />
                 <div className="absolute top-[20%] right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full opacity-20" />
             </div>
 
@@ -88,12 +123,12 @@ export default async function BlogPage() {
                                 {/* Blog Posts Grid */}
                                 <section>
                                     <div className="flex items-center gap-4 mb-12">
-                                        <div className="h-px bg-white/10 flex-1"></div>
-                                        <h3 className="text-xs font-black text-gray-500 uppercase tracking-[0.3em] flex items-center gap-3">
-                                            <span className="size-2 rounded-full bg-[#13ec5b]"></span>
+                                        <div className="h-px bg-border flex-1"></div>
+                                        <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.3em] flex items-center gap-3">
+                                            <span className="size-2 rounded-full bg-primary"></span>
                                             Últimos Artigos
                                         </h3>
-                                        <div className="h-px bg-white/10 flex-1"></div>
+                                        <div className="h-px bg-border flex-1"></div>
                                     </div>
 
                                     {recentPosts.length > 0 ? (
@@ -103,25 +138,28 @@ export default async function BlogPage() {
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-gray-500 text-center py-10 font-medium">
-                                            Nenhum outro artigo encontrado.
+                                        <p className="text-muted-foreground text-center py-10 font-medium border border-border rounded-2xl bg-card">
+                                            Nenhum outro artigo encontrado no momento.
                                         </p>
                                     )}
-                                    {/* Pagination - Placeholder for now */}
-                                    <div className="flex justify-center mt-20">
-                                        <button className="px-8 py-4 rounded-2xl border border-white/10 text-xs font-black uppercase tracking-widest text-white hover:bg-white/5 hover:border-[#13ec5b]/50 transition-all duration-300">
-                                            Carregar Mais
-                                        </button>
-                                    </div>
+
+                                    {/* Pagination Placeholder - Could be implemented if needed */}
+                                    {recentPosts.length >= 6 && (
+                                        <div className="flex justify-center mt-20">
+                                            <button className="px-8 py-4 rounded-2xl border border-border text-xs font-black uppercase tracking-widest text-foreground hover:bg-muted hover:border-primary/50 transition-all duration-300">
+                                                Ver Todos
+                                            </button>
+                                        </div>
+                                    )}
                                 </section>
                             </>
                         ) : (
-                            <div className="text-center py-40 border border-white/5 rounded-[3rem] bg-white/[0.02]">
-                                <span className="material-symbols-outlined text-6xl text-white/10 mb-6">edit_note</span>
-                                <h2 className="text-2xl font-black text-white mb-2">
+                            <div className="text-center py-40 border border-border rounded-[3rem] bg-card">
+                                <span className="material-symbols-outlined text-6xl text-muted-foreground mb-6">edit_note</span>
+                                <h2 className="text-2xl font-black text-foreground mb-2">
                                     Nenhum post publicado
                                 </h2>
-                                <p className="text-gray-500">Volte em breve para novidades!</p>
+                                <p className="text-muted-foreground">Estamos preparando conteúdos incríveis. Volte em breve!</p>
                             </div>
                         )}
                     </main>

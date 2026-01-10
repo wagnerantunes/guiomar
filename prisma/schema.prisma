@@ -171,6 +171,7 @@ model Post {
   category  Category? @relation(fields: [categoryId], references: [id])
   tags      PostTag[]
   analytics Analytics[]
+  metadata  Json?
 
   @@unique([siteId, slug])
   @@index([siteId, status])

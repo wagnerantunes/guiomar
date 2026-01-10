@@ -185,15 +185,7 @@ function HomePageContent() {
     <ToastProvider>
       <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/30">
         {siteSettings[0]?.siteId && <AnalyticsTracker siteId={siteSettings[0].siteId} />}
-        <Header
-          getSetting={getSetting}
-          scrollTo={scrollTo}
-          setSelectedPost={setSelectedPost}
-          logo={siteData?.logo}
-          logoLight={siteData?.logoLight}
-          logoDark={siteData?.logoDark}
-          settings={siteData?.settings}
-        />
+        {siteSettings[0]?.siteId && <AnalyticsTracker siteId={siteSettings[0].siteId} />}
 
         {selectedPost ? (
           <article className="pt-32 pb-20 px-6 animate-fadeIn">

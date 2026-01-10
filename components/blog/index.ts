@@ -4,3 +4,5 @@ export * from "./widgets/SearchWidget";
 export * from "./widgets/NewsletterWidget";
 export * from "./widgets/CategoriesWidget";
 export * from "./widgets/TagsWidget";
+export * from "./TableOfContents";
+export * from "./ShareButtons";

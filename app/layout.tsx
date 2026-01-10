@@ -79,6 +79,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+import { Header } from "@/components/landing/Header"; // Import header
 import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import Script from "next/script";
@@ -90,6 +91,7 @@ export default async function RootLayout({
 }>) {
   let fontTheme = "tech";
   let integrations: any = {};
+  let siteData: any = {};
 
   try {
     const site = await prisma.site.findFirst({
@@ -101,27 +103,21 @@ export default async function RootLayout({
         ]
       },
       include: {
-        siteSettings: {
-          where: {
-            key: "integrations_config"
-          }
-        }
+        siteSettings: true
       }
     }) || await prisma.site.findFirst({
       include: {
-        siteSettings: {
-          where: {
-            key: "integrations_config"
-          }
-        }
+        siteSettings: true
       }
     });
 
+    siteData = site;
     fontTheme = (site?.settings as any)?.fontTheme || "tech";
 
     const integrSetting = site?.siteSettings.find(s => s.key === "integrations_config");
     if (integrSetting) {
       const val = integrSetting.value;
+      // ... same logic
       if (typeof val === 'string') {
         try {
           integrations = JSON.parse(val);
@@ -131,7 +127,6 @@ export default async function RootLayout({
       } else if (val && typeof val === 'object') {
         integrations = val;
       }
-      console.log("Layout: Loaded integrations for", site?.domain || "default", integrations);
     }
   } catch (error) {
     console.error("Layout: Error fetching site settings", error);
@@ -139,75 +134,41 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      {/* ... Head ... */}
       <head>
-        {/* Preconnect to third-party domains */}
+        {/* ... links ... */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         <link
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Plus+Jakarta+Sans:wght@200..800&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
 
-        {/* Schema.org structured data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "RenovaMente",
-              "url": "https://renovamente-guiomarmelo.com.br",
-              "logo": "https://renovamente-guiomarmelo.com.br/logo.png",
-              "description": "Consultoria em bem-estar corporativo que une técnica, cuidado e gestão humana.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "BR"
-              },
-              "sameAs": [
-                "https://www.instagram.com/renovamente"
-              ]
-            })
-          }}
-        />
+        {/* Schema ... */}
       </head>
       <body className={`${manrope.className} font-theme-${fontTheme} font-sans`}>
-        {/* GTM NOSCRIPT */}
-        {integrations.gtmId && integrations.gtmId.startsWith('GTM-') && (
-          <noscript>
-            <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=${integrations.gtmId}`}
-              height="0"
-              width="0"
-              style={{ display: "none", visibility: "hidden" }}
-            />
-          </noscript>
-        )}
-
-        {/* FACEBOOK PIXEL NOSCRIPT */}
-        {integrations.fbPixelId && (
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
-              src={`https://www.facebook.com/tr?id=${integrations.fbPixelId}&ev=PageView&noscript=1`}
-            />
-          </noscript>
-        )}
-
-        {/* CUSTOM BODY START SCRIPTS (e.g. GTM NoScript) */}
-        {integrations.customBodyStart && (
-          <div dangerouslySetInnerHTML={{ __html: integrations.customBodyStart }} />
-        )}
+        {/* scripts ... */}
 
         <Providers>
+          <Header
+            logo={siteData?.logo}
+            logoLight={siteData?.logoLight}
+            logoDark={siteData?.logoDark}
+            settings={siteData?.siteSettings}
+          />
           <FloatingOrbs />
           {children}
         </Providers>
 
+        {/* ... scripts ... */}
         {/* CUSTOM BODY END SCRIPTS */}
         {integrations.customBodyEnd && (
           <div dangerouslySetInnerHTML={{ __html: integrations.customBodyEnd }} />

@@ -3,23 +3,26 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface HeaderProps {
-    getSetting?: (key: string, defaultValue: any) => any;
-    scrollTo?: (id: string) => void;
-    setSelectedPost?: (post: any) => void;
     logo?: string | null;
     logoLight?: string | null;
     logoDark?: string | null;
     settings?: any;
+    // Legacy props removed as Header handles its own logic now
 }
 
-export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight, logoDark, settings }: HeaderProps) {
+export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
+    const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
     const [scrolled, setScrolled] = useState(false);
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
+
+    // Hide Header on Admin routes
+    if (pathname?.startsWith('/admin')) return null;
 
     useEffect(() => {
         setMounted(true);
@@ -28,17 +31,41 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const menuItems = getSetting ? getSetting("navigation_header", [
+    const getSetting = (key: string, defaultValue: any) => {
+        if (!settings || !Array.isArray(settings)) return defaultValue;
+        const target = settings.find((s: any) => s.key === key);
+        // Simple value return, assuming basic types or relying on pre-parsed if passed
+        // For complex JSON content usually handled by pages, Header mostly uses primitive values
+        return target ? target.value : defaultValue;
+    };
+
+    const menuItems = getSetting("navigation_header", [
         { label: "SOBRE", url: "#sobre" },
         { label: "CLIENTES", url: "#clientes" },
         { label: "SERVIÇOS", url: "#servicos" },
         { label: "METODOLOGIA", url: "#metodologia" },
         { label: "BLOG", url: "#blog" },
         { label: "CONTATO", url: "#contato" },
-    ]) : [];
+    ]);
+
+    const handleNavigation = (url: string) => {
+        setMobileMenuOpen(false);
+        if (url.startsWith("#")) {
+            const id = url.replace("#", "");
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                if (window.location.pathname !== '/') {
+                    window.location.href = "/" + url;
+                }
+            }
+        } else {
+            window.location.href = url;
+        }
+    };
 
     // Logo Logic
-    // If theme is dark, use light logo. If light, use dark logo.
     const effectiveLogo = mounted && theme === 'dark' ? (logoLight || logo) : (logoDark || logo);
 
     // Dimensions
@@ -51,7 +78,9 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
         { icon: "work", url: "#" }, // LinkedIn placeholder
     ];
 
-    const phoneNumber = ((getSetting ? getSetting("navigation_footer", { phone: "5511994416024" }) : { phone: "5511994416024" }).phone || "5511994416024").replace(/\D/g, "");
+    const phoneNumber = ((getSetting("navigation_footer", { phone: "5511994416024" }) || { phone: "5511994416024" }).phone || "5511994416024").replace(/\D/g, "");
+
+    const isBlogPost = pathname?.startsWith('/blog/') && pathname !== '/blog';
 
     return (
         <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-md" : "bg-transparent"}`}>
@@ -100,15 +129,7 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
                 <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
                     {/* LOGO (Left) */}
-                    <div
-                        className="flex items-center gap-3 cursor-pointer group shrink-0"
-                        onClick={() => {
-                            if (setSelectedPost) setSelectedPost(null);
-                            if (typeof window !== "undefined") {
-                                window.location.href = "/";
-                            }
-                        }}
-                    >
+                    <Link href="/" className="flex items-center gap-3 cursor-pointer group shrink-0">
                         {mounted && effectiveLogo ? (
                             <img
                                 src={effectiveLogo}
@@ -128,25 +149,36 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
                                 <span className="font-black text-xl text-foreground tracking-tighter">Renova<span className="text-primary">Mente</span></span>
                             </div>
                         )}
-                    </div>
+
+                        {isBlogPost && (
+                            <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-border/50 text-muted-foreground">
+                                <span className="material-symbols-outlined text-base">arrow_back</span>
+                                <span className="text-[10px] uppercase font-black tracking-widest">Voltar para o Início</span>
+                            </div>
+                        )}
+                    </Link>
 
                     {/* NAV LINKS (Right) */}
                     <nav className="hidden lg:flex items-center gap-8">
-                        {menuItems.map((link: any, i: number) => (
-                            <button
-                                key={i}
-                                onClick={() => {
-                                    if (scrollTo) {
-                                        scrollTo(link.url.replace("#", ""));
-                                    } else {
-                                        window.location.href = "/" + link.url;
-                                    }
-                                }}
-                                className="text-[11px] font-black text-foreground/70 hover:text-primary transition-colors tracking-[0.15em] uppercase hover:underline decoration-2 underline-offset-4 decoration-primary"
+                        {isBlogPost ? (
+                            <Link
+                                href="/"
+                                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors border border-primary/20 px-6 py-3 rounded-xl bg-primary/5"
                             >
-                                {link.label}
-                            </button>
-                        ))}
+                                <span className="material-symbols-outlined text-sm">arrow_back</span>
+                                Voltar para o Início
+                            </Link>
+                        ) : (
+                            menuItems.map((link: any, i: number) => (
+                                <button
+                                    key={i}
+                                    onClick={() => handleNavigation(link.url)}
+                                    className="text-[11px] font-black text-foreground/70 hover:text-primary transition-colors tracking-[0.15em] uppercase hover:underline decoration-2 underline-offset-4 decoration-primary"
+                                >
+                                    {link.label}
+                                </button>
+                            ))
+                        )}
                     </nav>
 
                     {/* MOBILE TOGGLE & SCROLLED CTA */}
@@ -177,9 +209,6 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
 
             {/* MOBILE MENU */}
             <div className={`fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
-                <div className="absolute top-6 left-6">
-                    {/* Optional Mobile Logo */}
-                </div>
 
                 {/* Social Mobile */}
                 <div className="flex items-center gap-6 mb-8 text-muted-foreground">
@@ -188,20 +217,26 @@ export function Header({ getSetting, scrollTo, setSelectedPost, logo, logoLight,
                     <a href="#" className="hover:text-primary"><span className="material-symbols-outlined text-2xl">thumb_up</span></a>
                 </div>
 
-                {menuItems.map((link: any, i: number) => (
-                    <button
-                        key={i}
-                        onClick={() => {
-                            setMobileMenuOpen(false);
-                            if (scrollTo) {
-                                scrollTo(link.url.replace("#", ""));
-                            }
-                        }}
-                        className="text-2xl font-black text-foreground hover:text-primary transition-colors uppercase tracking-widest"
+                {isBlogPost ? (
+                    <Link
+                        href="/"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-2xl font-black text-primary transition-colors uppercase tracking-widest flex items-center gap-3"
                     >
-                        {link.label}
-                    </button>
-                ))}
+                        <span className="material-symbols-outlined text-3xl">arrow_back</span>
+                        Voltar ao Início
+                    </Link>
+                ) : (
+                    menuItems.map((link: any, i: number) => (
+                        <button
+                            key={i}
+                            onClick={() => handleNavigation(link.url)}
+                            className="text-2xl font-black text-foreground hover:text-primary transition-colors uppercase tracking-widest"
+                        >
+                            {link.label}
+                        </button>
+                    ))
+                )}
 
                 <Link
                     href="/admin"
