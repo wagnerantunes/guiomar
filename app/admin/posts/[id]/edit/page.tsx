@@ -365,6 +365,7 @@ export default function EditPostPage({ params }: PageProps) {
                     setFormData(prev => ({ ...prev, image: url }));
                     setShowMediaPicker(false);
                 }}
+                recommendedSize="1200x630px"
             />
         </div>
     )

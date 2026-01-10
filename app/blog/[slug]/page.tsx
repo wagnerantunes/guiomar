@@ -192,17 +192,26 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 py-32 md:py-40">
 
                 {/* Visual Breadcrumbs */}
-                <nav className="mb-8 flex items-center gap-2 text-[11px] text-muted-foreground uppercase tracking-widest font-bold">
-                    <Link href="/" className="hover:text-primary transition-colors">Início</Link>
-                    <span>/</span>
-                    <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
-                    {post.category && (
-                        <>
-                            <span>/</span>
-                            <Link href="#" className="hover:text-primary transition-colors">{post.category.name}</Link>
-                        </>
-                    )}
-                </nav>
+                <div className="mb-8 flex items-center justify-between">
+                    <nav className="flex items-center gap-2 text-[11px] text-muted-foreground uppercase tracking-widest font-bold">
+                        <Link href="/" className="hover:text-primary transition-colors">Início</Link>
+                        <span>/</span>
+                        <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
+                        {post.category && (
+                            <>
+                                <span>/</span>
+                                <span className="text-foreground">{post.category.name}</span>
+                            </>
+                        )}
+                    </nav>
+                    <Link
+                        href="/blog"
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-all text-xs font-bold uppercase tracking-wider"
+                    >
+                        <span className="material-symbols-outlined text-sm">arrow_back</span>
+                        Voltar ao Blog
+                    </Link>
+                </div>
 
                 <div className="flex flex-col lg:flex-row gap-12">
                     {/* LEFT COLUMN: Share Buttons (Desktop Sticky) */}

@@ -15,6 +15,7 @@ interface MediaPickerProps {
     onSelect: (url: string) => void;
     title?: string;
     subtitle?: string;
+    recommendedSize?: string;
     onUploadSuccess?: () => void;
 }
 
@@ -23,7 +24,8 @@ export function MediaPicker({
     onClose,
     onSelect,
     title = "Biblioteca de Mídia",
-    subtitle = "Selecione uma imagem existente"
+    subtitle = "Selecione uma imagem existente",
+    recommendedSize
 }: MediaPickerProps) {
     const [mediaLibrary, setMediaLibrary] = useState<Media[]>([]);
     const [loading, setLoading] = useState(false);
@@ -112,6 +114,14 @@ export function MediaPicker({
                         <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">
                             {subtitle}
                         </p>
+                        {recommendedSize && (
+                            <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-lg border border-primary/20">
+                                <span className="material-symbols-outlined text-xs">photo_size_select_large</span>
+                                <span className="text-[9px] font-black uppercase tracking-wider">
+                                    Recomendado: {recommendedSize}
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <div className="flex items-center gap-3">
                         <button
