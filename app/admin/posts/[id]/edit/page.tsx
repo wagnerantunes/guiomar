@@ -310,7 +310,14 @@ export default function EditPostPage({ params }: PageProps) {
 
                         {formData.image ? (
                             <div className="relative group aspect-video rounded-3xl overflow-hidden border border-border bg-muted/5">
-                                <img src={formData.image} alt="Preview" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                <img
+                                    src={formData.image}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                                    style={{
+                                        objectPosition: imagePosition === 'top' ? 'top' : imagePosition === 'bottom' ? 'bottom' : 'center'
+                                    }}
+                                />
                                 <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                     <button
                                         onClick={() => setShowMediaPicker(true)}
