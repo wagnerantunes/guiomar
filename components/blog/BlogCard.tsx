@@ -10,13 +10,21 @@ export function BlogCard({ post }: BlogCardProps) {
     return (
         <article className="flex flex-col bg-card rounded-[2.2rem] border border-border overflow-hidden group hover:-translate-y-2 hover:border-primary/30 transition-all duration-500 relative shadow-sm">
             <Link href={`/blog/${post.slug}`} className="relative h-60 w-full overflow-hidden block">
-                <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{
-                        backgroundImage: `url("${post.image || "/placeholder.jpg"}")`,
-                    }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {post.image ? (
+                    <>
+                        <div
+                            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                            style={{
+                                backgroundImage: `url("${post.image}")`,
+                            }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </>
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-6xl text-primary/30">image</span>
+                    </div>
+                )}
 
                 {post.category && (
                     <div className="absolute top-5 left-5">
