@@ -61,7 +61,7 @@ function HomePageContent() {
         const res = await fetch("/api/settings");
         if (res.ok) {
           const data = await res.json();
-          setSiteSettings(data);
+          setSiteSettings(Array.isArray(data) ? data : []);
         }
       } catch (error) {
         console.error("Error fetching site settings:", error);
@@ -85,15 +85,17 @@ function HomePageContent() {
         const res = await fetch("/api/posts");
         if (res.ok) {
           const data = await res.json();
-          const transformed = data.map((p: any) => ({
-            id: p.id,
-            title: p.title,
-            cat: p.category?.name || "GERAL",
-            img: p.image || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
-            date: new Date(p.createdAt).toLocaleDateString("pt-BR", { day: 'numeric', month: 'short', year: 'numeric' }),
-            content: p.content
-          }));
-          setBlogPosts(transformed);
+          if (Array.isArray(data)) {
+            const transformed = data.map((p: any) => ({
+              id: p.id,
+              title: p.title,
+              cat: p.category?.name || "GERAL",
+              img: p.image || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+              date: new Date(p.createdAt).toLocaleDateString("pt-BR", { day: 'numeric', month: 'short', year: 'numeric' }),
+              content: p.content
+            }));
+            setBlogPosts(transformed);
+          }
         }
       } catch (error) {
         console.error("Error fetching posts:", error);

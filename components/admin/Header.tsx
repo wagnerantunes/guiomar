@@ -2,12 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import MobileSidebar from "./MobileSidebar";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { NotificationBell } from "./NotificationBell";
 
 export default function AdminHeader() {
+    const { data: session } = useSession();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const [logo, setLogo] = React.useState<string | null>(null);
 
@@ -25,6 +26,11 @@ export default function AdminHeader() {
         };
         fetchSettings();
     }, []);
+
+    const user = session?.user as any;
+    const userName = user?.name || "Usuário";
+    const userRole = user?.role === 'ADMIN' ? "Administrador(a)" : user?.role === 'EDITOR' ? "Editor(a)" : "Visualizador(a)";
+    const userImage = user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=0F758D&color=fff`;
 
     return (
         <header
@@ -91,14 +97,14 @@ export default function AdminHeader() {
 
                             <div className="flex items-center gap-3 pl-4 border-l border-border">
                                 <div className="text-right hidden lg:block">
-                                    <p className="text-[11px] font-black text-foreground leading-none">Guiomar Melo</p>
-                                    <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Administradora</p>
+                                    <p className="text-[11px] font-black text-foreground leading-none">{userName}</p>
+                                    <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">{userRole}</p>
                                 </div>
-                                <div className="size-10 rounded-xl border-2 border-white dark:border-white/10 shadow-lg overflow-hidden shrink-0">
+                                <div className="size-10 rounded-xl border-2 border-white dark:border-white/10 shadow-lg overflow-hidden shrink-0 bg-muted/20">
                                     <img
                                         alt="Avatar"
                                         className="h-full w-full object-cover"
-                                        src="https://lh3.googleusercontent.com/a/ACg8ocL0O7T_F-zL7W3J_GhcBEox7bdUyHxk5JShcprT5YPMDd3e7Q=s96-c"
+                                        src={userImage}
                                     />
                                 </div>
                             </div>
