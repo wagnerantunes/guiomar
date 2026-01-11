@@ -1,6 +1,6 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getAdminSession } from "@/lib/admin-utils";
 
 // GET route for public site data (logos, etc)
 export async function GET() {
@@ -32,26 +32,13 @@ export async function GET() {
 
 export async function PATCH(req: Request) {
     try {
-        const session = await auth();
-        if (!session?.user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-
+        const { session, siteId } = await getAdminSession();
         const body = await req.json();
         const { name, domain, description, favicon, logo, logoDark, logoLight, logoAdmin, ogImage, emailTo, emailBcc, resendApiKey, settings } = body;
 
-        // Get user's site
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user.id },
-        });
-
-        if (!siteUser) {
-            return NextResponse.json({ error: "Site not found" }, { status: 404 });
-        }
-
         // Update site
         const updatedSite = await prisma.site.update({
-            where: { id: siteUser.siteId },
+            where: { id: siteId },
             data: {
                 name,
                 domain: domain || null,

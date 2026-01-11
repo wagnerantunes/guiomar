@@ -1,16 +1,14 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getAdminSession } from "@/lib/admin-utils";
 
 export async function GET() {
-    const session = await auth();
-    if (!session) return new NextResponse("Unauthorized", { status: 401 });
-
-    const siteUser = await prisma.siteUser.findFirst({
-        where: { userId: session.user?.id },
-    });
-
-    if (!siteUser) return new NextResponse("Site not found", { status: 404 });
+    let session, siteId;
+    try {
+        ({ session, siteId } = await getAdminSession());
+    } catch (error: any) {
+        return new NextResponse(error.message || "Unauthorized", { status: error.message === "Unauthorized" ? 401 : 404 });
+    }
 
     // Fetch leads with status 'New'
     const newLeads = await prisma.lead.findMany({

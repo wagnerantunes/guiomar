@@ -1,26 +1,19 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, unlink } from "fs/promises";
 import path from "path";
+import { getAdminSession } from "@/lib/admin-utils";
 
 export async function GET() {
-    const session = await auth();
-
-    if (!session) {
-        return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    const siteUser = await prisma.siteUser.findFirst({
-        where: { userId: session.user?.id },
-    });
-
-    if (!siteUser) {
-        return new NextResponse("Site not found", { status: 404 });
+    let session, siteId;
+    try {
+        ({ session, siteId } = await getAdminSession());
+    } catch (error: any) {
+        return new NextResponse(error.message || "Unauthorized", { status: error.message === "Unauthorized" ? 401 : 404 });
     }
 
     const media = await prisma.media.findMany({
-        where: { siteId: siteUser.siteId },
+        where: { siteId: siteId },
         orderBy: { createdAt: "desc" },
     });
 
@@ -29,14 +22,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await auth();
-        if (!session) return new NextResponse("Unauthorized", { status: 401 });
-
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user?.id },
-        });
-
-        if (!siteUser) return new NextResponse("Site not found", { status: 404 });
+        const { session, siteId } = await getAdminSession();
 
         const formData = await request.formData();
         const file = formData.get("file") as File;
@@ -58,7 +44,7 @@ export async function POST(request: NextRequest) {
                 url: `/uploads/${filename}`,
                 mimeType: file.type,
                 size: file.size,
-                siteId: siteUser.siteId,
+                siteId: siteId,
             },
         });
 
@@ -71,9 +57,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
-        const session = await auth();
-        if (!session) return new NextResponse("Unauthorized", { status: 401 });
-
+        const { siteId } = await getAdminSession();
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
 

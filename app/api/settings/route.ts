@@ -1,39 +1,43 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getAdminSession, getActiveSiteId } from "@/lib/admin-utils";
+import { auth } from "@/lib/auth";
 
 export async function GET() {
     const session = await auth();
-    if (!session?.user?.id) {
-        // For public landing page access, we need a way to fetch settings
-        // Usually by domain or site slug.
-        const url = new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001");
-        const domain = url.hostname;
+    let siteId: string | null = null;
 
+    if (session?.user?.id && session.user.email) {
+        try {
+            siteId = await getActiveSiteId(session.user.id, session.user.email);
+        } catch (e) {
+            // Log or handle error
+        }
+    }
+
+    if (!siteId) {
+        // Public access or fallback
         try {
             const site = await prisma.site.findFirst({
-                where: { domain: { contains: "renovamente" } }, // Fallback logic
-                include: { siteSettings: true }
+                where: {
+                    OR: [
+                        { domain: "renovamente-guiomarmelo.com.br" },
+                        { domain: { contains: "renovamente" } }
+                    ]
+                }
             });
-            return NextResponse.json(site?.siteSettings || []);
+            siteId = site?.id || null;
         } catch (e) {
             return NextResponse.json([]);
         }
     }
 
+    if (!siteId) return NextResponse.json([]);
+
     try {
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user.id },
-        });
-
-        if (!siteUser) {
-            return NextResponse.json({ error: "Site not found" }, { status: 404 });
-        }
-
         const settings = await prisma.siteSettings.findMany({
-            where: { siteId: siteUser.siteId },
+            where: { siteId: siteId },
         });
-
         return NextResponse.json(settings);
     } catch (error) {
         console.error("Error fetching settings:", error);
@@ -42,41 +46,29 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-    const session = await auth();
-    if (!session?.user?.id) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     try {
+        const { siteId } = await getAdminSession();
         const body = await req.json();
         const { key, value } = body;
-
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user.id },
-        });
-
-        if (!siteUser) {
-            return NextResponse.json({ error: "Site not found" }, { status: 404 });
-        }
 
         const setting = await prisma.siteSettings.upsert({
             where: {
                 siteId_key: {
-                    siteId: siteUser.siteId,
+                    siteId: siteId,
                     key: key,
                 },
             },
             update: { value: value },
             create: {
-                siteId: siteUser.siteId,
+                siteId: siteId,
                 key: key,
                 value: value,
             },
         });
 
         return NextResponse.json(setting);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating setting:", error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: error.message === "Unauthorized" ? 401 : 500 });
     }
 }

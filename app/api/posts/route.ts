@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import prisma from '@/lib/prisma'
+import { getActiveSiteId, getAdminSession } from '@/lib/admin-utils'
 
 export async function GET(request: NextRequest) {
     try {
         const session = await auth()
         let siteId: string | null = null
 
-        if (session?.user?.id) {
-            const siteUser = await prisma.siteUser.findFirst({
-                where: { userId: session.user.id }
-            })
-            siteId = siteUser?.siteId || null
-        } else {
-            // Public access - find site by domain
+        if (session?.user?.id && session.user.email) {
+            try {
+                siteId = await getActiveSiteId(session.user.id, session.user.email)
+            } catch (e) {
+                // Fallback to searching siteId via domain or first site
+            }
+        }
+
+        if (!siteId) {
+            // Public access or fallback - find site by domain
             const url = new URL(request.url)
             const domain = url.searchParams.get('domain') || "renovamente-guiomarmelo.com.br"
             const site = await prisma.site.findUnique({
@@ -53,18 +57,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await auth()
-        if (!session) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        }
-
-        const siteUser = await prisma.siteUser.findFirst({
-            where: { userId: session.user.id }
-        })
-
-        if (!siteUser) {
-            return NextResponse.json({ error: 'Site not found' }, { status: 404 })
-        }
+        const { session, siteId } = await getAdminSession()
 
         const body = await request.json()
         const { title, slug, content, excerpt, categoryId, status, image } = body
@@ -77,7 +70,7 @@ export async function POST(request: NextRequest) {
                 excerpt,
                 status,
                 image,
-                siteId: siteUser.siteId,
+                siteId: siteId,
                 authorId: session.user.id,
                 categoryId: categoryId || null,
                 publishedAt: status === 'PUBLISHED' ? new Date() : null
