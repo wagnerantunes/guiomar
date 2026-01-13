@@ -32,9 +32,14 @@ export default function EditPostPage({ params }: PageProps) {
         excerpt: '',
         image: '',
         categoryId: '',
-        status: 'DRAFT' as 'DRAFT' | 'PUBLISHED'
+        status: 'DRAFT' as 'DRAFT' | 'PUBLISHED',
+        seoTitle: '',
+        seoDescription: '',
+        seoKeywords: ''
     })
     const [imagePosition, setImagePosition] = useState('center')
+    const [isAutoSaving, setIsAutoSaving] = useState(false)
+    const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
     useEffect(() => {
         async function fetchData() {
@@ -71,7 +76,10 @@ export default function EditPostPage({ params }: PageProps) {
                         excerpt: postData.excerpt || '',
                         image: postData.image || '',
                         categoryId: postData.categoryId || '',
-                        status: postData.status || 'DRAFT'
+                        status: postData.status || 'DRAFT',
+                        seoTitle: postData.seoTitle || '',
+                        seoDescription: postData.seoDescription || '',
+                        seoKeywords: postData.seoKeywords || ''
                     })
                     setImagePosition(loadedPosition);
                 }
@@ -83,6 +91,34 @@ export default function EditPostPage({ params }: PageProps) {
         }
         fetchData()
     }, [id])
+
+    // Auto-save to DB
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (fetching) return; // Don't save while loading initial data
+
+            try {
+                setIsAutoSaving(true)
+                const response = await fetch(`/api/posts/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...formData,
+                        content: formData.content + `<!-- image_position:${imagePosition} -->`
+                    })
+                })
+                if (response.ok) {
+                    console.log("Auto-save successful")
+                    setLastSaved(new Date())
+                }
+            } catch (error) {
+                console.error("Auto-save error:", error)
+            } finally {
+                setTimeout(() => setIsAutoSaving(false), 500)
+            }
+        }, 5000) // Save every 5 seconds after last change
+        return () => clearTimeout(timer)
+    }, [formData, imagePosition, id, fetching])
 
     const handleTitleChange = (title: string) => {
         setFormData({
@@ -214,8 +250,10 @@ export default function EditPostPage({ params }: PageProps) {
                                 <div className="flex items-center justify-between px-2">
                                     <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em] block">Corpo Editorial <span className="text-destructive">*</span></label>
                                     <div className="flex items-center gap-2">
-                                        <span className="size-2 rounded-full bg-primary animate-pulse" />
-                                        <span className="text-[9px] font-bold text-muted uppercase tracking-widest">Salvamento Ativo</span>
+                                        <span className={`size-2 rounded-full ${isAutoSaving ? 'bg-amber-500 animate-pulse' : 'bg-primary'}`} />
+                                        <span className="text-[9px] font-bold text-muted uppercase tracking-widest">
+                                            {isAutoSaving ? 'Sincronizando...' : lastSaved ? `Salvo em ${lastSaved.toLocaleTimeString()}` : 'Salvamento Ativo'}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="border border-border rounded-[3rem] overflow-hidden bg-muted/5 p-2">
@@ -229,131 +267,181 @@ export default function EditPostPage({ params }: PageProps) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150">
-                    {/* Publishing Settings */}
-                    <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-10">
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-sm">category</span>
+                <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150 relative">
+                    <div className="sticky top-32 space-y-8 h-fit pb-10">
+                        {/* Publishing Settings */}
+                        <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-10">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-sm">category</span>
+                                    </div>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Classificação</label>
                                 </div>
-                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Classificação</label>
+                                <select
+                                    aria-label="Selecionar categoria"
+                                    value={formData.categoryId}
+                                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                                    className="w-full bg-muted/5 border border-border rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground appearance-none cursor-pointer uppercase tracking-[0.2em]"
+                                >
+                                    <option value="">Sem Categoria</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                    ))}
+                                </select>
                             </div>
-                            <select
-                                aria-label="Selecionar categoria"
-                                value={formData.categoryId}
-                                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                className="w-full bg-muted/5 border border-border rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground appearance-none cursor-pointer uppercase tracking-[0.2em]"
-                            >
-                                <option value="">Sem Categoria</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                ))}
-                            </select>
-                        </div>
 
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-sm">link</span>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-sm">link</span>
+                                    </div>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Identificador Único</label>
                                 </div>
-                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Identificador Único</label>
+                                <div className="flex items-center gap-4 px-6 py-4 bg-muted/5 rounded-2xl border border-border focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                                    <input
+                                        aria-label="URL do post (slug)"
+                                        type="text"
+                                        value={formData.slug}
+                                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                                        className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-muted"
+                                        placeholder="identificador-url"
+                                    />
+                                </div>
                             </div>
-                            <div className="flex items-center gap-4 px-6 py-4 bg-muted/5 rounded-2xl border border-border focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                                <input
-                                    aria-label="URL do post (slug)"
-                                    type="text"
-                                    value={formData.slug}
-                                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                                    className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-muted"
-                                    placeholder="identificador-url"
+
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-sm">subject</span>
+                                    </div>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Resumo Executivo</label>
+                                </div>
+                                <textarea
+                                    aria-label="Resumo do post"
+                                    value={formData.excerpt}
+                                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                                    rows={6}
+                                    className="w-full bg-muted/5 border border-border rounded-[2rem] p-8 text-[11px] font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none leading-relaxed text-muted placeholder:text-muted/20"
+                                    placeholder="Uma síntese que despertará curiosidade no leitor..."
+                                />
+                            </div>
+
+                            <div className="pt-10 border-t border-border space-y-8">
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                            <span className="material-symbols-outlined text-sm">search</span>
+                                        </div>
+                                        <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Configurações de SEO</label>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-widest ml-1">Meta Título</label>
+                                        <input
+                                            type="text"
+                                            value={formData.seoTitle}
+                                            onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                                            placeholder={formData.title || "Título SEO"}
+                                            className="w-full bg-muted/5 border border-border rounded-xl px-5 py-3 text-[10px] font-bold focus:ring-4 focus:ring-primary/10 outline-none text-foreground"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-widest ml-1">Meta Descrição</label>
+                                        <textarea
+                                            value={formData.seoDescription}
+                                            onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
+                                            placeholder={formData.excerpt || "Breve descrição para o Google..."}
+                                            rows={3}
+                                            className="w-full bg-muted/5 border border-border rounded-xl px-5 py-3 text-[10px] font-bold focus:ring-4 focus:ring-primary/10 outline-none text-foreground resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-widest ml-1">Palavras-Chave</label>
+                                        <input
+                                            type="text"
+                                            value={formData.seoKeywords}
+                                            onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })}
+                                            placeholder="separadas, por, virgula"
+                                            className="w-full bg-muted/5 border border-border rounded-xl px-5 py-3 text-[10px] font-bold focus:ring-4 focus:ring-primary/10 outline-none text-foreground"
+                                        />
+                                    </div>
+                                </div>
+
+                                <SEOHealthCheck
+                                    title={formData.seoTitle || formData.title}
+                                    content={formData.content}
+                                    excerpt={formData.seoDescription || formData.excerpt}
+                                    image={formData.image}
+                                    slug={formData.slug}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 mb-2">
+                        {/* Featured Image */}
+                        <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-6">
+                            <div className="flex items-center gap-3">
                                 <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-sm">subject</span>
+                                    <span className="material-symbols-outlined text-sm">image</span>
                                 </div>
-                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Resumo Executivo</label>
+                                <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Imagem de Destaque</label>
                             </div>
-                            <textarea
-                                aria-label="Resumo do post"
-                                value={formData.excerpt}
-                                onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                                rows={6}
-                                className="w-full bg-muted/5 border border-border rounded-[2rem] p-8 text-[11px] font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none leading-relaxed text-muted placeholder:text-muted/20"
-                                placeholder="Uma síntese que despertará curiosidade no leitor..."
-                            />
-                        </div>
 
-                        <div className="pt-10 border-t border-border">
-                            <SEOHealthCheck
-                                title={formData.title}
-                                content={formData.content}
-                                excerpt={formData.excerpt}
-                                image={formData.image}
-                                slug={formData.slug}
-                            />
-                        </div>
-                    </div>
+                            {formData.image ? (
+                                <div className="relative group aspect-video rounded-3xl overflow-hidden border border-border bg-muted/5">
+                                    <img
+                                        src={formData.image.startsWith('http') ? formData.image : (formData.image.startsWith('/') ? `${window.location.origin}${formData.image}` : formData.image)}
+                                        alt="Preview"
+                                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            if (target.src !== formData.image) {
+                                                target.src = formData.image;
+                                            }
+                                        }}
+                                        style={{
+                                            objectPosition: imagePosition === 'top' ? 'top' : imagePosition === 'bottom' ? 'bottom' : 'center'
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        <button
+                                            onClick={() => setShowMediaPicker(true)}
+                                            className="p-3 bg-card text-foreground rounded-full hover:scale-110 transition-all"
+                                        >
+                                            <span className="material-symbols-outlined">sync</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                                            className="p-3 bg-card text-destructive rounded-full hover:scale-110 transition-all"
+                                        >
+                                            <span className="material-symbols-outlined">delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => setShowMediaPicker(true)}
+                                    className="w-full aspect-video rounded-3xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 text-muted hover:text-primary hover:border-primary/50 transition-all group"
+                                >
+                                    <div className="size-12 rounded-2xl bg-muted/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <span className="material-symbols-outlined text-2xl">add_a_photo</span>
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Selecionar Imagem</span>
+                                </button>
+                            )}
+                            <p className="text-[9px] text-muted font-medium text-center px-4 uppercase tracking-tighter">
+                                Recomendado: 1200x630px para redes sociais.
+                            </p>
 
-                    {/* Featured Image */}
-                    <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-6">
-                        <div className="flex items-center gap-3">
-                            <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                <span className="material-symbols-outlined text-sm">image</span>
-                            </div>
-                            <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Imagem de Destaque</label>
-                        </div>
-
-                        {formData.image ? (
-                            <div className="relative group aspect-video rounded-3xl overflow-hidden border border-border bg-muted/5">
-                                <img
-                                    src={formData.image}
-                                    alt="Preview"
-                                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                                    style={{
-                                        objectPosition: imagePosition === 'top' ? 'top' : imagePosition === 'bottom' ? 'bottom' : 'center'
-                                    }}
+                            {formData.image && (
+                                <ImagePositionSelector
+                                    value={imagePosition}
+                                    onChange={setImagePosition}
                                 />
-                                <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                    <button
-                                        onClick={() => setShowMediaPicker(true)}
-                                        className="p-3 bg-card text-foreground rounded-full hover:scale-110 transition-all"
-                                    >
-                                        <span className="material-symbols-outlined">sync</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                                        className="p-3 bg-card text-destructive rounded-full hover:scale-110 transition-all"
-                                    >
-                                        <span className="material-symbols-outlined">delete</span>
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={() => setShowMediaPicker(true)}
-                                className="w-full aspect-video rounded-3xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 text-muted hover:text-primary hover:border-primary/50 transition-all group"
-                            >
-                                <div className="size-12 rounded-2xl bg-muted/5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <span className="material-symbols-outlined text-2xl">add_a_photo</span>
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest">Selecionar Imagem</span>
-                            </button>
-                        )}
-                        <p className="text-[9px] text-muted font-medium text-center px-4 uppercase tracking-tighter">
-                            Recomendado: 1200x630px para redes sociais.
-                        </p>
-
-                        {formData.image && (
-                            <ImagePositionSelector
-                                value={imagePosition}
-                                onChange={setImagePosition}
-                            />
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

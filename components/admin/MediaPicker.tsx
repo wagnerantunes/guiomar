@@ -176,7 +176,7 @@ export function MediaPicker({
                                     className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-white/10 hover:border-primary cursor-pointer transition-all group hover:scale-105 shadow-sm"
                                 >
                                     <img
-                                        src={media.url}
+                                        src={media.url.startsWith('http') ? media.url : `${window.location.origin}${media.url}`}
                                         className="w-full h-full object-cover"
                                         alt={media.filename}
                                         loading="lazy"

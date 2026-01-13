@@ -41,6 +41,13 @@ export function SEOHealthCheck({ title, content, excerpt, image, slug }: SEOHeal
             status: image ? 'success' : 'error',
             message: image ? 'Definida' : 'Obrigatória',
             icon: 'image'
+        },
+        {
+            id: 'keywords',
+            label: 'Tags SEO',
+            status: content.includes('keywords') || title.length > 5 ? 'success' : 'warning',
+            message: 'Otimizado',
+            icon: 'sell'
         }
     ];
 

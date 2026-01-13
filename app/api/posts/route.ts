@@ -59,8 +59,7 @@ export async function POST(request: NextRequest) {
     try {
         const { session, siteId } = await getAdminSession()
 
-        const body = await request.json()
-        const { title, slug, content, excerpt, categoryId, status, image } = body
+        const { title, slug, content, excerpt, categoryId, status, image, seoTitle, seoDescription, seoKeywords } = body
 
         const post = await prisma.post.create({
             data: {
@@ -70,6 +69,9 @@ export async function POST(request: NextRequest) {
                 excerpt,
                 status,
                 image,
+                seoTitle,
+                seoDescription,
+                seoKeywords,
                 siteId: siteId,
                 authorId: session.user.id,
                 categoryId: categoryId || null,

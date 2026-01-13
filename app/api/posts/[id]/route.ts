@@ -43,8 +43,7 @@ export async function PATCH(
         }
 
         const { id } = await params
-        const body = await request.json()
-        const { title, slug, content, excerpt, categoryId, status, image } = body
+        const { title, slug, content, excerpt, categoryId, status, image, seoTitle, seoDescription, seoKeywords } = body
 
         const post = await prisma.post.update({
             where: { id },
@@ -55,6 +54,9 @@ export async function PATCH(
                 excerpt,
                 status,
                 image,
+                seoTitle,
+                seoDescription,
+                seoKeywords,
                 categoryId: categoryId || null,
                 publishedAt: status === 'PUBLISHED' ? new Date() : null
             }

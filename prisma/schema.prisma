@@ -165,6 +165,11 @@ model Post {
   views         Int         @default(0)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  
+  // SEO Fields
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
 
   site      Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
   author    User      @relation(fields: [authorId], references: [id])
