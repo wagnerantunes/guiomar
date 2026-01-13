@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface HeaderProps {
     logo?: string | null;
@@ -20,6 +21,7 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
     const [scrolled, setScrolled] = useState(false);
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const isMobile = useIsMobile();
 
     // Hide Header on Admin routes
     if (pathname?.startsWith('/admin')) return null;
@@ -83,7 +85,7 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
     const isBlogPost = pathname?.startsWith('/blog/') && pathname !== '/blog';
 
     return (
-        <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-md" : "bg-transparent"}`}>
+        <header className={`fixed top-0 w-full z-50 transition-all duration-300 will-change-transform ${scrolled ? (isMobile ? "bg-background border-b border-border shadow-md" : "bg-background/80 backdrop-blur-xl border-b border-border shadow-md") : "bg-transparent"}`}>
 
             {/* ROW 1: TOP BAR (Desktop Only) */}
             <div className={`hidden lg:block w-full border-b border-border/10 ${scrolled ? "h-0 overflow-hidden opacity-0 py-0" : "h-12 opacity-100 py-0"} transition-all duration-300 bg-primary/5`}>
@@ -208,7 +210,8 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
             </div>
 
             {/* MOBILE MENU */}
-            <div className={`fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+            <div className={`fixed inset-0 z-40 bg-background transition-all duration-500 lg:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+                {!isMobile && <div className="absolute inset-0 backdrop-blur-3xl bg-background/95 z-[-1]" />}
 
                 {/* Social Mobile */}
                 <div className="flex items-center gap-6 mb-8 text-muted-foreground">

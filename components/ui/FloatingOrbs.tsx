@@ -2,8 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 export function FloatingOrbs() {
+    const isMobile = useIsMobile();
+
+    if (isMobile) return null;
+
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1] select-none">
             {/* Soft Ambient Light Orbs */}

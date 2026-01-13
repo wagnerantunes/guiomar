@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/ToastProvider";
 import { RichText } from "@/components/ui/RichText";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 import { AntigravityParticles } from "@/components/ui/AntigravityParticles";
 
@@ -20,6 +21,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [currentSlide, setCurrentSlide] = useState(0);
     const { toast } = useToast();
+    const isMobile = useIsMobile();
 
     const heroData = getSetting("section_hero_content", SECTION_DEFAULTS.hero);
 
@@ -52,6 +54,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
     const dy = useSpring(mouseY, springConfig);
 
     const handleMouseMove = (e: React.MouseEvent) => {
+        if (isMobile) return;
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (e.clientX - rect.left - rect.width / 2) * 0.4;
         const y = (e.clientY - rect.top - rect.height / 2) * 0.4;
@@ -60,6 +63,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
     };
 
     const handleMouseLeave = () => {
+        if (isMobile) return;
         mouseX.set(0);
         mouseY.set(0);
     };
@@ -138,7 +142,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.7, ease: "easeInOut" }}
-                            className="relative w-full h-full"
+                            className="relative w-full h-full will-change-transform"
                         >
                             <Image
                                 src={bgImage}
@@ -157,8 +161,6 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                 <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
             </div>
 
-            {/* ... */}
-
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div className="text-foreground space-y-8 animate-fadeInLeft lg:col-span-7">
                     <motion.p
@@ -166,7 +168,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="type-badge text-primary bg-primary/20 px-4 py-2 rounded-full inline-block border border-primary/20 mb-6 backdrop-blur-md normal-case tracking-normal"
+                        className={`type-badge text-primary bg-primary/20 px-4 py-2 rounded-full inline-block border border-primary/20 mb-6 ${isMobile ? '' : 'backdrop-blur-md'} normal-case tracking-normal will-change-[transform,opacity]`}
                         style={{ textTransform: 'none', letterSpacing: '0px' }}
                     >
                         {displaySubtitle}
@@ -176,7 +178,7 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.3 }}
-                        className="text-5xl md:text-6xl font-black text-foreground drop-shadow-sm max-w-3xl leading-[1.1] tracking-wide mb-8"
+                        className="text-4xl md:text-6xl font-black text-foreground drop-shadow-sm max-w-3xl leading-[1.1] tracking-wide mb-8 will-change-[transform,opacity]"
                         style={{ textWrap: "balance" } as any}
                     >
                         {displayTitle}
@@ -192,10 +194,10 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.5 }}
-                        className="relative inline-block"
+                        className="relative inline-block will-change-[transform,opacity]"
                         onMouseMove={handleMouseMove}
                         onMouseLeave={handleMouseLeave}
-                        style={{ x: dx, y: dy }}
+                        style={!isMobile ? { x: dx, y: dy } : {}}
                     >
                         <button
                             onClick={() => scrollTo("servicos")}
@@ -210,8 +212,9 @@ export function Hero({ getSetting, scrollTo, nextId }: HeroProps) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
-                    className="lg:col-span-4 lg:col-start-9 bg-card/40 backdrop-blur-2xl p-8 md:p-10 rounded-[2rem] shadow-2xl w-full ml-auto border border-border"
+                    className={`lg:col-span-4 lg:col-start-9 bg-card/40 ${isMobile ? '' : 'backdrop-blur-2xl'} p-8 md:p-10 rounded-[2rem] shadow-2xl w-full ml-auto border border-border will-change-[transform,opacity]`}
                 >
+
                     <div className="mb-6">
                         <h3 className="text-xl md:text-2xl font-black text-foreground">
                             Transforme seu ambiente de trabalho

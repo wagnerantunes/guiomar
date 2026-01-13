@@ -4,12 +4,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface TestimonialsProps {
     getSetting: (key: string, defaultValue: any) => any;
 }
 
 export function Testimonials({ getSetting }: TestimonialsProps) {
+    const isMobile = useIsMobile();
     const data = getSetting("section_testimonials_content", {
         title: "O que nossos clientes dizem",
         items: [
@@ -24,7 +26,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
 
     return (
         <div className="px-6">
-            <div className="text-center mb-24 space-y-6">
+            <div className="text-center mb-20 md:mb-24 space-y-6">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Experiências</span>
                 <h2
                     className="font-black text-foreground tracking-tighter uppercase italic"
@@ -42,7 +44,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                 }}
             >
                 <motion.div
-                    className="flex gap-8"
+                    className="flex gap-8 will-change-transform"
                     animate={{
                         x: [0, -2000],
                     }}
@@ -50,7 +52,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 30,
+                            duration: isMobile ? 40 : 30, // Slower on mobile/smaller screens for better readability and performance
                             ease: "linear",
                         },
                     }}
@@ -58,7 +60,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                     {items.map((t: any, i: number) => (
                         <div
                             key={i}
-                            className="flex-shrink-0 w-[400px] bg-card backdrop-blur-xl p-10 rounded-[2.5rem] border border-border shadow-xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden"
+                            className={`flex-shrink-0 w-[320px] md:w-[400px] bg-card ${isMobile ? '' : 'backdrop-blur-xl'} p-8 md:p-10 rounded-[2.5rem] border border-border shadow-xl hover:border-primary/30 transition-all duration-500 group relative overflow-hidden`}
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
 
@@ -68,7 +70,7 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
                                 ))}
                             </div>
 
-                            <div className="mb-10 min-h-[120px]">
+                            <div className="mb-10 min-h-[100px] md:min-h-[120px]">
                                 <p
                                     className="text-foreground font-medium italic leading-relaxed"
                                     style={{ fontSize: "var(--section-body-size)" } as any}
@@ -95,4 +97,5 @@ export function Testimonials({ getSetting }: TestimonialsProps) {
         </div>
     );
 }
+
 

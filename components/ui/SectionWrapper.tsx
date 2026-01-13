@@ -6,6 +6,7 @@ import { AntigravityParticles } from "./AntigravityParticles";
 import { ScrollIndicator } from "./ScrollIndicator";
 import { AuroraBackground } from "./AuroraBackground";
 import { AnimatedGrid } from "./AnimatedGrid";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface SectionWrapperProps {
     children: React.ReactNode;
@@ -29,7 +30,8 @@ export function SectionWrapper({
     variant = "default"
 }: SectionWrapperProps) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const isMobile = useIsMobile();
 
     const getFontSize = (val: any, fallback: number) => {
         if (!val) return fallback;
@@ -61,19 +63,19 @@ export function SectionWrapper({
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: stagger ? 0.2 : 0,
+                staggerChildren: stagger ? (isMobile ? 0.1 : 0.2) : 0,
                 delayChildren: delay,
             }
         }
     };
 
     const itemVariants = {
-        hidden: { opacity: 0, y: 30 },
+        hidden: { opacity: 0, y: isMobile ? 15 : 30 },
         visible: {
             opacity: 1,
             y: 0,
             transition: {
-                duration: 0.8,
+                duration: isMobile ? 0.5 : 0.8,
                 ease: [0.21, 0.47, 0.32, 0.98] as any
             }
         }
@@ -99,8 +101,8 @@ export function SectionWrapper({
         // Fallback for generic text color
         ...(content?.textColor && { '--foreground': content.textColor }),
 
-        ...(content?.paddingTop && { paddingTop: `${content.paddingTop}px` }),
-        ...(content?.paddingBottom && { paddingBottom: `${content.paddingBottom}px` }),
+        ...(content?.paddingTop && { paddingTop: `${(isMobile ? content.paddingTop * 0.7 : content.paddingTop) || 0}px` }),
+        ...(content?.paddingBottom && { paddingBottom: `${(isMobile ? content.paddingBottom * 0.7 : content.paddingBottom) || 0}px` }),
     } as React.CSSProperties;
 
     return (
@@ -110,7 +112,7 @@ export function SectionWrapper({
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className={`py-32 px-6 ${!content?.bgColor ? variantClasses[variant] : ''} ${className} relative overflow-hidden transition-colors duration-500`}
+            className={`py-20 md:py-32 px-6 ${!content?.bgColor ? variantClasses[variant] : ''} ${className} relative overflow-hidden transition-colors duration-500 will-change-transform`}
             style={styleVars}
         >
             <style dangerouslySetInnerHTML={{
@@ -152,30 +154,34 @@ export function SectionWrapper({
                 />
             )}
 
-            {/* Background Effects */}
-            {content?.bgEffect === "particles" && <AntigravityParticles />}
-            {content?.bgEffect === "aurora" && <AuroraBackground />}
-            {content?.bgEffect === "grid" && <AnimatedGrid />}
+            {/* Background Effects - Heavily optimized/disabled for mobile */}
+            {!isMobile && (
+                <>
+                    {content?.bgEffect === "particles" && <AntigravityParticles />}
+                    {content?.bgEffect === "aurora" && <AuroraBackground />}
+                    {content?.bgEffect === "grid" && <AnimatedGrid />}
+                </>
+            )}
 
-            {/* Parallax Effect / Gradient fallback */}
+            {/* Parallax Effect / Gradient fallback - Only if not too heavy */}
             {content?.bgEffect === "parallax" && (
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent z-0 animate-pulse pointer-events-none" />
             )}
 
-            {/* Ambient Background Glow for variants */}
+            {/* Ambient Background Glow - Reduced blur for mobile */}
             {variant === "default" && (
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/2 blur-[120px] rounded-full opacity-20 pointer-events-none" />
+                <div className={`absolute top-0 right-0 w-[800px] h-[800px] bg-primary/2 ${isMobile ? 'blur-[60px]' : 'blur-[120px]'} rounded-full opacity-20 pointer-events-none`} />
             )}
 
-            <div className={`${content?.fullWidth ? "w-full px-6" : "max-w-7xl mx-auto"} ${content?.fullHeight ? "min-h-[80vh] flex flex-col justify-center" : "h-full"} relative z-10 w-full`}>
+            <div className={`${content?.fullWidth ? "w-full px-6" : "max-w-7xl mx-auto"} ${content?.fullHeight ? "min-h-[60vh] flex flex-col justify-center" : "h-full"} relative z-10 w-full`}>
                 {stagger ? (
                     React.Children.map(children, (child) => (
-                        <motion.div variants={itemVariants}>
+                        <motion.div variants={itemVariants} className="will-change-[transform,opacity]">
                             {child}
                         </motion.div>
                     ))
                 ) : (
-                    <motion.div variants={itemVariants}>
+                    <motion.div variants={itemVariants} className="will-change-[transform,opacity]">
                         {children}
                     </motion.div>
                 )}
@@ -183,4 +189,5 @@ export function SectionWrapper({
         </motion.section>
     );
 }
+
 
