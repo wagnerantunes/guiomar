@@ -231,7 +231,7 @@ export default function LeadsPage() {
                                                         "{lead.message}"
                                                     </p>
                                                     <span className="text-[9px] font-bold text-muted/50 mt-3 block">
-                                                        {new Date(lead.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short' })}
+                                                        {new Date(lead.createdAt).toLocaleDateString("pt-BR", { day: '2-digit', month: 'short', timeZone: 'America/Sao_Paulo' })}
                                                     </span>
                                                 </button>
                                             ))}
@@ -302,10 +302,10 @@ export default function LeadsPage() {
                                                     <h4 className="text-[10px] font-black text-muted uppercase tracking-widest mb-6">Detalhes</h4>
                                                     <p className="text-sm font-bold mb-2">Recebido em:</p>
                                                     <p className="text-lg text-primary font-black mb-4">
-                                                        {new Date(selectedLead.createdAt).toLocaleDateString("pt-BR", { dateStyle: 'long' })}
+                                                        {new Date(selectedLead.createdAt).toLocaleDateString("pt-BR", { dateStyle: 'long', timeZone: 'America/Sao_Paulo' })}
                                                     </p>
                                                     <p className="text-[10px] uppercase font-black tracking-widest opacity-50">
-                                                        às {new Date(selectedLead.createdAt).toLocaleTimeString("pt-BR")}
+                                                        às {new Date(selectedLead.createdAt).toLocaleTimeString("pt-BR", { timeZone: 'America/Sao_Paulo' })}
                                                     </p>
                                                 </div>
                                             </div>
