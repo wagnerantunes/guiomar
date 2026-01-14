@@ -32,7 +32,13 @@ export async function POST(request: NextRequest) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+        // Sanitize filename: remove special chars, replace spaces with hyphens, remove multiple consecutive hyphens
+        const sanitizedName = file.name
+            .replace(/\s+/g, "-")           // Replace spaces with hyphens
+            .replace(/[^\w\-\.]/g, "")      // Remove special characters except word chars, hyphens, and dots
+            .replace(/-+/g, "-")            // Replace multiple consecutive hyphens with single hyphen
+            .replace(/^-+|-+$/g, "");       // Remove leading/trailing hyphens
+        const filename = `${Date.now()}-${sanitizedName}`;
         const uploadsDir = path.join(process.cwd(), "public", "uploads");
         const filePath = path.join(uploadsDir, filename);
 
