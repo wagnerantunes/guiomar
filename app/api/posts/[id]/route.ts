@@ -43,6 +43,7 @@ export async function PATCH(
         }
 
         const { id } = await params
+        const body = await request.json()
         const { title, slug, content, excerpt, categoryId, status, image, seoTitle, seoDescription, seoKeywords } = body
 
         const post = await prisma.post.update({
