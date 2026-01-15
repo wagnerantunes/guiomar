@@ -67,6 +67,7 @@ export const SECTION_DEFAULTS = {
         title: "Por que a RenovaMente?",
         subtitle: "Nossa essência traduzida em valor para sua empresa",
         layout: "grid",
+        image: "", // Campo para imagem customizável
         items: [
             { t: "Evolução Constante", d: "Não entregamos apenas relatórios. Entregamos transformação real.", icon: "trending_up" },
             { t: "Integração Total", d: "Técnica e Humano. Razão e Emoção. Legalidade e Propósito.", icon: "extension" },

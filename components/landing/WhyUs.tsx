@@ -47,15 +47,25 @@ export function WhyUs({ getSetting }: WhyUsProps) {
                         )}
                     </div>
 
-                    {/* Visual Decorator */}
-                    <div className="hidden md:block w-full aspect-square rounded-[3rem] bg-gradient-to-br from-primary/20 via-primary/5 to-transparent relative overflow-hidden backdrop-blur-3xl border border-white/5">
-                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
-                        <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/30 blur-[80px] rounded-full"></div>
-                        <div className="absolute top-12 left-12 w-32 h-32 bg-secondary/30 blur-[40px] rounded-full"></div>
-
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-9xl text-primary/20">diamond</span>
-                        </div>
+                    {/* Visual Image or Decorator */}
+                    <div className="hidden md:block w-full aspect-square rounded-[3rem] relative overflow-hidden backdrop-blur-3xl border border-white/5 shadow-2xl">
+                        {content.image ? (
+                            <img 
+                                src={content.image} 
+                                alt={content.title || "RenovaMente"} 
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <>
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent"></div>
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+                                <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/30 blur-[80px] rounded-full"></div>
+                                <div className="absolute top-12 left-12 w-32 h-32 bg-secondary/30 blur-[40px] rounded-full"></div>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-9xl text-primary/20">diamond</span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

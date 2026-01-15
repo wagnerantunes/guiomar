@@ -280,6 +280,41 @@ function SortableSection({
                                             </div>
                                         )}
 
+                                        {/* PORQUE RENOVA MENTE - IMAGE UPLOAD */}
+                                        {sec.id === "porque" && (
+                                            <div className="space-y-4 border-t border-gray-100 dark:border-white/5 pt-6">
+                                                <div className="flex items-center justify-between">
+                                                    <h4 className="text-[10px] font-black text-muted uppercase tracking-widest">Imagem Lateral</h4>
+                                                </div>
+                                                <div className="flex gap-3 flex-wrap">
+                                                    {sec.content?.image && (
+                                                        <div className="relative h-20 aspect-video rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 group">
+                                                            <img src={sec.content.image} alt="Destaque" className="w-full h-full object-cover" />
+                                                            <button
+                                                                onClick={() => handleContentChange(sec.id, "image", "")}
+                                                                className="absolute top-2 right-2 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-10"
+                                                                title="Remover imagem"
+                                                            >
+                                                                <span className="material-symbols-outlined text-sm">close</span>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                    <div
+                                                        onClick={() => {
+                                                            setMediaPickerTarget({ secId: sec.id, fieldName: "image" });
+                                                            setShowMediaPicker(true);
+                                                        }}
+                                                        className="h-20 aspect-video rounded-2xl border-2 border-dashed border-gray-100 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-gray-300 hover:text-[var(--primary)] hover:border-[var(--primary)]/50 transition-all cursor-pointer bg-gray-50/50 dark:bg-white/2"
+                                                    >
+                                                        <span className="material-symbols-outlined text-xl">photo_library</span>
+                                                        <span className="text-[8px] font-bold uppercase tracking-widest">
+                                                            {sec.content?.image ? "Trocar Imagem" : "Adicionar Imagem"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {/* GUIOMAR SECTION - IMAGE UPLOAD */}
                                         {sec.id === "guiomar" && (
                                             <>
