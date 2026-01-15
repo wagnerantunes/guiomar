@@ -269,8 +269,8 @@ export function Footer({
                     © {new Date().getFullYear()} RenovaMente. Todos os direitos reservados.
                 </p>
                 <div className="flex gap-8 text-[9px] font-black text-muted uppercase tracking-widest">
-                    <a href="#" className="hover:text-primary transition-colors">Termos</a>
-                    <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
+                    <a href="/termos" className="hover:text-primary transition-colors">Termos de Uso</a>
+                    <a href="/privacidade" className="hover:text-primary transition-colors">Política de Privacidade</a>
                 </div>
             </div>
         </footer>

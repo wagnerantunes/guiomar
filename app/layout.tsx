@@ -81,6 +81,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import { Header } from "@/components/landing/Header"; // Import header
 import { GlobalFooter } from "@/components/landing/GlobalFooter";
+import { CookieConsent } from "@/components/landing/CookieConsent";
 import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import Script from "next/script";
@@ -173,6 +174,7 @@ export default async function RootLayout({
             logoDark={siteData?.logoDark}
             settings={siteData?.siteSettings}
           />
+          <CookieConsent />
         </Providers>
 
         {/* ... scripts ... */}
