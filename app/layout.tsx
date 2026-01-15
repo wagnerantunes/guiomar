@@ -80,6 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { Header } from "@/components/landing/Header"; // Import header
+import { GlobalFooter } from "@/components/landing/GlobalFooter";
 import { Providers } from "@/components/Providers";
 import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import Script from "next/script";
@@ -166,6 +167,12 @@ export default async function RootLayout({
           />
           <FloatingOrbs />
           {children}
+          <GlobalFooter
+            logo={siteData?.logo}
+            logoLight={siteData?.logoLight}
+            logoDark={siteData?.logoDark}
+            settings={siteData?.siteSettings}
+          />
         </Providers>
 
         {/* ... scripts ... */}

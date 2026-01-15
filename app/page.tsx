@@ -157,28 +157,16 @@ function HomePageContent() {
       if (res.ok) {
         setNewsletterStatus("success");
         setNewsletterEmail("");
-        toast({
-          title: "Inscrição realizada!",
-          description: "Você receberá nossas novidades em breve.",
-          type: "success"
-        });
+        toast.success("Inscrição realizada!", { description: "Você receberá nossas novidades em breve." });
         setTimeout(() => setNewsletterStatus("idle"), 2000);
       } else {
         setNewsletterStatus("error");
-        toast({
-          title: "Erro na inscrição",
-          description: "Por favor, tente novamente.",
-          type: "error"
-        });
+        toast.error("Erro na inscrição", { description: "Por favor, tente novamente." });
         setTimeout(() => setNewsletterStatus("idle"), 3000);
       }
     } catch (error) {
       setNewsletterStatus("error");
-      toast({
-        title: "Erro de conexão",
-        description: "Verifique sua internet e tente novamente.",
-        type: "error"
-      });
+      toast.error("Erro de conexão", { description: "Verifique sua internet e tente novamente." });
       setTimeout(() => setNewsletterStatus("idle"), 3000);
     }
   };
@@ -223,11 +211,10 @@ function HomePageContent() {
           <div className="overflow-x-hidden">
             {(() => {
               const defaultOrderArr = [
-                "hero", "clientes", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "newsletter", "contato" // Added "newsletter"
+                "hero", "clientes", "sobre", "desafio", "servicos", "metodologia", "blog", "porque", "guiomar", "testimonials", "faq", "newsletter", "contato"
               ];
               let rawOrder = getSetting("landing_section_order", defaultOrderArr);
 
-              // Helper to parse if string
               if (typeof rawOrder === 'string') {
                 try {
                   rawOrder = JSON.parse(rawOrder);
@@ -236,12 +223,10 @@ function HomePageContent() {
                 }
               }
 
-              // Helper to ensure array
               if (!Array.isArray(rawOrder)) {
                 rawOrder = defaultOrderArr;
               }
 
-              // Ensure we use the correct IDs even if old ones are stored in the database
               const orderArr = rawOrder.map((id: string) => {
                 if (id === "challenge") return "desafio";
                 if (id === "whyus") return "porque";
@@ -249,10 +234,8 @@ function HomePageContent() {
                 return id;
               });
 
-              // Filter only visible sections for proper nextId calculation
               const visibleSections = orderArr.filter((id: string) => {
                 const defaults = (SECTION_DEFAULTS as any)[id] || {};
-                // Special check for hero which might not be in SECTION_DEFAULTS or has different key structure
                 if (id === "hero") return getSetting("section_hero_content", { ...SECTION_DEFAULTS.hero, isVisible: true }).isVisible !== false;
                 return getSetting(`section_${id}_content`, { ...defaults, isVisible: true }).isVisible !== false;
               });
@@ -261,6 +244,7 @@ function HomePageContent() {
                 const nextId = visibleSections[index + 1];
 
                 switch (id) {
+                  // ... (manter switch cases)
                   case "hero":
                     return <Hero key={id} getSetting={getSetting} scrollTo={scrollTo} nextId={nextId} />;
                   case "clientes":
@@ -333,7 +317,6 @@ function HomePageContent() {
                       </SectionWrapper>
                     );
                   default:
-                    // Support for custom sections
                     if (id.startsWith("custom_")) {
                       const customContent = getSetting(`section_${id}_content`, { title: "Nova Seção", subtitle: "Texto da seção...", isVisible: true });
                       return (
@@ -349,21 +332,7 @@ function HomePageContent() {
               });
             })()}
           </div>
-
         )}
-
-        <Footer
-          getSetting={getSetting}
-          scrollTo={scrollTo}
-          handleNewsletterSubmit={handleNewsletterSubmit}
-          newsletterEmail={newsletterEmail}
-          setNewsletterEmail={setNewsletterEmail}
-          newsletterStatus={newsletterStatus}
-          logo={siteData?.logo}
-          logoLight={siteData?.logoLight}
-          logoDark={siteData?.logoDark}
-          settings={siteData?.settings}
-        />
       </div>
     </ToastProvider>
   );

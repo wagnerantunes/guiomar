@@ -74,10 +74,41 @@ export function Footer({
         address: "São Paulo, SP"
     };
 
-    const footerSettings = getSetting ? {
+    const resolveSetting = (key: string, defaultValue: any) => {
+        if (getSetting) return getSetting(key, defaultValue);
+        
+        if (!settings || !Array.isArray(settings)) return defaultValue;
+        
+        const setting = settings.find((s: any) => s.key === key);
+        if (!setting) return defaultValue;
+
+        if (key.includes("_content") || key.includes("navigation_")) {
+            try {
+                let parsed = setting.value;
+                if (typeof parsed === 'string') {
+                    try {
+                        parsed = JSON.parse(parsed);
+                    } catch (e) {
+                         if (typeof defaultValue === 'object' && defaultValue !== null) return defaultValue;
+                         return parsed;
+                    }
+                }
+                if (typeof defaultValue === 'object' && defaultValue !== null) {
+                    if (typeof parsed !== 'object' || parsed === null) return defaultValue;
+                    return { ...defaultValue, ...parsed };
+                }
+                return parsed || defaultValue;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        return setting.value || defaultValue;
+    };
+
+    const footerSettings = {
         ...defaultFooterData,
-        ...getSetting("navigation_footer", defaultFooterData)
-    } : defaultFooterData;
+        ...resolveSetting("navigation_footer", defaultFooterData)
+    };
 
     const SocialIcon = ({ name }: { name: string }) => {
         switch (name.toLowerCase()) {

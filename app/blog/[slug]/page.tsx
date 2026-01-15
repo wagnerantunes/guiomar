@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { Footer } from "@/components/landing/Footer";
 import { SearchWidget, NewsletterWidget, CategoriesWidget, TableOfContents, ReadingProgressBar } from "@/components/blog";
 import { RichText } from "@/components/ui/RichText";
 import { calculateReadingTime } from "@/lib/blog-utils";
@@ -122,9 +121,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                 <main className="flex flex-col lg:flex-row gap-10">
                     <section className="w-full xl:w-[68%]">
-                        <article className="bg-card border border-border rounded-[2rem] p-6 md:p-10 shadow-sm relative overflow-hidden">
+                        <article className="bg-card border border-border rounded-[2rem] p-6 md:p-10 shadow-sm relative">
                              {/* Content */}
-                            <div className="absolute -left-4 top-12 hidden xl:block z-20">
+                            <div className="absolute -left-10 top-12 hidden xl:block z-20"> {/* Ajustei para -left-10 para dar mais espaco se possivel, ou manter -left-4 se o design for colado */}
                                 <ShareButtons title={post.title} />
                             </div>
                             <RichText content={content} />
@@ -156,7 +155,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     </aside>
                 </main>
             </div>
-            <Footer />
         </div>
     );
 }
