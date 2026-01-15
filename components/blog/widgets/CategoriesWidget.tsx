@@ -1,40 +1,36 @@
-interface Category {
-    id: string;
-    name: string;
-    _count: {
-        posts: number;
-    };
-}
+import Link from "next/link";
+import { Folder } from "lucide-react";
 
 interface CategoriesWidgetProps {
-    categories: Category[];
+    categories: any[];
 }
 
 export function CategoriesWidget({ categories }: CategoriesWidgetProps) {
     return (
-        <div className="bg-card rounded-[2rem] p-8 border border-border relative overflow-hidden shadow-sm">
-            <div className="absolute inset-0 bg-background/40 backdrop-blur-md -z-10"></div>
-            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
-                <span className="material-symbols-outlined text-lg text-primary">category</span>
-                Arquivos e Tópicos
+        <div className="bg-card border border-border rounded-[2rem] p-8 shadow-sm">
+            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-primary"></span>
+                Categorias
             </h3>
-            <ul className="space-y-3">
-                {categories.map((category) => (
-                    <li key={category.id}>
-                        <a
-                            className="group flex items-center justify-between p-4 rounded-2xl bg-muted/40 hover:bg-primary/10 transition-all duration-300 border border-transparent hover:border-primary/20"
-                            href={`/blog/category/${category.id}`}
-                        >
-                            <span className="text-[11px] font-black uppercase tracking-wider text-muted-foreground group-hover:text-primary transition-colors">
-                                {category.name}
+            <div className="flex flex-col gap-2">
+                {categories.map((cat) => (
+                    <Link
+                        key={cat.id}
+                        href={`/blog/category/${cat.slug}`}
+                        className="group flex items-center justify-between p-4 rounded-2xl border border-transparent hover:border-primary/20 hover:bg-primary/5 transition-all"
+                    >
+                        <div className="flex items-center gap-3">
+                            <Folder size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest group-hover:text-foreground transition-colors">
+                                {cat.name}
                             </span>
-                            <span className="bg-background text-[10px] font-black px-3 py-1 rounded-full text-muted-foreground shadow-sm border border-border group-hover:text-primary group-hover:border-primary/30">
-                                {category._count.posts}
-                            </span>
-                        </a>
-                    </li>
+                        </div>
+                        <span className="bg-muted px-2 py-1 rounded-lg text-[9px] font-black text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary transition-all">
+                            {cat._count.posts}
+                        </span>
+                    </Link>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

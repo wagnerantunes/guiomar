@@ -6,3 +6,4 @@ export * from "./widgets/CategoriesWidget";
 export * from "./widgets/TagsWidget";
 export * from "./TableOfContents";
 export * from "./ShareButtons";
+export * from "./ReadingProgressBar";

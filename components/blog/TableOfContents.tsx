@@ -1,14 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
-interface TocItem {
+interface TOCItem {
     id: string;
     text: string;
     level: number;
 }
 
-export function TableOfContents({ items }: { items: TocItem[] }) {
+interface TableOfContentsProps {
+    items: TOCItem[];
+}
+
+export function TableOfContents({ items }: TableOfContentsProps) {
     const [activeId, setActiveId] = useState<string>("");
 
     useEffect(() => {
@@ -20,46 +25,39 @@ export function TableOfContents({ items }: { items: TocItem[] }) {
                     }
                 });
             },
-            { rootMargin: "0px 0px -80% 0px" }
+            { rootMargin: "0% 0% -80% 0%" }
         );
 
         items.forEach((item) => {
             const element = document.getElementById(item.id);
-            if (element) {
-                observer.observe(element);
-            }
+            if (element) observer.observe(element);
         });
 
         return () => observer.disconnect();
     }, [items]);
 
-    if (items.length < 2) return null;
+    if (items.length === 0) return null;
 
     return (
-        <div className="bg-card border border-border rounded-3xl p-8 mb-8 shadow-sm">
-            <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">toc</span>
-                Neste Artigo
+        <div className="bg-card border border-border rounded-[2rem] p-8 shadow-sm">
+            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-primary"></span>
+                Conteúdo
             </h3>
-            <nav className="flex flex-col gap-1">
+            <nav className="flex flex-col gap-3">
                 {items.map((item) => (
                     <a
                         key={item.id}
                         href={`#${item.id}`}
                         onClick={(e) => {
                             e.preventDefault();
-                            document.querySelector(`#${item.id}`)?.scrollIntoView({
-                                behavior: "smooth",
-                            });
-                            setActiveId(item.id);
+                            document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
                         }}
-                        className={`text-sm transition-colors py-1.5 border-l-2 pl-4 ${activeId === item.id
-                            ? "border-primary text-primary font-bold"
-                            : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
-                            }`}
-                        style={{
-                            marginLeft: item.level === 3 ? "1rem" : "0",
-                        }}
+                        className={cn(
+                            "text-[11px] font-bold uppercase tracking-wider transition-all hover:text-primary leading-relaxed",
+                            item.level === 3 ? "ml-4" : "",
+                            activeId === item.id ? "text-primary translate-x-1" : "text-muted-foreground/70"
+                        )}
                     >
                         {item.text}
                     </a>

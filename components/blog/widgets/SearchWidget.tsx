@@ -1,19 +1,26 @@
+"use client";
+
+import { useState } from "react";
+import { Search } from "lucide-react";
+
 export function SearchWidget() {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
-        <div className="bg-card rounded-[2rem] p-8 border border-border relative group overflow-hidden shadow-sm">
-            <div className="absolute inset-0 bg-background/40 backdrop-blur-md -z-10"></div>
-            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-                <span className="material-symbols-outlined text-lg text-primary">search</span>
-                Pesquisar Insights
+        <div className="bg-card border border-border rounded-[2rem] p-8 shadow-sm">
+            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-primary"></span>
+                Pesquisar
             </h3>
-            <div className="relative">
+            <div className={`relative flex items-center transition-all duration-300 ${isFocused ? 'ring-2 ring-primary/20 scale-[1.02]' : ''}`}>
                 <input
-                    className="w-full bg-muted/40 border border-border rounded-2xl py-4 px-6 text-sm font-bold text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:bg-background transition-all outline-none"
-                    placeholder="O que você deseja aprender?"
+                    type="text"
+                    placeholder="O que você procura?"
+                    className="w-full bg-muted/30 border border-border rounded-2xl py-4 pl-12 pr-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-primary/50 transition-colors"
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 size-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
-                    <span className="material-symbols-outlined text-lg font-bold">arrow_forward</span>
-                </button>
+                <Search size={16} className={`absolute left-4 transition-colors duration-300 ${isFocused ? 'text-primary' : 'text-muted-foreground'}`} />
             </div>
         </div>
     );

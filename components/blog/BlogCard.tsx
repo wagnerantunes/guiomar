@@ -1,22 +1,35 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { motion } from "framer-motion";
+import { calculateReadingTime } from "@/lib/blog-utils";
 
 interface BlogCardProps {
     post: any;
 }
 
 export function BlogCard({ post }: BlogCardProps) {
+    const readingTime = calculateReadingTime(post.content || "");
+
     return (
-        <article className="flex flex-col bg-card rounded-[2.2rem] border border-border overflow-hidden group hover:-translate-y-2 hover:border-primary/30 transition-all duration-500 relative shadow-sm">
-            <Link href={`/blog/${post.slug}`} className="relative h-60 w-full overflow-hidden block">
+        <motion.article 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col bg-card rounded-[2rem] border border-border overflow-hidden group hover:-translate-y-2 hover:border-primary/30 transition-all duration-500 relative shadow-sm"
+        >
+            <Link href={`/blog/${post.slug}`} className="relative h-56 w-full overflow-hidden block">
                 {post.image ? (
                     <>
-                        <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                            style={{
-                                backgroundImage: `url("${post.image}")`,
-                            }}
+                        <Image
+                            src={post.image}
+                            alt={post.title}
+                            fill
+                            className="object-cover bg-center transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </>
@@ -35,7 +48,7 @@ export function BlogCard({ post }: BlogCardProps) {
                 )}
             </Link>
 
-            <div className="p-8 flex flex-col flex-1 relative z-10">
+            <div className="p-5 flex flex-col flex-1 relative z-10">
                 <div className="flex items-center gap-3 mb-4">
                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
                         {post.publishedAt
@@ -46,7 +59,7 @@ export function BlogCard({ post }: BlogCardProps) {
                     </span>
                     <div className="size-1 bg-border rounded-full"></div>
                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-                        5 min read
+                        {readingTime} min read
                     </span>
                 </div>
 
@@ -56,11 +69,11 @@ export function BlogCard({ post }: BlogCardProps) {
                     </h4>
                 </Link>
 
-                <p className="text-sm text-muted-foreground line-clamp-2 md:line-clamp-3 mb-8 flex-1 leading-relaxed">
+                <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-6 flex-1 leading-relaxed">
                     {post.excerpt}
                 </p>
 
-                <div className="flex items-center justify-between pt-6 border-t border-border">
+                <div className="flex items-center justify-between pt-4 border-t border-border">
                     <Link
                         className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground group/btn"
                         href={`/blog/${post.slug}`}
@@ -72,6 +85,6 @@ export function BlogCard({ post }: BlogCardProps) {
                     </Link>
                 </div>
             </div>
-        </article>
+        </motion.article>
     );
 }
