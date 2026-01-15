@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { Footer } from "@/components/landing/Footer";
 import {
     BlogHero,
     BlogCard,
@@ -169,7 +168,6 @@ export default async function BlogPage({
                     </aside>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

@@ -97,14 +97,24 @@ export default function PostsPage() {
                         Estratégia de conteúdo e gestão de conhecimento.
                     </p>
                 </div>
-                <Link
-                    href="/admin/posts/new"
-                    aria-label="Criar novo post"
-                    className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-primary text-primary-foreground rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 active:scale-95 uppercase tracking-[0.1em]"
-                >
-                    <span className="material-symbols-outlined text-[20px] font-bold">add_circle</span>
-                    Novo Artigo
-                </Link>
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/admin/categories"
+                        aria-label="Gerenciar Categorias"
+                        className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-background border border-border text-muted-foreground rounded-2xl font-black text-xs hover:bg-muted/50 transition-all active:scale-95 uppercase tracking-[0.1em]"
+                    >
+                        <span className="material-symbols-outlined text-[20px] font-bold">category</span>
+                        Categorias
+                    </Link>
+                    <Link
+                        href="/admin/posts/new"
+                        aria-label="Criar novo post"
+                        className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-primary text-primary-foreground rounded-2xl font-black text-xs hover:scale-105 transition-all shadow-xl shadow-primary/20 active:scale-95 uppercase tracking-[0.1em]"
+                    >
+                        <span className="material-symbols-outlined text-[20px] font-bold">add_circle</span>
+                        Novo Artigo
+                    </Link>
+                </div>
             </div>
 
             {/* FILTROS E BUSCA */}
