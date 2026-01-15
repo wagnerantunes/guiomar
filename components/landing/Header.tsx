@@ -151,36 +151,19 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
                                 <span className="font-black text-xl text-foreground tracking-tighter">Renova<span className="text-primary">Mente</span></span>
                             </div>
                         )}
-
-                        {isBlogPost && (
-                            <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-border/50 text-muted-foreground">
-                                <span className="material-symbols-outlined text-base">arrow_back</span>
-                                <span className="text-[10px] uppercase font-black tracking-widest">Voltar para o Início</span>
-                            </div>
-                        )}
                     </Link>
 
                     {/* NAV LINKS (Right) */}
                     <nav className="hidden lg:flex items-center gap-8">
-                        {isBlogPost ? (
-                            <Link
-                                href="/"
-                                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors border border-primary/20 px-6 py-3 rounded-xl bg-primary/5"
+                        {menuItems.map((link: any, i: number) => (
+                            <button
+                                key={i}
+                                onClick={() => handleNavigation(link.url)}
+                                className="text-[11px] font-black text-foreground/70 hover:text-primary transition-colors tracking-[0.15em] uppercase hover:underline decoration-2 underline-offset-4 decoration-primary"
                             >
-                                <span className="material-symbols-outlined text-sm">arrow_back</span>
-                                Voltar para o Início
-                            </Link>
-                        ) : (
-                            menuItems.map((link: any, i: number) => (
-                                <button
-                                    key={i}
-                                    onClick={() => handleNavigation(link.url)}
-                                    className="text-[11px] font-black text-foreground/70 hover:text-primary transition-colors tracking-[0.15em] uppercase hover:underline decoration-2 underline-offset-4 decoration-primary"
-                                >
-                                    {link.label}
-                                </button>
-                            ))
-                        )}
+                                {link.label}
+                            </button>
+                        ))}
                     </nav>
 
                     {/* MOBILE TOGGLE & SCROLLED CTA */}
@@ -220,26 +203,15 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
                     <a href="#" className="hover:text-primary"><span className="material-symbols-outlined text-2xl">thumb_up</span></a>
                 </div>
 
-                {isBlogPost ? (
-                    <Link
-                        href="/"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-2xl font-black text-primary transition-colors uppercase tracking-widest flex items-center gap-3"
+                {menuItems.map((link: any, i: number) => (
+                    <button
+                        key={i}
+                        onClick={() => handleNavigation(link.url)}
+                        className="text-2xl font-black text-foreground hover:text-primary transition-colors uppercase tracking-widest"
                     >
-                        <span className="material-symbols-outlined text-3xl">arrow_back</span>
-                        Voltar ao Início
-                    </Link>
-                ) : (
-                    menuItems.map((link: any, i: number) => (
-                        <button
-                            key={i}
-                            onClick={() => handleNavigation(link.url)}
-                            className="text-2xl font-black text-foreground hover:text-primary transition-colors uppercase tracking-widest"
-                        >
-                            {link.label}
-                        </button>
-                    ))
-                )}
+                        {link.label}
+                    </button>
+                ))}
 
                 <Link
                     href="/admin"

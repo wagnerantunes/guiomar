@@ -93,7 +93,7 @@ export default async function BlogPage({
                 <div className="absolute top-[20%] right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full opacity-20" />
             </div>
 
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 py-20 md:py-24">
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 pt-32 pb-20 md:pt-40 md:pb-24">
                 <div className="flex flex-col lg:flex-row gap-10">
                     <main className="w-full lg:w-[68%] flex flex-col gap-12">
                         {posts.length > 0 ? (
