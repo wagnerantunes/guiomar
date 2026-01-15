@@ -268,7 +268,7 @@ export default function EditPostPage({ params }: PageProps) {
                 </div>
 
                 <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-150 relative">
-                    <div className="sticky top-32 space-y-8 h-fit pb-10">
+                    <div className="sticky top-32 space-y-8 h-fit max-h-[calc(100vh-9rem)] overflow-y-auto custom-scrollbar pb-10 pr-2">
                         {/* Publishing Settings */}
                         <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-10">
                             <div className="space-y-4">
