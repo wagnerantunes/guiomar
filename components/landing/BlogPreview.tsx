@@ -63,32 +63,34 @@ export function BlogPreview({ getSetting, blogPosts, setSelectedPost, scrollTo }
                 {/* Featured Post (First Item) - Takes 8 cols */}
                 {blogPosts.length > 0 && (
                     <div
-                        className="lg:col-span-8 group cursor-pointer relative rounded-[3rem] overflow-hidden min-h-[450px] lg:min-h-[600px] shadow-2xl border border-border/50"
+                        className="lg:col-span-8 group cursor-pointer flex flex-col h-full bg-card rounded-[3rem] border border-border/50 shadow-sm overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
                         onClick={() => setSelectedPost(blogPosts[0])}
                     >
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10" />
-                        <img
-                            src={blogPosts[0].img}
-                            alt={blogPosts[0].title}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-20" />
+                        <div className="relative w-full h-[300px] lg:h-[450px] overflow-hidden">
+                            <img
+                                src={blogPosts[0].img}
+                                alt={blogPosts[0].title}
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            {/* Overlay sutil apenas para profundidade na imagem */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                        </div>
 
-                        <div className="absolute bottom-0 left-0 right-0 p-10 md:p-14 z-30 flex flex-col items-start gap-6">
-                            <span className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-md shadow-xl shadow-primary/20">
+                        <div className="p-8 md:p-12 flex flex-col justify-center flex-1 space-y-6">
+                            <span className="w-fit px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20">
                                 {blogPosts[0].cat || "Destaque"}
                             </span>
-                            <div className="space-y-4">
-                                <h3 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1] max-w-3xl drop-shadow-2xl">
-                                    {blogPosts[0].title}
-                                </h3>
-                                <div className="flex items-center gap-6 text-white/70 text-[10px] font-black uppercase tracking-[0.2em] mt-4">
-                                    <span>{blogPosts[0].date}</span>
-                                    <span className="size-1.5 rounded-full bg-primary ring-4 ring-primary/20"></span>
-                                    <span className="flex items-center gap-2 text-white group-hover:text-primary transition-colors cursor-pointer">
-                                        Ler Artigo <span className="material-symbols-outlined text-lg">arrow_right_alt</span>
-                                    </span>
-                                </div>
+                            
+                            <h3 className="text-2xl md:text-4xl lg:text-5xl font-black text-foreground leading-[1.1] tracking-tight group-hover:text-primary transition-colors max-w-4xl">
+                                {blogPosts[0].title}
+                            </h3>
+
+                            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-muted-foreground mt-2">
+                                <span>{blogPosts[0].date}</span>
+                                <span className="size-1.5 rounded-full bg-primary/30"></span>
+                                <span className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                                    Ler Artigo <span className="material-symbols-outlined text-base">arrow_right_alt</span>
+                                </span>
                             </div>
                         </div>
                     </div>
