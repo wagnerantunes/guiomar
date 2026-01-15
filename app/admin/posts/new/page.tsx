@@ -92,7 +92,6 @@ export default function NewPostPage() {
             const response = await fetch('/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
                     content: formData.content + `<!-- image_position:${imagePosition} -->`
@@ -239,7 +238,7 @@ export default function NewPostPage() {
                                         aria-label="URL do post (slug)"
                                         type="text"
                                         value={formData.slug}
-                                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, slug: e.target.value.replace(/^\/+/, '').replace(/\s+/g, '-').toLowerCase() })}
                                         className="flex-1 bg-transparent border-none p-0 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-muted"
                                         placeholder="identificador-url"
                                     />
