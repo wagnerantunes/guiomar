@@ -40,6 +40,8 @@ export default function EditPostPage({ params }: PageProps) {
     const [imagePosition, setImagePosition] = useState('center')
     const [isAutoSaving, setIsAutoSaving] = useState(false)
     const [lastSaved, setLastSaved] = useState<Date | null>(null)
+    const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+    const [newCategoryName, setNewCategoryName] = useState('')
 
     useEffect(() => {
         async function fetchData() {
@@ -126,6 +128,26 @@ export default function EditPostPage({ params }: PageProps) {
             title,
             slug: slugify(title)
         })
+    }
+
+    const handleCreateCategory = async () => {
+        if (!newCategoryName.trim()) return;
+        try {
+            const res = await fetch('/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newCategoryName })
+            });
+            if (res.ok) {
+                const newCat = await res.json();
+                setCategories(prev => [...prev, newCat].sort((a, b) => a.name.localeCompare(b.name)));
+                setFormData(prev => ({ ...prev, categoryId: newCat.id }));
+                setIsCreatingCategory(false);
+                setNewCategoryName('');
+            }
+        } catch (e) {
+            console.error("Error creating category:", e);
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -272,23 +294,52 @@ export default function EditPostPage({ params }: PageProps) {
                         {/* Publishing Settings */}
                         <div className="bg-card rounded-[3.5rem] border border-border shadow-sm overflow-hidden p-10 space-y-10">
                             <div className="space-y-4">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-sm">category</span>
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                            <span className="material-symbols-outlined text-sm">category</span>
+                                        </div>
+                                        <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Classificação</label>
                                     </div>
-                                    <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Classificação</label>
+                                    <button
+                                        onClick={() => setIsCreatingCategory(!isCreatingCategory)}
+                                        className="text-[9px] font-black text-primary hover:underline uppercase tracking-widest"
+                                    >
+                                        {isCreatingCategory ? 'Cancelar' : '+ Nova'}
+                                    </button>
                                 </div>
-                                <select
-                                    aria-label="Selecionar categoria"
-                                    value={formData.categoryId}
-                                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                    className="w-full bg-muted/5 border border-border rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground appearance-none cursor-pointer uppercase tracking-[0.2em]"
-                                >
-                                    <option value="">Sem Categoria</option>
-                                    {categories.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                    ))}
-                                </select>
+                                
+                                {isCreatingCategory ? (
+                                    <div className="flex gap-2 animate-in fade-in slide-in-from-top-2">
+                                        <input
+                                            type="text"
+                                            value={newCategoryName}
+                                            onChange={(e) => setNewCategoryName(e.target.value)}
+                                            placeholder="Nome da nova categoria..."
+                                            className="flex-1 bg-muted/5 border border-border rounded-xl px-4 py-3 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground"
+                                            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleCreateCategory())}
+                                        />
+                                        <button
+                                            onClick={handleCreateCategory}
+                                            disabled={!newCategoryName.trim()}
+                                            className="bg-primary text-primary-foreground px-4 rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-50 hover:brightness-110 transition-all"
+                                        >
+                                            Salvar
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <select
+                                        aria-label="Selecionar categoria"
+                                        value={formData.categoryId}
+                                        onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                                        className="w-full bg-muted/5 border border-border rounded-2xl px-6 py-4 text-[10px] font-black focus:ring-4 focus:ring-primary/10 outline-none text-foreground appearance-none cursor-pointer uppercase tracking-[0.2em]"
+                                    >
+                                        <option value="">Sem Categoria</option>
+                                        {categories.map((cat) => (
+                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                        ))}
+                                    </select>
+                                )}
                             </div>
 
                             <div className="space-y-4">
