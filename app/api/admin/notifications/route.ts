@@ -13,7 +13,7 @@ export async function GET() {
     // Fetch leads with status 'New'
     const newLeads = await prisma.lead.findMany({
         where: {
-            siteId: siteUser.siteId,
+            siteId: siteId,
             status: "New",
         },
         orderBy: { createdAt: "desc" },

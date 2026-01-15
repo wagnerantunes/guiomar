@@ -32,7 +32,58 @@ export async function POST(request: NextRequest) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+
+        // Professional filename sanitization with best practices
+        const sanitizeFilename = (filename: string): string => {
+            // Extract file extension
+            const lastDotIndex = filename.lastIndexOf('.');
+            const name = lastDotIndex > 0 ? filename.substring(0, lastDotIndex) : filename;
+            const ext = lastDotIndex > 0 ? filename.substring(lastDotIndex) : '';
+
+            // Transliterate common special characters to ASCII equivalents
+            const transliterationMap: { [key: string]: string } = {
+                'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a',
+                'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+                'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i',
+                'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o', 'ö': 'o',
+                'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u',
+                'ç': 'c', 'ñ': 'n',
+                'Á': 'A', 'À': 'A', 'Ã': 'A', 'Â': 'A', 'Ä': 'A',
+                'É': 'E', 'È': 'E', 'Ê': 'E', 'Ë': 'E',
+                'Í': 'I', 'Ì': 'I', 'Î': 'I', 'Ï': 'I',
+                'Ó': 'O', 'Ò': 'O', 'Õ': 'O', 'Ô': 'O', 'Ö': 'O',
+                'Ú': 'U', 'Ù': 'U', 'Û': 'U', 'Ü': 'U',
+                'Ç': 'C', 'Ñ': 'N'
+            };
+
+            // Apply transliteration
+            let sanitized = name.split('').map(char => transliterationMap[char] || char).join('');
+
+            // Replace spaces and special chars with hyphens
+            sanitized = sanitized
+                .replace(/\s+/g, '-')           // Spaces to hyphens
+                .replace(/[^\w\-]/g, '-')       // Special chars to hyphens
+                .replace(/-+/g, '-')            // Multiple hyphens to single
+                .replace(/^-+|-+$/g, '')        // Remove leading/trailing hyphens
+                .toLowerCase();                 // Lowercase for consistency
+
+            // Fallback if name becomes empty after sanitization
+            if (!sanitized || sanitized.length === 0) {
+                sanitized = 'file';
+            }
+
+            // Limit filename length (max 100 chars for name part)
+            if (sanitized.length > 100) {
+                sanitized = sanitized.substring(0, 100);
+            }
+
+            return sanitized + ext.toLowerCase();
+        };
+
+        const sanitizedFilename = sanitizeFilename(file.name);
+        const timestamp = Date.now();
+        const filename = `${timestamp}-${sanitizedFilename}`;
+
         const uploadsDir = path.join(process.cwd(), "public", "uploads");
         const filePath = path.join(uploadsDir, filename);
 
