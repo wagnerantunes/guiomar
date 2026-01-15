@@ -3,7 +3,8 @@ import { auth } from "@/lib/auth";
 
 export const SUPER_ADMIN_EMAILS = [
     'wagnerantunes84@gmail.com',
-    'maycon.santos.ms@gmail.com'
+    'maycon.santos.ms@gmail.com',
+    'renovamente.mkt@gmail.com'
 ];
 
 export async function isSuperAdmin(email?: string | null) {
