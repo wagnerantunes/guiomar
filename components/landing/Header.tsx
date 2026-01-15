@@ -85,7 +85,7 @@ export function Header({ logo, logoLight, logoDark, settings }: HeaderProps) {
     const isBlogPost = pathname?.startsWith('/blog/') && pathname !== '/blog';
 
     return (
-        <header className={`fixed top-0 w-full z-50 transition-all duration-300 will-change-transform ${scrolled ? (isMobile ? "bg-background border-b border-border shadow-md" : "bg-background/80 backdrop-blur-xl border-b border-border shadow-md") : "bg-transparent"}`}>
+        <header className={`fixed top-0 w-full z-50 transition-all duration-300 will-change-transform ${scrolled ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-sm py-2" : "bg-background/20 backdrop-blur-md border-b border-white/5 py-4"}`}>
 
             {/* ROW 1: TOP BAR (Desktop Only) */}
             <div className={`hidden lg:block w-full border-b border-border/10 ${scrolled ? "h-0 overflow-hidden opacity-0 py-0" : "h-12 opacity-100 py-0"} transition-all duration-300 bg-primary/5`}>
